@@ -5,6 +5,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
+    "//scripts": "项目的文档根目录在 src/；使用的是 webpack 作为构建器；所有脚本都以 docs: 前缀命名",
     "docs:build": "vuepress-webpack build src",
     "docs:clean-dev": "vuepress-webpack dev src --clean-cache",
     "docs:dev": "vuepress-webpack dev src",
