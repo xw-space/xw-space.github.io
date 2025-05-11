@@ -1,8 +1,10 @@
 import { navbar } from "vuepress-theme-hope";
-
+// 这里控制的是主页上边的导航栏
 export default navbar([
   "/",
   "/demo/",
+  "/daily/",
+  "/CS_Fundamentals/",
   {
     text: "博文",
     icon: "pen-to-square",
@@ -41,6 +43,7 @@ export default navbar([
       { text: "樱桃", icon: "pen-to-square", link: "cherry" },
       { text: "火龙果", icon: "pen-to-square", link: "dragonfruit" },
       "tomato",
+      "测试2",
       "strawberry",
     ],
   },

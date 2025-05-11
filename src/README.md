@@ -2,7 +2,7 @@
 home: true
 layout: Blog
 icon: house
-title: ff_blog
+title: 主页1421441543523
 heroImage: https://theme-hope-assets.vuejs.press/logo.svg
 heroText: 范同学的博客
 heroFullScreen: true
