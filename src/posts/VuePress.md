@@ -38,4 +38,7 @@ npm init vuepress-theme-hope@latest blogdir_name
 | 更新依赖工具（可选） | `npm run docs:update-package` |
 
 
+如何取消首页主页的大背景图？
+将src/README.md文件中的“heroFullScreen”设为false。
+
 # END

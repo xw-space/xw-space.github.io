@@ -1,5 +1,5 @@
 import { defineUserConfig } from "vuepress";
-
+// 主配置文件（必须）
 import theme from "./theme.js";
 
 export default defineUserConfig({

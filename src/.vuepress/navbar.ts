@@ -1,5 +1,5 @@
 import { navbar } from "vuepress-theme-hope";
-// 这里控制的是主页上边的导航栏
+// 网站顶部导航栏配置
 export default navbar([
   "/",
   "/demo/",

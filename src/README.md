@@ -2,10 +2,10 @@
 home: true
 layout: Blog
 icon: house
-title: 主页1421441543523
+title: ff
 heroImage: https://theme-hope-assets.vuejs.press/logo.svg
 heroText: 范同学的博客
-heroFullScreen: true
+heroFullScreen: false
 tagline: 保持希望，满怀好奇
 projects:
   - icon: folder-open

@@ -1,5 +1,6 @@
 import { hopeTheme } from "vuepress-theme-hope";
-
+// Hope主题专用配置
+// 如导航栏、侧边栏、博客配置、功能开关等
 import navbar from "./navbar.js";
 import sidebar from "./sidebar.js";
 
@@ -7,7 +8,7 @@ export default hopeTheme({
   hostname: "https://mister-hope.github.io",
 
   author: {
-    name: "Mr.Hope",
+    name: "范同学",
     url: "https://mister-hope.com",
   },
 
