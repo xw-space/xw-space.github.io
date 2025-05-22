@@ -2,7 +2,7 @@
 home: true
 layout: Blog
 icon: house
-title: ff
+title: 主页
 heroImage: https://theme-hope-assets.vuejs.press/logo.svg
 heroText: 范同学的博客
 heroFullScreen: false
@@ -22,16 +22,6 @@ projects:
     name: 书籍名称
     desc: 书籍详细描述
     link: https://你的书籍链接
-
-  - icon: newspaper
-    name: 文章名称
-    desc: 文章详细描述
-    link: https://你的文章链接
-
-  - icon: user-group
-    name: 伙伴名称
-    desc: 伙伴详细介绍
-    link: https://你的伙伴链接
 
   - icon: https://theme-hope-assets.vuejs.press/logo.svg
     name: 自定义项目

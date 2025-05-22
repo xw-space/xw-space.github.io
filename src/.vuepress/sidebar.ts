@@ -28,7 +28,7 @@ export default sidebar({
       children: "structure",
     },
     {
-      text: "如何使用",
+      text: "VuePress使用",
       icon: "laptop-code",
       prefix: "demo/",
       link: "demo/",
