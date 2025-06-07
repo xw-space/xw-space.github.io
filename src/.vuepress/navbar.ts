@@ -2,49 +2,39 @@ import { navbar } from "vuepress-theme-hope";
 // 网站顶部导航栏配置
 export default navbar([
   "/",
+  "/all/",
   "/demo/",
   "/daily/",
   "/CS_Fundamentals/",
   {
-    text: "博文",
+    text: "导航栏的下拉栏",
     icon: "pen-to-square",
-    prefix: "/posts/",
+    prefix: "/",
     children: [
       {
-        text: "苹果",
+        text: "日常",
         icon: "pen-to-square",
-        prefix: "apple/",
+        prefix: "daily/",
         children: [
-          { text: "苹果1", icon: "pen-to-square", link: "1" },
-          { text: "苹果2", icon: "pen-to-square", link: "2" },
-          "3",
-          "4",
+          { text: "日记06-07", icon: "pen-to-square", link: "daily2025-06-07" },
+          "daily2025-05-10",
         ],
       },
       {
-        text: "香蕉",
+        text: "导航栏的计算机基础",
         icon: "pen-to-square",
-        prefix: "banana/",
+        prefix: "CS_Fundamentals/",
         children: [
           {
-            text: "香蕉 1",
+            text: "操作系统",
             icon: "pen-to-square",
-            link: "1",
+            link: "OS",
           },
-          {
-            text: "香蕉 2",
-            icon: "pen-to-square",
-            link: "2",
-          },
-          "3",
-          "4",
+          "NetWork",
         ],
       },
-      { text: "樱桃", icon: "pen-to-square", link: "cherry" },
-      { text: "火龙果", icon: "pen-to-square", link: "dragonfruit" },
-      "tomato",
-      "测试2",
-      "strawberry",
+      { text: "test1", icon: "pen-to-square", link: "test1" },
+      "test2",
     ],
   },
   {
