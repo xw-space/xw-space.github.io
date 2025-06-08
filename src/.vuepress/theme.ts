@@ -22,7 +22,19 @@ export default hopeTheme({
   navbar,
 
   // 侧边栏
-  sidebar,
+  // sidebar,
+  sidebar: {
+    "/sidebar/":[
+      "",
+      "test",
+    ],
+    "/demo/":[
+      "",
+      "page",
+    ],
+    "/CS_Fundamentals/":"structure",
+    "/daily/":"structure",
+  },
 
   // 页脚
   footer: "默认页脚",
