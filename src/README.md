@@ -4,6 +4,12 @@ layout: Blog
 icon: house
 title: 主页
 heroImage: https://theme-hope-assets.vuejs.press/logo.svg
+heroImageStyle: {
+  width: '200px',
+  height: '200px',
+  filter: 'grayscale(100%)',
+  border: '2px solid #333',
+}
 heroText: 范同学的博客
 heroFullScreen: false
 tagline: 保持希望，满怀好奇

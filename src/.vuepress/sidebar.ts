@@ -10,11 +10,13 @@ export default sidebar({
       children: "structure",
     },
     {
-      text: "计算机基础",
-      icon: "book",
-      prefix: "CS_FundamentsCS_Fundaments/",
+      text: "VuePress的使用",
+      icon: "laptop-code",
+      prefix: "VuePress/",
+      link: "VuePress/",
       children: "structure",
     },
+    
     {
       text: "Fuck Java",
       icon: "book",
@@ -22,10 +24,9 @@ export default sidebar({
       children: "structure",
     },
     {
-      text: "VuePress的使用",
-      icon: "laptop-code",
-      prefix: "demo/",
-      link: "demo/",
+      text: "计算机基础",
+      icon: "book",
+      prefix: "CS_FundamentsCS_Fundaments/",
       children: "structure",
     },
     {

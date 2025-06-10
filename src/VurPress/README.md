@@ -1,5 +1,5 @@
 ---
-title: VuePress的使用
+title: VuePress
 index: false
 icon: laptop-code
 category:

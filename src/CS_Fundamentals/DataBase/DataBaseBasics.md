@@ -9,5 +9,5 @@ tag:
   - 日常记录
 ---
 
-# OS
-操作系统
+# DataBase Basics
+数据库基础

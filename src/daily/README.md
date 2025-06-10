@@ -1,5 +1,5 @@
 ---
-title: 日常
+title: 生活日常
 index: false
 icon: laptop-code
 category:
