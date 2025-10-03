@@ -1,9 +1,9 @@
 ---
-title: 计算机基础
+title: Windows技巧
 index: false
 icon: laptop-code
 category:
-  - 计算机基础
+  - 其它
 ---
 
 <Catalog />

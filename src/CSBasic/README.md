@@ -1,9 +1,11 @@
 ---
-title: Fuck Java
+title: 计科基础
 index: false
 icon: laptop-code
 category:
-  - Java
+  - 计科基础
 ---
+
+
 
 <Catalog />

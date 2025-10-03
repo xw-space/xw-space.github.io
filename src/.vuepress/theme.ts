@@ -5,7 +5,9 @@ import navbar from "./navbar.js";
 import sidebar from "./sidebar.js";
 
 export default hopeTheme({
-  hostname: "https://mister-hope.github.io",
+
+  // hostname: "https://mister-hope.github.io",
+  hostname: "https://xw-space.github.io",
 
   author: {
     name: "范同学",
@@ -24,10 +26,13 @@ export default hopeTheme({
   // 侧边栏
   // sidebar,
   sidebar: {
-    "/daily/":"structure",
-    "/VurPress/":"structure",
-    "/Java/":"structure",
-    "/CS_Fundamentals/":"structure",
+    "/AIDevelopment/":"structure",
+    "/CSBasic/":"structure",
+    "/DailyRecord/":"structure",
+    "/JavaDevelopment/":"structure",
+    "/Other/":"structure",
+    "/SoftwareEngineering/":"structure",
+    "/TopicDiscussion/":"structure",
     "/posts/":"structure",
   },
 
@@ -40,21 +45,22 @@ export default hopeTheme({
     description: "一个开发者",
     intro: "/intro.html",
     medias: {
+      Email: "fxw0601@example.com",
+      GitHub: "https://github.com/xw-space",
+      // Wechat: "https://example.com",
       // Baidu: "https://example.com",
-      BiliBili: "https://example.com",
+      // BiliBili: "https://example.com",
       // Bitbucket: "https://example.com",
       // Dingding: "https://example.com",
       // Discord: "https://example.com",
       // Dribbble: "https://example.com",
-      Email: "mailto:info@example.com",
       // Evernote: "https://example.com",
-      Facebook: "https://example.com",
+      // Facebook: "https://example.com",
       // Flipboard: "https://example.com",
       // Gitee: "https://example.com",
-      GitHub: "https://github.com/xw-space",
       // Gitlab: "https://example.com",
-      Gmail: "mailto:info@example.com",
-      Instagram: "https://example.com",
+      // Gmail: "mailto:info@example.com",
+      // Instagram: "https://example.com",
       // Lark: "https://example.com",
       // Lines: "https://example.com",
       // Linkedin: "https://example.com",
@@ -64,26 +70,16 @@ export default hopeTheme({
       // Qzone: "https://example.com",
       // Reddit: "https://example.com",
       // Rss: "https://example.com",
-      Steam: "https://example.com",
-      Twitter: "https://example.com",
-      // Wechat: "https://example.com",
-      Weibo: "https://example.com",
+      // Steam: "https://example.com",
+      // Twitter: "https://example.com",
+      // Weibo: "https://example.com",
       // Whatsapp: "https://example.com",
       // Youtube: "https://example.com",
-      Zhihu: "https://example.com",
+      // Zhihu: "https://example.com",
       VuePressThemeHope: {
         icon: "https://theme-hope-assets.vuejs.press/logo.svg",
         link: "https://theme-hope.vuejs.press",
-      },
-    },
-  },
 
-  // 加密配置
-  encrypt: {
-    config: {
-      "/demo/encrypt.html": {
-        hint: "Password: 1234",
-        password: "1234",
       },
     },
   },
@@ -92,9 +88,21 @@ export default hopeTheme({
   metaLocales: {
     editLink: "在 GitHub 上编辑此页",
   },
-
+  
   // 如果想要实时查看任何改变，启用它。注: 这对更新性能有很大负面影响
   // hotReload: true,
+
+  // 加密配置
+  // encrypt: {
+  //   config: {
+  //     "/demo/encrypt.html": {
+  //       hint: "Password: 1234",
+  //       password: "1234",
+  //     },
+  //   },
+  // },
+
+
 
   // 此处开启了很多功能用于演示，你应仅保留用到的功能。
   markdown: {
@@ -131,12 +139,12 @@ export default hopeTheme({
     vPre: true,
 
     // 取消注释它们如果你需要 TeX 支持
-    // math: {
-    //   // 启用前安装 katex
-    //   type: "katex",
-    //   // 或者安装 mathjax-full
-    //   type: "mathjax",
-    // },
+    math: {
+      // 启用前安装 katex
+      type: "katex",
+      // 或者安装 mathjax-full
+      // type: "mathjax",
+    },
 
     // 如果你需要幻灯片，安装 @vuepress/plugin-revealjs 并取消下方注释
     // revealjs: {

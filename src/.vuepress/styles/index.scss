@@ -1,1 +1,79 @@
-// place your custom styles here
+/* ====== 1) 统一横排，强覆盖主题的布局 / 媒体查询 ====== */
+.vp-blog-hero,
+.vp-hero { /* 兼容 theme-hope 的 blog hero 和部分版本的 vp-hero */
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 24px !important;
+  flex-wrap: nowrap !important;
+  justify-content: center !important;   /* 居中这一行的内容 */
+  margin-inline: auto !important;       /* 避免被外层 auto margin 推到一侧 */
+  text-align: initial !important;       /* 不要受父级居中影响 */
+  width: 100%;
+}
+
+/* ====== 2) 左侧 Logo 限宽，不要把一行撑爆 ====== */
+.vp-blog-hero-image,
+.vp-hero .vp-hero-image,
+.vp-hero .vp-hero-logo {
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+}
+.vp-blog-hero-image img,
+.vp-hero .vp-hero-image img,
+.vp-hero .vp-hero-logo img {
+  display: block !important;
+  width: 80px !important;
+  height: 80px !important;
+  object-fit: contain !important;
+  border: none !important;
+  filter: none !important;
+}
+
+/* ====== 3) 右侧文字上下堆叠，主标题大，副标题小 ====== */
+.vp-blog-hero-info,
+.vp-hero .vp-hero-info {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 4px !important;
+  min-width: 0; /* 避免文字区域被挤换行 */
+  text-align: left !important;
+}
+.vp-blog-hero-title,
+.vp-hero .vp-hero-title,
+.vp-hero h1 {
+  margin: 0 !important;
+  line-height: 1.2 !important;
+  font-weight: 800 !important;
+  align-items: center !important;
+  font-size: clamp(28px, 4vw, 40px) !important;
+}
+.vp-blog-hero-description,
+.vp-hero .vp-hero-description,
+.vp-hero .description,
+.vp-hero p.tagline {
+  margin: 0 !important;
+  line-height: 1.6 !important;
+  align-items: center !important;
+  font-size: 20px !important;
+  color: #46c4e4 !important;
+}
+
+
+
+/* ====== 4) 移动端保留横排（如果你想小屏改回纵排，把这个删掉即可） ====== */
+@media (max-width: 640px) {
+  .vp-blog-hero,
+  .vp-hero {
+    flex-direction: row !important;
+    align-items: center !important;
+    text-align: left !important;
+  }
+  .vp-blog-hero-info,
+  .vp-hero .vp-hero-info {
+    align-items: flex-start !important;
+  }
+}
+
+

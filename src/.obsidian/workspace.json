@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "demo/disable.md",
+                "file": "CS_Fundamentals/ComputerNetwork.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "demo/disable.md",
+                "file": "CS_Fundamentals/ComputerNetwork.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "demo/disable.md",
+                "file": "CS_Fundamentals/ComputerNetwork.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "demo/disable.md"
+                "file": "CS_Fundamentals/ComputerNetwork.md"
               }
             }
           }
@@ -148,9 +148,9 @@
   },
   "active": "6a9715df0be5165a",
   "lastOpenFiles": [
+    "posts/测试2.md",
     "demo/测试.md",
     "posts/strawberry.md",
-    "posts/测试2.md",
     "posts/dragonfruit.md"
   ]
 }
