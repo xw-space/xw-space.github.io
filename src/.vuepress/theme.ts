@@ -43,7 +43,7 @@ export default hopeTheme({
   // 博客相关
   blog: {
     description: "一个开发者",
-    intro: "/intro.html",
+    intro: "/intro",
     medias: {
       Email: "fxw0601@example.com",
       GitHub: "https://github.com/xw-space",

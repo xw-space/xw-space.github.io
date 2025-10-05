@@ -1,18 +1,24 @@
 
 name: 部署文档
 
+# 当推送到 main 分支时触发这个工作流
 on:
   push:
     branches:
       - main
 
+# 给予工作流写入仓库权限（也就是后面要推送 dist 文件到另一个分支）
 permissions:
   contents: write
 
+# 定义工作流包含的作业
 jobs:
+  # 定义了一个名为 deploy-gh-pages 的任务，在最新版 Ubuntu 环境运行
   deploy-gh-pages:
     runs-on: ubuntu-latest
+    # 任务步骤
     steps:
+      # 第一步：从你的仓库拉取全部代码（fetch-depth: 0 是为了保留 Git 提交记录，VuePress 主题有时需要）
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -20,19 +26,19 @@ jobs:
           # 如果你文档需要 Git 子模块，取消注释下一行
           # submodules: true
 
-
-
+      # 第二步：设置 Node.js 环境
       - name: 设置 Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
 
+      # 第三步
       - name: 安装依赖
         run: |
           corepack enable
           npm ci
-
+      # 第4步
       - name: 构建文档
         env:
           NODE_OPTIONS: --max_old_space_size=8192
@@ -40,6 +46,7 @@ jobs:
           npm run docs:build
           > src/.vuepress/dist/.nojekyll
 
+      # 第5步
       - name: 部署文档
         uses: JamesIves/github-pages-deploy-action@v4
         env:

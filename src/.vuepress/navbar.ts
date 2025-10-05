@@ -1,9 +1,9 @@
 import { navbar } from "vuepress-theme-hope";
 // 网站顶部导航栏配置
 export default navbar([
-  "/",
-  "/DailyRecord/",
-  "/TopicDiscussion/",
+  "/blog/",
+  "/blog/DailyRecord/",
+  "/blog/TopicDiscussion/",
   {
     text: "计科基础",
     icon: "pen-to-square",
@@ -27,9 +27,9 @@ export default navbar([
       // },
     ],
   },
-  "/SoftwareEngineering/",
-  "/AIDevelopment/",
-  "/JavaDevelopment/",
+  "/blog/SoftwareEngineering/",
+  "/blog/AIDevelopment/",
+  "/blog/JavaDevelopment/",
   {
     text: "其它",
     icon: "ellipsis-h",

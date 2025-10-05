@@ -1,27 +1,27 @@
 import { sidebar } from "vuepress-theme-hope";
 // 配置文档左侧导航结构，支持多级分类
 export default sidebar({
-  "/DailyRecord/": "structure",
-  
-  "/TopicDiscussion/": [
-  ],
-  
-  "/CSBasic/": [
-  ],
-  
-  "/SoftwareEngineering/": [
-  ],
-  
-  "/AIDevelopment/": [
+  "/blog/DailyRecord/": "structure",
+
+  "/blog/TopicDiscussion/": [
   ],
 
-  "/JavaDevelopment/": [
+  "/blog/CSBasic/": [
   ],
 
-  "/Other/": [
+  "/blog/SoftwareEngineering/": [
+  ],
+  
+  "/blog/AIDevelopment/": [
   ],
 
-  "/": [
+  "/blog/JavaDevelopment/": [
+  ],
+
+  "/blog/Other/": [
+  ],
+
+  "/blog/": [
     "",
     {
       text: "日常",
