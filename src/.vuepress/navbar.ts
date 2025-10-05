@@ -1,22 +1,22 @@
 import { navbar } from "vuepress-theme-hope";
 // 网站顶部导航栏配置
 export default navbar([
-  "/blog/",
-  "/blog/DailyRecord/",
-  "/blog/TopicDiscussion/",
+  "/",
+  "/DailyRecord/",
+  "/TopicDiscussion/",
   {
     text: "计科基础",
     icon: "pen-to-square",
-    prefix: "CSBasic/",
+    prefix: "/CSBasic/",
     children: [
-      { text: "计算机组成原理", icon: "pen-to-square", link: "PrinciplesofComputerOrganization.md" },
-      { text: "操作系统", icon: "pen-to-square", link: "OperatingSystem" },
-      { text: "计算机网络", icon: "pen-to-square", link: "ComputerNetwork" },
-      { text: "数据结构与算法", icon: "pen-to-square", link: "DataStructuresandAlgorithms" },
+      { text: "计算机组成原理", icon: "pen-to-square", link: "PrinciplesofComputerOrganization.html" },
+      { text: "操作系统", icon: "pen-to-square", link: "OperatingSystem.html" },
+      { text: "计算机网络", icon: "pen-to-square", link: "ComputerNetwork.html" },
+      { text: "数据结构与算法", icon: "pen-to-square", link: "DataStructuresandAlgorithms.html" },
       {
         text: "数据库",
         icon: "pen-to-square",
-        link: "DataStructuresandAlgorithms" 
+        link: "DataBase.html"
       },
         // prefix: "DataBase/",
         // children: [
@@ -27,17 +27,17 @@ export default navbar([
       // },
     ],
   },
-  "/blog/SoftwareEngineering/",
-  "/blog/AIDevelopment/",
-  "/blog/JavaDevelopment/",
+  "/SoftwareEngineering/",
+  "/AIDevelopment/",
+  "/JavaDevelopment/",
   {
     text: "其它",
     icon: "ellipsis-h",
-    prefix: "Other/",
+    prefix: "/Other/",
     children: [
-      { text: "WindowsTips", icon: "link", link: "WindowsTips/README.md" },
-      { text: "MacGuide", icon: "link", link: "MacGuide.md" },
-      { text: "VuePress", icon: "link", link: "VuePress/README.md" },
+      { text: "WindowsTips", icon: "link", link: "WindowsTips/" },
+      { text: "MacGuide", icon: "link", link: "MacGuide.html" },
+      { text: "VuePress", icon: "link", link: "VuePress/" },
     ],
   }
   // {

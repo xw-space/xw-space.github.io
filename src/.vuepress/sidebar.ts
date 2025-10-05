@@ -1,58 +1,52 @@
 import { sidebar } from "vuepress-theme-hope";
 // 配置文档左侧导航结构，支持多级分类
 export default sidebar({
-  "/blog/DailyRecord/": "structure",
+  "/DailyRecord/": "structure",
 
-  "/blog/TopicDiscussion/": [
-  ],
+  "/TopicDiscussion/": "structure",
 
-  "/blog/CSBasic/": [
-  ],
+  "/CSBasic/": "structure",
 
-  "/blog/SoftwareEngineering/": [
-  ],
+  "/SoftwareEngineering/": "structure",
   
-  "/blog/AIDevelopment/": [
-  ],
+  "/AIDevelopment/": "structure",
 
-  "/blog/JavaDevelopment/": [
-  ],
+  "/JavaDevelopment/": "structure",
 
-  "/blog/Other/": [
-  ],
+  "/Other/": "structure",
 
-  "/blog/": [
+  "/": [
     "",
     {
       text: "日常",
       icon: "book",
-      prefix: "daily/",
+      prefix: "/daily/",
       children: "structure",
     },
     {
       text: "VuePress的使用",
       icon: "laptop-code",
       prefix: "VuePress/",
-      link: "VuePress/",
+      link: "/VuePress/",
       children: "structure",
     },
     
     {
       text: "Fuck Java",
       icon: "book",
-      prefix: "Java/",
+      prefix: "/Java/",
       children: "structure",
     },
     {
       text: "计算机基础",
       icon: "book",
-      prefix: "CS_FundamentsCS_Fundaments/",
+      prefix: "/CS_FundamentsCS_Fundaments/",
       children: "structure",
     },
     {
       text: "其它文章",
       icon: "book",
-      prefix: "posts/",
+      prefix: "/posts/",
       children: "structure",
     },
     "intro",

@@ -20,21 +20,22 @@ export default hopeTheme({
 
   docsDir: "src",
 
-  // 导航栏
+  // 导航栏,直接使用import导入的
   navbar,
 
-  // 侧边栏
-  // sidebar,
-  sidebar: {
-    "/AIDevelopment/":"structure",
-    "/CSBasic/":"structure",
-    "/DailyRecord/":"structure",
-    "/JavaDevelopment/":"structure",
-    "/Other/":"structure",
-    "/SoftwareEngineering/":"structure",
-    "/TopicDiscussion/":"structure",
-    "/posts/":"structure",
-  },
+  // 侧边栏,直接使用import导入的
+  sidebar,
+  // sidebar也可自己配置↓
+  // sidebar: {
+  //   "/AIDevelopment/":"structure",
+  //   "/CSBasic/":"structure",
+  //   "/DailyRecord/":"structure",
+  //   "/JavaDevelopment/":"structure",
+  //   "/Other/":"structure",
+  //   "/SoftwareEngineering/":"structure",
+  //   "/TopicDiscussion/":"structure",
+  //   "/posts/":"structure",
+  // },
 
   // 页脚
   footer: "默认页脚",
