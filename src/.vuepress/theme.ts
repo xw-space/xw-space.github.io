@@ -25,7 +25,8 @@ export default hopeTheme({
 
   // 侧边栏,直接使用import导入的
   sidebar,
-  // sidebar也可自己配置↓
+  // sidebar: [],
+  // sidebar也可自己配置
   // sidebar: {
   //   "/AIDevelopment/":"structure",
   //   "/CSBasic/":"structure",
