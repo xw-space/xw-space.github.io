@@ -1,4 +1,4 @@
 User-agent:*
 Disallow:
 
-Sitemap: https://xw-space.github.io/sitemap.xml
+Sitemap: https://xw-space.github.io/blog/sitemap.xml
