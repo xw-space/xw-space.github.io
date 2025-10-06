@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CSBasic/DataBase.md",
+                "file": "JavaDevelopment/JavaBasic.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "CSBasic/DataBase.md",
+                "file": "JavaDevelopment/JavaBasic.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "CSBasic/DataBase.md",
+                "file": "JavaDevelopment/JavaBasic.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,16 +125,16 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "CSBasic/DataBase.md"
+                "file": "JavaDevelopment/JavaBasic.md"
               }
             }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -148,10 +148,19 @@
   },
   "active": "b2fb7947411edbfc",
   "lastOpenFiles": [
+    "JavaDevelopment/JavaConcurrency.md",
+    "JavaDevelopment/JavaVirtualMachine.md",
+    "JavaDevelopment/JavaCollection.md",
+    "JavaDevelopment/JavaBasic.md",
     "CSBasic/ComputerNetwork.md",
-    "AIDevelopment/README.md",
     "DailyRecord/Daily2025-06-07.md",
     "DailyRecord/Daily2025-05-10.md",
+    "CSBasic/README.md",
+    "CSBasic/PrinciplesofComputerOrganization.md",
+    "CSBasic/OperatingSystem.md",
+    "CSBasic/DataStructuresandAlgorithms.md",
+    "CSBasic/DataBase.md",
+    "AIDevelopment/README.md",
     "intro.md"
   ]
 }

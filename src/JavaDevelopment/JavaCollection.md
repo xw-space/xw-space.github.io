@@ -252,4 +252,312 @@ import java.util.concurrent.CopyOnWriteArrayList;
 List<String> copyOnWriteList = new CopyOnWriteArrayList<>();
 ```
 
+## Set集合
+**Set特点**：元素唯一、无序
+**Set 接口的实现类**
+- HashSet
+    - 基于哈希表实现，不保证元素的顺序。
+	- 插入、删除和查找操作具有常数时间的性能。
+	- 允许`null`元素。
+- LinkedHashSet
+    - 继承自`HashSet`，基于哈希表和链表实现，维护元素的插入顺序。
+	- 元素按插入顺序迭代。
+	- 性能略低于`HashSet`，但提供了有序性。
+- TreeSet
+    - 基于红黑树实现，元素按自然顺序或指定的比较器排序。
+	- 提供有序的集合视图。
+	- 插入、删除和查找操作具有对数时间的性能。
+
+- **SortedSet**：扩展了`Set`接口，元素按自然顺序或指定的比较器排序。
+    - **主要实现类**：`TreeSet`
+
+**Set的线程安全**
+`Set`接口的实现类（如`HashSet`、`LinkedHashSet`、`TreeSet`）都不是线程安全的。
+如果需要在多线程环境中使用，可以使用`Collections.synchronizedSet()`方法包装`Set`，或者使用并发集合类如`ConcurrentSkipListSet`。
+
+## Set集合-代码
+
+Set接口和常用实现类导入
+```java
+import java.util.Set;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.TreeSet;
+```
+创建Set
+```java
+// 使用HashSet
+Set<String> set = new HashSet<>();
+// 使用LinkedHashSet（保持插入顺序）
+Set<String> linkedHashSet = new LinkedHashSet<>();
+// 使用TreeSet（自动排序）
+Set<String> treeSet = new TreeSet<>();
+
+// 获取Set的大小
+int size = set.size();
+
+// 遍历Set
+// 使用增强型for循环
+for (String fruit : set) {
+    System.out.println(fruit);
+}
+// 使用迭代器
+import java.util.Iterator;
+
+Iterator<String> iterator = set.iterator();
+while (iterator.hasNext()) {
+    String fruit = iterator.next();
+    System.out.println(fruit);
+}
+// 使用Java 8的forEach方法
+set.forEach(System.out::println);
+
+
+// 检查元素是否存在
+boolean contains = set.contains("Apple"); // true
+
+// 检查子集和超集
+Set<String> set1 = new HashSet<>(Arrays.asList("Apple", "Banana"));
+Set<String> set2 = new HashSet<>(Arrays.asList("Apple"));
+
+boolean isSubset = set2.containsAll(set1); // false
+boolean isSuperset = set1.containsAll(set2); // true
+
+// 将Set转换为数组
+String[] array = set.toArray(new String[0]);
+
+// 创建不可变Set（Java 9及以上）
+Set<String> immutableSet = Set.of("Apple", "Banana", "Cherry");
+// immutableSet 不可修改，任何修改操作都会抛出 UnsupportedOperationException
+
+```
+
+```java
+// 添加元素
+set.add("Apple");
+set.add("Banana");
+set.add("Cherry");
+// 添加重复元素不会成功
+boolean added = set.add("Apple"); // false
+
+// 删除元素
+set.remove("Banana"); // 删除指定元素
+set.clear(); // 清空整个Set
+
+// 集合操作
+// 并集
+Set<String> set1 = new HashSet<>(Arrays.asList("Apple", "Banana"));
+Set<String> set2 = new HashSet<>(Arrays.asList("Banana", "Cherry"));
+
+// 使用addAll方法
+set1.addAll(set2); // set1 现在包含 ["Apple", "Banana", "Cherry"]
+// 交集
+Set<String> set1 = new HashSet<>(Arrays.asList("Apple", "Banana"));
+Set<String> set2 = new HashSet<>(Arrays.asList("Banana", "Cherry"));
+
+// 使用retainAll方法
+set1.retainAll(set2); // set1 现在只包含 ["Banana"]
+// 差集
+Set<String> set1 = new HashSet<>(Arrays.asList("Apple", "Banana"));
+Set<String> set2 = new HashSet<>(Arrays.asList("Banana", "Cherry"));
+
+// 使用removeAll方法
+set1.removeAll(set2); // set1 现在只包含 ["Apple"]
+
+// 排序Set中的元素
+// HashSet 不保证元素的顺序，如果需要有序的 Set，可以使用 LinkedHashSet 或 TreeSet。
+
+// 使用TreeSet自动排序
+Set<String> treeSet = new TreeSet<>(Arrays.asList("Banana", "Apple", "Cherry"));
+// treeSet 自动按自然顺序排序 ["Apple", "Banana", "Cherry"]
+// 使用Comparator自定义排序
+Set<String> customSortedSet = new TreeSet<>((s1, s2) -> s2.compareTo(s1));
+customSortedSet.addAll(Arrays.asList("Apple", "Banana", "Cherry"));
+// customSortedSet 按降序排序 ["Cherry", "Banana", "Apple"]
+
+
+// 使用Set进行去重操作
+// Set 天然具有去重的特性，可以很方便地用于去除集合中的重复元素。
+
+List<String> listWithDuplicates = Arrays.asList("Apple", "Banana", "Apple", "Cherry");
+Set<String> uniqueFruits = new HashSet<>(listWithDuplicates);
+// uniqueFruits 现在包含 ["Apple", "Banana", "Cherry"]
+
+
+```
+
+使用Java 8 Stream API进行高级操作
+```java
+// 过滤元素
+Set<String> filtered = set.stream()
+                          .filter(fruit -> fruit.startsWith("A"))
+                          .collect(Collectors.toSet());
+// 映射元素
+Set<String> upperCaseFruits = set.stream()
+                                  .map(String::toUpperCase)
+                                  .collect(Collectors.toSet());
+// 去重（对于Set本身已经是去重的，此操作适用于其他集合转换到Set）
+List<String> listWithDuplicates = Arrays.asList("Apple", "Banana", "Apple");
+Set<String> uniqueFruits = listWithDuplicates.stream().collect(Collectors.toSet());
+
+// 使用Stream API进行过滤和映射
+Set<String> fruits = new HashSet<>(Arrays.asList("Apple", "Banana", "Cherry", "Date"));
+
+// 过滤出以'A'开头的水果
+Set<String> filtered = fruits.stream().filter(fruit -> fruit.startsWith("A")).collect(Collectors.toSet());
+System.out.println("以'A'开头的水果: " + filtered);
+
+// 将水果名称转换为大写
+Set<String> upperCaseFruits = fruits.stream().map(String::toUpperCase).collect(Collectors.toSet());
+System.out.println("大写水果名称: " + upperCaseFruits);
+
+
+```
+
+
+
+
+
+
+
+## Map映射
+Map是键值对（key-value pairs）的集合，键不允许重复。
+
+`Map`不是`Collection`的子接口，单独一类，不继承 `Collection`，用于存储键值对，但它是集合框架的重要组成部分。
+**Map 接口的实现类**
+- HashMap：
+	- 基于哈希表实现，存储键值对，不保证映射的顺序。
+	- 查询速度快，提供常数时间的性能进行基本操作（`get`和`put`）。
+	- 允许一个`null`键和多个`null`值。
+- LinkedHashMap
+    - 继承自`HashMap`，通过维护一个双向链表来记录插入顺序或访问顺序。
+	- 可以按插入顺序或访问顺序迭代元素。
+	- 适用于需要有序访问缓存的场景。
+- TreeMap
+    - 基于红黑树实现，键按自然顺序或自定义的比较器排序。
+	- 提供有序的键值对视图。
+	- 支持范围查询和有序遍历。
+- Hashtable
+    - 类似于`HashMap`，但是线程安全的（所有方法都是同步的）。
+	- 线程安全，但性能较低。
+	- 不允许`null`键和`null`值。
+	- 在需要线程安全的场景下，通常推荐使用`ConcurrentHashMap`。
+- ConcurrentHashMap
+    - 线程安全的哈希表实现，适用于高并发环境。
+	- 提供比`Hashtable`更高的并发性能。
+	- 支持高并发读取和一定程度的并发写入。
+	- 不允许`null`键和`null`值。
+- WeakHashMap
+    - 一种特殊的`Map`，其键是弱引用（WeakReference），当键不再被强引用时，可以被垃圾回收器回收。
+	- 适用于缓存实现，防止内存泄漏。
+	- 键被回收后，对应的键值对会被自动移除。
+- IdentityHashMap
+    - 一种`Map`实现，使用对象的引用相等性（`==`）而不是`equals`方法来比较键。
+	- 适用于需要基于对象引用的场景。
+	- 不常用，但在特定需求下有用。`
+
+- **SortedMap**：扩展了`Map`接口，键按自然顺序或指定的比较器排序。
+    - **主要实现类**：`TreeMap`
+
+**HashMap的底层实现原理**：
+* `HashMap` 底层由 **数组 + 链表/红黑树** 构成。
+* 每个数组槽位是一个桶（bucket），桶中存储一个链表或红黑树。
+* 每次插入数据时，通过哈希函数定位到某个 bucket，如果存在哈希冲突，则挂链表或红黑树。
+**HashMap的扩容机制**：
+* 默认容量为 16，负载因子为 0.75。
+* 当元素个数超过 `容量 × 负载因子` 时触发扩容。
+* 扩容时，数组大小变为原来的 2 倍，并重新计算每个键的位置（rehash）。
+* JDK 1.8 中，扩容过程优化为“新旧节点交叉复制”，避免死链问题。
+**HashMap如何解决哈希冲突**：使用链地址法解决。JDK 1.8 起优化了冲突处理：当链表长度超过 8 且数组长度 ≥ 64 时，链表会转换成红黑树，提高查找效率（从 O(n) 提高到 O(log n)）。
+**HashMap为什么线程不安全？**
+因为它没有对读写操作加锁，多个线程同时进行 put 或 resize 操作时可能导致：
+* **数据覆盖**（put 时覆盖未提交的数据）
+* **数据丢失**（多线程 put 导致链表被重写）
+* **死循环**（多线程扩容时导致链表形成环）
+**HashMap如何实现线程安全**：
+* 使用 `Collections.synchronizedMap(map)` 包装。
+* 使用 `ConcurrentHashMap` 替代。
+* 在方法外手动加锁，如使用 `synchronized` 或 `ReentrantLock`。
+**HashMap中的循环链表是如何产⽣的**
+这个是 JDK 1.7 的经典并发 bug，在 **JDK 1.8** 中被重写的扩容逻辑解决了。在多线程并发扩容过程中：
+* 假设两个线程同时触发 `resize`；
+* 链表在 rehash 时被拆开并重新链接；
+* 如果线程之间顺序不一致，就可能把链表头指向了自己，形成循环；
+* 后续访问会导致 `get()` 死循环，CPU 飙升。
+**ConcurrentHashMap的底层实现**
+- JDK 1.7：使用 **分段锁**（Segment + ReentrantLock），每个 Segment 类似一个小 HashMap，默认分成 16 段，线程只锁一个段，提高并发度。
+- JDK 1.8（核心）：
+	- 去除了 Segment，改为使用 **CAS + synchronized + Node数组 + 链表/红黑树**。
+	* `CAS` 操作保障写入原子性（无锁并发 put）。
+	* `synchronized` 控制桶节点的同步。
+	* 红黑树用于高冲突 bucket 的优化。
+	* 支持并发扩容，多个线程可协作迁移数据，提升性能。
+**Map的遍历方式**
+- 遍历 `entrySet`（推荐）。特点：一次取出键值对，性能最优。
+```java
+for (Map.Entry<K, V> entry : map.entrySet()) {
+    K key = entry.getKey();
+    V value = entry.getValue();
+}
+```
+- 遍历 `keySet`，再通过 `get()` 获取 value。缺点：性能较差，`get()` 会重复 hash。
+```java
+for (K key : map.keySet()) {
+    V value = map.get(key);
+}
+```
+- 遍历 `values()`。适用于只关心 value 的场景。
+```java
+for (V value : map.values()) {
+    // 只需要 value
+}
+```
+- 使用 Java 8 的 Lambda 表达式
+```java
+map.forEach((k, v) -> {
+    System.out.println(k + " -> " + v);
+});
+```
+
+## Map映射-代码
+
+```java
+
+Map<Integer, Integer> freqMap = new HashMap<>();
+for (int num : nums) {
+	freqMap.put(num, freqMap.getOrDefault(num, 0) + 1);
+}
+
+```
+
+
+
+## Queue队列
+**Queue 接口的实现类**
+- PriorityQueue
+    - 基于优先级的队列，基于最小堆实现，元素按照自然顺序或指定的比较器排序。
+    - 插入和删除的时间复杂度为 `O(log n)`
+	- 默认是最小元素（根据排序规则）位于队列头部，可以使用逆序比较器（`Collections.reverseOrder()` 或 `Comparator.reverseOrder()`）实现最大堆
+	- 适用于需要按优先级处理元素的场景，比如Top K、最值问题、调度系统、贪心算法。
+- ArrayDeque
+    - 基于动态数组实现，支持在两端高效的插入和删除操作。
+	- 无容量限制，具有自动扩容机制。
+	- 适合作为栈或队列使用，性能优于`Stack`类。
+- LinkedList
+    - 也可以作为`Queue`使用，基于链表实现，实现先进先出（FIFO）队列。
+	- 支持队列操作如`offer`、`poll`、`peek`。
+	- 适合需要双端操作的场景（也可作为`Deque`使用）。
+- PriorityBlockingQueue
+    - 线程安全的优先级队列，适用于并发环境。
+	- 元素按优先级排序。
+	- 支持阻塞操作，适用于生产者-消费者模型。
+
+`Deque`
+**Double-Ended Queue**（双端队列），支持在两端进行插入和删除操作。
+- 所在位置：`java.util.Deque`
+- 继承关系：`Deque` extends `Queue` extends `Collection`，扩展了`Queue`接口，所以 `Deque` **是 Collection 家族成员**。
+- 常见实现类：
+    - `ArrayDeque`：基于动态数组实现的高效双端队列。
+    - `LinkedList`：也可以作为`Deque`使用。
+
 ## END
