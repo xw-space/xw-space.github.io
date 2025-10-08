@@ -1,9 +1,9 @@
 ---
-title: 主题讨论
+title: 生活感想
 index: false
 icon: laptop-code
 category:
-  - 主题讨论
+  - 生活感想
 ---
 
 <Catalog />

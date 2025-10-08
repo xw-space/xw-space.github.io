@@ -13,13 +13,62 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "JavaDevelopment/JavaBasic.md",
+                "file": "CSBasic/ComputerNetwork.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "13612c1f180a282a",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "DailyThoughts/README.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "98d0e5096b1ee50e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "ProgrammingDevelopment/JavaProjectPractice.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "bef9446b64f8b298",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "posts/博客初衷以及内容说明.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "378d76999dd2acdf",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Other/VuePress/VuePress教程.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -85,7 +134,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "JavaDevelopment/JavaBasic.md",
+                "file": "ProgrammingDevelopment/JavaProjectPractice.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +151,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "JavaDevelopment/JavaBasic.md",
+                "file": "ProgrammingDevelopment/JavaProjectPractice.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +174,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "JavaDevelopment/JavaBasic.md"
+                "file": "ProgrammingDevelopment/JavaProjectPractice.md"
               }
             }
           }
@@ -146,21 +195,33 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "b2fb7947411edbfc",
+  "active": "98d0e5096b1ee50e",
   "lastOpenFiles": [
-    "JavaDevelopment/JavaConcurrency.md",
-    "JavaDevelopment/JavaVirtualMachine.md",
-    "JavaDevelopment/JavaCollection.md",
-    "JavaDevelopment/JavaBasic.md",
+    "ProgrammingDevelopment/C&C++.md",
+    "ProgrammingDevelopment/JavaProjectPractice.md",
+    "Other/README.md",
+    "Other/英语学习.md",
+    "Other/英语语法.md",
+    "ProgrammingDevelopment/SoftwareEngineering.md",
+    "ProgrammingDevelopment/Python.md",
+    "ProgrammingDevelopment/JavaSpring&SpringBoot.md",
+    "ProgrammingDevelopment/JavaServiceDevelopmentTools.md",
+    "ProgrammingDevelopment/AIDevelopment.md",
+    "Other/VuePress/page.md",
     "CSBasic/ComputerNetwork.md",
-    "DailyRecord/Daily2025-06-07.md",
-    "DailyRecord/Daily2025-05-10.md",
-    "CSBasic/README.md",
-    "CSBasic/PrinciplesofComputerOrganization.md",
-    "CSBasic/OperatingSystem.md",
-    "CSBasic/DataStructuresandAlgorithms.md",
     "CSBasic/DataBase.md",
-    "AIDevelopment/README.md",
-    "intro.md"
+    "CSBasic/DataStructuresandAlgorithms.md",
+    "DailyThoughts/README.md",
+    "ProgrammingDevelopment/README.md",
+    "SoftwareEngineering/README.md",
+    "Other/VuePress/markdown.md",
+    "Other/VuePress/layout.md",
+    "Other/现代诗词.md",
+    "posts/博客初衷以及内容说明.md",
+    "Other/VuePress/VuePress教程.md",
+    "Other/日语学习.md",
+    "Other/摘抄.md",
+    "Other/古文.md",
+    "Other/古代诗词.md"
   ]
 }

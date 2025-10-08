@@ -8,9 +8,10 @@ export default defineUserConfig({
   //   "!**/node_modules/**",
   //   "!.vuepress/**",
   // ],
-  base: "/",
   // base: "/blog/",
 
+  
+  base: "/",
   lang: "zh-CN",
   title: "xwBlog",
   description: "xw's Blog",

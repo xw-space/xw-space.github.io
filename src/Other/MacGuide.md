@@ -3,7 +3,7 @@ icon: pen-to-square
 date: 2025-10-01
 category:
   - 其它
-  - Mac入门
+  - 摘抄
 tag:
   - default
 ---

@@ -1,9 +1,10 @@
 ---
-title: 软件工程
+title: 编程&开发
 index: false
 icon: laptop-code
 category:
-  - 软件工程
+  - Programming
+  - Development
 ---
 
 <Catalog />
