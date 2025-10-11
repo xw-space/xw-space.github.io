@@ -23,8 +23,9 @@ tag:
 **常见实现类**：
 - `ArrayList`：基于动态数组实现，查询快，插入和删除慢。适合读取频繁的场景。
 - `LinkedList`：基于双向链表实现，插入和删除快，但查询较慢。适合频繁插入和删除的场景。
-- `Vector`：已过时，线程安全，性能较低。在需要线程安全的场景下，通常推荐使用`ArrayList`配合外部同步或使用`CopyOnWriteArrayList`。
 - `CopyOnWriteArrayList`：线程安全的 `ArrayList`，用于并发环境
+- `Vector`：已过时，线程安全，性能较低。在需要线程安全的场景下，通常推荐使用`ArrayList`配合外部同步或使用`CopyOnWriteArrayList`。
+
 **`List`接口的常用方法**：
 - `add(E e)`：在列表末尾添加元素。
 - `add(int index, E element)`：在指定索引处插入元素。
@@ -39,6 +40,7 @@ tag:
 - 当达到容量时，触发扩容机制，新容量等于，初始容量+扩容因子*容量。
 - 时间成本：数组拷贝 (`System.arraycopy()`)，时间复杂度为 O(n)。
 - 空间成本：新数组占用更大空间，旧数组等待 GC 释放。
+
 **ArrayList和Array的区别**
 - 长度：`Array`的长度是固定的，一旦创建就不能改变。`ArrayList`的长度是可变的，会依据元素数量自动扩容。
 - 数据类型：`Array`可以存储基本数据类型（如`int`、`char`等）和引用数据类型。`ArrayList`只能存储引用数据类型，若要存储基本数据类型，需使用对应的包装类（如`Integer`、`Character`等）。
@@ -47,12 +49,14 @@ tag:
 - 插入和删除：`Array` 需要手动管理元素的插入和删除，不提供内置方法。`ArrayList` 提供 `add()`、`remove()` 等方法，内部会自动调整数组大小。
 - 内存使用：`Array` 仅存储元素，占用内存较少。`ArrayList` 由于扩容机制，会预留额外空间，可能会浪费部分内存。
 - 适用场景：如果数据大小固定且访问频繁，使用 `Array`。如果数据大小不固定且需要灵活操作，使用 `ArrayList`。
+
 **ArrayList 与 LinkedList 的区别**
 - 实现方式：`ArrayList`基于动态数组实现，`LinkedList`基于双向链表实现
 - 访问性能方面：`ArrayList`支持随机访问，通过索引访问元素的时间复杂度是 O (1)。`LinkedList`不支持随机访问，访问元素需要从头或尾开始遍历链表，时间复杂度是 O (n)。
 - 插入和删除性能方面：`ArrayList`在列表末尾插入和删除元素的时间复杂度是 O (1)，但在中间或开头插入和删除元素时，需要移动后续元素，时间复杂度是 O (n)。`LinkedList`在任意位置插入和删除元素的时间复杂度都是 O (1)，因为只需修改相邻节点的引用。
 - 内存占用方面：`ArrayList`的内存占用相对较小，仅存储元素，主要是数组本身的开销。`LinkedList`的每个节点除了存储元素外，还需要额外的引用指针，内存占用相对较大。
 - 适用场景：如果查询操作多，使用 `ArrayList`。如果插入和删除操作多，使用 `LinkedList`。
+
 **ArrayList的序列化**
 - ArrayList 本身实现了 Serializable 接口，可以直接被序列化和反序列化
 - ArrayList序列化要确保内部对象也实现了 Serializable 。
