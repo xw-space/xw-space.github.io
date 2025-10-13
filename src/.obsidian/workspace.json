@@ -50,7 +50,7 @@
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -171,13 +171,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "ProgrammingDevelopment/JavaCollection.md",
+                "file": "DailyThoughts/README.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "JavaCollection 的大纲"
+              "title": "README 的大纲"
             }
           }
         ],
@@ -198,11 +198,13 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "64addd68e59182d4",
+  "active": "13612c1f180a282a",
   "lastOpenFiles": [
+    "CSBasic/PrinciplesofComputerOrganization.md",
+    "CSBasic/OperatingSystem.md",
+    "ProgrammingDevelopment/JavaCollection.md",
     "ProgrammingDevelopment/JavaBasic.md",
     "posts/博客初衷以及内容说明.md",
-    "CSBasic/OperatingSystem.md",
     "CSBasic/DataBase.md",
     "CSBasic/DataStructuresandAlgorithms.md",
     "CSBasic/ComputerNetwork.md",
@@ -223,8 +225,6 @@
     "SoftwareEngineering/README.md",
     "Other/VuePress/markdown.md",
     "Other/VuePress/layout.md",
-    "Other/现代诗词.md",
-    "Other/VuePress/VuePress教程.md",
-    "Other/日语学习.md"
+    "Other/现代诗词.md"
   ]
 }
