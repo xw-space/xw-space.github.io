@@ -548,6 +548,7 @@ creator-trx-id 创建这个ReadView的事务的id查询规则：该版本的事�
 
 
 【数据库中的MVCC到底是个啥？】 https://www.bilibili.com/video/BV16VVRzuEvL/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
+【面试官：说说MVCC？ 事务隔离级别实现原理是什么？】 https://www.bilibili.com/video/BV1Hr421p7EK/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
 
 
 
