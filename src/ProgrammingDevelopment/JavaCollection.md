@@ -77,7 +77,8 @@ List<String> list = new ArrayList<>(); // 使用ArrayList
 
 List<String> linkedList = new LinkedList<>(); // 使用LinkedList
 
-List<String> predefinedList = Arrays.asList("A", "B", "C"); 使用Arrays.asList()快速初始化
+List<String> predefinedList = Arrays.asList("A", "B", "C"); 
+// 使用Arrays.asList()快速初始化
 // 注意：此方法返回的List是固定大小的，不能进行增删操作
 ```
 
