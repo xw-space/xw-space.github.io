@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "DailyThoughts/README.md",
+                "file": "CSBasic/DataBase.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "DataBase"
             }
           },
           {
@@ -171,13 +171,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "DailyThoughts/README.md",
+                "file": "CSBasic/DataBase.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "README 的大纲"
+              "title": "DataBase 的大纲"
             }
           }
         ],
@@ -200,6 +200,8 @@
   },
   "active": "13612c1f180a282a",
   "lastOpenFiles": [
+    "CSBasic/ComputerNetwork.md",
+    "DailyThoughts/README.md",
     "CSBasic/PrinciplesofComputerOrganization.md",
     "CSBasic/OperatingSystem.md",
     "ProgrammingDevelopment/JavaCollection.md",
@@ -207,7 +209,6 @@
     "posts/博客初衷以及内容说明.md",
     "CSBasic/DataBase.md",
     "CSBasic/DataStructuresandAlgorithms.md",
-    "CSBasic/ComputerNetwork.md",
     "Other/古代诗词.md",
     "ProgrammingDevelopment/JavaProjectPractice.md",
     "ProgrammingDevelopment/C&C++.md",
@@ -220,7 +221,6 @@
     "ProgrammingDevelopment/JavaServiceDevelopmentTools.md",
     "ProgrammingDevelopment/AIDevelopment.md",
     "Other/VuePress/page.md",
-    "DailyThoughts/README.md",
     "ProgrammingDevelopment/README.md",
     "SoftwareEngineering/README.md",
     "Other/VuePress/markdown.md",
