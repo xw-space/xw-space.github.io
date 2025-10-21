@@ -1110,6 +1110,17 @@ recordSuccess / recordFailure
 ### 连接池与资源管理
 
 
+### 基于Netty封装通信层，实现高性能异步NIO网络通信；
+### 使用Zookeeper作为服务注册中心；
+### 自定义编、解码器处理消息，解决粘包、拆包问题；
+### 在客户端建立本地服务缓存，设置Watcher监听服务节点变化，实现客户端实时获取最新服务信息，减少注册中心访问压力；
+### 使用心跳检测动态维护连接资源；
+### 实现了多种序列化方式，可自由设置；
+### 实现了多种负载均衡策略选择，支持灵活选择；基于令牌桶算法实现接口请求限流；
+### 为幂等服务设置白名单，在白名单服务因异常失败时使用Guava-Retry框架按策略进行安全重试；
+### 实现熔断器机制，支持关闭、开启、半开三种状态切换，结合服务状态判定与恢复算法，提升系统可用性；
+
+
 ## 乐尚代驾
 ### 项目资料
 Java-项目-乐尚代驾-ProcessOn： https://www.processon.com/mindmap/671f918c61fdee7d75f3f00a
@@ -1213,14 +1224,19 @@ tencent:
 
 - 微信问题：40163，code被请求了两次，一个code有5分钟时效
 
-### Nacos
+### 使用Nacos作为配置中心，简化配置管理；
 为什么要用Nacos？
 可以热更新计费参数
 
-### 自定义注解 + AOP 登录校验
+### 基于微信小程序构建应用前端，基于SpringBoot构建后端系统；
+
+### 使用Mybatis-plus操作数据库，简化开发工作；
+
+
+### 通过自定义注解+AOP校验是否处于登录状态，减少重复代码；
 过程：写了一个 `@LoginRequired` 注解，AOP 切面在 Controller 层拦截请求，解析 Token → 校验合法性 → 注入用户上下文。这样 Controller 方法不需要重复写校验逻辑。
 
-### 通过腾讯云服务，实习司机的实名认证登录
+### 使用腾讯云服务，进行司机的身份证认证、驾驶证认证、登录时的人脸识别以及相关文件的存储与审核；
 
 首先注册与登录等腾讯云，官网地址：[https://cloud.tencent.com/](https://cloud.tencent.com/)
 开通腾讯云对象存储COS：官网地址：[https://cloud.tencent.com/product/cos](https://cloud.tencent.com/product/cos)
@@ -1242,13 +1258,24 @@ tencent:
 - OCR可以来识别身份证照片中的内容，进行实名认证。
 - COS（Cloud Object Storage）是腾讯云提供的对象存储服务，用于存储和管理大规模数据，如身份证照片、司机个人资料等。
 
-### 基于Drools规则引擎，预估订单数据
+### 通过腾讯位置服务，实现代驾路线规划；
+
+腾讯位置服务服务器端API文档：[https://lbs.qq.com/service/webService/webServiceGuide/webServiceOverview](https://lbs.qq.com/service/webService/webServiceGuide/webServiceOverview)
+
+腾讯位置服务的官网（[https://lbs.qq.com/](https://lbs.qq.com/)
+
+
+- 使用腾讯位置服务就能获得规划好的路线
+
+
+
+### 基于Drools规则引擎预估订单数据、计算代驾完成系统奖励以及分账信息，支持灵活规则配置；
 Drools 计价规则例子？
 例如：夜间 + 长途 单子 → 起步价上浮 20% + 每公里 5 元。
 Drools 规则存放在数据库，系统启动时加载到内存，配置变更时用 Nacos 推送刷新规则，支持热更新，不用重启服务。
 
 
-### RedisGEO搜索用户附近司机、智能派单、个性化接单
+### 使用Redis Geo功能搜索用户附近司机，提高派单效率；
 
 Redis GEO搜索司机流程：
 * 每次司机位置上报时，执行 `GEOADD` 更新。
@@ -1395,30 +1422,19 @@ public boolean grabOrder(String orderId, String driverId) {
 | 多司机同时抢单  | Redisson 锁限制唯一   |
 | 抢单数据一致   | Redis + DB 状态持久化 |
 | 系统高并发稳定性 | 线程池隔离 + 锁控制并发冲突  |
+### 支持司机个性化接单设置，实现智能派单；
+### 使用分布式任务调度框架XXL-JOB定时调度搜索附近司机任务；
 
-### 使用xxl-job定时调度搜索用户附近司机任务
+### 使用分布式锁Redisson解决司机抢单并发问题和优惠券领取并发问题；
 
-### 基于Redisson实现分布式乐观锁解决司机抢单问题
-
-
-### 使用Seata添加分布式事务
+### 基于Redis实时同步司机和乘客位置，在前端实现司乘同显；
+### 在订单、支付等跨服务场景中引入 Seata 分布式事务，保证数据一致性；
 
 为什么要用Seata？
 Steata的AT 模式，不需要改业务逻辑太多，通过数据代理实现分布式事务，性能和开发成本更均衡。
 
-
-### 腾讯位置服务，实现路径规划
-
-腾讯位置服务服务器端API文档：[https://lbs.qq.com/service/webService/webServiceGuide/webServiceOverview](https://lbs.qq.com/service/webService/webServiceGuide/webServiceOverview)
-
-腾讯位置服务的官网（[https://lbs.qq.com/](https://lbs.qq.com/)
-
-
-- 使用腾讯位置服务就能获得规划好的路线
-
-
-
-### 使用MongoDB保存轨迹
+### 使用Jemeter工具进行优惠券的并发测试；
+### 使用MongoDB存储代驾轨迹，支持轨迹回溯；
 
 MongoDB 轨迹存储结构？
 使用文档型存储：
@@ -1461,13 +1477,19 @@ MongoDB 轨迹存储结构？
 | **动态字段扩展**    | 🟢 随写随加字段        | 🔴 改表结构成本高    |
 | **分布式扩展**     | 🟢 原生支持 Sharding | 🔴 扩展难，复杂     |
 
-### Minio保存录音信息
+### 使用MinIO上传代驾过程的录音数据；
+### 设计规则进行司机刷单行为判定，保障平台公平性；
+
+
+### 通过ThreadPool+CompletableFuture异步编排远程调用，缩短司机结束代驾服务时间；
+
+
+
+
 ### 使用数据万象保存并审核信息
 数据万象（Cloud Infinite，CI）
 
 
-
-### 通过CompletableFuture异步编排缩短司机结束代驾服务时间
 
 CompletableFuture
 
@@ -1478,7 +1500,7 @@ CompletableFuture 支持并行执行多个远程调用，比如账单生成和�
 
 情景问题：当司机结束代驾服务时，要进行非常多的步骤，比如：获取订单信息 1s、计算防止刷单 0.5s、计算订单实际里程 0.5s、计算订单实际代驾费用 1s，数据的获取都需要远程调用，要花费很多时间，这不能接受，但如果使用多个线程并行完成这些操作，那么就可以快很多
 
-### RabbbitMQ
+### 基于RabbitMQ的TTL和死信队列实现超时订单自动取消；
 
 RabbitMQ 延迟消息丢了怎么办？
 * 幂等性保证：订单状态有状态机控制（待支付 → 已支付 → 已取消）。
@@ -1490,7 +1512,7 @@ RabbitMQ 挂掉兜底方案？
 * 再加定时任务兜底。
 
 
-### 订单微信支付并通过微信分账
+### 使用微信支付实现支付功能；
 
 分账时外部支付系统失败怎么办？
 A15. 分账逻辑走 Seata 分布式事务。如果某个支付系统失败，Seata 会回滚整体事务。兜底是 补偿任务：XXL-Job 定时扫失败订单，重试分账。

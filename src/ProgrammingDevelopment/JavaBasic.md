@@ -144,38 +144,36 @@ public class Main {
         int age = scanner.nextInt();
         // 读取一个浮点数
         double score = scanner.nextDouble();
-        
-        System.out.println("Name: " + name);
+		
+		System.out.println("Name: " + name);
         System.out.println("Age: " + age);
         System.out.println("Score: " + score);
+        
+        // 读取整数数组：1 2 3 4 5
+		String[] parts = sc.nextLine().split(" ");
+		int[] nums = new int[parts.length];
+		for (int i = 0; i < parts.length; i++) {
+		    nums[i] = Integer.parseInt(parts[i]);
+		}
+        
+        // 读取二维数组矩阵
+		// 3 3
+		// 1 2 3
+		// 4 5 6
+		// 7 8 9
+		Scanner sc = new Scanner(System.in);
+		int rows = sc.nextInt();
+		int cols = sc.nextInt();
+		int[][] matrix = new int[rows][cols];
+		for (int i = 0; i < rows; i++) {
+		    for (int j = 0; j < cols; j++) {
+		        matrix[i][j] = sc.nextInt();
+		    }
+		}
+
         scanner.close();
     }
 }
-
-
-// 读取整数数组：1 2 3 4 5
-Scanner sc = new Scanner(System.in);
-String[] parts = sc.nextLine().split(" ");
-int[] nums = new int[parts.length];
-for (int i = 0; i < parts.length; i++) {
-    nums[i] = Integer.parseInt(parts[i]);
-}
-
-// 读取二维数组矩阵
-// 3 3
-// 1 2 3
-// 4 5 6
-// 7 8 9
-Scanner sc = new Scanner(System.in);
-int rows = sc.nextInt();
-int cols = sc.nextInt();
-int[][] matrix = new int[rows][cols];
-for (int i = 0; i < rows; i++) {
-    for (int j = 0; j < cols; j++) {
-        matrix[i][j] = sc.nextInt();
-    }
-}
-
 ```
 
 ## 输出-代码
@@ -188,13 +186,12 @@ System.out.println("Hello");
 // 格式化输出
 int age = 25;
 double d = 1.2345;
-String name = "Tom";
 System.out.printf("Name: %s, Age: %d\t", name, age);
+// 输出：Name: Tom, Age: 25
+String name = "Tom";
 System.out.printf("小数：%f只保留2位是：%.2f\n", d, d);
-// 输出：Name: Tom, Age: 25      小数：1.234500只保留2位是：1.23
-
+// 小数：1.234500只保留2位是：1.23
 ```
-
 
 ## Char-代码
 
@@ -214,7 +211,7 @@ char ch = '\n'; // 换行符
 boolean isEqual = (ch1 == ch2); // false
 
 // 使用Character.compare()方法
-int comparison = Character.compare(ch1, ch2); // 返回 -1，表示ch1 < ch2
+int comparison = Character.compare(ch1, ch2); // 返回 -表示ch1 < ch2
 
 
 // 获取char数组的长度,这个相当于属性，在算法中，如果将一个string转换为char[]，使用char[].lenght比string.length快一些
@@ -475,7 +472,6 @@ Integer.valueOf(String s)
 ```
 
 ## 数组Arrays
-
 所在位置：`java.util.Arrays`
 **工具类**，里面全是 `static` 方法（比如 `sort()`、`asList()`、`binarySearch()`）。
 主要作用是操作 **数组**（`array`），和集合不一样。
@@ -483,7 +479,6 @@ Integer.valueOf(String s)
 提供了一些方法将数组转换为集合：
 - `asList(T... a)`：将数组转换为固定大小的`List`。注意：返回的`List`是由原数组支持的，修改会影响原数组，且大小固定，不能添加或删除元素。
 
-## 数组Arrays-代码
 ```java
 // 数组相关的包
 import java.util.Arrays;
@@ -582,13 +577,17 @@ Set<String> set = new HashSet<>(Arrays.asList(arr));
 ## 深拷贝和浅拷贝
 
 浅拷贝：
+只复制基本的值
+如果字段是基本数据类型，那么就复制其值；
+如果字段是引用类型，复制的是引用而不是实际对象。
+浅拷贝通常通过clone方法实现
 
-浅拷贝：浅拷贝创建一个新对象，然后将原对象的非静态字段复制到新对象。如果字段是基本数据类型，那么就复制其值；如果字段是引用类型，复制的就是引用而不是实际对象。
-深拷贝：创建一个新对象，并递归复制原对象中的所有引用类型的字段指向的对象，而不是共享引用。因此，新对象和原对象中的引用类型字段引用的是两组不同的对象。
-总结：
-浅拷贝复制对象，包括对象的引用，两者共享引用对象。
-深拷贝复制对象及其引用的对象，两者不共享引用对象，即使引用对象也会被复制。
-在Java中，浅拷贝通常通过clone方法实现，深拷贝可以通过手动实现clone方法、序列化和反序列化，或者使用第三方库来实现。
+
+深拷贝：
+创建一个新对象，并递归复制原对象中的所有引用类型的字段指向的对象，而不是将引用复制过去共享使用。
+新对象和原对象中的引用类型字段引用的是两组不同的对象。
+深拷贝可以通过手动实现clone方法、序列化和反序列化，或者使用第三方库来实现。
+
 
 
 ## 封装
@@ -822,14 +821,14 @@ public class OrderServiceTest {
 - **abstract方法**：没有方法体的方法，子类必须实现该方法。
 
 abstract 关键字：
-1、abstract 修饰方法
+abstract 修饰方法
 1.抽象方法，不用实现，在具体的子类中实现
 2.若子类未实现抽象方法，仍然要定义为抽象类2、abstract 修饰类
-1，抽象类，包含一个或多个抽象方法（也可以一个也不包含）
-2，抽象类也可以包含字段和具体方法
-3、提高程序清晰度
+抽象类，包含一个或多个抽象方法（也可以一个也不包含）
+抽象类也可以包含字段和具体方法
+提高程序清晰度
 1.父类中定义抽象方法，子类中具体实现2，变量定义为父类（抽象类）类型，具体实现（new）子类类型（上转型）
-3，方法调用，通过父类变量（多态，动态绑定）
+方法调用，通过父类变量（多态，动态绑定）
 
 
 ## 错误和异常
