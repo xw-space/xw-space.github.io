@@ -670,112 +670,9 @@ String name = userService.getUserName(123);
 使用
 
 
-### 网络通信
-- 通过自定义协议明确每条消息的边界，防止 TCP 粘包/拆包问题：
-因为 TCP是流式传输，它是没有消息边界的！所以多条小消息可能**粘在一起**发送到对方、一条大消息可能**拆成多块**发送到对方
-
-
-如果一条大消息被拆成多块发送到对方，怎么合并起来呢？
-
-自定义协议一般要考虑的东西：
-
-| 需要定义的元素          | 说明                 |
-| ---------------- | ------------------ |
-| 魔数（magic number） | 标识这是我们自家协议，不是垃圾数据  |
-| 协议版本             | 方便未来扩展             |
-| 消息类型             | 请求/响应/心跳等          |
-| 序列化方式            | JSON/Protobuf/自定义等 |
-| 请求ID             | 区分异步多个请求           |
-| 数据长度             | 多少字节是正文内容（Body）    |
-| 数据内容（Body）       | 真正序列化后的业务对象        |
-
-| 字段            | 长度      | 说明                 |
-| ------------- | ------- | ------------------ |
-| Magic Number  | 4 bytes | 协议标识，比如 0xCAFEBABE |
-| Version       | 1 byte  | 版本号                |
-| Serialization | 1 byte  | 使用什么序列化方式          |
-| Message Type  | 1 byte  | 请求/响应/心跳           |
-| Request ID    | 8 bytes | 请求ID，用于异步关联        |
-| Body Length   | 4 bytes | 正文长度               |
-| Body          | N bytes | 正文（序列化后的数据）        |
 
 
 
-- 自定义编/解码器
-- 自定义消息序列化器，支持多种序列化方式：JSON、Protobuf、Hessian
-
-### 负载均衡
-4 种负载均衡策略选择：服务轮询、随机访问、LRU 最近最少使用和一致性哈希算法；
-
-负载均衡含义：当有多个服务实例可用时，客户端按一定策略调用其中一个实例，以分散压力，提高性能和容错。
-
-
-**🎡 轮询（Round Robin）**
-原理：把请求均匀地分配到每个节点上。
-特点：
-优点：简单好实现，分配均匀
-缺点：节点性能差异大时不适合，容易拖慢整体
-实现：`int pos = Math.abs(index.getAndIncrement()) % servers.size();`
-
-
-**🎲 随机（Random）**
-
-原理：每次随机选一个可用节点。
-特点：
-- 优点：简单，避免某节点过热
-- 缺点：可能造成流量不均匀
-代码伪实现：`int idx = random.nextInt(servers.size());`
-
-
-
-3. 🧠 最近最少使用（LRU，Least Recently Used）
-
-✅ 原理：通过维护一个访问时间的缓存表，优先选择最近最久未被访问的节点
-✅ 特点：
-优点：能避免冷节点长时间不用，利用率高
-缺点：管理开销稍大，因为需要维护时间表
-
-✅ 代码伪实现：
-
-```java
-public class LruLoadBalancer implements LoadBalancer {
-
-    private final Map<String, Long> accessTime = new ConcurrentHashMap<>();
-
-    @Override
-    public String select(List<String> servers) {
-        String leastUsed = servers.stream()
-            .min(Comparator.comparingLong(server -> accessTime.getOrDefault(server, 0L)))
-            .orElse(servers.get(0));
-        accessTime.put(leastUsed, System.currentTimeMillis());
-        return leastUsed;
-    }
-}
-```
-
-4. 🔗 一致性哈希（Consistent Hash）
-
-✅ 原理：
-- 将服务器节点映射到一个**哈希环**上。
-- 请求根据自己的 Key（如 userId/hash值）映射到环上，顺时针找到第一个大于它的节点。
-- 节点增减时只影响很小一部分请求，**避免大规模重新路由**。
-✅ 代码伪实现：（注意生产环境一般要引入**虚拟节点机制**，提升哈希均匀性）
-
-
-
-
-📈 四种策略对比总结
-
-| 策略 | 适用场景 | 优缺点 |
-|------|---------|--------|
-| Round Robin | 机器性能均匀、数量稳定 | 均匀分配，但不区分负载 |
-| Random | 流量波动较大场景 | 简单，但可能导致短时间流量集中 |
-| LRU | 需要避免节点冷热不均 | 动态调节，但维护开销大 |
-| Consistent Hash | 对会话稳定性要求高（如电商购物车） | 增删节点影响小，但实现复杂 |
-
-
-
-### 服务注册与发现
 
 ### 限流与服务降级
 ✅ 第二个功能：使用令牌桶算法实现接口限流
@@ -785,15 +682,12 @@ public class LruLoadBalancer implements LoadBalancer {
 📚 原理
 
 **令牌桶算法（Token Bucket）**流程：
+1. 有一个固定容量的桶（token数），比如 100
+2. 按固定速率往桶里加 token
+3. 每来一个请求，取出一个 token，有 token 才能通过
+4. 没有 token，就拒绝请求或排队，限流保护
 
-| 流程                   | 说明               |
-| -------------------- | ---------------- |
-| 1. 有一个固定容量的桶（token数） | 桶大小设定，比如 100     |
-| 2. 按固定速率往桶里加 token   | 比如每秒加 10 个 token |
-| 3. 每来一个请求，取出一个 token | 有 token 才能通过     |
-| 4. 没有 token，就拒绝请求或排队 | 限流保护             |
-
-✅ 令牌桶允许**一定程度突发流量**，比漏桶算法更灵活。
+✅ 令牌桶允许**一定程度突发流量**，比漏桶算法（）更灵活。
 
 ---
 
@@ -850,12 +744,12 @@ RPC Client
 
 📢 最佳实践建议
 
-| 项目 | 建议 |
-|------|------|
+| 项目   | 建议                  |
+| ---- | ------------------- |
 | 故障下线 | 可以加上“超时恢复”机制，避免永久剔除 |
-| 限流策略 | 限速优先拦截在客户端，保护后端服务器 |
+| 限流策略 | 限速优先拦截在客户端，保护后端服务器  |
 | 可配置化 | 故障次数、限流速率都支持动态配置热更新 |
-| 指标监控 | 成功率、失败率、限流数输出到监控平台 |
+| 指标监控 | 成功率、失败率、限流数输出到监控平台  |
 
 ---
 
@@ -1102,9 +996,7 @@ recordSuccess / recordFailure
 | 降级方案 | 熔断后返回默认值、缓存值、兜底接口 |
 
 ---
-### 序列化
 ### 动态代理
-### 故障处理
 ### 多线程与异步调用
 
 ### 连接池与资源管理
@@ -1113,12 +1005,100 @@ recordSuccess / recordFailure
 ### 基于Netty封装通信层，实现高性能异步NIO网络通信；
 ### 使用Zookeeper作为服务注册中心；
 ### 自定义编、解码器处理消息，解决粘包、拆包问题；
+因为 TCP是流式传输，没有消息边界的！所以多条小消息可能**粘在一起**发送到对方、一条大消息可能**拆成多块**发送到对方
+
+
+自定义协议一般具备的要素：
+
+| 需要定义的元素            | 长度      | 说明                 |
+| ------------------ | ------- | ------------------ |
+| 魔数（magic number）   | 4 bytes | 标识这是我们自家协议，不是垃圾数据  |
+| 协议版本Version        | 1 byte  | 方便未来扩展             |
+| 消息类型Message Type   | 1 byte  | 请求/响应/心跳等          |
+| 序列化方式Serialization | 1 byte  | JSON/Protobuf/自定义等 |
+| 请求IDRequest ID     | 8 bytes | 区分异步多个请求           |
+| 数据长度Body Length    | 4 bytes | 多少字节是正文内容（Body）    |
+| 数据内容（Body）         | N bytes | 序列化后的真正业务对象的数据长度   |
+
+
+
 ### 在客户端建立本地服务缓存，设置Watcher监听服务节点变化，实现客户端实时获取最新服务信息，减少注册中心访问压力；
 ### 使用心跳检测动态维护连接资源；
-### 实现了多种序列化方式，可自由设置；
+### 序列化——实现了多种序列化方式，可自由设置；
 ### 实现了多种负载均衡策略选择，支持灵活选择；基于令牌桶算法实现接口请求限流；
+
+负载均衡定义：当有多个服务实例可用时，客户端按一定策略选择其中一个实例，主要是未来分散各服务器的压力，提高性能和容错。
+
+4 种负载均衡策略选择：服务轮询、随机访问、LRU 最近最少使用和一致性哈希算法；
+
+
+
+**🎡 轮询（Round Robin）**
+原理：把请求均匀地分配到每个节点上。
+特点：
+优点：简单好实现，分配均匀
+缺点：节点性能差异大时不适合，容易拖慢整体
+实现：`int pos = Math.abs(index.getAndIncrement()) % servers.size();`
+
+
+**🎲 随机（Random）**
+
+原理：每次随机选一个可用节点。
+特点：
+- 优点：简单，避免某节点过热
+- 缺点：可能造成流量不均匀
+代码伪实现：`int idx = random.nextInt(servers.size());`
+
+
+
+3. 🧠 最近最少使用（LRU，Least Recently Used）
+
+✅ 原理：通过维护一个访问时间的缓存表，优先选择最近最久未被访问的节点
+✅ 特点：
+优点：能避免冷节点长时间不用，利用率高
+缺点：管理开销稍大，因为需要维护时间表
+
+✅ 代码伪实现：
+
+```java
+public class LruLoadBalancer implements LoadBalancer {
+
+    private final Map<String, Long> accessTime = new ConcurrentHashMap<>();
+
+    @Override
+    public String select(List<String> servers) {
+        String leastUsed = servers.stream()
+            .min(Comparator.comparingLong(server -> accessTime.getOrDefault(server, 0L)))
+            .orElse(servers.get(0));
+        accessTime.put(leastUsed, System.currentTimeMillis());
+        return leastUsed;
+    }
+}
+```
+
+4. 🔗 一致性哈希（Consistent Hash）
+
+✅ 原理：
+- 将服务器节点映射到一个**哈希环**上。
+- 请求根据自己的 Key（如 userId/hash值）映射到环上，顺时针找到第一个大于它的节点。
+- 节点增减时只影响很小一部分请求，**避免大规模重新路由**。
+✅ 代码伪实现：（注意生产环境一般要引入**虚拟节点机制**，提升哈希均匀性）
+
+
+
+
+📈 四种策略对比总结
+
+| 策略 | 适用场景 | 优缺点 |
+|------|---------|--------|
+| Round Robin | 机器性能均匀、数量稳定 | 均匀分配，但不区分负载 |
+| Random | 流量波动较大场景 | 简单，但可能导致短时间流量集中 |
+| LRU | 需要避免节点冷热不均 | 动态调节，但维护开销大 |
+| Consistent Hash | 对会话稳定性要求高（如电商购物车） | 增删节点影响小，但实现复杂 |
+
+
 ### 为幂等服务设置白名单，在白名单服务因异常失败时使用Guava-Retry框架按策略进行安全重试；
-### 实现熔断器机制，支持关闭、开启、半开三种状态切换，结合服务状态判定与恢复算法，提升系统可用性；
+### 故障处理——实现熔断器机制，支持关闭、开启、半开三种状态切换，结合服务状态判定与恢复算法，提升系统可用性；
 
 
 ## 乐尚代驾
@@ -1228,9 +1208,43 @@ tencent:
 为什么要用Nacos？
 可以热更新计费参数
 
+
+
+
+
+
+
 ### 基于微信小程序构建应用前端，基于SpringBoot构建后端系统；
 
+
+
+
+
 ### 使用Mybatis-plus操作数据库，简化开发工作；
+
+
+只需要试验接口集成BaseMapper，然后就可以用
+```
+
+package com.atguigu.mp.mapper;
+@Mapper
+public interface UserMapper extends BaseMapper<User> {
+}
+
+package com.atguigu.mp;
+
+@SpringBootTest
+public class CRUDTests {
+    @Resource
+    private UserMapper userMapper;
+
+    @Test
+    public void testSelectList() {
+        List<User> userList = userMapper.selectList(null);
+        userList.forEach(System.out::println);
+    }
+}
+```
 
 
 ### 通过自定义注解+AOP校验是否处于登录状态，减少重复代码；
@@ -1262,7 +1276,7 @@ tencent:
 
 腾讯位置服务服务器端API文档：[https://lbs.qq.com/service/webService/webServiceGuide/webServiceOverview](https://lbs.qq.com/service/webService/webServiceGuide/webServiceOverview)
 
-腾讯位置服务的官网（[https://lbs.qq.com/](https://lbs.qq.com/)
+腾讯位置服务的官网（[https://lbs.qq.com/](https://lbs.qq.com/))
 
 
 - 使用腾讯位置服务就能获得规划好的路线
@@ -1423,12 +1437,27 @@ public boolean grabOrder(String orderId, String driverId) {
 | 抢单数据一致   | Redis + DB 状态持久化 |
 | 系统高并发稳定性 | 线程池隔离 + 锁控制并发冲突  |
 ### 支持司机个性化接单设置，实现智能派单；
+
+
+
 ### 使用分布式任务调度框架XXL-JOB定时调度搜索附近司机任务；
+
+
+
 
 ### 使用分布式锁Redisson解决司机抢单并发问题和优惠券领取并发问题；
 
+
+
+
+
 ### 基于Redis实时同步司机和乘客位置，在前端实现司乘同显；
+
+
+
+
 ### 在订单、支付等跨服务场景中引入 Seata 分布式事务，保证数据一致性；
+
 
 为什么要用Seata？
 Steata的AT 模式，不需要改业务逻辑太多，通过数据代理实现分布式事务，性能和开发成本更均衡。
@@ -1478,6 +1507,10 @@ MongoDB 轨迹存储结构？
 | **分布式扩展**     | 🟢 原生支持 Sharding | 🔴 扩展难，复杂     |
 
 ### 使用MinIO上传代驾过程的录音数据；
+
+
+
+
 ### 设计规则进行司机刷单行为判定，保障平台公平性；
 
 
