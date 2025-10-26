@@ -16,9 +16,7 @@
                 "file": "CSBasic/OperatingSystem.md",
                 "mode": "source",
                 "source": false
-              },
-              "icon": "lucide-file",
-              "title": "OperatingSystem"
+              }
             }
           },
           {
@@ -30,9 +28,7 @@
                 "file": "ProgrammingDevelopment/GO.md",
                 "mode": "source",
                 "source": false
-              },
-              "icon": "lucide-file",
-              "title": "GO"
+              }
             }
           },
           {
@@ -44,9 +40,7 @@
                 "file": "ProgrammingDevelopment/JavaProjectPractice.md",
                 "mode": "source",
                 "source": false
-              },
-              "icon": "lucide-file",
-              "title": "JavaProjectPractice"
+              }
             }
           }
         ],
@@ -69,11 +63,8 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical",
-                "autoReveal": false
-              },
-              "icon": "lucide-folder-closed",
-              "title": "文件列表"
+                "sortOrder": "alphabetical"
+              }
             }
           },
           {
@@ -88,9 +79,7 @@
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical"
-              },
-              "icon": "lucide-search",
-              "title": "搜索"
+              }
             }
           },
           {
@@ -98,9 +87,7 @@
             "type": "leaf",
             "state": {
               "type": "bookmarks",
-              "state": {},
-              "icon": "lucide-bookmark",
-              "title": "书签"
+              "state": {}
             }
           }
         ]
@@ -131,9 +118,7 @@
                 "searchQuery": "",
                 "backlinkCollapsed": false,
                 "unlinkedCollapsed": true
-              },
-              "icon": "links-coming-in",
-              "title": "JavaProjectPractice 的反向链接列表"
+              }
             }
           },
           {
@@ -145,9 +130,7 @@
                 "file": "ProgrammingDevelopment/JavaProjectPractice.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
-              },
-              "icon": "links-going-out",
-              "title": "JavaProjectPractice 的出链列表"
+              }
             }
           },
           {
@@ -157,12 +140,8 @@
               "type": "tag",
               "state": {
                 "sortOrder": "frequency",
-                "useHierarchy": true,
-                "showSearch": false,
-                "searchQuery": ""
-              },
-              "icon": "lucide-tags",
-              "title": "标签"
+                "useHierarchy": true
+              }
             }
           },
           {
@@ -171,13 +150,8 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "ProgrammingDevelopment/JavaProjectPractice.md",
-                "followCursor": false,
-                "showSearch": false,
-                "searchQuery": ""
-              },
-              "icon": "lucide-list",
-              "title": "JavaProjectPractice 的大纲"
+                "file": "ProgrammingDevelopment/JavaProjectPractice.md"
+              }
             }
           }
         ],
@@ -189,7 +163,6 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "bases:创建新数据库": false,
       "switcher:打开快速切换": false,
       "graph:查看关系图谱": false,
       "canvas:新建白板": false,
@@ -200,9 +173,9 @@
   },
   "active": "2b26b0d5c0a17ac7",
   "lastOpenFiles": [
-    "ProgrammingDevelopment/AIDevelopment.md",
-    "ProgrammingDevelopment/JavaProjectPractice.md",
     "ProgrammingDevelopment/GO.md",
+    "ProgrammingDevelopment/JavaProjectPractice.md",
+    "ProgrammingDevelopment/AIDevelopment.md",
     "CSBasic/OperatingSystem.md",
     "ProgrammingDevelopment/JavaBasic.md",
     "CSBasic/ComputerNetwork.md",
