@@ -1141,7 +1141,8 @@ int main() {
 ## 学习资料
 
 
-- Hello 算法： http://algo.qingfusheng.cn/
+- Hello 算法： https://www.hello-algo.com/
+- 
 - 10分钟过一遍算法学习路线 | 面试 | 蓝桥杯 | ACM： https://www.bilibili.com/video/BV1NR4y1M75H
 - 北京理工大学ACM冬季培训课程： https://www.bilibili.com/video/BV1pE411E7RV
 - 《算法竞赛》清华大学出版社 罗勇军讲解视频： https://www.bilibili.com/video/BV1mo4y1n7Xq

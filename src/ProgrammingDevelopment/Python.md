@@ -1090,6 +1090,69 @@ jupyter 快捷键 - Lowell - 博客园： https://www.cnblogs.com/liuweida/p/119
 Jupyter Notebook介绍、安装及使用教程 - 简书： https://www.jianshu.com/p/91365f343585/
 如何在Jupyter Notebook中使用Python虚拟环境？ - 简书： https://www.jianshu.com/p/afea092dda1d
 
+## asyncio
+`asyncio` 是 Python 标准库中的一个模块，用于编写异步 I/O 操作的代码。它允许你以非阻塞的方式执行 I/O 密集型任务，并且通过协程（coroutines）和事件循环（event loop）来管理任务的并发执行。
+核心概念
+
+1. **协程（coroutines）**：
+
+   * 协程是可以暂停执行并在之后恢复的函数，使用 `async def` 定义。
+   * 通过 `await` 关键字可以等待协程完成，而不阻塞程序。
+
+2. **事件循环（Event Loop）**：
+
+   * 事件循环是异步编程的核心，它会调度并管理协程的执行。`asyncio` 提供了 `asyncio.run()` 来启动事件循环，执行任务。
+
+3. **任务（Tasks）**：
+
+   * 任务是协程的封装，表示一个正在执行的协程。
+   * 使用 `asyncio.create_task()` 来创建并调度协程任务。
+
+4. **异步 I/O**：
+
+   * `asyncio` 使得 I/O 操作（如网络请求、文件操作）异步化，在 I/O 操作等待时不会阻塞其他任务的执行。
+
+示例代码：
+
+```python
+import asyncio
+
+# 定义一个协程
+async def say_hello():
+    print("Hello")
+    await asyncio.sleep(1)  # 模拟 I/O 操作
+    print("World")
+
+# 运行协程
+async def main():
+    await asyncio.gather(say_hello(), say_hello())  # 同时运行两个协程
+
+# 启动事件循环
+asyncio.run(main())
+```
+
+`asyncio` 的优势
+
+* **高效的并发**：通过事件循环和协程，能够在 I/O 密集型任务中提高并发性能，避免了线程切换的开销。
+* **简洁的代码**：相比传统的回调函数，使用 `async/await` 可以写出更清晰、易于理解的代码。
+
+总结：
+
+`asyncio` 提供了一种高效、非阻塞的方式来处理并发 I/O 操作，特别适用于需要高并发的网络编程、爬虫等场景。通过协程和事件循环，程序可以在等待 I/O 操作时做其他任务，极大地提高了性能。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Appium——手机自动化
 【Appium + Python 手机自动化】 https://www.bilibili.com/video/BV1Fj42197Bc/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef

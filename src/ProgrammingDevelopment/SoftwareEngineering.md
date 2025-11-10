@@ -176,6 +176,9 @@ tag:
 | 架构思维      | 《架构整洁之道》《Domain-Driven Design 精粹》   |
 | 测试实践      | 《Python测试驱动开发》《单元测试的艺术》             |
 | DevOps工具链 | 《Docker 入门实战》《持续交付》《Kubernetes权威指南》 |
+## 开发策略
+MVP（Minimum Viable Product，最小可行产品）
+
 
 ## 软件开发注意事项
 - **明确项目需求**
@@ -312,10 +315,12 @@ Reactor（反应堆）：由Reactor（反应堆）和Handlers（事件处理器�
 常见的架构模式：MVC、MVP、MVVM
 
 ## 架构
-### 概念
+### 介绍
 (Architecture)
 软件系统的顶层结构设计，定义整个软件​​系统整体的结构，对组件进行了抽象的描述，明确设计原则
 用于指导大型软件系统各个方面的设计，定义整个软件系统的组成部分（模块、子系统、接口）、它们的关系与协作方式。
+
+以功能或者说，开发需要为出发点，进行架构选择
 
 常见的架构：C/S架构，B/S架构等。
 
@@ -477,6 +482,12 @@ Model层：实体类、pojo、VO、DTO等等
 View-Model层：Vue、LayUI、React等等
 
 View层：vue、html等等
+
+### 资料
+凤凰架构： https://icyfenix.cn/
+
+
+
 
 ## END
 

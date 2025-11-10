@@ -8,61 +8,79 @@
         "type": "tabs",
         "children": [
           {
-            "id": "34f1d8133b766264",
+            "id": "bbe0b96f9f1824e1",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CSBasic/OperatingSystem.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "OperatingSystem"
-            }
-          },
-          {
-            "id": "c4b5a9727d7ad692",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "ProgrammingDevelopment/GO.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "GO"
-            }
-          },
-          {
-            "id": "2b26b0d5c0a17ac7",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Other/英语学习.md",
+                "file": "ProgrammingDevelopment/JavaProjectPractice.md",
                 "mode": "source",
                 "source": false
               }
             }
           },
           {
-            "id": "c136e7f52ce0429e",
+            "id": "daf0d8616f091521",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Other/英语语法.md",
+                "file": "ProgrammingDevelopment/JavaSpring&SpringBoot.md",
                 "mode": "source",
                 "source": false
-              },
-              "icon": "lucide-file",
-              "title": "ComputerNetwork"
+              }
+            }
+          },
+          {
+            "id": "0d1b1a86cd0435e5",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "ProgrammingDevelopment/JavaServiceDevelopmentTools.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "3796054a2174f2cd",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "CSBasic/ComputerNetwork.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "4c744148ccf74617",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "CSBasic/DataBase.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "87d4be7e746408d2",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "ProgrammingDevelopment/SoftwareEngineering.md",
+                "mode": "source",
+                "source": false
+              }
             }
           }
         ],
-        "currentTab": 3
+        "currentTab": 5
       }
     ],
     "direction": "vertical"
@@ -81,11 +99,8 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical",
-                "autoReveal": false
-              },
-              "icon": "lucide-folder-closed",
-              "title": "文件列表"
+                "sortOrder": "alphabetical"
+              }
             }
           },
           {
@@ -100,9 +115,7 @@
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical"
-              },
-              "icon": "lucide-search",
-              "title": "搜索"
+              }
             }
           },
           {
@@ -110,9 +123,7 @@
             "type": "leaf",
             "state": {
               "type": "bookmarks",
-              "state": {},
-              "icon": "lucide-bookmark",
-              "title": "书签"
+              "state": {}
             }
           }
         ]
@@ -135,7 +146,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Other/英语语法.md",
+                "file": "ProgrammingDevelopment/SoftwareEngineering.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -143,9 +154,7 @@
                 "searchQuery": "",
                 "backlinkCollapsed": false,
                 "unlinkedCollapsed": true
-              },
-              "icon": "links-coming-in",
-              "title": "ComputerNetwork 的反向链接列表"
+              }
             }
           },
           {
@@ -154,12 +163,10 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Other/英语语法.md",
+                "file": "ProgrammingDevelopment/SoftwareEngineering.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
-              },
-              "icon": "links-going-out",
-              "title": "ComputerNetwork 的出链列表"
+              }
             }
           },
           {
@@ -169,12 +176,8 @@
               "type": "tag",
               "state": {
                 "sortOrder": "frequency",
-                "useHierarchy": true,
-                "showSearch": false,
-                "searchQuery": ""
-              },
-              "icon": "lucide-tags",
-              "title": "标签"
+                "useHierarchy": true
+              }
             }
           },
           {
@@ -183,7 +186,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Other/英语语法.md"
+                "file": "ProgrammingDevelopment/SoftwareEngineering.md"
               }
             }
           }
@@ -196,7 +199,6 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "bases:创建新数据库": false,
       "switcher:打开快速切换": false,
       "graph:查看关系图谱": false,
       "canvas:新建白板": false,
@@ -205,20 +207,28 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "c136e7f52ce0429e",
+  "active": "87d4be7e746408d2",
   "lastOpenFiles": [
+    "CSBasic/DataBase.md",
+    "CSBasic/ComputerNetwork.md",
+    "intro.md",
+    "ProgrammingDevelopment/SoftwareEngineering.md",
+    "ProgrammingDevelopment/Python.md",
+    "ProgrammingDevelopment/JavaBasic.md",
+    "ProgrammingDevelopment/GO.md",
+    "ProgrammingDevelopment/FastAPI.md",
+    "ProgrammingDevelopment/C&C++.md",
+    "ProgrammingDevelopment/AIDevelopment.md",
+    "CSBasic/PrinciplesofComputerOrganization.md",
+    "CSBasic/OperatingSystem.md",
+    "CSBasic/DataStructuresandAlgorithms.md",
+    "ProgrammingDevelopment/JavaProjectPractice.md",
+    "ProgrammingDevelopment/JavaServiceDevelopmentTools.md",
+    "ProgrammingDevelopment/JavaSpring&SpringBoot.md",
     "Other/英语学习.md",
     "Other/英语语法.md",
-    "ProgrammingDevelopment/JavaProjectPractice.md",
-    "ProgrammingDevelopment/GO.md",
-    "ProgrammingDevelopment/AIDevelopment.md",
-    "CSBasic/OperatingSystem.md",
-    "ProgrammingDevelopment/JavaBasic.md",
-    "CSBasic/ComputerNetwork.md",
-    "ProgrammingDevelopment/FastAPI.md",
-    "ProgrammingDevelopment/JavaCollection.md",
-    "CSBasic/DataBase.md",
-    "CSBasic/PrinciplesofComputerOrganization.md",
-    "CSBasic/DataStructuresandAlgorithms.md"
+    "ProgrammingDevelopment/JavaVirtualMachine.md",
+    "ProgrammingDevelopment/JavaConcurrency.md",
+    "ProgrammingDevelopment/JavaCollection.md"
   ]
 }

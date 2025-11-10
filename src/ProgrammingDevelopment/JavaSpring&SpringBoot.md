@@ -483,6 +483,78 @@ public class LogAspect {
 }
 ```
 
+
+AOP 的环绕通知与前置通知有何区别？
+**AOP 的环绕通知（`@Around`）** 和 **前置通知（`@Before`）** 之间的主要区别如下：
+
+1. **执行时机不同**：
+
+* **前置通知（`@Before`）**：在目标方法执行之前执行，不能控制目标方法是否执行。它只在方法调用之前进行处理。
+* **环绕通知（`@Around`）**：它是最强大的通知类型，可以在目标方法执行之前、执行之后以及方法抛出异常时进行控制。环绕通知能够决定是否执行目标方法，并且可以在目标方法执行前后添加额外的逻辑。
+
+2. **是否可以控制目标方法的执行**：
+
+* **前置通知（`@Before`）**：不允许修改目标方法的执行过程，只能执行前置的逻辑，不能决定是否继续执行目标方法。
+* **环绕通知（`@Around`）**：可以控制目标方法的执行。通过 `joinPoint.proceed()` 可以决定是否执行目标方法，或者直接阻止目标方法的执行。例如，环绕通知可以在方法执行之前做判断，决定是否执行目标方法。
+
+3. **返回值**：
+
+* **前置通知（`@Before`）**：没有返回值。它只负责在目标方法之前执行某些逻辑。
+* **环绕通知（`@Around`）**：必须返回一个对象，通常返回目标方法的执行结果。如果没有调用 `proceed()` 方法，则没有返回值。
+
+4. **异常处理**：
+
+* **前置通知（`@Before`）**：如果前置通知抛出异常，会导致目标方法不执行。
+* **环绕通知（`@Around`）**：环绕通知可以处理目标方法抛出的异常，并可以决定是否继续抛出异常，或者返回默认值。
+
+5. **使用场景**：
+
+* **前置通知（`@Before`）**：适用于执行某些操作，比如日志记录、权限校验等，必须在方法执行之前完成的任务。
+* **环绕通知（`@Around`）**：适用于更复杂的场景，如缓存处理、事务管理、性能监控等，需要控制方法执行的时机或者方法的返回值。
+
+总结：
+
+* **前置通知（`@Before`）**：只能在目标方法之前执行，不控制目标方法的执行。
+* **环绕通知（`@Around`）**：在目标方法执行前后都可以控制，能够决定是否执行目标方法，返回值和异常也都可以进行控制。
+
+示例代码：
+
+**前置通知（`@Before`）**：
+
+```java
+@Aspect
+@Component
+public class MyAspect {
+
+    @Before("execution(* com.example.service.*.*(..))")
+    public void beforeMethod(JoinPoint joinPoint) {
+        System.out.println("Before method execution");
+    }
+}
+```
+
+**环绕通知（`@Around`）**：
+
+```java
+@Aspect
+@Component
+public class MyAspect {
+
+    @Around("execution(* com.example.service.*.*(..))")
+    public Object aroundMethod(ProceedingJoinPoint joinPoint) throws Throwable {
+        System.out.println("Before method execution");
+        
+        Object result = joinPoint.proceed();  // 执行目标方法
+        
+        System.out.println("After method execution");
+        return result;
+    }
+}
+```
+
+**总结**：前置通知主要用于方法执行前的操作，而环绕通知提供了更灵活的控制，可以在方法执行前后插入逻辑。
+
+
 **资料**：
 史上最完整的AOP底层原理 https://www.bilibili.com/video/BV1SY41117zq
 

@@ -709,6 +709,8 @@ SQL查询语句的执行流程通常包括以下几个步骤：
 **分析SQL语句的执行过程**
 可以直接在select语句之前使用explain 或者 desc 命令获取 MySQL 如何执行 SELECT 语句的信息
 例如：
+![PixPin_2025-10-07_16-41-49.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/PixPin_2025-10-07_16-41-49.png)
+
 ![Pasted image 20250604111130.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/Pasted%20image%2020250604111130.png)
 
 

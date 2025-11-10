@@ -1011,9 +1011,80 @@ Mybatis中Dao接⼝和XML⽂件的SQL如何建⽴关联：MyBatis 会自动为 D
 
 ## MyBatis Plus
 
-和Mybatis对比：
+和Mybatis对比，**MyBatis-Plus** 与原生 **MyBatis** 的主要区别：
 - 传统MyBatis需要 `UserMapper.xml` + `<insert|select|update|delete>` + `resultMap`，并且简单 CRUD 也要写 SQL
 - 而MyBatis Plus只要继承 `BaseMapper<T>`，立刻获得`insert、selectById、updateById、deleteById、selectList(...)` 等 20+ 个通用方法
+
+- **简化开发**：
+    
+    - **MyBatis-Plus** 提供了大量的封装，减少了手动编写 SQL 的工作，例如常用的增删改查操作可以通过方法自动生成。
+        
+    - **MyBatis** 需要手动编写 SQL 语句和映射文件，开发工作量较大。
+        
+- **自动化功能**：
+    
+    - **MyBatis-Plus** 提供了自动分页、自动填充、乐观锁等功能，减少了很多重复的代码。
+        
+    - **MyBatis** 没有这些自动化功能，需要开发者自己实现。
+        
+- **增强的 CRUD 操作**：
+    
+    - **MyBatis-Plus** 提供了 `BaseMapper` 接口，集成了通用的 CRUD 操作方法。
+        
+    - **MyBatis** 需要自己编写 SQL 语句，进行 CRUD 操作。
+        
+- **代码生成器**：
+    
+    - **MyBatis-Plus** 提供了代码生成器，可以根据数据库表自动生成实体类、Mapper 接口、XML 映射文件等。
+        
+    - **MyBatis** 需要手动编写这些类。
+
+
+
+
+
+```
+package com.atguigu.mp.mapper;
+@Mapper
+public interface UserMapper extends BaseMapper<User> {
+}
+
+package com.atguigu.mp;
+
+@SpringBootTest
+public class CRUDTests {
+    @Resource
+    private UserMapper userMapper;
+
+    @Test
+    public void testSelectList() {
+        List<User> userList = userMapper.selectList(null);
+        userList.forEach(System.out::println);
+    }
+}
+
+```
+UserMapper是接口吗？接口怎么就直接实例化一个对象了？这个对象怎么就有一些方法？
+是的，**UserMapper** 是接口，但它并没有直接实例化对象。这里的 **UserMapper** 是通过 **MyBatis-Plus** 的 **`BaseMapper`** 提供的功能来实现的。
+
+具体流程如下：
+
+1. **`UserMapper` 是接口**：  
+    `UserMapper` 继承了 **`BaseMapper<User>`**，并且 **MyBatis-Plus** 会在运行时动态生成该接口的实现类。这个实现类是通过 **MyBatis** 的 **动态代理** 创建的，因此你无需手动编写实现类。
+    
+2. **Spring 注入**：  
+    在你的代码中，`@Resource` 注解告诉 Spring 容器自动注入 `UserMapper` 实现类。这个实现类由 MyBatis-Plus 提供，它实现了接口中的方法。
+    
+3. **`BaseMapper` 提供的方法**：  
+    `BaseMapper` 是 MyBatis-Plus 提供的一个通用 Mapper，里面包含了常见的 CRUD 方法（如 `selectList`、`insert`、`update` 等）。这些方法并不是你需要手动实现的，而是由 **MyBatis-Plus** 在运行时通过动态代理自动生成。
+工作流程总结：
+- 当你在 `UserMapper` 接口中调用 `selectList` 等方法时，实际上是调用了 MyBatis-Plus 自动生成的代理类的实现。
+    
+- Spring 会通过 **`@Mapper`** 注解识别 `UserMapper` 接口，并且在应用启动时自动生成代理类并注入到 `userMapper` 实例中。
+    
+
+因此，虽然 **`UserMapper`** 是接口，但它通过 **MyBatis-Plus** 动态代理生成实现类，并与 Spring 集成，在运行时自动注入到你的测试类中。
+
 
 MyBatis自己写动态 SQL（`<where> <if> <foreach>`），维护成本高
 mby：`QueryWrapper` / `LambdaQueryWrapper` / 链式 `query()/update()`，**无 XML 的动态条件拼接**，Lambda 写法自动感知字段（避免写错列名/属性名）
@@ -1251,6 +1322,23 @@ private String configValue;
 ## 假设你有 3 个 Nacos 实例
 nacos.discovery.server-addr=127.0.0.1:8848,127.0.0.2:8848,127.0.0.3:8848
 ```
+
+**如何防止 Nacos 单点故障？**
+- **集群部署**：通过部署多个 Nacos 实例，形成集群，避免单点故障。
+    
+- **数据复制**：配置 Nacos 集群中的每个节点进行数据同步，确保节点间数据一致性。
+    
+- **负载均衡**：使用负载均衡器（如 Nginx 或 LVS）将请求分发到多个 Nacos 实例。
+    
+- **服务发现高可用**：Nacos 集群配置多节点，确保即使某个节点宕机，其他节点依然能提供服务。
+    
+- **持久化配置**：启用 Nacos 的数据持久化，确保配置数据不会丢失。
+
+
+
+
+
+
 
 
 
