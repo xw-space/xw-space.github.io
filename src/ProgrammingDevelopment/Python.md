@@ -7,7 +7,8 @@ category:
 tag:
   - default
 ---
-
+一个简单的Python入门教程
+<!-- more -->
 # Python
 
 ## Pycharm

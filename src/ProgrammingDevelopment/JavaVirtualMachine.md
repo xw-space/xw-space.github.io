@@ -9,7 +9,8 @@ tags:
   - default
 ---
 
-
+一个简单的Java虚拟机入门教程
+<!-- more -->
 # JVM（Java虚拟机）
 Java Virtual Machine，即 Java 虚拟机，是运行 Java 字节码的虚拟环境，屏蔽了底层操作系统与硬件的差异，实现“一次编写，到处运行”。
 

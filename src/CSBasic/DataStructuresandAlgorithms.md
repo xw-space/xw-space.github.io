@@ -8,6 +8,8 @@ tags:
   - default
 ---
 
+学习如何更好地使用编程语言操作数据，完成任务
+
 <!-- more -->
 # 数据结构与算法
 # 编程工具
@@ -1182,9 +1184,7 @@ CLRS Solutions： https://walkccc.me/CLRS/
 - GitHub - labuladong/fucking-algorithm: 刷算法全靠套路，认准 labuladong 就够了！English version supported! Crack LeetCode, not only how, but also why.： https://github.com/labuladong/fucking-algorithm?tab=readme-ov-file
 
 
-
-
-
+## 其它
 
 
 

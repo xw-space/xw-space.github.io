@@ -7,7 +7,8 @@ category:
 tag:
   - default
 ---
-
+一个简单的**Java集合**入门教程
+<!-- more -->
 
 # Java集合
 

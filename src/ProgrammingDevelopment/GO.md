@@ -8,7 +8,8 @@ category:
 tags:
   - default
 ---
-
+一个简单的GO入门教程
+<!-- more -->
 # GO
 
 ## 介绍

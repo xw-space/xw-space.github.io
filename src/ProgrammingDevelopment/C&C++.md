@@ -7,6 +7,9 @@ category:
 tags:
   - default
 ---
+
+一个简单的C&C++入门教程
+<!-- more -->
 # C&C++
 ## C语言
 ### 简介

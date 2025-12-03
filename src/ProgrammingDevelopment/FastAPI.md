@@ -8,7 +8,8 @@ category:
 tags:
   - default
 ---
-
+一个简单的FastAPI入门教程
+<!-- more -->
 
 # FastAPI
 ## 简介

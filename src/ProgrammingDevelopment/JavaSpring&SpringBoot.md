@@ -7,6 +7,11 @@ category:
 tag:
   - default
 ---
+一个简单的JavaSpring&SpringBoot入门教程
+<!-- more -->
+
+
+
 # JavaSpring&SpringBoot
 ## JavaSpring
 ### 简介

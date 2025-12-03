@@ -7,6 +7,10 @@ category:
 tags:
   - default
 ---
+一个简单的**Java并发**入门教程
+<!-- more -->
+
+
 
 # Java并发
 ## **基本概念**
@@ -146,6 +150,58 @@ public void method() {
 
 ```
 
+## sychronzied和reentranlock的区别
+
+`Synchronized` 和 `ReentrantLock` 都是 Java 中用于实现线程同步的工具，它们的功能类似，都用于控制多线程访问共享资源时的同步性。然而，它们有一些关键的区别：
+
+1. **锁的类型**
+
+* **Synchronized**：`synchronized` 是一个关键字，用于标记方法或者代码块，保证同一时刻只有一个线程能够执行标记了 `synchronized` 的代码段。它实现的是一种隐式的锁机制，锁是对象级别的，每个对象都有一个锁。
+* **ReentrantLock**：`ReentrantLock` 是 `java.util.concurrent.locks` 包中的一个类，提供了比 `synchronized` 更灵活的锁机制。它是显式锁，可以通过 `lock()` 和 `unlock()` 方法手动控制。
+
+2. **可重入性**
+
+* **Synchronized**：`synchronized` 是可重入的（Reentrant）。如果一个线程已经获得了某个对象的锁，它可以再次获取该锁，不会导致死锁。这是因为同一个线程可以多次进入 `synchronized` 的方法或代码块。
+* **ReentrantLock**：`ReentrantLock` 也是可重入的。当一个线程获取到 `ReentrantLock` 后，它可以多次获取锁而不会被阻塞。
+
+3. **锁的释放**
+
+* **Synchronized**：`synchronized` 锁由 JVM 自动管理，锁定和解锁由 JVM 完成。每当进入一个同步代码块时，JVM 会自动获取锁，而当方法或代码块执行完毕时，JVM 会自动释放锁。
+* **ReentrantLock**：`ReentrantLock` 需要手动释放锁。开发者必须显式调用 `unlock()` 方法来释放锁，否则会导致死锁。
+
+4. **支持公平锁**
+
+* **Synchronized**：`synchronized` 锁是非公平的，线程获取锁的顺序是随机的。
+* **ReentrantLock**：`ReentrantLock` 支持公平锁和非公平锁。如果创建 `ReentrantLock` 时传入 `true`，则使用公平锁，意味着等待时间最长的线程会优先获取锁。默认是非公平锁，意味着线程竞争锁的顺序是随机的。
+
+5. **中断响应**
+
+* **Synchronized**：`synchronized` 在等待锁时无法响应中断。如果一个线程被阻塞在 `synchronized` 锁上，它无法被中断。
+* **ReentrantLock**：`ReentrantLock` 在获取锁时可以响应中断。你可以使用 `lockInterruptibly()` 方法来尝试获取锁，如果线程在等待锁时被中断，它会抛出 `InterruptedException`，这样可以更灵活地控制线程的中断。
+
+6. **条件变量（Condition）**
+
+* **Synchronized**：`synchronized` 通过 `wait()`、`notify()` 和 `notifyAll()` 方法来实现线程间的协调和通信，但这些方法只能在同步块中使用。
+* **ReentrantLock**：`ReentrantLock` 提供了 `Condition` 类，支持比 `wait()` 和 `notify()` 更复杂的线程间通信。例如，使用 `Condition` 可以实现多个线程等待不同的条件。
+
+7. **性能**
+
+* **Synchronized**：在旧版本的 Java 中，`synchronized` 的性能相对较低，因为它是通过 JVM 来管理的，存在一定的性能开销。但从 Java 5 开始，JVM 对 `synchronized` 做了优化，在许多情况下性能已经大大提高。
+* **ReentrantLock**：`ReentrantLock` 通常在高竞争的环境下比 `synchronized` 更有效，因为它允许更细粒度的控制（如可中断的锁、条件变量等），但它的性能也与具体的使用方式有关。
+
+总结
+
+| 特性   | `Synchronized`                       | `ReentrantLock`              |
+| ---- | ------------------------------------ | ---------------------------- |
+| 锁类型  | 隐式锁                                  | 显式锁                          |
+| 可重入性 | 是                                    | 是                            |
+| 锁释放  | 自动                                   | 需要手动调用 `unlock()`            |
+| 公平性  | 非公平锁                                 | 支持公平锁和非公平锁                   |
+| 中断响应 | 不支持                                  | 支持（使用 `lockInterruptibly()`） |
+| 条件变量 | 通过 `wait()`、`notify()`、`notifyAll()` | 通过 `Condition`               |
+| 性能   | 优化后表现良好                              | 在高竞争环境下通常更高效                 |
+
+选择使用 `Synchronized` 还是 `ReentrantLock` 取决于具体的需求。如果需要较为简单的同步控制，`synchronized` 足够用。如果需要更精细的锁控制、更高效的资源利用、或者支持中断和条件变量等高级功能，那么 `ReentrantLock` 更加合适。
 
 
 ## `Lock` 接口
@@ -430,6 +486,31 @@ AQS通过一个**共享资源状态（state）变量**和**双向队列**来管�
 **Condition支持**。AQS还支持条件队列，通过`ConditionObject`类实现`Condition`接口。条件队列允许线程在特定条件下等待，并在条件满足后被唤醒。每个条件队列与一个锁对象关联，常用于实现高级同步机制。
 AQS的工作流程如下：当一个线程尝试获取资源时，AQS判断资源状态并决定是否授予访问权限。如果资源不可用，线程会被加入等待队列并挂起。资源释放时，AQS会唤醒队列中的一个或多个线程并重新判断资源状态。AQS的设计使得各种锁和同步器能够在并发环境下高效工作。
 总结来说，AQS通过资源状态管理、双向队列、模板方法和CAS实现了一个通用的、灵活的同步框架，是Java并发包中实现多种同步器的核心基础。
+
+
+**AQS（AbstractQueuedSynchronizer）** 是 Java 并发包中的一个抽象类，提供了用于构建锁或同步器的基础框架。它是实现锁、信号量、倒计时闩锁等同步器的基础。
+
+
+AQS 的数据结构
+
+AQS 内部使用 **FIFO 队列** 来保存等待获取锁的线程，通常通过 `Node` 类（一个双向链表节点）来表示每个线程在队列中的状态。每个线程都会被封装成一个 `Node` 节点，当线程无法获取到资源时，它会进入队列等待。
+
+AQS 的成员
+
+AQS 主要有以下几个重要成员：
+
+1. **state**：表示当前同步器的状态，通常用于表示锁是否被占用，或信号量的许可数量等。
+    
+2. **head**：队列的头节点，指向当前等待的线程队列的头部。
+    
+3. **tail**：队列的尾节点，指向队列的末尾。
+    
+4. **condition**：用于实现 `Condition` 类的条件队列（如 `await()`、`signal()` 等方法）。
+    
+
+state 的类型
+`state` 是一个 `volatile` 类型的 `int` 变量，通常用于表示同步器的当前状态，比如锁的占用情况，信号量的剩余许可数量等。它是一个 32 位的整数，可以通过自定义的方式来定义不同的状态值。
+
 
 ## volatile关键字
 `volatile` 是一种轻量级的同步机制，它的作用主要有两个：**可见性** 和 **有序性**

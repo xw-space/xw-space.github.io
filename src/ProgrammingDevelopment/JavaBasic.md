@@ -8,6 +8,10 @@ category:
 tag:
   - default
 ---
+
+一个简单的Java基础入门教程
+<!-- more -->
+
 # Java基础
 
 ## 下载安装
