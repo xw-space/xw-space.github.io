@@ -10,6 +10,7 @@ tag:
 
 一个简单的前端入门教程
 <!-- more -->
+
 # FrontEnd
 ## 技术介绍
 工作需要的技术
@@ -109,7 +110,7 @@ function App() {
 
 ## 前端调用api
 ### **使用 `fetch` 调用 API**
-`fetch` 是现代浏览器中原生支持的 JavaScript API，它用来发起 HTTP 请求并获取响应数据。通常它返回的是一个 Promise，你可以通过 `then` 或 `async/await` 来处理响应。
+**fetch` 是现代浏览器中原生支持的 JavaScript API，它用来发起 HTTP 请求并获取响应数据。通常它返回的是一个 Promise，你可以通过 `then` 或 `async/await` 来处理响应。
 ```javascript
 
 // 使用 fetch 发起 GET 请求
@@ -129,8 +130,8 @@ fetch('https://api.example.com/data')
 ```
 
 如果你更喜欢使用 `async/await`，可以像这样写：
-```javascript
 
+```javascript
 async function fetchData() {
   try {
     const response = await fetch('https://api.example.com/data');
@@ -160,7 +161,9 @@ npm install axios
 ```
 
 示例代码（`axios`）：
+
 ```javascript
+
 import axios from 'axios';
 
 // 使用 axios 发起 GET 请求
@@ -217,8 +220,8 @@ fetch('https://api.example.com/data', {
   .catch(error => console.error('请求失败:', error));
 ```
 
-`axios` 示例：
-`axios` 支持通过查询参数和请求体发送数据。
+`axios`示例：
+`axios`支持通过查询参数和请求体发送数据。
 ```javascript
 // GET 请求传递查询参数
 axios.get('https://api.example.com/data', {
@@ -238,7 +241,7 @@ axios.post('https://api.example.com/data', {
 
 ### **React 中如何调用 API**
 
-在 React 中，通常会在组件的生命周期函数或 `useEffect` 钩子中进行 API 调用。以下是使用 `useEffect` 和 `fetch` 进行数据获取的示例：
+在 React 中，通常会在组件的生命周期函数或 `useEffect` 钩子中进行 API 调用。以下是使用 `useEffect`和 `fetch`进行数据获取的示例：
 
 使用 `useEffect` 和 `fetch` 示例：
 ```javascript
@@ -301,15 +304,15 @@ HTML文件的扩展名可以是“.html”或“.htm”，这是两种常见的�
 
 ### 提交表单
 提交表单
-1. form标签包裹要提交的数据的标签
-	1. - 提交方式：`method="get/POST"`
-	2. - 提交的地址：`action="/xxx/xxx/xx"`
-	3. - 在form标签里面必须有一个submit标签。
-	4. 
-	5. - 在form里面的一些标签：input/select/textarea，一定要写name属性 `<input type="text" name="uu"/>`
+form标签包裹要提交的数据的标签
+- 提交方式：`method="get/POST"`
+- 提交的地址：`action="/xxx/xxx/xx"`
+- 在form标签里面必须有一个submit标签。
+- 在form里面的一些标签：input/select/textarea，一定要写name属性 `<input type="text" name="uu"/>`
 
 例：
-```
+```html
+
 <body>
 <h1>用户注册</h1>
 <form method="post" action="/register">
@@ -365,7 +368,7 @@ HTML文件的扩展名可以是“.html”或“.htm”，这是两种常见的�
 不是为了显示内容，只是实现某种功能的标签，如换行、分割线，以及布局标签。● <br>标签：可以在文本中生成一个换行。该标签是一个单标签，不需要包含其他的文本内容。● <hr>标签：可以在文本中生成一条分割线。和<br>标签一样，该标签是一个单标签，不需要包含其他的文本内容。● <span> 标签：没有具体的展示效果，只是用来页面局部布局。<span>标签可以和<span>标签共享一行，做水平布局。● <div>标签：没有具体的展示效果，只是用来做页面局部布局。<div>标签独占一行，不会和其他标签共享一行，做垂直布局。
 ```
 
-`head
+head
 ```html
 <head>
     <meta charset="UTF-8">
@@ -373,11 +376,12 @@ HTML文件的扩展名可以是“.html”或“.htm”，这是两种常见的�
 </head>
 ```
 ![[Pasted image 20240312205513.png]]
-`<meta>
+
+<meta>
 标签是一个单标签，可以用来在 HTML 文件中模拟 HTTP 的响应头报文。该标签包含一个charset属性，可以设置文件的字符编码。注意，乱码的根本原因是编码和解码使用的编码方式不一致，因此保证编码和解码格式一致是避免乱码产生的重要前提。
 编码：`<meta charset="UTF-8">`
 
-`a
+a
 超链接，行内标签
 跳转到其他网站
 
@@ -386,7 +390,9 @@ HTML文件的扩展名可以是“.html”或“.htm”，这是两种常见的�
 ```html
 <a href="http://www.chinaunicom.com.cn/about/about.html">点击跳转</a>
 ```
+
 跳转到自己网站其他的地址
+
 ```html
 <a href="http://127.0.0.1:5000/get/news">点击跳转</a>
 <a href="/get/news">点击跳转</a>
@@ -402,10 +408,13 @@ HTML文件的扩展名可以是“.html”或“.htm”，这是两种常见的�
 
 锚点
 锚点是指在 URL 地址中出现的片段标识符，也称为页面内链接。如果所请求的目标是一个大目标，那么可以使用`<a>`链接来将页面划分成大目标的一个一个小目标，之后在地址栏中输入这个小目标的标识之后跳转到小目标的位置。
+
 `<a>`标签的id属性可以在页面中划分一个一个小目标，其属性的值可以是自定义的字母、数字，但是尽量不要使用数字开头来创建test_anchors.html
 在上面代码的基础上，直接在浏览器地址栏的地址后面加上“＃test1”或“＃test2”将跳转至其对应的页面标记的小目标位置。
 
-`h*
+
+`h`
+
 标题标签
 标题，块级标签
 h1 的级别最高，h6 的级别最低，重要程度依次递减，而且标题标签是独占一行的
@@ -427,10 +436,11 @@ h1 的级别最高，h6 的级别最低，重要程度依次递减，而且标�
 </html>
 ```
 
-段落标签,<p>标签，用来标识一个段落，该标签的表现形式会在段落上、下加入空白，也就是段落之间自动换行！
-<hr>标签，用来表示段落级别的主题转换，它表现为一条水平线。值得一提的是，<hr>标签是一个单标签。
+段落标签,`<p>`标签，用来标识一个段落，该标签的表现形式会在段落上、下加入空白，也就是段落之间自动换行！
+`<hr>`标签，用来表示段落级别的主题转换，它表现为一条水平线。值得一提的是，`<hr>`标签是一个单标签。
 
-`div
+
+`div`
 块级标签
 
 ```html
@@ -440,7 +450,8 @@ h1 的级别最高，h6 的级别最低，重要程度依次递减，而且标�
 </body>
 ```
 
-`img
+
+`img`
 图片，行内标签
 src属性，用来指定要嵌入的图片的URL地址，地址可以是绝对路径也可以是相对路径。
 
@@ -466,7 +477,8 @@ src属性，用来指定要嵌入的图片的URL地址，地址可以是绝对�
 alt属性，用来指定<img>标签的备用内容，这个内容会在图像无法显示时出现。
 结合`<a>`标签，创建一个可以单击的图像链接
 
-`span
+
+`span`
 块级标签、内联标签，行内标签
 ```html
 <body>
@@ -475,7 +487,8 @@ alt属性，用来指定<img>标签的备用内容，这个内容会在图像无
 </body>
 ```
 
-`input
+
+`input`
 
 ```html
 <input type="text" />
@@ -494,7 +507,9 @@ alt属性，用来指定<img>标签的备用内容，这个内容会在图像无
 <input type="submit" value="提交">  -->提交表单
 ```
 
-`列表
+
+列表
+
 `<ol>`标签来编写一个带有编号的列表。需要注意的是，`<ol>`标签只是定义了一个有序列表，列表中的每项内容需要使用`<li>`标签来表示
 
 无序列表
@@ -531,7 +546,8 @@ alt属性，用来指定<img>标签的备用内容，这个内容会在图像无
 ```
 
 
-`表格
+
+表格
 
 ```html
 <table>
@@ -556,7 +572,8 @@ border属性，如果设置其值为0，意味着没有边框；如果将其值�
 ```
 
 
-`表单
+
+表单
 
 ```
 网页中通常使用表单提交数据，需要从客户端发起请求至服务器端，然后服务器端给出响应。下面，我们对创建表单涉及的标签进行简单介绍。● <form>标签：用于创建一个表单。在<form>标签内，通常会放置一个或多个专门用于表单的标签，这些表单标签用于提供输入信息的不同方式，如文本框、单选、多选、下拉菜单等。● <input> 标签：用于创建一个文本框。<input>标签可以设置name属性给该标签命名；设置type属性用来定义<form>标签中输入数据的类型，包括4种属性值，分别是text（文本输入框）、password （密码框）、radio（单选框）和checkbox（复选框）；还可以设置value属性值，用来表示文本输入框中默认显示的内容。● <select>标签：用来实现下拉列表。该标签可以包含一个或多个<option>标签，用来表示下拉列表中的项。● <textarea>标签：用来表示文本域。文本域可以用来输入多行文本，输入的内容中允许换行。● <button>标签：用于创建一个提交按钮。
@@ -587,7 +604,8 @@ border属性，如果设置其值为0，意味着没有边框；如果将其值�
 
 ```
 
-`下拉框
+
+下拉框
 ```html
 <select>
     <option>北京</option>
@@ -602,7 +620,8 @@ border属性，如果设置其值为0，意味着没有边框；如果将其值�
 </select>
 ```
 
-`行内文本标签
+
+行内文本标签
 
 ```
 <b>标签或<strong>标签，表示将标记的文本显示为粗体
@@ -611,12 +630,14 @@ border属性，如果设置其值为0，意味着没有边框；如果将其值�
 <s>标签，表示将标记的文本显示为加删除线的文本，通常用来描述不存在、不相关的事物
 ```
 
-`多行文本
+
+多行文本
 ```html
 <textarea name="desc"></textarea>
 <textarea>标签没有value属性，如果要设置默认值，则其需要写在开始和结束标签之间。
 ```
-`实体
+
+实体
 HTML对空格和回车的处理比较特殊。在HTML文件中，一个空格和多个空格都会被当作一个空格来处理，一个回车和多个回车也会被当作一个空格来处理。要在HTML中显示多个空格，则需要通过实体来实现。那什么是实体呢？在HTML中有些字符是系统预留下来的，如果想要使用这些预留下来的字符就要使用实体将它们表示出来。实体的格式是“＆”符号后接字母。下面以表格的形式列出一些常用的实体![[Pasted image 20240716092617.png]]
 
 
@@ -837,6 +858,7 @@ DOM（Document Object Model，文档对象模型）是表示HTML文档结构的�
 - 额外的计算开销：虽然虚拟DOM减少了直接操作真实DOM的次数，但它在内存中创建和比较虚拟DOM也会带来一定的性能开销。对于一些简单的页面或操作频率非常高的场景，虚拟DOM的优势可能并不明显。
 
 ### `<template>`
+
 `<template>`是一个容器，用来包裹一段 HTML 代码或 Vue.js 模板代码，最终这些内容会根据**设定逻辑**被渲染到页面上。
 举例：
 - 替换内容
@@ -885,9 +907,9 @@ export default {
 ```
 
 ### createElement和h
-1. **`createElement` 是什么？**
-`createElement` 是 Vue.js 用来创建虚拟 DOM 的函数。虚拟 DOM 是 Vue.js 的一个核心概念，它在内存中表示 DOM 结构，之后再与实际 DOM 进行比较（diff），以确定需要更新的部分，从而高效地更新界面。
-`createElement` 可以接收多个参数：
+1. `createElement` 是什么？**
+**createElement` 是 Vue.js 用来创建虚拟 DOM 的函数。虚拟 DOM 是 Vue.js 的一个核心概念，它在内存中表示 DOM 结构，之后再与实际 DOM 进行比较（diff），以确定需要更新的部分，从而高效地更新界面。
+**createElement` 可以接收多个参数：
 ```javascript
 createElement(
   // {String | Object | Function} 一个 HTML 标签名、组件选项对象，或者是一个返回值为这些选项之一的函数。
@@ -905,7 +927,7 @@ createElement(
   ]
 )
 ```
-2. **`h` 是什么？**
+2. `h` 是什么？**
 “`h`” 是 `createElement` 的缩写，由于`createElement`经常被使用，为了简洁，Vue 社区普遍采用了 `h` 作为它的缩写。
 ```javascript
 render: h => h(App)
@@ -960,7 +982,7 @@ new Vue({
 ## marked.js
 
 
-`marked.js` 是一个非常流行的 **JavaScript Markdown 解析器**，可以把 Markdown 文本转化为 HTML。它是纯 JavaScript 实现的，不依赖其他库，所以常用在前端（浏览器）和 Node.js 环境中。
+**marked.js** 是一个非常流行的 **JavaScript Markdown 解析器**，可以把 Markdown 文本转化为 HTML。它是纯 JavaScript 实现的，不依赖其他库，所以常用在前端（浏览器）和 Node.js 环境中。
 
 ---
 
