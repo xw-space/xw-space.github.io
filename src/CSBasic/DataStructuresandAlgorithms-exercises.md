@@ -8,12 +8,12 @@ tag:
   - default
 ---
 
+一些做过的题的经验
+<!-- more -->
 
-
-
-## 算法-题
-### POJ
-#### [2456.Aggressive cows](http://poj.org/problem?id=2456)
+# 算法-题
+## POJ
+### [2456.Aggressive cows](http://poj.org/problem?id=2456)
 Description
 Farmer John has built a new long barn, with N (2 <= N <= 100,000) stalls. The stalls are located along a straight line at positions x1,...,xN (0 <= xi <= 1,000,000,000).
 His C (2 <= C <= N) cows don't like this barn layout and become aggressive towards each other once put into a stall. To prevent the cows from hurting each other, FJ want to assign the cows to the stalls, such that the minimum distance between any two of them is as large as possible. What is the largest minimum distance?
@@ -81,7 +81,7 @@ int main(){
 使用二分查找最小距离
 
 
-#### 3414-Pots
+### 3414-Pots
 
 You are given two pots, having the volume of A and B liters respectively. The following operations can be performed:
 
@@ -189,7 +189,7 @@ int main(){
 
 Explanation
 
-#### 2387-Til the Cows Come Home
+### 2387-Til the Cows Come Home
 
 Bessie is out in the field and wants to get back to the barn to get as much sleep as possible before Farmer John wakes her for the morning milking. Bessie needs her beauty sleep, so she wants to get back as quickly as possible.
 
@@ -292,8 +292,8 @@ int main(){
 ```
 
 
-### KamaCoder卡码网
-#### 55.右旋字符串
+## KamaCoder卡码网
+### 55.右旋字符串
 https://kamacoder.com/problempage.php?pid=1065
 题目描述
 字符串的右旋转操作是把字符串尾部的若干个字符转移到字符串的前面。给定一个字符串 s 和一个正整数 k，请编写一个函数，将字符串中的后面 k 个字符移到字符串的前面，实现字符串的右旋转操作。 
@@ -331,8 +331,8 @@ int main() {
     cout << s << endl;
 } 
 ```
-### HDU
-#### 1228.A + B
+## HDU
+### 1228.A + B
 Problem Description
 读入两个小于100的正整数A和B,计算A+B.
 需要注意的是:A和B的每一位数字由对应的英文单词给出.
@@ -396,7 +396,7 @@ int main(){
 ```
 使用map<string, int>来存英文与数字的对应，，如果一个英文数字后面不是”+“或者”=“，说明这个数字是十位，要乘十
 
-#### [1232.畅通工程](http://acm.hdu.edu.cn/showproblem.php?pid=1232)
+### [1232.畅通工程](http://acm.hdu.edu.cn/showproblem.php?pid=1232)
 
 ```c++
 #include<bits/stdc++.h>
@@ -454,7 +454,7 @@ int main(){
 
 ```
 很典型的一道并查集题目，题意是给出n个城镇与m条道路，问还需修多少条路才能使任意两个城镇连通（但不一定有直接的道路相连，只要互相间接通过道路可达即可），找出
-#### 2000.ASCII码排序
+### 2000.ASCII码排序
 Problem Description
 输入三个字符后，按各字符的ASCII码从小到大的顺序输出这三个字符。
 
@@ -500,7 +500,7 @@ int main(){
 }
 ```
 
-#### [2199.Can you solve this equation?](https://acm.hdu.edu.cn/showproblem.php?pid=2199)
+### [2199.Can you solve this equation?](https://acm.hdu.edu.cn/showproblem.php?pid=2199)
 Problem Description
 Now,given the equation 8*x^4 + 7*x^3 + 2*x^2 + 3*x + 6 == Y,can you find its solution between 0 and 100;
 Now please try your lucky.
@@ -561,8 +561,8 @@ int main(){
 使用二分法，从0-100间搜索这个解
 
 
-### CSP
-#### 20240922-2. 字符串变换
+## CSP
+### 20240922-2. 字符串变换
 
 样例：
 ```
@@ -570,7 +570,7 @@ int main(){
 6
 #HH#
 #e #
-## r#
+# r#
 #re#
 #oa#
 #ao#
@@ -628,7 +628,7 @@ int main() {
 
 题解：
 https://blog.csdn.net/weixin_46655675/article/details/142441929
-#### 20240922-3. 补丁应用
+### 20240922-3. 补丁应用
 样例1：
 ```cpp
 
@@ -747,7 +747,7 @@ int main() {
     return 0;
 }
 ```
-#### 20240922-4. 通讯延迟
+### 20240922-4. 通讯延迟
 样例：
 ```
 5 5
@@ -859,7 +859,7 @@ int main() {
 }
 
 ```
-#### 20240922-5. 木板切割
+### 20240922-5. 木板切割
 
 样例：
 ```
@@ -928,8 +928,8 @@ int main() {
 
 ```
 
-### CodeForces
-#### 1272B-Snow Walking Robot
+## CodeForces
+### 1272B-Snow Walking Robot
 
 Recently you have bought a snow walking robot and brought it home. Suppose your home is a cell (0, 0)(0,0) on an infinite grid.
 
@@ -1058,7 +1058,7 @@ int main(){
 ```
 
 
-#### 1304A.Two Rabbits
+### 1304A.Two Rabbits
 Being tired of participating in too many Codeforces rounds, Gildong decided to take some rest in a park. He sat down on a bench, and soon he found two rabbits hopping around. One of the rabbits was taller than the other.
 He noticed that the two rabbits were hopping towards each other. The positions of the two rabbits can be represented as integer coordinates on a horizontal line. The taller rabbit is currently on position xx, and the shorter rabbit is currently on position yy (x<yx<y). Every second, each rabbit hops to another position. The taller rabbit hops to the positive direction by aa, and the shorter rabbit hops to the negative direction by bb.
 
@@ -1103,7 +1103,7 @@ int main(){
 }
 ```
 
-#### 1304B. Longest Palindrome
+### 1304B. Longest Palindrome
 
 Returning back to problem solving, Gildong is now studying about palindromes. He learned that a palindrome is a string that is the same as its reverse. For example, strings "pop", "noon", "x", and "kkkkkk" are palindromes, while strings "moon", "tv", and "abab" are not. An empty string is also a palindrome.
 
@@ -1238,7 +1238,7 @@ int main(){
 ```
 
 
-#### 1313A.Fast Food Restaurant
+### 1313A.Fast Food Restaurant
 Tired of boring office work, Denis decided to open a fast food restaurant.
 On the first day he made aa portions of dumplings, bb portions of cranberry juice and cc pancakes with condensed milk.
 The peculiarity of Denis's restaurant is the procedure of ordering food. For each visitor Denis himself chooses a set of dishes that this visitor will receive. When doing so, Denis is guided by the following rules:
@@ -1302,7 +1302,7 @@ int main(){
 }
 ```
 将三个堆按照从大到小排序，使得 `a` 为最大的堆，`b` 为次大的堆，`c` 为最小的堆。这确保了每次尽可能先从大的堆中取物品,先从每个非空堆中各取一个物品,然后检查是否可以从两个不同的堆中再各取一个物品，尽量减少较大的堆的大小,最后，如果所有三个堆都至少有一个物品，则从每个堆中各取一个物品。最终输出可以进行操作的最大次数 `ans`。
-#### 1313B.Different Rules
+### 1313B.Different Rules
 Nikolay has only recently started in competitive programming, but already qualified to the finals of one prestigious olympiad. There going to be nn participants, one of whom is Nikolay. Like any good olympiad, it consists of two rounds. Tired of the traditional rules, in which the participant who solved the largest number of problems wins, the organizers came up with different rules.
 Suppose in the first round participant A took xx-th place and in the second round — yy-th place. Then the total score of the participant A is sum x+yx+y. The overall place of the participant A is the number of participants (including A) having their total score less than or equal to the total score of A. Note, that some participants may end up having a common overall place. It is also important to note, that in both the first and the second round there were no two participants tying at a common place. In other words, for every ii from 11 to nn exactly one participant took ii-th place in first round and exactly one participant took ii-th place in second round.
 Right after the end of the Olympiad, Nikolay was informed that he got xx-th place in first round and yy-th place in the second round. Nikolay doesn't know the results of other participants, yet he wonders what is the minimum and maximum place he can take, if we consider the most favorable and unfavorable outcome for him. Please help Nikolay to find the answer to this question.
@@ -1353,10 +1353,10 @@ https://blog.csdn.net/Doneoll/article/details/104481023
 https://blog.csdn.net/mrcrack/article/details/104486588/
 https://blog.csdn.net/weixin_45767800/article/details/106061608
 
-### LeetCode力扣
-#### LeetCode使用
+## LeetCode力扣
+### LeetCode使用
 
-##### 越界溢出问题
+#### 越界溢出问题
 
 对于第54题螺旋矩阵，在这道题的for循环中，如果不在判断部分添加“ && k < total”部分，会出现堆缓冲溢出错误，并且这个错误是随机出现的，就是这四个for循环中有的加上“ && k < total”这部分或者不加，都可能会出现这个错误或者没有这个错误，Chatgpt说这个错误通常是由于数组或向量的索引超出了其分配的范围，但我这个程序即使不加这个检查条件，他也不会越界溢出，我觉得应该是LeetCode的问题，因为在写这道题的过程中，也出现了类似的错误，我觉得这些问题出现的主要原因是，LeetCode会多管闲事，即使实际不会溢出，但是其有潜在越界溢出的风险，就会报错，并且这个检查不是很智能，即使我故意写会越界溢出的代码，这个问题也还是会随机出现，并且最大的问题是，他报错了会只给报错，不会显示输出，没发调试，所以最好自己在本地调试，反正现在有Chatgpt，直接让Chatgpt给补齐主体代码也很方便，调好后粘贴到LeetCode上，再消除越界问题，也当作对自己的锻炼了，最后附上出现的越界溢出报错之一
 
@@ -1364,7 +1364,7 @@ https://blog.csdn.net/weixin_45767800/article/details/106061608
 Line 16: Char 63: ================================================================= ==21==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x504000000140 at pc 0x55cd24bc4658 bp 0x7fffc87b4d30 sp 0x7fffc87b4d28 WRITE of size 4 at 0x504000000140 thread T0 #0 0x55cd24bc4657 in Solution::spiralOrder(std::vector<std::vector<int, std::allocator<int>>, std::allocator<std::vector<int, std::allocator<int>>>>&) solution.cpp:16:63 #1 0x55cd24bc3229 in __helper__ solution.cpp:16:36 #2 0x55cd24bc3229 in main solution.cpp:16:48 #3 0x7f958336dd8f (/lib/x86_64-linux-gnu/libc.so.6+0x29d8f) (BuildId: 490fef8403240c91833978d494d39e537409b92e) #4 0x7f958336de3f in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x29e3f) (BuildId: 490fef8403240c91833978d494d39e537409b92e) #5 0x55cd24af2324 in _start (solution+0x9d324) 0x504000000140 is located 0 bytes after 48-byte region [0x504000000110,0x504000000140) allocated by thread T0 here: #0 0x55cd24bc0bbd in operator new(unsigned long) /root/llvm-project/compiler-rt/lib/asan/asan_new_delete.cpp:95:3 #1 0x55cd24bc4727 in allocate /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ext/new_allocator.h:127:27 #2 0x55cd24bc4727 in allocate /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/allocator.h:185:32 #3 0x55cd24bc4727 in allocate /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/alloc_traits.h:464:20 #4 0x55cd24bc4727 in _M_allocate /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_vector.h:346:20 #5 0x55cd24bc4727 in std::_Vector_base<int, std::allocator<int>>::_M_create_storage(unsigned long) /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_vector.h:361:33 #6 0x55cd24bc3a5b in _Vector_base /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_vector.h:305:9 #7 0x55cd24bc3a5b in vector /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_vector.h:511:9 #8 0x55cd24bc3a5b in Solution::spiralOrder(std::vector<std::vector<int, std::allocator<int>>, std::allocator<std::vector<int, std::allocator<int>>>>&) solution.cpp:16:21 #9 0x55cd24bc3229 in __helper__ solution.cpp:16:36 #10 0x55cd24bc3229 in main solution.cpp:16:48 #11 0x7f958336dd8f (/lib/x86_64-linux-gnu/libc.so.6+0x29d8f) (BuildId: 490fef8403240c91833978d494d39e537409b92e) SUMMARY: AddressSanitizer: heap-buffer-overflow solution.cpp:16:63 in Solution::spiralOrder(std::vector<std::vector<int, std::allocator<int>>, std::allocator<std::vector<int, std::allocator<int>>>>&) Shadow bytes around the buggy address: 0x503ffffffe80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 0x503fffffff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 0x503fffffff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 0x504000000000: fa fa 00 00 00 00 00 05 fa fa fd fd fd fd fd fd 0x504000000080: fa fa fd fd fd fd fd fa fa fa fd fd fd fd fd fd =>0x504000000100: fa fa 00 00 00 00 00 00[fa]fa fa fa fa fa fa fa 0x504000000180: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa 0x504000000200: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa 0x504000000280: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa 0x504000000300: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa 0x504000000380: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa Shadow byte legend (one shadow byte represents 8 application bytes): Addressable: 00 Partially addressable: 01 02 03 04 05 06 07 Heap left redzone: fa Freed heap region: fd Stack left redzone: f1 Stack mid redzone: f2 Stack right redzone: f3 Stack after return: f5 Stack use after scope: f8 Global redzone: f9 Global init order: f6 Poisoned by user: f7 Container overflow: fc Array cookie: ac Intra object redzone: bb ASan internal: fe Left alloca redzone: ca Right alloca redzone: cb ==21==ABORTING
 ```
 
-##### Definition for a binary tree node
+#### Definition for a binary tree node
 C++：
 ```C++
 /**
@@ -1398,7 +1398,7 @@ Java：
  */
 ```
 
-#### [1. 两数之和](https://leetcode.cn/problems/two-sum/)
+### [1. 两数之和](https://leetcode.cn/problems/two-sum/)
 
 暴力：
 ```C++
@@ -1430,7 +1430,7 @@ public:
 ```
 
 
-#### [20. 有效的括号](https://leetcode.cn/problems/valid-parentheses/)
+### [20. 有效的括号](https://leetcode.cn/problems/valid-parentheses/)
 ```C++
 class Solution {
 public:
@@ -1453,7 +1453,7 @@ public:
 };
 ```
 
-#### [27. 移除元素](https://leetcode.cn/problems/remove-element/)
+### [27. 移除元素](https://leetcode.cn/problems/remove-element/)
 
 题目描述：略
 
@@ -1479,7 +1479,7 @@ public:
 };
 ```
 
-#### [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/)
+### [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/)
 
 
 题目描述：略
@@ -1519,7 +1519,7 @@ public:
 ```
 
 
-#### [35.搜索插入位置](https://leetcode.cn/problems/search-insert-position/description/)
+### [35.搜索插入位置](https://leetcode.cn/problems/search-insert-position/description/)
 #分治法
 
 题目描述：略
@@ -1562,7 +1562,7 @@ public:
 };
 ```
 
-####   [41. 缺失的第一个正数](https://leetcode.cn/problems/first-missing-positive/)
+###   [41. 缺失的第一个正数](https://leetcode.cn/problems/first-missing-positive/)
 
 
 ```java
@@ -1576,11 +1576,11 @@ public:
 
 
 
-#### 53. 
+### 53. 
 题解没太说到点子上，主要是，0到i-1要么提供负面作用，要么正面作用，所以可以直接加i比大小，
 如果前面的累计值小于 0 了，那么就没有意义了，你就需要从当前下标开始了
 
-#### [54. 螺旋矩阵](https://leetcode.cn/problems/spiral-matrix/)
+### [54. 螺旋矩阵](https://leetcode.cn/problems/spiral-matrix/)
 java（不同于leetcode的方法）：
 ```java
 class Solution {
@@ -1672,12 +1672,12 @@ int main() {
 ```
 
 
-#### 56. 合并区间
+### 56. 合并区间
 `if(ans.isEmpty() || ans.get(ans.size()-1)[1] < interval[0]){`中，如果更改`ans.get(ans.size()-1)[1] < interval[0]`为`interval[0] > ans.get(ans.size()-1)[1]`，就会快2ms，神奇
 
 
 
-#### [59. 螺旋矩阵 II](https://leetcode.cn/problems/spiral-matrix-ii/)
+### [59. 螺旋矩阵 II](https://leetcode.cn/problems/spiral-matrix-ii/)
 
 Solution1：
 ```C++
@@ -1746,7 +1746,7 @@ public:
     }
 };
 ```
-#### [69.x的平方根](https://leetcode.cn/problems/sqrtx/description/)
+### [69.x的平方根](https://leetcode.cn/problems/sqrtx/description/)
 #分治法 
 
 题目描述：略
@@ -1779,7 +1779,7 @@ public:
     }
 };
 ```
-#### [77. 组合](https://leetcode.cn/problems/combinations/)
+### [77. 组合](https://leetcode.cn/problems/combinations/)
 
 递归解法：
 ```Java
@@ -1848,7 +1848,7 @@ public class Solution {
     }
 }
 ```
-#### [94. 二叉树的中序遍历](https://leetcode.cn/problems/binary-tree-inorder-traversal/)
+### [94. 二叉树的中序遍历](https://leetcode.cn/problems/binary-tree-inorder-traversal/)
 
 ```
 /**
@@ -1905,7 +1905,7 @@ class Solution {
     }
 }
 ```
-#### [98. 验证二叉搜索树](https://leetcode.cn/problems/validate-binary-search-tree/)
+### [98. 验证二叉搜索树](https://leetcode.cn/problems/validate-binary-search-tree/)
 
 ```Java
 class Solution {
@@ -1923,7 +1923,7 @@ class Solution {
 
 
 
-#### [101. 对称二叉树](https://leetcode.cn/problems/symmetric-tree/)
+### [101. 对称二叉树](https://leetcode.cn/problems/symmetric-tree/)
 
 递归：
 ```Java
@@ -1971,7 +1971,7 @@ class Solution {
     }
 }
 ```
-#### [102. 二叉树的层序遍历](https://leetcode.cn/problems/binary-tree-level-order-traversal/)
+### [102. 二叉树的层序遍历](https://leetcode.cn/problems/binary-tree-level-order-traversal/)
 ```
 /**
  * Definition for a binary tree node.
@@ -2013,7 +2013,7 @@ class Solution {
     }
 }
 ```
-#### [104. 二叉树的最大深度](https://leetcode.cn/problems/maximum-depth-of-binary-tree/)
+### [104. 二叉树的最大深度](https://leetcode.cn/problems/maximum-depth-of-binary-tree/)
 
 深度优先搜索，递归搜索：
 ```Java
@@ -2055,7 +2055,7 @@ class Solution {
 }
 ```
 
-#### [110. 平衡二叉树](https://leetcode.cn/problems/balanced-binary-tree/)
+### [110. 平衡二叉树](https://leetcode.cn/problems/balanced-binary-tree/)
 
 
 递归判断，用一个函数来获取左右子树的高度，如果两树高度差不超过1且左右子树平衡则为平衡二叉树：
@@ -2073,7 +2073,7 @@ class Solution {
 ```
 
 
-#### [111. 二叉树的最小深度](https://leetcode.cn/problems/minimum-depth-of-binary-tree/)
+### [111. 二叉树的最小深度](https://leetcode.cn/problems/minimum-depth-of-binary-tree/)
 
 广度优先搜索：
 ```Java
@@ -2089,7 +2089,7 @@ class Solution {
 }
 ```
 
-#### [138. 随机链表的复制](https://leetcode.cn/problems/copy-list-with-random-pointer/)
+### [138. 随机链表的复制](https://leetcode.cn/problems/copy-list-with-random-pointer/)
 
 ```java
 class Solution {
@@ -2121,7 +2121,7 @@ class Solution {
     }
 }
 ```
-#### [142. 环形链表 II](https://leetcode.cn/problems/linked-list-cycle-ii/)
+### [142. 环形链表 II](https://leetcode.cn/problems/linked-list-cycle-ii/)
 
 ```C++
 class Solution {
@@ -2137,7 +2137,7 @@ public:
     }
 };
 ```
-#### [144. 二叉树的前序遍历](https://leetcode.cn/problems/binary-tree-preorder-traversal/)
+### [144. 二叉树的前序遍历](https://leetcode.cn/problems/binary-tree-preorder-traversal/)
 ```
 /**
  * Definition for a binary tree node.
@@ -2202,7 +2202,7 @@ class Solution {
 }
 ```
 
-#### [145. 二叉树的后序遍历](https://leetcode.cn/problems/binary-tree-postorder-traversal/)
+### [145. 二叉树的后序遍历](https://leetcode.cn/problems/binary-tree-postorder-traversal/)
 
 ```
 /**
@@ -2269,7 +2269,7 @@ class Solution {
 }
 
 ```
-#### [150. 逆波兰表达式求值](https://leetcode.cn/problems/evaluate-reverse-polish-notation/)
+### [150. 逆波兰表达式求值](https://leetcode.cn/problems/evaluate-reverse-polish-notation/)
 
 ```C++
 class Solution {
@@ -2306,7 +2306,7 @@ public:
 };
 ```
 
-#### [151. 反转字符串中的单词](https://leetcode.cn/problems/reverse-words-in-a-string/)
+### [151. 反转字符串中的单词](https://leetcode.cn/problems/reverse-words-in-a-string/)
 可以直接使用现成的字符串分割split库函数，通过空白字符分割单词然后倒序相加。
 将整个字符串反转，然后挨个翻转每个单词，空间复杂度位O（1）
 ```C++
@@ -2330,7 +2330,7 @@ public:
 };
 ```
 
-#### [200. 岛屿数量](https://leetcode.cn/problems/number-of-islands/)
+### [200. 岛屿数量](https://leetcode.cn/problems/number-of-islands/)
 深度优先搜索，从二维网格的左上角开始扫描，扫描到1则视为扫描到一个岛屿，将和这个1相连的所有1置为0，然后接着扫描：
 ```java
 class Solution {
@@ -2490,7 +2490,7 @@ class Solution {
 ```
 
 
-#### [206. 反转链表](https://leetcode.cn/problems/reverse-linked-list/)
+### [206. 反转链表](https://leetcode.cn/problems/reverse-linked-list/)
 
 ```cpp
 class Solution {
@@ -2508,7 +2508,7 @@ public:
 };
 ```
 
-#### [226. 翻转二叉树](https://leetcode.cn/problems/invert-binary-tree/)
+### [226. 翻转二叉树](https://leetcode.cn/problems/invert-binary-tree/)
 
 递归解法：
 ```Java
@@ -2524,7 +2524,7 @@ class Solution {
 }
 ```
 
-#### [239. 滑动窗口最大值](https://leetcode.cn/problems/sliding-window-maximum/)
+### [239. 滑动窗口最大值](https://leetcode.cn/problems/sliding-window-maximum/)
 
 solution1：
 使用优先队列（堆），要注意的是，堆顶的最大值可能已不在滑动窗口中，已被滑过，所以要为每个放入堆的值加一个下标来判断其是否在滑动窗口中
@@ -2596,7 +2596,7 @@ public:
 
 
 
-#### [242. 有效的字母异位词](https://leetcode.cn/problems/valid-anagram/)
+### [242. 有效的字母异位词](https://leetcode.cn/problems/valid-anagram/)
 给定两个字符串 `s` 和 `t` ，编写一个函数来判断 `t` 是否是 `s` 的 字母异位词——字母异位词是通过重新排列不同单词或短语的字母而形成的单词或短语，并使用所有原字母一次。
 
 排序法：
@@ -2630,7 +2630,7 @@ public:
     }
 };
 ```
-#### [257. 二叉树的所有路径](https://leetcode.cn/problems/binary-tree-paths/)
+### [257. 二叉树的所有路径](https://leetcode.cn/problems/binary-tree-paths/)
 
 用深度优先搜索来搜素树，如果碰到一个叶子节点，则获得一条以这个叶子节点为末尾的路径，通过没有左右子节点来判断叶子节点：
 ```Java
@@ -2655,9 +2655,9 @@ class Solution {
     }
 }
 ```
-#### 281. 寻找重复数
+### 281. 寻找重复数
 必须是do-while，而不是while-do，因为开始f、s都是nums[0]
-#### [283. 移动零](https://leetcode.cn/problems/move-zeroes/)
+### [283. 移动零](https://leetcode.cn/problems/move-zeroes/)
 
 题目描述：略
 
@@ -2683,7 +2683,7 @@ public:
 };
 
 ```
-#### [347. 前 K 个高频元素](https://leetcode.cn/problems/top-k-frequent-elements/)
+### [347. 前 K 个高频元素](https://leetcode.cn/problems/top-k-frequent-elements/)
 方法一：
 遍历整个数组，并使用哈希表记录每个数字出现的次数，并形成一个「出现次数数组」，如果直接为这个「出现次数数组」排序寻找前k个高频元素，算法复杂度为O(NlogN)。
 为了降低算法复杂度，形成「出现次数数组」后，建一个小顶堆，如果堆的元素个数小于 k，就可以直接插入堆中，如果堆的元素个数等于 k，则检查堆顶与当前出现次数的大小。如果堆顶更大，说明至少有 k 个数字的出现次数比当前值大，故舍弃当前值；否则，就弹出堆顶，并将当前值插入堆中。
@@ -2718,7 +2718,7 @@ public:
 ```
 
 
-#### [349. 两个数组的交集](https://leetcode.cn/problems/intersection-of-two-arrays/)
+### [349. 两个数组的交集](https://leetcode.cn/problems/intersection-of-two-arrays/)
 
 
 查找一个数组中每个元素是否在另一个数组中，这样时间复杂度位O（mn），可以先将两个数组存到set中降低时间复杂度，变为O（m+n）：
@@ -2743,7 +2743,7 @@ public:
 ```
 
 
-#### [367. 有效的完全平方数](https://leetcode.cn/problems/valid-perfect-square/)
+### [367. 有效的完全平方数](https://leetcode.cn/problems/valid-perfect-square/)
 
 
 题目描述：略
@@ -2774,7 +2774,7 @@ public:
 };
 
 ```
-#### [450. 删除二叉搜索树中的节点](https://leetcode.cn/problems/delete-node-in-a-bst/)
+### [450. 删除二叉搜索树中的节点](https://leetcode.cn/problems/delete-node-in-a-bst/)
 
 - root 为空，代表未搜索到值为 key 的节点，返回空。
 - root.val>key，表示值为 key 的节点可能存在于 root 的左子树中，需要递归地在 root.left 调用 deleteNode，并返回 root。
@@ -2813,7 +2813,7 @@ class Solution {
 }
 ```
 
-#### [459. 重复的子字符串](https://leetcode.cn/problems/repeated-substring-pattern/)
+### [459. 重复的子字符串](https://leetcode.cn/problems/repeated-substring-pattern/)
 
 暴力枚举法，取字符串中前1...n-1个长度的一个个判断是不是重复子字符串：
 ```C++
@@ -2884,11 +2884,11 @@ public:
 };
 ```
 
-#### 560. 和为 K 的子数组
+### 560. 和为 K 的子数组
 这个子数组指连续的子数组
 
 
-#### [700. 二叉搜索树中的搜索](https://leetcode.cn/problems/search-in-a-binary-search-tree/)
+### [700. 二叉搜索树中的搜索](https://leetcode.cn/problems/search-in-a-binary-search-tree/)
 
 
 ```Java
@@ -2900,7 +2900,7 @@ class Solution {
     }
 }
 ```
-#### [704. 二分查找](https://leetcode.cn/problems/binary-search/)
+### [704. 二分查找](https://leetcode.cn/problems/binary-search/)
 #分治法 
 
 题目描述：略
@@ -2936,7 +2936,7 @@ public:
 };
 
 ```
-#### [707. 设计链表](https://leetcode.cn/problems/design-linked-list/)
+### [707. 设计链表](https://leetcode.cn/problems/design-linked-list/)
 
 知识点：
 1. ListNode：是用于表示链表节点的基本数据结构。在链表中，每个节点包含两个主要部分：存储数据的值（通常是一个整数或其他类型的数据，val）和指向下一个节点的指针（next）。通常，`ListNode` 类的定义如下：
@@ -3013,7 +3013,7 @@ public:
  */
 ```
 
-#### 739. 每日温度
+### 739. 每日温度
 // 题目是对每一个温度，获得下一个更高温度在第几天之后，即获得一个长度和给定的温度数组相同的数字数组
 // 题目要找下一个温度更高的日期，说明前面的都是连续下降的，并且对于所谓“温度更高的一天”的前一天的答案数组应该存1，前二天应该存2，是一个倒序，所以应该用到栈
 class Solution {
@@ -3043,8 +3043,8 @@ class Solution {
     }
 }
 
-### 其它
-#### m个苹果分给n个人，每个人可以分0-m个苹果，求出所以分配方案
+## 其它
+### m个苹果分给n个人，每个人可以分0-m个苹果，求出所以分配方案
 
 这是一个典型的组合数学问题，可以通过 **"带约束的组合问题"** 来解决。
 
@@ -3074,4 +3074,4 @@ C(m + n - 1, n - 1)
 总结
 所以，分配 ( m ) 个苹果给 ( n ) 个人的方案数是：  C(m + n - 1, n - 1)  
 
-## END
+# END

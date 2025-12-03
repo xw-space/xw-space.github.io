@@ -13,6 +13,7 @@ export default navbar([
       { text: "操作系统", icon: "pen-to-square", link: "OperatingSystem.html" },
       { text: "计算机网络", icon: "pen-to-square", link: "ComputerNetwork.html" },
       { text: "数据结构与算法", icon: "pen-to-square", link: "DataStructuresandAlgorithms.html" },
+      { text: "算法题解与做题心得", icon: "pen-to-square", link: "DataStructuresandAlgorithms-exercises.html" },
       { text: "数据库", icon: "pen-to-square", link: "DataBase.html" },
     ],
   },
