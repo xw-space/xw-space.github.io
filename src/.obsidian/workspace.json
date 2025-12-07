@@ -16,7 +16,9 @@
                 "file": "Other/Linux.md",
                 "mode": "source",
                 "source": false
-              }
+              },
+              "icon": "lucide-file",
+              "title": "Linux"
             }
           },
           {
@@ -25,10 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "ProgrammingDevelopment/FrontEnd.md",
+                "file": "CSBasic/ComputerNetwork.md",
                 "mode": "source",
                 "source": false
-              }
+              },
+              "icon": "lucide-file",
+              "title": "ComputerNetwork"
             }
           }
         ],
@@ -51,8 +55,11 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical"
-              }
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
             }
           },
           {
@@ -67,7 +74,9 @@
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical"
-              }
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
             }
           },
           {
@@ -75,7 +84,9 @@
             "type": "leaf",
             "state": {
               "type": "bookmarks",
-              "state": {}
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
             }
           }
         ]
@@ -98,7 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "ProgrammingDevelopment/FrontEnd.md",
+                "file": "CSBasic/ComputerNetwork.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -106,7 +117,9 @@
                 "searchQuery": "",
                 "backlinkCollapsed": false,
                 "unlinkedCollapsed": true
-              }
+              },
+              "icon": "links-coming-in",
+              "title": "ComputerNetwork 的反向链接列表"
             }
           },
           {
@@ -115,10 +128,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "ProgrammingDevelopment/FrontEnd.md",
+                "file": "CSBasic/ComputerNetwork.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
-              }
+              },
+              "icon": "links-going-out",
+              "title": "ComputerNetwork 的出链列表"
             }
           },
           {
@@ -128,8 +143,12 @@
               "type": "tag",
               "state": {
                 "sortOrder": "frequency",
-                "useHierarchy": true
-              }
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
             }
           },
           {
@@ -138,8 +157,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "ProgrammingDevelopment/FrontEnd.md"
-              }
+                "file": "CSBasic/ComputerNetwork.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "ComputerNetwork 的大纲"
             }
           }
         ],
@@ -151,6 +175,7 @@
   },
   "left-ribbon": {
     "hiddenItems": {
+      "bases:创建新数据库": false,
       "switcher:打开快速切换": false,
       "graph:查看关系图谱": false,
       "canvas:新建白板": false,
@@ -161,6 +186,9 @@
   },
   "active": "56a908fba3330e7f",
   "lastOpenFiles": [
+    "ProgrammingDevelopment/Python.md",
+    "ProgrammingDevelopment/JavaBasic.md",
+    "ProgrammingDevelopment/FrontEnd.md",
     "ProgrammingDevelopment/JavaServiceDevTools.md",
     "DailyThoughts/生活乐趣.md",
     "DailyThoughts/Daily2025-06-07.md",
@@ -168,7 +196,6 @@
     "Other/VuePress/VuePress教程.md",
     "Other/VuePress教程.md",
     "Other/VuePress/page.md",
-    "ProgrammingDevelopment/FrontEnd.md",
     "CSBasic/DataBase.md",
     "ProgrammingDevelopment/JavaServiceDevelopmentTools.md",
     "ProgrammingDevelopment/JavaProjectPractice.md",
@@ -182,10 +209,8 @@
     "CSBasic/ComputerNetwork.md",
     "ProgrammingDevelopment/SoftwareEngineering.md",
     "ProgrammingDevelopment/README.md",
-    "ProgrammingDevelopment/Python.md",
     "ProgrammingDevelopment/JavaConcurrency.md",
     "ProgrammingDevelopment/JavaCollection.md",
-    "ProgrammingDevelopment/JavaBasic.md",
     "ProgrammingDevelopment/GO.md"
   ]
 }
