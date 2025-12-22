@@ -13,14 +13,151 @@ tag:
 # Java集合
 
 ## **Collections 工具类**
+
+Java 集合框架主要分为 **`Collection`** (单列集合) 和 **`Map`** (双列集合/键值对) 两大体系。
+**Collection 体系**（继承自 `Iterable`）
+* **List**（有序、可重复）
+	* `ArrayList`：底层数组，查询快，增删慢，线程不安全。
+	* `LinkedList`：底层双向链表，查询慢，增删快，线程不安全。
+	* `Vector`：底层数组，线程安全（方法加了 synchronized），已淘汰。
+	* `Stack`：继承自 Vector，先进后出。
+* **Set**（无序、唯一）
+	* `HashSet`：底层是 HashMap，无序，性能最好。
+		* `LinkedHashSet`：哈希表和链表作为底层，维护插入顺序。
+	* TreeSet 红黑树结构
+* `TreeSet`：底层是红黑树（TreeMap），自动排序。
+* **Queue**（队列）
+	* `PriorityQueue`：优先队列，堆结构。
+	* `Deque`（双端队列）：
+		* `ArrayDeque`：底层数组，栈和队列的首选实现。
+		* `LinkedList`：也实现了 Deque 接口。
+**Map 体系**（独立接口，不继承 Collection）
+* **HashMap**：底层数组 + 链表 + 红黑树，Key 无序，线程不安全。
+	* `LinkedHashMap`：哈希表和链表作为底层，维护插入顺序（LRU 算法基础）。
+* **TreeMap**：底层红黑树，Key 自动排序。
+* **Hashtable**：线程安全，Key/Value 不能为 null，已淘汰。
+	* Properties
+* **ConcurrentHashMap**（JUC包）：哈希表结构，线程安全的高性能 Map。
+
 - 提供了一系列静态方法来操作或返回集合，如排序、查找、同步包装等。
 - **常用方法**：
     - `sort(List<T> list)`：对列表进行排序。
     - `binarySearch(List<? extends Comparable<? super T>> list, T key)`：在已排序的列表中进行二分查找。
     - `synchronizedList(List<T> list)`：返回线程安全的同步列表。
     - `unmodifiableList(List<? extends T> list)`：返回不可修改的列表视图。
+
+
+
 ## List列表
+
+
+
+
+
+
+
+
 **简介**：有序的集合。集合中的元素有对应的索引，能够依据索引对元素进行访问、插入和删除操作。允许存在重复元素。
+
+ArrayList底层的实现原理是什么
+- 底层数据结构： ArrayList底层是用动态的数组实现的
+- 初始容量： ArrayList初始容量为0，当第一次添加数据的时候才会初始化容量为10
+- 扩容逻辑： ArrayList在进行扩容的时候是原来容量的1.5倍，每次扩容都需要拷贝数组
+- 添加逻辑：
+	- 确保数组已使用长度（size）加1之后足够存下下一个数据​	
+	- 计算数组的容量，如果当前数组已使用长度+1后的大于当前的数组长度，则调用grow方法扩容（原来的1.5倍）
+	- 确保新增的数据有地方存储之后，则将新元素添加到位于size的位置上。​
+	- 返回添加成功布尔值。
+
+`ArrayList list=new ArrayList(10)`中的list扩容几次
+参考回答：
+	该语句只是声明和实例了一个 ArrayList，指定了容量为 10，未扩容 
+
+```java
+/**
+ * 构造一个具有指定初始容量的空列表。
+ * 参数：initialCapacity - 列表的初始容量
+ * 抛出：IllegalArgumentException – 如果指定的初始容量为负
+ */
+public ArrayList(int initialCapacity) {
+    if (initialCapacity > 0) {
+        this.elementData = new Object[initialCapacity];
+    } else if (initialCapacity == 0) {
+        this.elementData = EMPTY_ELEMENTDATA;
+    } else {
+        throw new IllegalArgumentException("Illegal Capacity: "+
+                initialCapacity);
+    }
+}
+```
+
+如何实现数组和List之间的转换
+参考回答：
+- 数组转List ，使用JDK中java.util.Arrays工具类的asList方法
+- List转数组，使用List的toArray方法。无参toArray方法返回 Object数组，传入初始化长度的数组对象，返回该对象数组
+
+```java
+//数组转List
+public static void testArray2List(){
+    String[] strs = {"aaa","bbb","ccc"};
+    List<String> list = Arrays.asList(strs);
+    for (String s : list) {
+        System.out.println(s);
+    }
+}
+//List转数组
+public static void testList2Array(){
+    List<String> list = new ArrayList<String>();
+    list.add("aaa");
+    list.add("bbb");
+    list.add("ccc");
+    String[] array = list.toArray(new String[list.size()]);
+    for (String s : array) {
+        System.out.println(s);
+    }
+}
+```
+面试官再问：
+- 用Arrays.asList转List后，如果修改了数组内容，list受影响吗
+- List用toArray转数组后，如果修改了List内容，数组受影响吗
+再答：
+- Arrays.asList转换list之后，如果修改了数组的内容，list会受影响，因为它的底层使用的Arrays类中的一个内部类ArrayList来构造的集合，在这个集合的构造器中，把我们传入的这个集合进行了包装而已，最终指向的都是同一个内存地址
+- list用了toArray转数组后，如果修改了list内容，数组不会影响，当调用了toArray以后，在底层是它是进行了数组的拷贝，跟原来的元素就没啥关系了，所以即使list修改了以后，数组也不受影响
+```java
+
+//数组转List
+public static void testArray2List(){
+    String[] strs = {"aaa","bbb","ccc"};
+    List<String> list = Arrays.asList(strs);
+    for (String s : list) {
+        System.out.println(s);
+    }
+    strs[1]="ddd";
+    System.out.println("================");
+    for (String s : list) {
+        System.out.println(s);
+    }
+}
+//List转数组
+public static void testList2Array(){
+    List<String> list = new ArrayList<String>();
+    list.add("aaa");
+    list.add("bbb");
+    list.add("ccc");
+    String[] array = list.toArray(new String[list.size()]);
+    for (String s : array) {
+        System.out.println(s);
+    }
+    list.add("ddd");
+    System.out.println("================");
+    for (String s : array) {
+        System.out.println(s);
+    }
+}
+```
+
+
+
 **常见实现类**：
 - `ArrayList`：基于动态数组实现，查询快，插入和删除慢。适合读取频繁的场景。
 - `LinkedList`：基于双向链表实现，插入和删除快，但查询较慢。适合频繁插入和删除的场景。
@@ -53,11 +190,32 @@ tag:
 
 
 **ArrayList 与 LinkedList 的区别**
-- 实现方式：`ArrayList`基于动态数组实现，`LinkedList`基于双向链表实现
-- 访问性能方面：`ArrayList`支持随机访问，通过索引访问元素的时间复杂度是 O (1)。`LinkedList`不支持随机访问，访问元素需要从头或尾开始遍历链表，时间复杂度是 O (n)。
-- 插入和删除性能方面：`ArrayList`在列表末尾插入和删除元素的时间复杂度是 O (1)，但在中间或开头插入和删除元素时，需要移动后续元素，时间复杂度是 O (n)。`LinkedList`在任意位置插入和删除元素的时间复杂度都是 O (1)，因为只需修改相邻节点的引用。
-- 内存占用方面：`ArrayList`的内存占用相对较小，仅存储元素，主要是数组本身的开销。`LinkedList`的每个节点除了存储元素外，还需要额外的引用指针，内存占用相对较大。
+- **实现方式**：
+	- `ArrayList`基于动态数组实现，
+	- `LinkedList`基于双向链表实现
+- **访问性能方面**：
+	- `ArrayList`支持随机访问（按照下标查询），通过索引访问元素的时间复杂度是 O (1)。
+	- `LinkedList`不支持随机访问，访问元素需要从头或尾开始遍历链表，时间复杂度是 O (n)。
+- 插入和删除性能方面：
+	- `ArrayList`在列表末尾插入和删除元素的时间复杂度是 O (1)，但在中间或开头插入和删除元素时，需要移动后续元素，时间复杂度是 O (n)。
+	- `LinkedList`在头尾节点增删时间复杂度是O(1)，其他任意位置插入和删除元素的时间复杂度都是 O (n)，虽然只需修改相邻节点的引用，但需要找到插入删除位置啊。
+- 内存占用方面：
+	- `ArrayList`的内存占用相对较小，仅存储元素，主要是数组本身的开销。
+	- `LinkedList`是双向链表，每个节点除了存储元素外，还需要存储额外的引用指针，内存占用相对较大。
+- 线程安全
+	- ArrayList和LinkedList都不是线程安全的
+	- 如果需要保证线程安全，有两种方案：
+		- 在方法内使用，局部变量则是线程安全的
+		- 使用线程安全的`ArrayList`和`LinkedList`
+```
+List<Object> syncArrayList = Collections.synchronizedList(new ArrayList<>());
+List<Object> syncLinkedList = Collections.synchronizedList(new LinkedList<>());
+```
 - 适用场景：如果查询操作多，使用 `ArrayList`。如果插入和删除操作多，使用 `LinkedList`。
+
+
+
+
 
 
 **ArrayList的序列化**
@@ -65,6 +223,174 @@ tag:
 - ArrayList序列化要确保内部对象也实现了 Serializable 。
 * 常见的 String、Integer、Double 等都已经是 `Serializable`。
 * 如果 `ArrayList` 中包含了不可序列化的对象，序列化会抛出异常：`java.io.NotSerializableException: YourObject`
+
+源码分析
+```java
+// 说明：以下源码都来源于jdk1.8
+List<Integer> list = new ArrayList<Integer>();
+list.add(1);
+```
+
+// 成员变量
+
+```java
+/**
+ * 默认初始的容量(CAPACITY)
+ */
+private static final int DEFAULT_CAPACITY = 10;
+/**
+ * 用于空实例的共享空数组实例
+ */
+private static final Object[] EMPTY_ELEMENTDATA = {};
+/**
+ * 用于默认大小的空实例的共享空数组实例。
+ * 我们将其与 EMPTY_ELEMENTDATA 区分开来，以了解添加第一个元素时要膨胀多少
+ */
+private static final Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = {};
+/**
+ * 存储 ArrayList 元素的数组缓冲区。 ArrayList 的容量就是这个数组缓冲区的长度。
+ * 当添加第一个元素时，任何具有 elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA 的空 ArrayList
+ * 都将扩展为 DEFAULT_CAPACITY
+ * 当前对象不参与序列化
+ */
+transient Object[] elementData; // non-private to simplify nested class access
+/**
+ * ArrayList 的大小（它包含的元素数量）
+ * @serial
+ */
+private int size;
+
+// 带初始化容量的构造函数
+public ArrayList(int initialCapacity) {
+    if (initialCapacity > 0) {
+        this.elementData = new Object[initialCapacity];
+    } else if (initialCapacity == 0) {
+        this.elementData = EMPTY_ELEMENTDATA;
+    } else {
+        throw new IllegalArgumentException("Illegal Capacity: "+
+                                           initialCapacity);
+    }
+}
+
+// 无参构造函数，默认创建空集合
+/**
+ * Constructs an empty list with an initial capacity of ten.
+ */
+public ArrayList() {
+    this.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;
+}
+
+// 将collection对象转换成数组，然后将数组的地址的赋给elementData
+public ArrayList(Collection<? extends E> c) {
+    Object[] a = c.toArray();
+    if ((size = a.length) != 0) {
+        if (c.getClass() == ArrayList.class) {
+            elementData = a;
+        } else {
+            elementData = Arrays.copyOf(a, size, Object[].class);
+        }
+    } else {
+        // replace with empty array.
+        elementData = EMPTY_ELEMENTDATA;
+    }
+}
+```
+
+// 添加和扩容操作(第1次添加数据)
+
+```java
+public boolean add(E e) {
+    ensureCapacityInternal(size + 1);  
+    elementData[size++] = e;
+    return true;
+}
+
+// 确保内部容量
+private void ensureCapacityInternal(int minCapacity) {
+    ensureExplicitCapacity(calculateCapacity(elementData, minCapacity));
+}
+
+// 计算容量，DEFAULT_CAPACITY=10
+private static int calculateCapacity(Object[] elementData, int minCapacity) {
+    if (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) {
+        return Math.max(DEFAULT_CAPACITY, minCapacity);
+    }
+    return minCapacity;
+}
+
+
+// 如果大于0，说明容量不够，需扩容
+
+private void ensureExplicitCapacity(int minCapacity) {
+    modCount++;
+    // overflow-conscious code
+    if (minCapacity - elementData.length > 0)
+        grow(minCapacity);
+}
+
+
+// 扩容方法
+private void grow(int minCapacity) {
+    // overflow-conscious code
+    int oldCapacity = elementData.length;
+    int newCapacity = oldCapacity + (oldCapacity >> 1); // 增加原来容量的1.5倍
+    if (newCapacity - minCapacity < 0)
+        newCapacity = minCapacity; // 第一次初始化数组长度
+    if (newCapacity - MAX_ARRAY_SIZE > 0)
+        newCapacity = hugeCapacity(minCapacity);
+    // minCapacity is usually close to size, so this is a win:
+    elementData = Arrays.copyOf(elementData, newCapacity); // 数组拷贝
+}
+```
+
+// 添加和扩容操作(第2至10次添加数据)
+
+```java
+public boolean add(E e) {
+    ensureCapacityInternal(size + 1);  
+    elementData[size++] = e;
+    return true;
+}
+// 确保内部容量
+private void ensureCapacityInternal(int minCapacity) {
+    ensureExplicitCapacity(calculateCapacity(elementData, minCapacity));
+}
+// 计算容量 DEFAULT_CAPACITY=10
+private static int calculateCapacity(Object[] elementData, int minCapacity) {
+    if (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) {
+        return Math.max(DEFAULT_CAPACITY, minCapacity);
+    }
+    return minCapacity;
+}
+// 如果大于0，说明容量不够，需扩容
+private void ensureExplicitCapacity(int minCapacity) {
+    modCount++;
+
+    // overflow-conscious code
+    if (minCapacity - elementData.length > 0)
+        grow(minCapacity);
+}
+
+// 扩容方法
+private void grow(int minCapacity) {
+    // overflow-conscious code
+    int oldCapacity = elementData.length;
+    int newCapacity = oldCapacity + (oldCapacity >> 1); // 增加原来容量的1.5倍
+
+    if (newCapacity - minCapacity < 0)
+        newCapacity = minCapacity; // 第一次初始化数组长度
+
+    if (newCapacity - MAX_ARRAY_SIZE > 0)
+        newCapacity = hugeCapacity(minCapacity);
+    // minCapacity is usually close to size, so this is a win:
+    elementData = Arrays.copyOf(elementData, newCapacity); // 数组拷贝
+
+}
+
+```
+
+
+
 ## List列表-代码
 List接口和常用实现类导入
 ```Java
@@ -259,6 +585,28 @@ List<String> synchronizedList = Collections.synchronizedList(new ArrayList<>());
 import java.util.concurrent.CopyOnWriteArrayList;
 List<String> copyOnWriteList = new CopyOnWriteArrayList<>();
 ```
+
+## 二叉树
+Java中有两个方式实现二叉树：数组存储，链式存储。
+基于链式存储的树的节点可定义如下：
+```java
+public class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    
+    TreeNode() {}
+    TreeNode(int val) { this.val = val; }
+    TreeNode(int val, TreeNode left, TreeNode right) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
+    }
+}
+
+```
+
+
 
 ## Set集合
 **Set特点**：元素唯一、无序
@@ -537,6 +885,144 @@ for (int num : nums) {
 }
 
 ```
+
+## HashMap
+说一下HashMap的实现原理？
+HashMap的数据结构： 底层使用hash表数据结构，即数组和链表或红黑树
+1. 当我们往HashMap中put元素时，利用key的hashCode重新hash计算出当前对象的元素在数组中的下标 
+2. 存储时，如果出现hash值相同的key，此时有两种情况。
+   a. 如果key相同，则覆盖原始值；
+   b. 如果key不同（出现冲突），则将当前的key-value放入链表或红黑树中 ：链表的长度大于8 且 数组长度大于64转换为红黑树
+3. 获取时，直接找到hash值对应的下标，在进一步判断key是否相同，从而找到对应值。
+
+HashMap的jdk1.7和jdk1.8有什么区别
+- JDK1.8之前采用的是拉链法，数组+链表。拉链法：将链表和数组相结合。也就是说创建一个链表数组，数组中每一格就是一个链表。若遇到哈希冲突，则将冲突的值加到链表中即可。
+- JDK1.8之后采用数组+链表+红黑树，链表长度大于8且数组长度大于64则会从链表转化为红黑树：jdk1.8在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为8） 时并且数组长度达到64时，将链表转化为红黑树，以减少搜索时间。扩容 resize( ) 时，红黑树拆分成的树的结点数小于等于临界值6个，则退化成链表
+
+HashMap的put方法的具体流程
+
+```java
+// DEFAULT_INITIAL_CAPACITY   默认的初始容量
+// DEFAULT_LOAD_FACTOR        默认的加载因子
+// 扩容阈值 == 数组容量  *  加载因子
+
+static class Node<K, V> implements Map.Entry<K, V> {
+    final int hash;
+    final K key;
+    V value;
+    HashMap.Node<K, V> next;
+
+    Node(int hash, K key, V value, HashMap.Node<K, V> next) {
+        this.hash = hash;
+        this.key = key;
+        this.value = value;
+        this.next = next;
+    }
+}
+
+static final int DEFAULT_INITIAL_CAPACITY = 1 << 4; // aka 16
+static final float DEFAULT_LOAD_FACTOR = 0.75f;
+transient HashMap.Node<K,V>[] table;
+transient int size;
+
+// HashMap是懒惰加载，在创建对象时并没有初始化数组
+// 在无参的构造函数中，设置了默认的加载因子是0.75
+Map<String, String> map = new HashMap<>();
+map.put("name", "itheima");
+
+
+public HashMap() {
+    this.loadFactor = DEFAULT_LOAD_FACTOR; // all other fields defaulted
+}
+
+```
+
+- 判断键值对数组table是否为空或为null，否则执行resize()进行扩容（初始化）
+- 根据键值key计算hash值得到数组索引
+- 判断`table[i]==null`，条件成立，直接新建节点添加
+- 如果`table[i]==null` ,不成立
+	- 判断table[i]的首个元素是否和key一样，如果相同直接覆盖value
+	- 判断table[i] 是否为treeNode，即table[i] 是否是红黑树，如果是红黑树，则直接在树中插入键值对
+	- 遍历table[i]，链表的尾部插入数据，然后判断链表长度是否大于8，大于8的话把链表转换为红黑树，在红黑树中执行插入操 作，遍历过程中若发现key已经存在直接覆盖value
+- 插入成功后，判断实际存在的键值对数量size是否超多了最大容量threshold（数组长度*0.75），如果超过，进行扩容。
+
+
+HashMap的扩容机制
+- 在添加元素或初始化的时候需要调用resize方法进行扩容，第一次添加数据初始化数组长度为16，以后每次每次扩容都是达到了扩容阈值（数组长度 * 0.75）
+- 每次扩容的时候，都是扩容之前容量的2倍； 
+- 扩容之后，会新创建一个数组，需要把老数组中的数据挪动到新的数组中
+	- 没有hash冲突的节点，则直接使用 e.hash & (newCap - 1) 计算新数组的索引位置
+	- 如果是红黑树，走红黑树的添加
+	- 如果是链表，则需要遍历链表，可能需要拆分链表，判断(e.hash & oldCap)是否为0，该元素的位置要么停留在原始位置，要么移动到原始位置+增加的数组大小这个位置上
+
+hashMap的寻址算法
+- 计算对象的 hashCode()
+- 再进行调用 hash() 方法进行二次哈希， hashcode值右移16位再异或运算，让哈希分布更为均匀
+- 最后 (capacity – 1) & hash 得到索引
+
+```java
+public V put(K key, V value) {
+    return putVal(hash(key), key, value, false, true);
+}
+
+// 扰动算法，是hash值更加均匀，减少hash冲突
+static final int hash(Object key) {
+    int h;
+    return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
+}
+
+// (n-1)&hash : 得到数组中的索引，代替取模，性能更好
+// 数组长度必须是2的n次幂
+final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
+               boolean evict) {
+……
+if ((p = tab[i = (n - 1) & hash]) == null)
+……
+}
+```
+
+为何HashMap的数组长度一定是2的次幂？
+1. 计算索引时效率更高：如果是 2 的 n 次幂可以使用位与运算代替取模
+2. 扩容时重新计算索引效率更高： hash & oldCap == 0 的元素留在原来位置 ，否则新位置 = 旧位置 + oldCap
+
+**hashmap在1.7情况下的多线程死循环问题**
+jdk7的的数据结构是：数组+链表
+在数组进行扩容的时候，因为链表是头插法，在进行数据迁移的过程中，有可能导致死循环
+```java
+
+void transfer(Entry[] newTable, boolean rehash) {
+    int newCapacity = newTable.length;
+    for (Entry<K,V> e : table) {
+        while(null != e) {
+            Entry<K,V> next = e.next;
+            if (rehash) {
+                e.hash = null == e.key ? 0 : hash(e.key);
+            }
+            int i = indexFor(e.hash, newCapacity);
+            e.next = newTable[i];
+            newTable[i] = e;
+            e = next;
+        }
+    }
+}
+```
+- 变量e指向的是需要迁移的对象
+- 变量next指向的是下一个需要迁移的对象
+- Jdk1.7中的链表采用的头插法
+- 在数据迁移的过程中并没有新的对象产生，只是改变了对象的引用
+
+参考回答：
+在jdk1.7的hashmap中在数组进行扩容的时候，因为链表是头插法，在进行数据迁移的过程中，有可能导致死循环
+
+比如说，现在有两个线程
+线程一：读取到当前的hashmap数据，数据中一个链表，在准备扩容时，线程二介入
+线程二：也读取hashmap，直接进行扩容。因为是头插法，链表的顺序会进行颠倒过来。比如原来的顺序是AB，扩容后的顺序是BA，线程二执行结束。
+线程一：继续执行的时候就会出现死循环的问题。
+线程一先将A移入新的链表，再将B插入到链头，由于另外一个线程的原因，B的next指向了A，所以B->A->B,形成循环。
+当然，JDK 8 将扩容算法做了调整，不再将元素加入链表头（而是保持与扩容前一样的顺序），尾插法，就避免了jdk7中死循环的问题。
+
+
+
 
 
 

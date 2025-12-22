@@ -16,9 +16,7 @@
                 "file": "Other/Linux.md",
                 "mode": "source",
                 "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Linux"
+              }
             }
           },
           {
@@ -30,27 +28,47 @@
                 "file": "ProgrammingDevelopment/Python.md",
                 "mode": "source",
                 "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Python"
+              }
             }
           },
           {
-            "id": "1c72d9d825187be7",
+            "id": "b2e4767ad155f708",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Other/摘抄.md",
+                "file": "CSBasic/DataStructuresandAlgorithms.md",
                 "mode": "source",
                 "source": false
-              },
-              "icon": "lucide-file",
-              "title": "摘抄"
+              }
             }
           },
           {
-            "id": "858f436934e62a1e",
+            "id": "d8aa638da50ce427",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "CSBasic/OperatingSystem.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "45b9a1c1c3521341",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "ProgrammingDevelopment/JavaVirtualMachine.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "5b0f55cdb547397d",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -58,9 +76,7 @@
                 "file": "CSBasic/DataBase.md",
                 "mode": "source",
                 "source": false
-              },
-              "icon": "lucide-file",
-              "title": "DataBase"
+              }
             }
           },
           {
@@ -72,9 +88,19 @@
                 "file": "ProgrammingDevelopment/JavaVirtualMachine.md",
                 "mode": "source",
                 "source": false
-              },
-              "icon": "lucide-file",
-              "title": "JavaVirtualMachine"
+              }
+            }
+          },
+          {
+            "id": "1c72d9d825187be7",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Other/摘抄.md",
+                "mode": "source",
+                "source": false
+              }
             }
           }
         ],
@@ -97,11 +123,8 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical",
-                "autoReveal": false
-              },
-              "icon": "lucide-folder-closed",
-              "title": "文件列表"
+                "sortOrder": "alphabetical"
+              }
             }
           },
           {
@@ -116,9 +139,7 @@
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical"
-              },
-              "icon": "lucide-search",
-              "title": "搜索"
+              }
             }
           },
           {
@@ -126,17 +147,14 @@
             "type": "leaf",
             "state": {
               "type": "bookmarks",
-              "state": {},
-              "icon": "lucide-bookmark",
-              "title": "书签"
+              "state": {}
             }
           }
         ]
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "right": {
     "id": "0119f9e73ee078a2",
@@ -152,7 +170,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "CSBasic/DataBase.md",
+                "file": "CSBasic/OperatingSystem.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -160,9 +178,7 @@
                 "searchQuery": "",
                 "backlinkCollapsed": false,
                 "unlinkedCollapsed": true
-              },
-              "icon": "links-coming-in",
-              "title": "DataBase 的反向链接列表"
+              }
             }
           },
           {
@@ -171,12 +187,10 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "CSBasic/DataBase.md",
+                "file": "CSBasic/OperatingSystem.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
-              },
-              "icon": "links-going-out",
-              "title": "DataBase 的出链列表"
+              }
             }
           },
           {
@@ -186,12 +200,8 @@
               "type": "tag",
               "state": {
                 "sortOrder": "frequency",
-                "useHierarchy": true,
-                "showSearch": false,
-                "searchQuery": ""
-              },
-              "icon": "lucide-tags",
-              "title": "标签"
+                "useHierarchy": true
+              }
             }
           },
           {
@@ -200,13 +210,8 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "CSBasic/DataBase.md",
-                "followCursor": false,
-                "showSearch": false,
-                "searchQuery": ""
-              },
-              "icon": "lucide-list",
-              "title": "DataBase 的大纲"
+                "file": "CSBasic/OperatingSystem.md"
+              }
             }
           }
         ],
@@ -218,7 +223,6 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "bases:创建新数据库": false,
       "switcher:打开快速切换": false,
       "graph:查看关系图谱": false,
       "canvas:新建白板": false,
@@ -227,33 +231,33 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "858f436934e62a1e",
+  "active": "d8aa638da50ce427",
   "lastOpenFiles": [
-    "Other/摘抄-弃.md",
+    "ProgrammingDevelopment/JavaVirtualMachine.md",
+    "ProgrammingDevelopment/FrontEnd.md",
+    "ProgrammingDevelopment/JavaCollection.md",
+    "ProgrammingDevelopment/JavaBasic.md",
+    "Other/WinShortcutKey.md",
+    "Other/MacGuide.md",
+    "Other/Linux.md",
+    "CSBasic/PrinciplesofComputerOrganization.md",
+    "CSBasic/OperatingSystem.md",
+    "CSBasic/DataStructuresandAlgorithms-exercises.md",
+    "CSBasic/DataStructuresandAlgorithms.md",
+    "CSBasic/DataBase.md",
+    "CSBasic/ComputerNetwork.md",
+    "ProgrammingDevelopment/Python.md",
+    "ProgrammingDevelopment/JavaConcurrency.md",
     "Other/摘抄.md",
+    "ProgrammingDevelopment/JavaServiceDevTools.md",
+    "Other/摘抄-弃.md",
     "Other/摘抄 - 副本.md",
     "Other/古代诗词.md",
-    "ProgrammingDevelopment/Python.md",
     "ProgrammingDevelopment/GO.md",
     "ProgrammingDevelopment/FastAPI.md",
     "ProgrammingDevelopment/C&C++.md",
     "Other/VuePress教程.md",
     "Other/README.md",
-    "Other/MarkDown.md",
-    "Other/MacGuide.md",
-    "Other/英语语法.md",
-    "Other/英语学习.md",
-    "Other/现代诗词.md",
-    "DailyThoughts/README.md",
-    "CSBasic/ComputerNetwork.md",
-    "CSBasic/DataStructuresandAlgorithms.md",
-    "CSBasic/DataBase.md",
-    "CSBasic/DataStructuresandAlgorithms-exercises.md",
-    "CSBasic/PrinciplesofComputerOrganization.md",
-    "CSBasic/OperatingSystem.md",
-    "ProgrammingDevelopment/JavaBasic.md",
-    "ProgrammingDevelopment/JavaConcurrency.md",
-    "ProgrammingDevelopment/JavaCollection.md",
-    "ProgrammingDevelopment/JavaVirtualMachine.md"
+    "Other/MarkDown.md"
   ]
 }
