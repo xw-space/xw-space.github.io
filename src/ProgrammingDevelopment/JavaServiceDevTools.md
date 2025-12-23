@@ -11,6 +11,530 @@ tag:
 <!-- more -->
 
 # JavaServiceDevTools
+### 消息中间件
+### Kafka
+#### Kafka是如何保证消息不丢失
+
+使用Kafka在消息的收发过程都会出现消息丢失  , Kafka分别给出了解决方案
+- 生产者发送消息到Brocker丢失
+- 消息在Brocker中存储丢失
+- 消费者从Brocker接收消息丢失
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223203035.png)
+**生产者发送消息到Brocker丢失**
+- 设置异步发送
+```Java
+//同步发送
+RecordMetadata recordMetadata = kafkaProducer.send(record).get();
+//异步发送
+kafkaProducer.send(record, new Callback() {
+    @Override
+    public void onCompletion(RecordMetadata recordMetadata, Exception e) {
+        if (e != null) {
+            System.out.println("消息发送失败 | 记录日志");
+        }
+        long offset = recordMetadata.offset();
+        int partition = recordMetadata.partition();
+        String topic = recordMetadata.topic();
+    }
+});
+
+
+```
+
+消息重试
+
+```Java
+//设置重试次数
+prop.put(ProducerConfig.RETRIES_CONFIG,10);
+
+```
+
+
+消息在Brocker中存储丢失
+发送确认机制acks
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223203147.png)
+
+确认机制	说明
+acks=0，生产者在成功写入消息之前不会等待任何来自服务器的响应,消息有丢失的风险，但是速度最快
+acks=1（默认值），只要集群首领节点收到消息，生产者就会收到一个来自服务器的成功响应
+acks=all，只有当所有参与赋值的节点全部收到消息时，生产者才会收到一个来自服务器的成功响应
+
+消费者从Brocker接收消息丢失
+
+- Kafka 中的分区机制指的是将每个主题划分成多个分区（Partition）
+- topic分区中消息只能由消费者组中的唯一一个消费者处理，不同的分区分配给不同的消费者（同一个消费者组）
+
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223203245.png)
+
+消费者默认是自动按期提交已经消费的偏移量，默认是每隔5s提交一次
+如果出现重平衡的情况，可能会重复消费或丢失数据
+
+禁用自动提交偏移量，改为手动
+- 同步提交
+- 异步提交
+- 同步+异步组合提交
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223203310.png)
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223203313.png)
+
+
+Kafka是如何保证消息不丢失
+需要从三个层面去解决这个问题：
+- 生产者发送消息到Brocker丢失
+	- 设置异步发送，发送失败使用回调进行记录或重发
+	- 失败重试，参数配置，可以设置重试次数
+- 消息在Brocker中存储丢失
+    - 发送确认acks，选择all，让所有的副本都参与保存数据后确认
+- 消费者从Brocker接收消息丢失
+	- 关闭自动提交偏移量，开启手动提交偏移量
+	- 提交方式，最好是同步+异步提交
+
+Kafka中消息的重复消费问题如何解决的
+- 关闭自动提交偏移量，开启手动提交偏移量
+- 提交方式，最好是同步+异步提交
+- 幂等方案
+
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223203357.png)
+
+
+#### Kafka是如何保证消费的顺序性
+应用场景：
+- 即时消息中的单对单聊天和群聊，保证发送方消息发送顺序与接收方的顺序一致
+- 充值转账两个渠道在同一个时间进行余额变更，短信通知必须要有顺序
+
+消费者从Brocker接收消息丢失
+topic分区中消息只能由消费者组中的唯一一个消费者处理，所以消息肯定是按照先后顺序进行处理的。但是它也仅仅是保证Topic的一个分区顺序处理，不能保证跨分区的消息先后处理顺序。 所以，如果你想要顺序的处理Topic的所有消息，那就只提供一个分区。
+
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223203424.png)
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223203434.png)
+Kafka是如何保证消费的顺序性
+
+问题原因：
+一个topic的数据可能存储在不同的分区中，每个分区都有一个按照顺序的存储的偏移量，如果消费者关联了多个分区不能保证顺序性
+解决方案：
+- 发送消息时指定分区号
+- 发送消息时按照相同的业务设置相同的key
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223203459.png)
+
+#### 高可用机制
+集群模式
+分区备份机制
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223203523.png)
+
+- Kafka 的服务器端由被称为 Broker 的服务进程构成，即一个 Kafka 集群由多个 Broker 组成
+- 这样如果集群中某一台机器宕机，其他机器上的 Broker 也依然能够对外提供服务。这其实就是 Kafka 提供高可用的手段之一
+
+分区备份机制
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223203551.png)
+- 一个topic有多个分区，每个分区有多个副本，其中有一个leader，其余的是follower，副本存储在不同的broker中
+- 所有的分区副本的内容是都是相同的，如果leader发生故障时，会自动将其中一个follower提升为leader
+
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223203622.png)
+
+ISR（in-sync replica）需要同步复制保存的follower
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223203610.png)
+如果leader失效后，需要选出新的leader，选举的原则如下：
+第一：选举时优先从ISR中选定，因为这个列表中follower的数据是与leader同步的
+第二：如果ISR列表中的follower都不行了，就只能从其他follower中选取
+
+
+Kafka的高可用机制有了解过嘛
+可以从两个层面回答，第一个是集群，第二个是复制机制
+- 集群：一个kafka集群由多个broker实例组成，即使某一台宕机，也不耽误其他broker继续对外提供服务
+- 复制机制：
+	- 一个topic有多个分区，每个分区有多个副本，有一个leader，其余的是follower，副本存储在不同的broker中
+	- 所有的分区副本的内容是都是相同的，如果leader发生故障时，会自动将其中一个follower提升为leader，保证了系统的容错性、高可用性
+
+解释一下复制机制中的ISR
+ISR（in-sync replica）需要同步复制保存的follower
+分区副本分为了两类，一个是ISR，与leader副本同步保存数据，另外一个普通的副本，是异步同步数据，当leader挂掉之后，会优先从ISR副本列表中选取一个作为leader
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223203717.png)
+
+
+#### 数据清理机制
+Kafka文件存储机制
+数据清理机制
+存储结构：
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223203819.png)
+
+
+.index  索引文件
+.log 数据文件
+.timeindex 时间索引文件
+
+为什么要分段？
+- 删除无用文件方便，提高磁盘利用率
+- 查找数据便捷
+
+
+日志的清理策略有两个
+1. 根据消息的保留时间，当消息在kafka中保存的时间超过了指定的时间，就会触发清理过程
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223203917.png)
+2. 根据topic存储的数据大小，当topic所占的日志文件大小大于一定的阈值，则开始删除最久的消息。需手动开启
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223203921.png)
+
+Kafka数据清理机制了解过嘛
+Kafka存储结构
+- Kafka中topic的数据存储在分区上，分区如果文件过大会分段存储segment
+- 每个分段都在磁盘上以索引(xxxx.index)和日志文件(xxxx.log)的形式存储 
+- 分段的好处是，第一能够减少单个文件内容的大小，查找数据方便，第二方便kafka进行日志清理。
+日志的清理策略有两个：
+- 根据消息的保留时间，当消息保存的时间超过了指定的时间，就会触发清理，默认是168小时（ 7天）
+- 根据topic存储的数据大小，当topic所占的日志文件大小大于一定的阈值，则开始删除最久的消息。（默认关闭）
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223203939.png)
+
+
+#### 高性能的设计
+- 消息分区：不受单台服务器的限制，可以不受限的处理更多的数据
+- 顺序读写：磁盘顺序读写，提升读写效率
+- 页缓存：把磁盘中的数据缓存到内存中，把对磁盘的访问变为对内存的访问
+- 零拷贝：减少上下文切换及数据拷贝
+- 消息压缩：减少磁盘IO和网络IO
+- 分批发送：将消息打包批量发送，减少网络开销
+
+零拷贝
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223204007.png)
+
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223204013.png)
+
+
+
+
+
+
+
+
+### Rabbitmq——消息中间件
+使用信息：
+- rabbitmq management： http://localhost:15672
+- java链接地址：127.0.0.1:5672
+- 用户名：guest
+- 密码：guest
+
+**安装插件**：
+```bash
+docker cp ./rabbitmq_delayed_message_exchange-3.9.0.ez rabbitmq:/plugins
+```
+
+**简介**：
+RabbitMQ是一种开源的消息中间件，基于AMQP（Advanced Message Queuing Protocol，高级消息队列协议）协议，用于在分布式系统中实现异步通信。
+消息中间件的核心作用是实现消息的生产和消费
+作为消息队列系统，用来处理异步事件（如延迟消息推送、超时检查等）；
+RabbitMQ在分布式系统中作为消息中间件，实现了可靠的消息传递、灵活的路由策略和高性能的异步通信，是处理高并发和异步任务的有效工具。
+
+
+**常用场景**：
+- 异步处理：用于将耗时的任务异步化，减少主流程阻塞，如订单处理、邮件发送、视频转码、邮件发送等。
+- 系统解耦：通过消息队列实现系统模块间的解耦，生产者和消费者不直接调用，减少系统间的依赖，使系统具有更高的灵活性和扩展性。
+- 流量削峰：通过缓冲突发请求，将请求分配到不同时间处理，防止系统过载。消息堆积在队列中，慢慢被消费，避免系统被瞬时高流量压垮。
+- 事件驱动架构：在微服务中，消息队列用于事件的传播，实现事件驱动的系统架构。
+- 消息广播：一条消息发给多个消费者（如通知系统）
+
+**RabbitMQ主要特点**：
+- **高性能**
+- **可靠性**：支持消息持久化、确认机制（ACK/NACK）和死信队列，确保消息的持久性和安全性。
+- **高可用性**：RabbitMQ支持集群和镜像队列机制，确保节点之间的数据冗余，提升可用性。
+- **灵活性**：有灵活的路由机制，基于多种类型的交换机，提供丰富的路由策略，适用于复杂的消息传递需求。
+- **多种协议支持**：除AMQP外，RabbitMQ还支持MQTT、STOMP等多种协议，方便不同类型的客户端接入。
+- **监控与管理**：RabbitMQ提供了Web管理界面和API接口，帮助用户实时监控队列、消息、连接等状态。
+
+
+
+**核心组件**
+- **Producer（生产者）**：生产者是消息的发送方，负责将消息推送到RabbitMQ中。生产者将消息发送到交换机（Exchange），而不是直接发送到队列，这样可以更灵活地进行消息路由。
+- **Exchange（交换机）**：交换机负责将消息路由到一个或多个队列中，基于绑定关系和路由规则分发消息。Routing Key（路由键）是生产者发消息时指定的“消息标签”，交换机根据它判断要发到哪个队列。RabbitMQ支持四种交换机类型：Direct（直连交换机）、Fanout（扇出交换机）、Topic（主题交换机）、Headers（头交换机），每种类型都有不同的路由逻辑：
+	- **direct**：按绑定的 routing key 精确匹配
+	- **fanout**：广播，发到所有绑定队列
+	- **topic**：按规则匹配 routing key（支持通配符）
+	- **headers**：按消息头属性路由
+- **Queue（队列）**：队列是消息的存储容器，RabbitMQ通过队列实现消息的持久化、消费和重试等功能。队列的特性包括持久化、优先级和延时队列等，确保消息的可靠存储。
+- **Consumer（消费者）**：消费者是消息的接收方，从队列中获取消息并进行处理。消费者可以主动拉取消息，也可以通过消息推送的方式实现异步消费。
+
+**工作流程**
+- 生产者将消息发送到交换机，并指定路由键。
+- 交换机根据路由规则将消息发送到绑定的队列。
+- 消费者从队列中获取消息并进行处理，消息在处理完成后被确认（ACK），系统从队列中删除该消息。
+- 如果消息消费失败，可以重新投递或移动到死信队列（DLX），确保消息不会丢失。
+
+**消息传递模式**：
+- **点对点模式（Direct Exchange）**：生产者发送的消息带有一个特定的路由键，交换机根据该路由键将消息定向发送到匹配的队列。
+- **广播模式（Fanout Exchange）**：交换机将消息广播到所有绑定的队列中，适合不需要路由的场景，如日志收集。
+- **主题模式（Topic Exchange）**：交换机根据路由键模式将消息路由到匹配的队列，可以实现多层级路由，适用于多级分类的消息传递。
+- **基于头部模式（Headers Exchange）**：交换机根据消息的头部属性进行路由，灵活度较高，但性能不如其他模式。
+
+好的，我将你给的内容重新调整为无序列表，并且把单一分点直接与上级合并。以下是修改后的内容：
+
+MQ 如何处理**消息积压**？
+- 消息积压通常是 生产消息的速度大于消费速度，导致队列中的消息越来越多。
+  - 临时提速  ：增加消费者数量（水平扩展）；提高单个消费者的并发度（多线程 / 异步消费）
+  - 限流保护  ：使用 RabbitMQ 的 basic.qos 设定 prefetch count ，避免消费者一次性拉太多数据；从生产端限流，避免无限生产导致内存溢出
+  - 过期与丢弃  ：设定 TTL（Time To Live），超过时间的消息直接丢弃；配合死信队列（DLX）做异常处理
+  - 分级处理  ：重要消息优先队列  ；普通消息延迟处理或直接丢弃
+
+MQ 如何保证消息不丢失？
+  - **消息持久化**  （**持久化不是实时写磁盘**，可能会有极短的丢失风险（crash 发生在写之前）
+    - **队列持久化**：创建队列时设定 durable=true  
+    - **消息持久化**：`delivery_mode=2`（消息落盘）  
+  - **生产确认** 
+    - 开启 **Publisher Confirms** 模式（发布确认）  
+    - 消息写入 RabbitMQ 内部存储后，才返回 ACK 给生产者
+  - **消费确认**  
+    - 消费者处理完后，通过 **手动 ACK**（basicAck）确认  
+    - 如果消费者崩溃且没 ACK，RabbitMQ 会把消息重新投递给其他消费者
+
+
+如何防止MQ自己弄丢数据：
+- 原因
+	- 没有开启持久化  
+	- 磁盘或文件系统损坏  
+	- 集群数据丢失（网络分区 / 节点故障）
+- 应对方案：
+	- 开启 镜像队列/Quorum Queue（RabbitMQ 高可用特性）  ：消息会在多个节点复制，单节点宕机不丢数据
+	- 定期备份：  用 shovel/federation 或外部备份 MQ 数据
+	- 使用 发布确认 + 业务端重试：业务端保留未确认的消息并可重复投递
+
+
+MQ 如何保证消息的顺序性？
+- **保证顺序的条件：**
+	- **单一队列**：同一业务 Key 的消息必须发送到同一个队列
+	- **单一消费者线程**：一个队列只能由一个线程消费，否则可能乱序
+	- **手动 ACK 且按顺序处理**：消费者必须严格按顺序处理并确认
+- **可能影响顺序的因素：**
+	- 多个消费者同时消费一个队列（并发导致乱序）  
+	- 消费失败重试时，后来的消息可能先消费到
+- **解决思路：**
+	- 按业务 Key 分队列（Hash 分区）
+	- 保证同一 Key 的消息只由一个消费者处理
+	- 如果要并发消费，可按 Key 分成多个顺序队列
+
+
+
+**一般场景：** **订单异步调度**：用户下订单后，可能要等待支付、物流、短信通知等，这些都不是同步立即执行的。如果所有操作同步执行，会影响响应速度、用户体验 ，应当下单成功后立即响应用户，后续步骤通过 MQ 异步处理。
+- 用户下单 -> 写入数据库 -> 发送消息到 RabbitMQ（比如 `"order.created"`）
+- 消费者监听该消息，异步执行库存扣减、短信通知、物流处理等
+
+
+**延迟消息推送**：订单未付款提醒场景： 用户下单后，10分钟还未支付，可以发送提醒通知。
+实现方法：使用 RabbitMQ 的延迟队列（死信队列）+ TTL
+- 发送一条消息进入延迟队列，设置 TTL = 10分钟（消息有效时间）
+- 10分钟后消息“过期”，被 RabbitMQ 转发到“死信队列”（Dead Letter Queue）
+- 死信队列的消费者拿到消息，执行提醒通知操作（比如发短信、App推送）
+为什么我们不直接等到“订单到期时间”再执行操作，而要用“死信队列 + 延迟消息”这种方式？：因为这样耗资源、延迟不精确，数据库压力大，如果一直计时，则一直运行个程序太浪费资源，而如果把计时存入数据库，则轮询数据库也耗费资源，并且可能有延迟
+
+**订单超时处理**（比如未支付自动取消）： 用户下单后 30 分钟还没支付，要自动关闭订单。
+解决方案：使用 RabbitMQ 延迟队列 + 死信队列
+（注意：延迟队列功能原生 RabbitMQ 不支持，需要配置 死信队列（DLX）+ TTL）
+（如果对延迟控制要求更精确，可以考虑用 RabbitMQ 插件 `rabbitmq_delayed_message_exchange`）
+
+- 同样，发一条延迟消息，TTL = 30分钟
+- 过期后进入“订单超时处理队列”
+- 消费者消费后检查订单状态：如果已支付：忽略；如果未支付：修改订单状态为“已取消”
+
+#### RabbitMQ-如何保证消息不丢失
+- 开启生产者确认机制，确保生产者的消息能到达队列
+- 开启持久化功能，确保消息未消费前在队列中不会丢失
+- 开启消费者确认机制为auto，由spring确认消息处理成功后完成ack
+- 开启消费者失败重试机制，多次重试失败后将消息投递到异常交换机，交由人工处理
+
+
+
+异步发送（验证码、短信、邮件…）
+MYSQL和Redis , ES之间的数据同步
+分布式事务
+削峰填谷
+…
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223201918.png)
+生产者确认机制
+RabbitMQ提供了publisher confirm机制来避免消息发送到MQ过程中丢失。消息发送到MQ以后，会返回一个结果给发送者，表示消息是否处理成功
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223201947.png)
+
+消息失败之后如何处理呢？
+- 回调方法即时重发
+- 记录日志
+- 保存到数据库然后定时重发，成功发送后即刻删除表中的数据
+
+消息持久化
+MQ默认是内存存储消息，开启持久化功能可以确保缓存在MQ中的消息不丢失。
+交换机持久化：
+```java
+@Bean
+public DirectExchange simpleExchange(){
+    // 三个参数：交换机名称、是否持久化、当没有queue与其绑定时是否自动删除 
+    return new DirectExchange("simple.direct", true, false);
+}
+
+
+```
+
+
+队列持久化：
+```java
+@Bean
+public Queue simpleQueue(){
+    // 使用QueueBuilder构建队列，durable就是持久化的
+    return QueueBuilder.durable("simple.queue").build();
+}
+
+
+```
+
+
+消息持久化，SpringAMQP中的的消息默认是持久的，可以通过MessageProperties中的DeliveryMode来指定的：
+```java
+Message msg = MessageBuilder
+        .withBody(message.getBytes(StandardCharsets.UTF_8)) // 消息体
+        .setDeliveryMode(MessageDeliveryMode.PERSISTENT) // 持久化 
+        .build();
+```
+
+消费者确认：
+RabbitMQ支持消费者确认机制，即：消费者处理消息后可以向MQ发送ack回执，MQ收到ack回执后才会删除该消息。而SpringAMQP则允许配置三种确认模式：
+- manual：手动ack，需要在业务代码结束后，调用api发送ack。
+- auto：自动ack，由spring监测listener代码是否出现异常，没有异常则返回ack；抛出异常则返回nack
+- none：关闭ack，MQ假定消费者获取消息后会成功处理，因此消息投递后立即被删除
+我们可以利用Spring的retry机制，在消费者出现异常时利用本地重试，设置重试次数，当次数达到了以后，如果消息依然失败，将消息投递到异常交换机，交由人工处理
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223202110.png)
+
+
+
+#### 重复消费问题
+网络抖动
+消费者挂了
+
+解决方案：
+- 每条消息设置一个唯一的标识id
+- 幂等方案：【 分布式锁、数据库锁（悲观锁、乐观锁） 】
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223202528.png)
+
+
+适用于任何MQ：
+- Kafka
+- RabbitMQ
+- RocketMQ
+- …
+
+#### 死信交换机
+RabbitMQ中死信交换机 ? (RabbitMQ延迟队列有了解过嘛)
+
+延迟队列=死信交换机+TTL（生存时间）
+
+
+延迟队列：进入队列的消息会被延迟消费的队列
+场景：超时订单、限时优惠、定时发布
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223202507.png)
+
+当一个队列中的消息满足下列情况之一时，可以成为死信（dead letter）：
+- 消费者使用basic.reject或 basic.nack声明消费失败，并且消息的requeue参数设置为false
+- 消息是一个过期消息，超时无人消费
+- 要投递的队列消息堆积满了，最早的消息可能成为死信
+如果该队列配置了dead-letter-exchange属性，指定了一个交换机，那么队列中的死信就会投递到这个交换机中，而这个交换机称为死信交换机（Dead Letter Exchange，简称DLX）。
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223202555.png)
+
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223202553.png)
+
+TTL，也就是Time-To-Live。如果一个队列中的消息TTL结束仍未消费，则会变为死信，ttl超时分为两种情况：
+- 消息所在的队列设置了存活时间
+- 消息本身设置了存活时间
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223202608.png)
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223202614.png)
+延迟队列插件
+- DelayExchange插件，需要安装在RabbitMQ中
+- RabbitMQ有一个官方的插件社区，地址为：https://www.rabbitmq.com/community-plugins.html 
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223202623.png)
+DelayExchange的本质还是官方的三种交换机，只是添加了延迟功能。因此使用时只需要声明一个交换机，交换机的类型可以是任意类型，然后设定delayed属性为true即可。
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223202629.png)
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223202631.png)
+
+RabbitMQ中死信交换机 ? (RabbitMQ延迟队列有了解过嘛)
+
+- 我们当时一个什么业务使用到了延迟队列（超时订单、限时优惠、定时发布…）
+- 其中延迟队列就用到了死信交换机和TTL（消息存活时间）实现的
+- 消息超时未消费就会变成死信（死信的其他情况：拒绝被消费，队列满了）
+
+延迟队列插件实现延迟队列DelayExchange
+- 声明一个交换机，添加delayed属性为true
+- 发送消息时，添加x-delay头，值为超时时间
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223202653.png)
+
+#### 消息堆积
+RabbitMQ如果有100万消息堆积在MQ , 如何解决(消息堆积怎么解决)
+
+当生产者发送消息的速度超过了消费者处理消息的速度，就会导致队列中的消息堆积，直到队列存储消息达到上限。之后发送的消息就会成为死信，可能会被丢弃，这就是消息堆积问题
+
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223202725.png)
+
+解决消息堆积有三种种思路：
+- 增加更多消费者，提高消费速度
+- 在消费者内开启线程池加快消息处理速度
+- 扩大队列容积，提高堆积上限
+
+惰性队列
+惰性队列的特征如下：
+- 接收到消息后直接存入磁盘而非内存
+- 消费者要消费消息时才会从磁盘中读取并加载到内存
+- 支持数百万条的消息存储
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223202743.png)
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223202745.png)
+
+
+RabbitMQ如果有100万消息堆积在MQ , 如何解决(消息堆积怎么解决)
+解决消息堆积有三种种思路：
+- 增加更多消费者，提高消费速度
+- 在消费者内开启线程池加快消息处理速度
+- 扩大队列容积，提高堆积上限，采用惰性队列
+	- 在声明队列的时候可以设置属性x-queue-mode为lazy，即为惰性队列
+	- 基于磁盘存储，消息上限高
+	- 性能比较稳定，但基于磁盘存储，受限于磁盘IO，时效性会降低
+
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223202814.png)
+
+#### 高可用机制
+- 在生产环境下，使用集群来保证高可用性
+- 普通集群、镜像集群、仲裁队列
+
+普通集群
+普通集群，或者叫标准集群（classic cluster），具备下列特征：
+- 会在集群的各个节点间共享部分数据，包括：交换机、队列元信息。不包含队列中的消息。
+- 当访问集群某节点时，如果队列不在该节点，会从数据所在节点传递到当前节点并返回
+- 队列所在节点宕机，队列中的消息就会丢失
+
+镜像集群
+镜像集群：本质是主从模式，具备下面的特征：
+- 交换机、队列、队列中的消息会在各个mq的镜像节点之间同步备份。
+- 创建队列的节点被称为该队列的主节点，备份到的其它节点叫做该队列的镜像节点。
+- 一个队列的主节点可能是另一个队列的镜像节点
+- 所有操作都是主节点完成，然后同步给镜像节点
+- 主宕机后，镜像节点会替代成新的主
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223202855.png)
+仲裁队列
+仲裁队列：仲裁队列是3.8版本以后才有的新功能，用来替代镜像队列，具备下列特征：
+- 与镜像队列一样，都是主从模式，支持主从数据同步
+- 使用非常简单，没有复杂的配置
+- 主从同步基于Raft协议，强一致
+```Java
+@Bean
+public Queue quorumQueue() {
+    return QueueBuilder
+            .durable("quorum.queue") // 持久化 
+            .quorum() // 仲裁队列
+            .build();
+}
+```
+RabbitMQ的高可用机制有了解过嘛
+
+- 在生产环境下，我们当时采用的镜像模式搭建的集群，共有3个节点
+- 镜像队列结构是一主多从（从就是镜像），所有操作都是主节点完成，然后同步给镜像节点
+- 主宕机后，镜像节点会替代成新的主（如果在主从同步完成前，主就已经宕机，可能出现数据丢失）
+那出现丢数据怎么解决呢？
+我们可以采用仲裁队列，与镜像队列一样，都是主从模式，支持主从数据同步，主从同步基于Raft协议，强一致。
+并且使用起来也非常简单，不需要额外的配置，在声明队列的时候只要指定这个是仲裁队列即可
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223202957.png)
+
+
+
+
+
+
+
 ## CompletableFuture
 
 用于支持异步编程和处理异步操作的结果，将多个耗时接口/方法异步执行，并并行处理+合并结果，从而显著提升系统整体响应性能。
@@ -669,7 +1193,6 @@ JavaFX文本域（输入框） - JavaFX教程™： https://www.yiibai.com/javaf
 
 ## JUnit——单元测试框架
 
-
 ## Log4j——日志
 Log4j 目前已被 Log4j2、SLF4J+Logback 组合部分替代，但仍有大量项目使用它。
 Log4j 是 Java 最早期、最经典的 日志框架
@@ -1007,7 +1530,129 @@ Mybatis中Dao接⼝和XML⽂件的SQL如何建⽴关联：MyBatis 会自动为 D
 * 接口全类名与 XML 文件路径相匹配，可以通过配置 mapper.xml 路径到配置文件或者或通过注解 `@MapperScan` 自动扫描接口，Mapper注册方式
 
 
+### MyBatis执行流程
+- 读取MyBatis配置文件：mybatis-config.xml加载运行环境和映射文件
+- 构造会话工厂SqlSessionFactory
+- 会话工厂创建SqlSession对象（包含了执行SQL语句的所有方法）
+- 操作数据库的接口，Executor执行器，同时负责查询缓存的维护
+- Executor接口的执行方法中有一个MappedStatement类型的参数，封装了映射信息
+- 输入参数映射
+- 输出结果映射
 
+
+
+
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223112151.png)
+
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223112136.png)
+
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223112117.png)
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223112125.png)
+
+
+
+### 延迟加载
+Mybatis是否支持延迟加载？
+
+延迟加载的意思是：就是在需要用到数据时才进行加载，不需要用到数据时就不加载数据。
+Mybatis支持一对一关联对象和一对多关联集合对象的延迟加载
+在Mybatis配置文件中，可以配置是否启用延迟加载lazyLoadingEnabled=true|false，默认是关闭的
+
+延迟加载的底层原理知道吗？
+1. 使用CGLIB创建目标对象的代理对象
+2. 当调用目标方法时，进入拦截器invoke方法，发现目标方法是null值，执行sql查询
+3. 获取数据以后，调用set方法设置属性值，再继续查询目标方法，就有值了
+
+
+
+Mybatis支持延迟记载，但默认没有开启
+什么叫做延迟加载？
+查询用户的时候，把用户所属的订单数据也查询出来，这个是立即加载
+查询用户的时候，暂时不查询订单数据，当需要订单的时候，再查询订单，这个就是延迟加载
+
+延迟加载的原理：
+1. 使用CGLIB创建目标对象的代理对象
+2. 当调用目标方法user.getOrderList()时，进入拦截器invoke方法，发现user.getOrderList()是null值，执行sql查询order列表
+3. 把order查询上来，然后调用`user.setOrderList(List<Order> orderList) `，接着完成user.getOrderList()方法的调用
+
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223112233.png)
+
+
+### 一级、二级缓存
+Mybatis的一级、二级缓存用过吗？
+
+一级缓存: 基于 PerpetualCache 的 HashMap 本地缓存，其存储作用域为 Session，当Session进行flush或close之后，该Session中的所有Cache就将清空，默认打开一级缓存
+二级缓存是基于namespace和mapper的作用域起作用的，不是依赖于SQL session，默认也是采用 PerpetualCache，HashMap 存储。需要单独开启，一个是核心配置，一个是mapper映射文件
+
+Mybatis的二级缓存什么时候会清理缓存中的数据
+当某一个作用域(一级缓存 Session/二级缓存Namespaces)的进行了新增、修改、删除操作后，默认该作用域下所有 select 中的缓存将被 clear。
+
+
+本地缓存，基于PerpetualCache，本质是一个HashMap
+一级缓存：作用域是session级别
+二级缓存：作用域是namespace和mapper的作用域，不依赖于session
+
+一级缓存
+一级缓存: 基于 PerpetualCache 的 HashMap 本地缓存，其存储作用域为 Session，当Session进行flush或close之后，该Session中的所有Cache就将清空，默认打开一级缓存
+只会执行一次sql查询
+```java
+//2. 获取SqlSession对象，用它来执行sql
+SqlSession sqlSession = sqlSessionFactory.openSession();
+//3. 执行sql
+//3.1 获取UserMapper接口的代理对象
+UserMapper userMapper1 = sqlSession.getMapper(UserMapper.class);
+UserMapper userMapper2 = sqlSession.getMapper(UserMapper.class);
+
+User user = userMapper1.selectById(6);
+System.out.println(user);
+
+System.out.println("---------------------");
+User user1 = userMapper2.selectById(6);
+System.out.println(user1);
+
+```
+二级缓存
+
+二级缓存是基于namespace和mapper的作用域起作用的，不是依赖于SQL session，默认也是采用 PerpetualCache，HashMap 存储
+```java
+//2. 获取SqlSession对象，用它来执行sql
+SqlSession sqlSession1 = sqlSessionFactory.openSession();
+
+//3. 执行sql
+//3.1 获取UserMapper接口的代理对象
+UserMapper userMapper1 = sqlSession1.getMapper(UserMapper.class);
+
+User user1 = userMapper1.selectById(6);
+System.out.println(user1);
+sqlSession1.close();
+
+SqlSession sqlSession2 = sqlSessionFactory.openSession();
+
+System.out.println("---------------------");
+UserMapper userMapper2 = sqlSession2.getMapper(UserMapper.class);
+User user2 = userMapper2.selectById(6);
+System.out.println(user2);
+
+//4.关闭资源
+sqlSession2.close();
+
+```
+二级缓存默认是关闭的
+开启方式，两步：
+1，全局配置文件
+```java
+
+<settings>
+    <setting name="cacheEnabled" value="true
+</settings>
+```
+2，映射文件
+使用`<cache/>`标签让当前mapper生效二级缓存
+
+注意事项：
+1，对于缓存数据更新机制，当某一个作用域(一级缓存 Session/二级缓存Namespaces)的进行了新增、修改、删除操作后，默认该作用域下所有 select 中的缓存将被 clear
+2，二级缓存需要缓存的数据实现Serializable接口
+3，只有会话提交或者关闭以后，一级缓存中的数据才会转移到二级缓存中
 
 
 
@@ -1387,134 +2032,6 @@ public class NettyRpcServer {
     }
 }
 ```
-
-
-## Rabbitmq——消息中间件
-使用信息：
-- rabbitmq management： http://localhost:15672
-- java链接地址：127.0.0.1:5672
-- 用户名：guest
-- 密码：guest
-
-**安装插件**：
-```bash
-docker cp ./rabbitmq_delayed_message_exchange-3.9.0.ez rabbitmq:/plugins
-```
-
-**简介**：
-RabbitMQ是一种开源的消息中间件，基于AMQP（Advanced Message Queuing Protocol，高级消息队列协议）协议，用于在分布式系统中实现异步通信。
-消息中间件的核心作用是实现消息的生产和消费
-作为消息队列系统，用来处理异步事件（如延迟消息推送、超时检查等）；
-RabbitMQ在分布式系统中作为消息中间件，实现了可靠的消息传递、灵活的路由策略和高性能的异步通信，是处理高并发和异步任务的有效工具。
-
-
-**常用场景**：
-- 异步处理：用于将耗时的任务异步化，减少主流程阻塞，如订单处理、邮件发送、视频转码、邮件发送等。
-- 系统解耦：通过消息队列实现系统模块间的解耦，生产者和消费者不直接调用，减少系统间的依赖，使系统具有更高的灵活性和扩展性。
-- 流量削峰：通过缓冲突发请求，将请求分配到不同时间处理，防止系统过载。消息堆积在队列中，慢慢被消费，避免系统被瞬时高流量压垮。
-- 事件驱动架构：在微服务中，消息队列用于事件的传播，实现事件驱动的系统架构。
-- 消息广播：一条消息发给多个消费者（如通知系统）
-
-**RabbitMQ主要特点**：
-- **高性能**
-- **可靠性**：支持消息持久化、确认机制（ACK/NACK）和死信队列，确保消息的持久性和安全性。
-- **高可用性**：RabbitMQ支持集群和镜像队列机制，确保节点之间的数据冗余，提升可用性。
-- **灵活性**：有灵活的路由机制，基于多种类型的交换机，提供丰富的路由策略，适用于复杂的消息传递需求。
-- **多种协议支持**：除AMQP外，RabbitMQ还支持MQTT、STOMP等多种协议，方便不同类型的客户端接入。
-- **监控与管理**：RabbitMQ提供了Web管理界面和API接口，帮助用户实时监控队列、消息、连接等状态。
-
-
-
-**核心组件**
-- **Producer（生产者）**：生产者是消息的发送方，负责将消息推送到RabbitMQ中。生产者将消息发送到交换机（Exchange），而不是直接发送到队列，这样可以更灵活地进行消息路由。
-- **Exchange（交换机）**：交换机负责将消息路由到一个或多个队列中，基于绑定关系和路由规则分发消息。Routing Key（路由键）是生产者发消息时指定的“消息标签”，交换机根据它判断要发到哪个队列。RabbitMQ支持四种交换机类型：Direct（直连交换机）、Fanout（扇出交换机）、Topic（主题交换机）、Headers（头交换机），每种类型都有不同的路由逻辑：
-	- **direct**：按绑定的 routing key 精确匹配
-	- **fanout**：广播，发到所有绑定队列
-	- **topic**：按规则匹配 routing key（支持通配符）
-	- **headers**：按消息头属性路由
-- **Queue（队列）**：队列是消息的存储容器，RabbitMQ通过队列实现消息的持久化、消费和重试等功能。队列的特性包括持久化、优先级和延时队列等，确保消息的可靠存储。
-- **Consumer（消费者）**：消费者是消息的接收方，从队列中获取消息并进行处理。消费者可以主动拉取消息，也可以通过消息推送的方式实现异步消费。
-
-**工作流程**
-- 生产者将消息发送到交换机，并指定路由键。
-- 交换机根据路由规则将消息发送到绑定的队列。
-- 消费者从队列中获取消息并进行处理，消息在处理完成后被确认（ACK），系统从队列中删除该消息。
-- 如果消息消费失败，可以重新投递或移动到死信队列（DLX），确保消息不会丢失。
-
-**消息传递模式**：
-- **点对点模式（Direct Exchange）**：生产者发送的消息带有一个特定的路由键，交换机根据该路由键将消息定向发送到匹配的队列。
-- **广播模式（Fanout Exchange）**：交换机将消息广播到所有绑定的队列中，适合不需要路由的场景，如日志收集。
-- **主题模式（Topic Exchange）**：交换机根据路由键模式将消息路由到匹配的队列，可以实现多层级路由，适用于多级分类的消息传递。
-- **基于头部模式（Headers Exchange）**：交换机根据消息的头部属性进行路由，灵活度较高，但性能不如其他模式。
-
-好的，我将你给的内容重新调整为无序列表，并且把单一分点直接与上级合并。以下是修改后的内容：
-
-MQ 如何处理**消息积压**？
-- 消息积压通常是 生产消息的速度大于消费速度，导致队列中的消息越来越多。
-  - 临时提速  ：增加消费者数量（水平扩展）；提高单个消费者的并发度（多线程 / 异步消费）
-  - 限流保护  ：使用 RabbitMQ 的 basic.qos 设定 prefetch count ，避免消费者一次性拉太多数据；从生产端限流，避免无限生产导致内存溢出
-  - 过期与丢弃  ：设定 TTL（Time To Live），超过时间的消息直接丢弃；配合死信队列（DLX）做异常处理
-  - 分级处理  ：重要消息优先队列  ；普通消息延迟处理或直接丢弃
-
-MQ 如何保证消息不丢失？
-  - **消息持久化**  （**持久化不是实时写磁盘**，可能会有极短的丢失风险（crash 发生在写之前）
-    - **队列持久化**：创建队列时设定 durable=true  
-    - **消息持久化**：`delivery_mode=2`（消息落盘）  
-  - **生产确认** 
-    - 开启 **Publisher Confirms** 模式（发布确认）  
-    - 消息写入 RabbitMQ 内部存储后，才返回 ACK 给生产者
-  - **消费确认**  
-    - 消费者处理完后，通过 **手动 ACK**（basicAck）确认  
-    - 如果消费者崩溃且没 ACK，RabbitMQ 会把消息重新投递给其他消费者
-
-
-如何防止MQ自己弄丢数据：
-- 原因
-	- 没有开启持久化  
-	- 磁盘或文件系统损坏  
-	- 集群数据丢失（网络分区 / 节点故障）
-- 应对方案：
-	- 开启 镜像队列/Quorum Queue（RabbitMQ 高可用特性）  ：消息会在多个节点复制，单节点宕机不丢数据
-	- 定期备份：  用 shovel/federation 或外部备份 MQ 数据
-	- 使用 发布确认 + 业务端重试：业务端保留未确认的消息并可重复投递
-
-
-MQ 如何保证消息的顺序性？
-- **保证顺序的条件：**
-	- **单一队列**：同一业务 Key 的消息必须发送到同一个队列
-	- **单一消费者线程**：一个队列只能由一个线程消费，否则可能乱序
-	- **手动 ACK 且按顺序处理**：消费者必须严格按顺序处理并确认
-- **可能影响顺序的因素：**
-	- 多个消费者同时消费一个队列（并发导致乱序）  
-	- 消费失败重试时，后来的消息可能先消费到
-- **解决思路：**
-	- 按业务 Key 分队列（Hash 分区）
-	- 保证同一 Key 的消息只由一个消费者处理
-	- 如果要并发消费，可按 Key 分成多个顺序队列
-
-
-
-**一般场景：** **订单异步调度**：用户下订单后，可能要等待支付、物流、短信通知等，这些都不是同步立即执行的。如果所有操作同步执行，会影响响应速度、用户体验 ，应当下单成功后立即响应用户，后续步骤通过 MQ 异步处理。
-- 用户下单 -> 写入数据库 -> 发送消息到 RabbitMQ（比如 `"order.created"`）
-- 消费者监听该消息，异步执行库存扣减、短信通知、物流处理等
-
-
-**延迟消息推送**：订单未付款提醒场景： 用户下单后，10分钟还未支付，可以发送提醒通知。
-实现方法：使用 RabbitMQ 的延迟队列（死信队列）+ TTL
-- 发送一条消息进入延迟队列，设置 TTL = 10分钟（消息有效时间）
-- 10分钟后消息“过期”，被 RabbitMQ 转发到“死信队列”（Dead Letter Queue）
-- 死信队列的消费者拿到消息，执行提醒通知操作（比如发短信、App推送）
-为什么我们不直接等到“订单到期时间”再执行操作，而要用“死信队列 + 延迟消息”这种方式？：因为这样耗资源、延迟不精确，数据库压力大，如果一直计时，则一直运行个程序太浪费资源，而如果把计时存入数据库，则轮询数据库也耗费资源，并且可能有延迟
-
-**订单超时处理**（比如未支付自动取消）： 用户下单后 30 分钟还没支付，要自动关闭订单。
-解决方案：使用 RabbitMQ 延迟队列 + 死信队列
-（注意：延迟队列功能原生 RabbitMQ 不支持，需要配置 死信队列（DLX）+ TTL）
-（如果对延迟控制要求更精确，可以考虑用 RabbitMQ 插件 `rabbitmq_delayed_message_exchange`）
-
-- 同样，发一条延迟消息，TTL = 30分钟
-- 过期后进入“订单超时处理队列”
-- 消费者消费后检查订单状态：如果已支付：忽略；如果未支付：修改订单状态为“已取消”
-
 
 
 ## Seata
