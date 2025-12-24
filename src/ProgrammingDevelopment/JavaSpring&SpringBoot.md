@@ -2487,7 +2487,8 @@ xxl-job任务执行失败怎么解决？
 分片参数
 - index：当前分片序号(从0开始)，执行器集群列表中当前执行器的序号；
 - total：总分片数，执行器集群的总机器数量；
-```java@XxlJob("shadingSample")
+```java
+@XxlJob("shadingSample")
 public void shardingJobHandler() throws Exception {
     // 分片参数
     int shardIndex = XxlJobHelper.getShardIndex();
