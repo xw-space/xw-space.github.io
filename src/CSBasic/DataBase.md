@@ -2683,6 +2683,7 @@ ranking → {
 
 
 ## 学习资料
+Redis篇 - 飞书云文档 https://heuqqdmbyk.feishu.cn/wiki/V45ewmbN6i8nm8kNl01c7qClnTc
 数据库（系统）分类简介 - 墨天轮： https://www.modb.pro/db/50043
 数据库类型有哪些-常见问题-PHP中文网：
 https://www.php.cn/faq/470582.html

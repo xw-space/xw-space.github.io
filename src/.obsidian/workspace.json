@@ -25,19 +25,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CSBasic/DataBase.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "b2e4767ad155f708",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "CSBasic/DataStructuresandAlgorithms.md",
+                "file": "Other/英语学习.md",
                 "mode": "source",
                 "source": false
               }
@@ -56,12 +44,12 @@
             }
           },
           {
-            "id": "affc5bb17da90b86",
+            "id": "f9c7b3ba40445b27",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Other/Linux.md",
+                "file": "ProgrammingDevelopment/JavaBasic.md",
                 "mode": "source",
                 "source": false
               }
@@ -92,6 +80,18 @@
             }
           },
           {
+            "id": "b2e4767ad155f708",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "CSBasic/DataStructuresandAlgorithms.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
             "id": "872d2a81d51611d1",
             "type": "leaf",
             "state": {
@@ -103,7 +103,8 @@
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -169,7 +170,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "CSBasic/ComputerNetwork.md",
+                "file": "Other/英语学习.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -186,7 +187,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "CSBasic/ComputerNetwork.md",
+                "file": "Other/英语学习.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -209,7 +210,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "CSBasic/ComputerNetwork.md"
+                "file": "Other/英语学习.md"
               }
             }
           }
@@ -230,33 +231,33 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "3aa545256a8380b4",
+  "active": "e1b966fa87a08af7",
   "lastOpenFiles": [
+    "ProgrammingDevelopment/MarkDown.md",
+    "ProgrammingDevelopment/VuePress.md",
+    "Other/VuePress.md",
+    "ProgrammingDevelopment/Linux.md",
     "Other/Linux.md",
+    "Other/英语学习.md",
+    "CSBasic/DataBase.md",
+    "ProgrammingDevelopment/JavaBasic.md",
+    "CSBasic/ComputerNetwork.md",
     "Other/摘抄.md",
     "ProgrammingDevelopment/JavaConcurrency.md",
     "ProgrammingDevelopment/JavaServiceDevTools.md",
     "CSBasic/DataStructuresandAlgorithms.md",
     "ProgrammingDevelopment/Python.md",
-    "CSBasic/ComputerNetwork.md",
-    "CSBasic/DataBase.md",
     "ProgrammingDevelopment/JavaVirtualMachine.md",
     "ProgrammingDevelopment/JavaDevelopment.md",
     "ProgrammingDevelopment/JavaSpring&SpringBoot.md",
     "CSBasic/OperatingSystem.md",
     "ProgrammingDevelopment/FrontEnd.md",
     "ProgrammingDevelopment/JavaCollection.md",
-    "ProgrammingDevelopment/JavaBasic.md",
     "Other/WinShortcutKey.md",
     "Other/MacGuide.md",
     "CSBasic/PrinciplesofComputerOrganization.md",
     "CSBasic/DataStructuresandAlgorithms-exercises.md",
     "Other/摘抄-弃.md",
-    "Other/摘抄 - 副本.md",
-    "Other/古代诗词.md",
-    "ProgrammingDevelopment/GO.md",
-    "ProgrammingDevelopment/FastAPI.md",
-    "ProgrammingDevelopment/C&C++.md",
-    "Other/VuePress教程.md"
+    "Other/摘抄 - 副本.md"
   ]
 }

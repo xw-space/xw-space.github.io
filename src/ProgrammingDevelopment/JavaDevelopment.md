@@ -1,3 +1,20 @@
+---
+icon: pen-to-square
+date: 2025-10-01
+category:
+  - 计科基础
+  - Java开发
+tags:
+  - default
+---
+
+一些JavaDevelopment相关内容
+
+<!-- more -->
+
+
+
+
 # JavaDevelopment
 ## 常见技术场景
 

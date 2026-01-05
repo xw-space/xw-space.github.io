@@ -1917,6 +1917,12 @@ public class UserService {
 
 
 ## 学习资料
+
+
+小傅哥，我觉得偏底层，比较难，有种为了难而难，都不讲基础。。。哦，仔细看了下，有基础，这个是一篇篇大播客文章的形式组织的，我觉得很不好： https://bugstack.cn/md/java/interview/2020-07-28-%E9%9D%A2%E7%BB%8F%E6%89%8B%E5%86%8C%20%C2%B7%20%E5%BC%80%E7%AF%87%E3%80%8A%E9%9D%A2%E8%AF%95%E5%AE%98%E9%83%BD%E9%97%AE%E6%88%91%E5%95%A5%E3%80%8B.html
+
+
+
 - 新版Java面试专题视频教程，java八股文面试全套真题+深度详解（含大厂高频面试真题）_哔哩哔哩_bilibili： https://www.bilibili.com/video/BV1yT411H7YK/?spm_id_from=333.999.0.0&vd_source=2bebef67d77d9a55c602507243628b63
 - 史上最全的Java程序员学习路线(Java学习者必备)10分钟让你了解Java程序要需要学习的那些知识_哔哩哔哩_bilibili： https://www.bilibili.com/video/BV1K4411r7DP/?spm_id_from=333.999.0.0&vd_source=2bebef67d77d9a55c602507243628b63
 - 我肝了一周，Java从基础到项目教程，Java全栈学习路线，帮你省去培训机构的2万块钱。_java nio selector 组播-CSDN博客： https://blog.csdn.net/mengchuan6666/article/details/118816713?spm=1001.2014.3001.5501
