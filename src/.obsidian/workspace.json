@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CSBasic/ComputerNetwork.md",
+                "file": "CSBasic/Network.md",
                 "mode": "source",
                 "source": false
               }
@@ -25,7 +25,19 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Other/英语学习.md",
+                "file": "ProgrammingDevelopment/JavaVirtualMachine.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "cfc513d89dc53add",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "CSBasic/Network.md",
                 "mode": "source",
                 "source": false
               }
@@ -170,7 +182,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Other/英语学习.md",
+                "file": "ProgrammingDevelopment/JavaVirtualMachine.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -187,7 +199,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Other/英语学习.md",
+                "file": "ProgrammingDevelopment/JavaVirtualMachine.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -210,7 +222,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Other/英语学习.md"
+                "file": "ProgrammingDevelopment/JavaVirtualMachine.md"
               }
             }
           }
@@ -219,7 +231,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 246.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -233,31 +245,31 @@
   },
   "active": "e1b966fa87a08af7",
   "lastOpenFiles": [
+    "ProgrammingDevelopment/JavaSpring&SpringBoot.md",
+    "ProgrammingDevelopment/JavaServiceDevTools.md",
+    "ProgrammingDevelopment/JavaConcurrency.md",
+    "ProgrammingDevelopment/JavaCollection.md",
+    "ProgrammingDevelopment/JavaBasic.md",
+    "CSBasic/DataBase.md",
+    "CSBasic/Network.md",
+    "CSBasic/DataStructuresandAlgorithms-exercises.md",
+    "CSBasic/OperatingSystem.md",
+    "CSBasic/PrinciplesofComputerOrganization.md",
+    "CSBasic/DataStructuresandAlgorithms.md",
+    "ProgrammingDevelopment/C&C++.md",
+    "ProgrammingDevelopment/Python.md",
+    "ProgrammingDevelopment/JavaDevelopment.md",
+    "DailyRecord/Daily2025-06-07.md",
     "ProgrammingDevelopment/MarkDown.md",
+    "ProgrammingDevelopment/Linux.md",
+    "ProgrammingDevelopment/FastAPI.md",
+    "Other/语言-英语.md",
+    "ProgrammingDevelopment/GO.md",
+    "Other/语言-英语语法.md",
+    "Other/语言-日语.md",
     "ProgrammingDevelopment/VuePress.md",
     "Other/VuePress.md",
-    "ProgrammingDevelopment/Linux.md",
     "Other/Linux.md",
-    "Other/英语学习.md",
-    "CSBasic/DataBase.md",
-    "ProgrammingDevelopment/JavaBasic.md",
-    "CSBasic/ComputerNetwork.md",
-    "Other/摘抄.md",
-    "ProgrammingDevelopment/JavaConcurrency.md",
-    "ProgrammingDevelopment/JavaServiceDevTools.md",
-    "CSBasic/DataStructuresandAlgorithms.md",
-    "ProgrammingDevelopment/Python.md",
-    "ProgrammingDevelopment/JavaVirtualMachine.md",
-    "ProgrammingDevelopment/JavaDevelopment.md",
-    "ProgrammingDevelopment/JavaSpring&SpringBoot.md",
-    "CSBasic/OperatingSystem.md",
-    "ProgrammingDevelopment/FrontEnd.md",
-    "ProgrammingDevelopment/JavaCollection.md",
-    "Other/WinShortcutKey.md",
-    "Other/MacGuide.md",
-    "CSBasic/PrinciplesofComputerOrganization.md",
-    "CSBasic/DataStructuresandAlgorithms-exercises.md",
-    "Other/摘抄-弃.md",
-    "Other/摘抄 - 副本.md"
+    "Other/摘抄.md"
   ]
 }

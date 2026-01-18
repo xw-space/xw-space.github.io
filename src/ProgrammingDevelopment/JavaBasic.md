@@ -105,96 +105,51 @@ int primitiveValue intValue；
 注意：
 所有整型包装类对象之间值的比较使用equals方法比较。
 
-## 命名规范
-- 总体命名规范
-- 类名需要使用大驼峰命名法(UpperCamelCase)风格。
-- 方法名、参数名、成员变量、局部变量需要使用小驼峰命名法(lowerCamelCase)。
-- 测试方法名、常量、枚举名称需要使用蛇形命名法(snake_case) ，比如test_get_user()、TIME_LIMIT。并且，测试方法名称要求全部小写，常量以及枚举名称需要全部大写。
-- 项目文件夹名称使用串式命名法(kebab-case)，比如dubbo-registry。
-- 包名统一使用小写，尽量使用单个名词作为包名，各个单词通过 "." 分隔符连接，并且各个单词必须为单数。
-- 抽象类命名使用 Abstract 开头。如：public abstract class AbstractClient extends AbstractEndpoint{}。
-- 异常类命名使用 Exception 结尾。如：public class NoSuchMethodException extends RuntimeException{}。
-- 测试类命名以它要测试的类的名称开始，以 Test 结尾。如：public class AnnotationUtilsTest{}。
-- 包名命名规范
-- Java的包名由小写单词组成，包的路径符合所开发的系统模块的定义，以便通过包名可得知其属于哪个模块，从而方便到对应包里找相应的实现类。
+## 数组Arrays
+所在位置：`java.util.Arrays`
+**工具类**，里面全是 `static` 方法（比如 `sort()`、`asList()`、`binarySearch()`）。
+主要作用是操作 **数组**（`array`），和集合不一样。
 
-- 常规包名
+提供了一些方法将数组转换为集合：
+- `asList(T... a)`：将数组转换为固定大小的`List`。注意：返回的`List`是由原数组支持的，修改会影响原数组，且大小固定，不能添加或删除元素。
 
-- 为了保障每个Java Package命名的唯一性,在Java编程规范中要求开发人员在自己定义的包名前加上唯一的前缀.由于互联网上的域名称是不会重复的,所以多数开发人员采用自己公司在互联网上的域名称作为自己程序包的唯一前缀.例如 : com.sun.swt...
-
-- 公司项目 com : 公司项目,copyright由项目发起的公司所有. 包名 : com.公司名.项目名.模块名..
-- 团队项目 team : 团队项目,指由团队发起,并由该团队开发的项目,copyright属于该团队所有. 包名 : team.团队名.项目名.模块名..
-- 自定义包名
-
-- 一般公司命名为com.公司名.项目名.模块名....那我们个人的项目又怎么命名呢?个人的英语单词有individual、personal、private、one-man,进一步对以上四个单词词意进行分析并在保证了唯一性,继而使用每个单词的前4个字母作为前缀,与com也做了区分.示例如下所示:
-
-- indi : 个体项目,指个人发起,但非自己独自完成的项目,可公开或私有项目,copyright主要属于发起者. 包名 :indi.发起者名.项目名.模块名..
-- pers : 个人项目,指个人发起,独自完成,可分享的项目,copyright主要属于个人.包名 : pers.个人名.项目名.模块名..
-- priv : 私有项目,指个人发起,独自完成,非公开的私人使用的项目,copyright属于个人.包名 : priv.个人名.项目名.模块名..
-- onem : 与indi相同，推荐使用indi.
-
-
-## Scanner-输入-代码
-**输入**：
-```Java
-import java.util.Scanner;
-
-public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        // 读取一个字符串
-        String name = scanner.nextLine();
-        // 读取一个整数，注意，它不会吃掉换行符
-        int age = scanner.nextInt();
-        // 读取一个浮点数
-        double score = scanner.nextDouble();
-		
-		System.out.println("Name: " + name);
-        System.out.println("Age: " + age);
-        System.out.println("Score: " + score);
-        
-        // 读取整数数组：1 2 3 4 5
-		String[] parts = sc.nextLine().split(" ");
-		int[] nums = new int[parts.length];
-		for (int i = 0; i < parts.length; i++) {
-		    nums[i] = Integer.parseInt(parts[i]);
-		}
-        
-        // 读取二维数组矩阵
-		// 3 3
-		// 1 2 3
-		// 4 5 6
-		// 7 8 9
-		Scanner sc = new Scanner(System.in);
-		int rows = sc.nextInt();
-		int cols = sc.nextInt();
-		int[][] matrix = new int[rows][cols];
-		for (int i = 0; i < rows; i++) {
-		    for (int j = 0; j < cols; j++) {
-		        matrix[i][j] = sc.nextInt();
-		    }
-		}
-
-        scanner.close();
-    }
+```java
+// 数组相关的包
+import java.util.Arrays;
+// 声明数组
+int[] arr = new int[5];
+int[] arr = new int[]{1, 2, 3, 4, 5};
+// 声明二维数组
+int[][] matrix = {
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9}
+};
+// 填充数组
+Arrays.fill(arr, 10);
+// 获得数组的大小
+int length = arr.length;
+// 遍历数组
+for (int element : arr) {
+    System.out.println(element);
 }
-```
-
-## 输出-代码
-**输出**：
-```Java
-// 输出内容，不换行。
-System.out.print("Hello");
-// 输出内容，并自动换行。
-System.out.println("Hello");
-// 格式化输出
-int age = 25;
-double d = 1.2345;
-System.out.printf("Name: %s, Age: %d\t", name, age);
-// 输出：Name: Tom, Age: 25
-String name = "Tom";
-System.out.printf("小数：%f只保留2位是：%.2f\n", d, d);
-// 小数：1.234500只保留2位是：1.23
+// 数组排序
+Arrays.sort(arr);
+// 判断两个数组是否相等
+boolean isEqual = Arrays.equals(arr1, arr2); 
+// 复制数组的两种方式（可指定长度）
+int[] src = {1, 2, 3, 4, 5};
+int[] dest = new int[5];
+System.arraycopy(src, 0, dest, 0, src.length);
+int[] dest = Arrays.copyOf(src, src.length);
+// 克隆数组（完全复制一个一模一样的）
+int[] clonedArr = arr.clone();
+// 将数组转换为List
+List<String> list = Arrays.asList(arr);
+// 将数组转换为String
+String str = Arrays.toString(arr); 
+// 将数组转换为Set
+Set<String> set = new HashSet<>(Arrays.asList(arr));
 ```
 
 ## Char-代码
@@ -295,66 +250,6 @@ switch(type) {
 }
 
 ```
-
-## String
-**String存储的底层原理**
-`String`底层是通过一个被`final`修饰的字符数组来存储字符内容，这样做是为了保证字符串对象内部的字符内容不能被修改，从而提高安全性和性能。
-```java
-// 在 JDK 8 及以前：
-private final char[] value;
-// 在 JDK 9 以后优化为：
-private final byte[] value;
-private final byte coder; // 标记是 LATIN-1 还是 UTF-16
-```
-**String类不能被继承，也不能被重写**：
-- 原因：`String` 类被 `final` 修饰，是一个不可变类。
-* 目的：提高安全性，保证字符串的不可变性，防止子类破坏常量池、哈希缓存等内部逻辑；
-**保证字符串的不可变性的原因**：
-- 安全性：如网络地址、文件路径、反射中类名等，若能被修改，可能造成安全漏洞。
-- 线程安全：不可变对象天生线程安全，不需要同步机制。
-- 性能优化：通过字符串常量池可以复用字符串对象，避免重复创建。
-- 支持哈希缓存：`String` 缓存了 `hashCode`，若可变会导致 HashMap 出错。
-**String/StringBuffer/StringBuilder的对比**
-* **String**：不可变，每次修改都会创建新对象；适合不频繁变化的字符串。
-* **StringBuffer**：可变，线程安全（方法有同步锁），适合多线程场景。
-* **StringBuilder**：可变，非线程安全，但性能更高，适合单线程下频繁拼接。
-* **拼接性能对比**：`StringBuilder` > `StringBuffer` > `String`（最慢）。
-**String类的常⻅⽅法**
-* `length()`：返回字符串长度
-* `charAt(int index)`：获取某个位置的字符
-* `substring(int start, int end)`：截取子串
-* `equals()` / `equalsIgnoreCase()`：比较字符串
-* `startsWith()` / `endsWith()`：判断前缀/后缀
-* `contains()`：是否包含某个子串
-* `indexOf()` / `lastIndexOf()`：查找字符或字符串位置
-* `replace()`：替换字符或子串
-* `split()`：按正则表达式分割
-* `trim()`：去除首尾空白字符
-* `toCharArray()`：转为字符数组
-* `valueOf()`：静态方法，转为字符串
-* `intern()`：将字符串放入常量池中
-**字符串常量池**
-- 字符串常量池（String Constant Pool）是 JVM 中专门存放字符串字面量的内存区域。
-- 使用双引号创建的字符串才会进入常量池，而`new String("hello")` 会创建两个对象（堆 + 常量池），可以通过 `intern()` 方法将堆中的字符串添加到常量池中。
-- 示例：
-```java
-String a = "hello";
-String b = "hello";
-System.out.println(a == b); // true，指向常量池中同一个对象
-```
-**字符串的拼接过程**：
-- 编译期优化（常量表达式）：
-```java
-String a = "hello" + "world"; 
-// 编译时直接优化为：String a = "helloworld";
-```
-- 运行时拼接（变量参与）：
-```java
-String b = "hello";
-String c = b + "world";
-// 实际编译器会变为：new StringBuilder().append(b).append("world").toString();
-```
-- 如果频繁拼接字符串，应使用 `StringBuilder` 来避免创建大量临时对象。
 
 ## String-代码
 
@@ -475,52 +370,65 @@ Integer.parseInt(String s)
 Integer.valueOf(String s)
 ```
 
-## 数组Arrays
-所在位置：`java.util.Arrays`
-**工具类**，里面全是 `static` 方法（比如 `sort()`、`asList()`、`binarySearch()`）。
-主要作用是操作 **数组**（`array`），和集合不一样。
-
-提供了一些方法将数组转换为集合：
-- `asList(T... a)`：将数组转换为固定大小的`List`。注意：返回的`List`是由原数组支持的，修改会影响原数组，且大小固定，不能添加或删除元素。
-
+## String
+**String存储的底层原理**
+`String`底层是通过一个被`final`修饰的字符数组来存储字符内容，这样做是为了保证字符串对象内部的字符内容不能被修改，从而提高安全性和性能。
 ```java
-// 数组相关的包
-import java.util.Arrays;
-// 声明数组
-int[] arr = new int[5];
-int[] arr = new int[]{1, 2, 3, 4, 5};
-// 声明二维数组
-int[][] matrix = {
-    {1, 2, 3},
-    {4, 5, 6},
-    {7, 8, 9}
-};
-// 填充数组
-Arrays.fill(arr, 10);
-// 获得数组的大小
-int length = arr.length;
-// 遍历数组
-for (int element : arr) {
-    System.out.println(element);
-}
-// 数组排序
-Arrays.sort(arr);
-// 判断两个数组是否相等
-boolean isEqual = Arrays.equals(arr1, arr2); 
-// 复制数组的两种方式（可指定长度）
-int[] src = {1, 2, 3, 4, 5};
-int[] dest = new int[5];
-System.arraycopy(src, 0, dest, 0, src.length);
-int[] dest = Arrays.copyOf(src, src.length);
-// 克隆数组（完全复制一个一模一样的）
-int[] clonedArr = arr.clone();
-// 将数组转换为List
-List<String> list = Arrays.asList(arr);
-// 将数组转换为String
-String str = Arrays.toString(arr); 
-// 将数组转换为Set
-Set<String> set = new HashSet<>(Arrays.asList(arr));
+// 在 JDK 8 及以前：
+private final char[] value;
+// 在 JDK 9 以后优化为：
+private final byte[] value;
+private final byte coder; // 标记是 LATIN-1 还是 UTF-16
 ```
+**String类不能被继承，也不能被重写**：
+- 原因：`String` 类被 `final` 修饰，是一个不可变类。
+* 目的：提高安全性，保证字符串的不可变性，防止子类破坏常量池、哈希缓存等内部逻辑；
+**保证字符串的不可变性的原因**：
+- 安全性：如网络地址、文件路径、反射中类名等，若能被修改，可能造成安全漏洞。
+- 线程安全：不可变对象天生线程安全，不需要同步机制。
+- 性能优化：通过字符串常量池可以复用字符串对象，避免重复创建。
+- 支持哈希缓存：`String` 缓存了 `hashCode`，若可变会导致 HashMap 出错。
+**String/StringBuffer/StringBuilder的对比**
+* **String**：不可变，每次修改都会创建新对象；适合不频繁变化的字符串。
+* **StringBuffer**：可变，线程安全（方法有同步锁），适合多线程场景。
+* **StringBuilder**：可变，非线程安全，但性能更高，适合单线程下频繁拼接。
+* **拼接性能对比**：`StringBuilder` > `StringBuffer` > `String`（最慢）。
+**String类的常⻅⽅法**
+* `length()`：返回字符串长度
+* `charAt(int index)`：获取某个位置的字符
+* `substring(int start, int end)`：截取子串
+* `equals()` / `equalsIgnoreCase()`：比较字符串
+* `startsWith()` / `endsWith()`：判断前缀/后缀
+* `contains()`：是否包含某个子串
+* `indexOf()` / `lastIndexOf()`：查找字符或字符串位置
+* `replace()`：替换字符或子串
+* `split()`：按正则表达式分割
+* `trim()`：去除首尾空白字符
+* `toCharArray()`：转为字符数组
+* `valueOf()`：静态方法，转为字符串
+* `intern()`：将字符串放入常量池中
+**字符串常量池**
+- 字符串常量池（String Constant Pool）是 JVM 中专门存放字符串字面量的内存区域。
+- 使用双引号创建的字符串才会进入常量池，而`new String("hello")` 会创建两个对象（堆 + 常量池），可以通过 `intern()` 方法将堆中的字符串添加到常量池中。
+- 示例：
+```java
+String a = "hello";
+String b = "hello";
+System.out.println(a == b); // true，指向常量池中同一个对象
+```
+**字符串的拼接过程**：
+- 编译期优化（常量表达式）：
+```java
+String a = "hello" + "world"; 
+// 编译时直接优化为：String a = "helloworld";
+```
+- 运行时拼接（变量参与）：
+```java
+String b = "hello";
+String c = b + "world";
+// 实际编译器会变为：new StringBuilder().append(b).append("world").toString();
+```
+- 如果频繁拼接字符串，应使用 `StringBuilder` 来避免创建大量临时对象。
 
 ## java数据结构如何获取大小长度
 总结：
@@ -539,6 +447,98 @@ Set<String> set = new HashSet<>(Arrays.asList(arr));
 | HashSet / TreeSet | `Set<String> set`      | `set.size()`   | ✅ 要加括号  | 方法，返回集合中不重复元素的数量              |
 | HashMap / TreeMap | `Map<K, V> map`        | `map.size()`   | ✅ 要加括号  | 方法，返回键值对的数量                   |
 | Stack / Queue     | `Stack<T> stack`       | `stack.size()` | ✅ 要加括号  | 方法，返回栈中元素的数量                  |
+
+## 命名规范
+- 总体命名规范
+- 类名需要使用大驼峰命名法(UpperCamelCase)风格。
+- 方法名、参数名、成员变量、局部变量需要使用小驼峰命名法(lowerCamelCase)。
+- 测试方法名、常量、枚举名称需要使用蛇形命名法(snake_case) ，比如test_get_user()、TIME_LIMIT。并且，测试方法名称要求全部小写，常量以及枚举名称需要全部大写。
+- 项目文件夹名称使用串式命名法(kebab-case)，比如dubbo-registry。
+- 包名统一使用小写，尽量使用单个名词作为包名，各个单词通过 "." 分隔符连接，并且各个单词必须为单数。
+- 抽象类命名使用 Abstract 开头。如：public abstract class AbstractClient extends AbstractEndpoint{}。
+- 异常类命名使用 Exception 结尾。如：public class NoSuchMethodException extends RuntimeException{}。
+- 测试类命名以它要测试的类的名称开始，以 Test 结尾。如：public class AnnotationUtilsTest{}。
+- 包名命名规范
+- Java的包名由小写单词组成，包的路径符合所开发的系统模块的定义，以便通过包名可得知其属于哪个模块，从而方便到对应包里找相应的实现类。
+
+- 常规包名
+
+- 为了保障每个Java Package命名的唯一性,在Java编程规范中要求开发人员在自己定义的包名前加上唯一的前缀.由于互联网上的域名称是不会重复的,所以多数开发人员采用自己公司在互联网上的域名称作为自己程序包的唯一前缀.例如 : com.sun.swt...
+
+- 公司项目 com : 公司项目,copyright由项目发起的公司所有. 包名 : com.公司名.项目名.模块名..
+- 团队项目 team : 团队项目,指由团队发起,并由该团队开发的项目,copyright属于该团队所有. 包名 : team.团队名.项目名.模块名..
+- 自定义包名
+
+- 一般公司命名为com.公司名.项目名.模块名....那我们个人的项目又怎么命名呢?个人的英语单词有individual、personal、private、one-man,进一步对以上四个单词词意进行分析并在保证了唯一性,继而使用每个单词的前4个字母作为前缀,与com也做了区分.示例如下所示:
+
+- indi : 个体项目,指个人发起,但非自己独自完成的项目,可公开或私有项目,copyright主要属于发起者. 包名 :indi.发起者名.项目名.模块名..
+- pers : 个人项目,指个人发起,独自完成,可分享的项目,copyright主要属于个人.包名 : pers.个人名.项目名.模块名..
+- priv : 私有项目,指个人发起,独自完成,非公开的私人使用的项目,copyright属于个人.包名 : priv.个人名.项目名.模块名..
+- onem : 与indi相同，推荐使用indi.
+
+
+## Scanner-输入-代码
+**输入**：
+```Java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        // 读取一个字符串
+        String name = scanner.nextLine();
+        // 读取一个整数，注意，它不会吃掉换行符
+        int age = scanner.nextInt();
+        // 读取一个浮点数
+        double score = scanner.nextDouble();
+		
+		System.out.println("Name: " + name);
+        System.out.println("Age: " + age);
+        System.out.println("Score: " + score);
+        
+        // 读取整数数组：1 2 3 4 5
+		String[] parts = sc.nextLine().split(" ");
+		int[] nums = new int[parts.length];
+		for (int i = 0; i < parts.length; i++) {
+		    nums[i] = Integer.parseInt(parts[i]);
+		}
+        
+        // 读取二维数组矩阵
+		// 3 3
+		// 1 2 3
+		// 4 5 6
+		// 7 8 9
+		Scanner sc = new Scanner(System.in);
+		int rows = sc.nextInt();
+		int cols = sc.nextInt();
+		int[][] matrix = new int[rows][cols];
+		for (int i = 0; i < rows; i++) {
+		    for (int j = 0; j < cols; j++) {
+		        matrix[i][j] = sc.nextInt();
+		    }
+		}
+
+        scanner.close();
+    }
+}
+```
+
+## 输出-代码
+**输出**：
+```Java
+// 输出内容，不换行。
+System.out.print("Hello");
+// 输出内容，并自动换行。
+System.out.println("Hello");
+// 格式化输出
+int age = 25;
+double d = 1.2345;
+System.out.printf("Name: %s, Age: %d\t", name, age);
+// 输出：Name: Tom, Age: 25
+String name = "Tom";
+System.out.printf("小数：%f只保留2位是：%.2f\n", d, d);
+// 小数：1.234500只保留2位是：1.23
+```
 
 ## 面向对象编程（OOP）
 - **类与对象**：理解类的定义、实例化对象、成员变量和成员方法。
@@ -575,22 +575,6 @@ Set<String> set = new HashSet<>(Arrays.asList(arr));
 
 
 代理类
-
-
-
-## 深拷贝和浅拷贝
-
-浅拷贝：
-只复制基本的值
-如果字段是基本数据类型，那么就复制其值；
-如果字段是引用类型，复制的是引用而不是实际对象。
-浅拷贝通常通过clone方法实现
-
-
-深拷贝：
-创建一个新对象，并递归复制原对象中的所有引用类型的字段指向的对象，而不是将引用复制过去共享使用。
-新对象和原对象中的引用类型字段引用的是两组不同的对象。
-深拷贝可以通过手动实现clone方法、序列化和反序列化，或者使用第三方库来实现。
 
 
 
@@ -854,6 +838,22 @@ abstract 修饰方法
 
 
 
+## 深拷贝和浅拷贝
+
+浅拷贝：
+只复制基本的值
+如果字段是基本数据类型，那么就复制其值；
+如果字段是引用类型，复制的是引用而不是实际对象。
+浅拷贝通常通过clone方法实现
+
+
+深拷贝：
+创建一个新对象，并递归复制原对象中的所有引用类型的字段指向的对象，而不是将引用复制过去共享使用。
+新对象和原对象中的引用类型字段引用的是两组不同的对象。
+深拷贝可以通过手动实现clone方法、序列化和反序列化，或者使用第三方库来实现。
+
+
+
 ## 错误和异常
 `Throwable` 是 Java 所有错误和异常的根类，它有两个直接子类：
 * `Error`：系统级严重错误，程序无法控制；
@@ -909,80 +909,6 @@ Java 使用 **异常捕获和抛出机制（try-catch-finally）** 来处理异�
 
 ## 反射
 **概念**：通过类的对象动态获取类的信息（比如字段、方法、构造函数等），以及动态调用类的方法
-
-
-
-## JDK动态代理
-**作用**：在运行时创建一个实现了指定接口的代理对象，所有方法调用都会被转发到你提供的 `InvocationHandler` 中处理。
-
-**名称解释**：
-- 动态代理，就是根据接口动态生成接口的代理对象，不用像静态代理那样，为每一个接口写死一个代理类
-- 名称中带上"JDK"是因为，这是 Java 官方（JDK）内置提供的一种基于接口的运行时代理机制，并且为了区分CGLIB动态代理和ByteBuddy、Javassist 等其他代理库
-
-**依赖**：它来自于 JDK 标准库中的两个核心类：
-`java.lang.reflect.Proxy`
-`java.lang.reflect.InvocationHandler`：JDK 动态代理的核心机制，当你调用某个代理对象的方法时，会触发 `invoke` 方法执行，而不是直接执行真正的逻辑。
-
-**常见用途**：远程调用、AOP、权限控制、懒加载、Mock测试
-
-**一般形式**：
-```java
-Object proxy = Proxy.newProxyInstance(
-    类加载器,
-    接口数组,
-    InvocationHandler实现
-);
-```
-调用上述代码，然后获得的 `proxy` 是一个 “实现了你指定接口”的对象，但它里面没有真正的实现类，而是所有方法都会被转发到你写的 `InvocationHandler.invoke()` 方法中执行。
-
-
-举例：
-```java
-// 你本来有个接口
-public interface HelloService {
-    void sayHello(String name);
-}
-
-// 动态代理实现
-public class HelloServiceHandler implements InvocationHandler {
-    @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        System.out.println("调用方法：" + method.getName());
-        System.out.println("参数：" + Arrays.toString(args));
-        return null;
-    }
-}
-
-
-// 创建代理对象
-HelloService proxy = (HelloService) Proxy.newProxyInstance(
-        HelloService.class.getClassLoader(),
-        new Class[]{HelloService.class},
-        new HelloServiceHandler()
-);
-
-// 使用代理对象
-proxy.sayHello("张三");  // 实际执行的是 invoke() 方法
-
-```
-
-```txt
-
-%输出结果：
-调用方法：sayHello
-参数：[张三]
-
-%过程：
-接口 HelloService
-   ↓
-Proxy.newProxyInstance(...)  ← InvocationHandler 实现类
-   ↓
-动态生成 Proxy 类，实现 HelloService 接口
-   ↓
-调用 proxy.sayHello("张三")
-   ↓
-进入 invoke(proxy, method, args) 方法中
-```
 
 
 
@@ -1285,101 +1211,6 @@ public class Test {
 
 ```
 
-## Future
-**介绍**：
-`future` 是 Java 并发包 (`java.util.concurrent`) 提供的**一个接口**，用来表示一个**异步计算的结果**。  
-它的作用是：你提交一个任务到线程池后，不必等它执行完就能拿到一个 `Future` 对象，后面可以用这个对象获取结果、检查任务状态、取消任务等。
-
-使用示例：
-```java
-ExecutorService executor = Executors.newFixedThreadPool(2);
-
-Future<Integer> future = executor.submit(() -> {
-    Thread.sleep(1000);
-    return 42;
-});
-
-System.out.println("任务提交了，我先干别的事");
-
-// 阻塞等待任务完成并拿结果
-Integer result = future.get();
-System.out.println("任务结果: " + result);
-
-executor.shutdown();
-```
-
-常用方法：
-
-| 方法                                      | 作用           |
-| --------------------------------------- | ------------ |
-| `get()`                                 | 阻塞等待结果返回     |
-| `get(timeout, unit)`                    | 等待指定时间，超时抛异常 |
-| `cancel(boolean mayInterruptIfRunning)` | 取消任务         |
-| `isDone()`                              | 判断任务是否完成     |
-| `isCancelled()`                         | 判断任务是否被取消    |
-
-
-
-
-
-
-## Math
-是 Java 标准库中的类，提供数学运算的常用方法（取整、随机数、幂运算等）
-`Math` 是 Java 提供的一个**数学工具类**，包含大量**静态方法**，用于执行基本的数学运算。
-在 `java.lang` 包下，无需导入即可使用。
-
-
-
-**示例：**
-```java
-int max = Math.max(10, 20);      // 20
-double r = Math.sqrt(9.0);       // 3.0
-double pi = Math.PI;             // 3.141592...
-```
-
-
-
-**常见的 `Math` 方法：**
-* `Math.abs(x)`：返回绝对值
-* `Math.max(a, b)` / `Math.min(a, b)`：求最大/最小值
-* `Math.pow(a, b)`：a 的 b 次幂
-* `Math.sqrt(x)`：平方根
-* `Math.round(x)`：四舍五入
-* `Math.floor(x)`：向下取整
-* `Math.ceil(x)`：向上取整
-* `Math.random()`：生成 0～1 之间的随机数
-* `Math.sin(x)` / `Math.cos(x)`：三角函数（参数是弧度）
-
-
-## Object
-特点：`Object` 是 Java 所有类的根类，所有类默认都继承它。
-**Object类的常⻅⽅法**
-* `equals()`：判断两个对象是否“相等”
-* `hashCode()`：返回对象的哈希值
-* `toString()`：返回对象的字符串表示
-* `getClass()`：返回对象的运行时类
-* `clone()`：创建对象副本（需实现 `Cloneable` 接口）
-* `finalize()`：对象被 GC 前调用（已过时）
-* `wait()`, `notify()`, `notifyAll()`：线程通信方法，配合同步锁使用
-**\=\=和equals()的区别**
-- `==` 是比较两个对象的引用是否相同，也就是是否指向同一块内存地址。
-- `equals()` 默认实现与 `==` 类似，但多数类（如 `String`、`Integer`）都重写了它，变为值比较。
-- 举例：
-```java
-String a = new String("abc");
-String b = new String("abc");
-a == b        // false：不同对象
-a.equals(b)   // true：内容相同
-```
-**hashCode()和equals()的关系**
-- hashCode 和 equals 都用于集合类的对象比较。
-* 两个对象进行 `equals()` 比较相等，它们进行 `hashCode()` 比较也一定相等。
-* 反之不成立：`hashCode` 相同不一定 `equals` 相等。
-* 所以，先判断 hashCode，相同再判断 equals，可以提高查找效率。
-**为什么要重写hashCode()和equals()**
-* 如果只重写了 `equals()` 而不重写 `hashCode()`，即使两个对象逻辑上相等，它们 hash 值不一样，集合查找会失败。
-* 如果重写不一致，会破坏集合的正确性，导致找不到 key、数据丢失等问题。
-
 ## Stream-链式调用
 原则：连续的 `.方法名()` 调用，是在处理**前一个方法返回的结果对象**
 
@@ -1414,33 +1245,6 @@ List<String> result = stringCollection.stream()
    ↓ .collect(...)
 最终结果（List）
 ```
-
-## Wrapper
-是 Java 标准库中的类，基本数据类型的包装类（Integer, Double 等）
-包装类是 Java 为每种基本数据类型提供的**类类型封装**，使得基本类型可以像对象一样使用。
-
-| 基本类型      | 包装类         |
-| --------- | ----------- |
-| `int`     | `Integer`   |
-| `double`  | `Double`    |
-| `boolean` | `Boolean`   |
-| `char`    | `Character` |
-| `long`    | `Long`      |
-| `float`   | `Float`     |
-| `byte`    | `Byte`      |
-| `short`   | `Short`     |
-这些都位于 `java.lang` 包中，**默认自动导入**，可以直接使用。
-
-**包装类的作用：**
-* 可以作为对象使用（基本类型不能调用方法）；
-* 可以用于泛型、集合等只接受对象的场合；
-* 提供了很多便捷的静态方法（如 `Integer.parseInt()`）；
-* 支持 **自动装箱/拆箱**（Java 5 引入）：
-```java
-Integer i = 10;     // 自动装箱：int → Integer
-int j = i + 5;      // 自动拆箱：Integer → int
-```
-
 
 ## 数据库
 
@@ -1904,6 +1708,202 @@ public class UserService {
 }
 ```
 
+
+
+## JDK动态代理
+**作用**：在运行时创建一个实现了指定接口的代理对象，所有方法调用都会被转发到你提供的 `InvocationHandler` 中处理。
+
+**名称解释**：
+- 动态代理，就是根据接口动态生成接口的代理对象，不用像静态代理那样，为每一个接口写死一个代理类
+- 名称中带上"JDK"是因为，这是 Java 官方（JDK）内置提供的一种基于接口的运行时代理机制，并且为了区分CGLIB动态代理和ByteBuddy、Javassist 等其他代理库
+
+**依赖**：它来自于 JDK 标准库中的两个核心类：
+`java.lang.reflect.Proxy`
+`java.lang.reflect.InvocationHandler`：JDK 动态代理的核心机制，当你调用某个代理对象的方法时，会触发 `invoke` 方法执行，而不是直接执行真正的逻辑。
+
+**常见用途**：远程调用、AOP、权限控制、懒加载、Mock测试
+
+**一般形式**：
+```java
+Object proxy = Proxy.newProxyInstance(
+    类加载器,
+    接口数组,
+    InvocationHandler实现
+);
+```
+调用上述代码，然后获得的 `proxy` 是一个 “实现了你指定接口”的对象，但它里面没有真正的实现类，而是所有方法都会被转发到你写的 `InvocationHandler.invoke()` 方法中执行。
+
+
+举例：
+```java
+// 你本来有个接口
+public interface HelloService {
+    void sayHello(String name);
+}
+
+// 动态代理实现
+public class HelloServiceHandler implements InvocationHandler {
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        System.out.println("调用方法：" + method.getName());
+        System.out.println("参数：" + Arrays.toString(args));
+        return null;
+    }
+}
+
+
+// 创建代理对象
+HelloService proxy = (HelloService) Proxy.newProxyInstance(
+        HelloService.class.getClassLoader(),
+        new Class[]{HelloService.class},
+        new HelloServiceHandler()
+);
+
+// 使用代理对象
+proxy.sayHello("张三");  // 实际执行的是 invoke() 方法
+
+```
+
+```txt
+
+%输出结果：
+调用方法：sayHello
+参数：[张三]
+
+%过程：
+接口 HelloService
+   ↓
+Proxy.newProxyInstance(...)  ← InvocationHandler 实现类
+   ↓
+动态生成 Proxy 类，实现 HelloService 接口
+   ↓
+调用 proxy.sayHello("张三")
+   ↓
+进入 invoke(proxy, method, args) 方法中
+```
+
+
+
+## Future
+**介绍**：
+`future` 是 Java 并发包 (`java.util.concurrent`) 提供的**一个接口**，用来表示一个**异步计算的结果**。  
+它的作用是：你提交一个任务到线程池后，不必等它执行完就能拿到一个 `Future` 对象，后面可以用这个对象获取结果、检查任务状态、取消任务等。
+
+使用示例：
+```java
+ExecutorService executor = Executors.newFixedThreadPool(2);
+
+Future<Integer> future = executor.submit(() -> {
+    Thread.sleep(1000);
+    return 42;
+});
+
+System.out.println("任务提交了，我先干别的事");
+
+// 阻塞等待任务完成并拿结果
+Integer result = future.get();
+System.out.println("任务结果: " + result);
+
+executor.shutdown();
+```
+
+常用方法：
+
+| 方法                                      | 作用           |
+| --------------------------------------- | ------------ |
+| `get()`                                 | 阻塞等待结果返回     |
+| `get(timeout, unit)`                    | 等待指定时间，超时抛异常 |
+| `cancel(boolean mayInterruptIfRunning)` | 取消任务         |
+| `isDone()`                              | 判断任务是否完成     |
+| `isCancelled()`                         | 判断任务是否被取消    |
+
+
+
+
+
+
+## Math
+是 Java 标准库中的类，提供数学运算的常用方法（取整、随机数、幂运算等）
+`Math` 是 Java 提供的一个**数学工具类**，包含大量**静态方法**，用于执行基本的数学运算。
+在 `java.lang` 包下，无需导入即可使用。
+
+
+
+**示例：**
+```java
+int max = Math.max(10, 20);      // 20
+double r = Math.sqrt(9.0);       // 3.0
+double pi = Math.PI;             // 3.141592...
+```
+
+
+
+**常见的 `Math` 方法：**
+* `Math.abs(x)`：返回绝对值
+* `Math.max(a, b)` / `Math.min(a, b)`：求最大/最小值
+* `Math.pow(a, b)`：a 的 b 次幂
+* `Math.sqrt(x)`：平方根
+* `Math.round(x)`：四舍五入
+* `Math.floor(x)`：向下取整
+* `Math.ceil(x)`：向上取整
+* `Math.random()`：生成 0～1 之间的随机数
+* `Math.sin(x)` / `Math.cos(x)`：三角函数（参数是弧度）
+
+
+## Object
+特点：`Object` 是 Java 所有类的根类，所有类默认都继承它。
+**Object类的常⻅⽅法**
+* `equals()`：判断两个对象是否“相等”
+* `hashCode()`：返回对象的哈希值
+* `toString()`：返回对象的字符串表示
+* `getClass()`：返回对象的运行时类
+* `clone()`：创建对象副本（需实现 `Cloneable` 接口）
+* `finalize()`：对象被 GC 前调用（已过时）
+* `wait()`, `notify()`, `notifyAll()`：线程通信方法，配合同步锁使用
+**\=\=和equals()的区别**
+- `==` 是比较两个对象的引用是否相同，也就是是否指向同一块内存地址。
+- `equals()` 默认实现与 `==` 类似，但多数类（如 `String`、`Integer`）都重写了它，变为值比较。
+- 举例：
+```java
+String a = new String("abc");
+String b = new String("abc");
+a == b        // false：不同对象
+a.equals(b)   // true：内容相同
+```
+**hashCode()和equals()的关系**
+- hashCode 和 equals 都用于集合类的对象比较。
+* 两个对象进行 `equals()` 比较相等，它们进行 `hashCode()` 比较也一定相等。
+* 反之不成立：`hashCode` 相同不一定 `equals` 相等。
+* 所以，先判断 hashCode，相同再判断 equals，可以提高查找效率。
+**为什么要重写hashCode()和equals()**
+* 如果只重写了 `equals()` 而不重写 `hashCode()`，即使两个对象逻辑上相等，它们 hash 值不一样，集合查找会失败。
+* 如果重写不一致，会破坏集合的正确性，导致找不到 key、数据丢失等问题。
+
+## Wrapper
+是 Java 标准库中的类，基本数据类型的包装类（Integer, Double 等）
+包装类是 Java 为每种基本数据类型提供的**类类型封装**，使得基本类型可以像对象一样使用。
+
+| 基本类型      | 包装类         |
+| --------- | ----------- |
+| `int`     | `Integer`   |
+| `double`  | `Double`    |
+| `boolean` | `Boolean`   |
+| `char`    | `Character` |
+| `long`    | `Long`      |
+| `float`   | `Float`     |
+| `byte`    | `Byte`      |
+| `short`   | `Short`     |
+这些都位于 `java.lang` 包中，**默认自动导入**，可以直接使用。
+
+**包装类的作用：**
+* 可以作为对象使用（基本类型不能调用方法）；
+* 可以用于泛型、集合等只接受对象的场合；
+* 提供了很多便捷的静态方法（如 `Integer.parseInt()`）；
+* 支持 **自动装箱/拆箱**（Java 5 引入）：
+```java
+Integer i = 10;     // 自动装箱：int → Integer
+int j = i + 5;      // 自动拆箱：Integer → int
+```
 
 
 ## 系统学习网站

@@ -32,7 +32,166 @@ GO的优势：
 容器：Docker、Kubernetes
 微服务：etcd、Prometheus
 DevOps 工具
+## 知识点
+### 核心语法与变量声明
 
+Go是静态强类型语言，但语法倾向于简洁。
+
+* **变量声明 (`var` vs `:=`)**
+* **显式声明：** `var x int = 10` (类似Java，但类型在后)。
+* **短变量声明：** `x := 10` (仅限函数内部)。这不仅是赋值，更是声明。编译器会自动推导类型（类似Python），但它是静态的。
+
+
+* **常量：** `const`，没有C/Java那样的复杂修饰符。
+* **无分号：** 像Python一样，行尾不需要分号（编译器自动加）。
+* **公有/私有可见性：**
+* **大写开头** = Public (导出)，如 `fmt.Println`。
+* **小写开头** = Private (包内可见)，如 `var secret string`。
+* **注意：** 不需要 `public`/`private` 关键字。
+
+
+
+### 控制流：极简主义
+
+Go只有很少的关键字，砍掉了许多传统语言的语法糖。
+
+* **循环：只有 `for**`
+* 没有 `while` 或 `do-while`。
+* `while` 的写法：`for condition { ..}`
+* 死循环：`for { ..}`
+* 标准循环：`for i := 0; i < 10; i++ { ..}`
+
+
+* **判断：`if**`
+* 条件不需要括号：`if x > 0 { ..}` (类似Python，但强制大括号)。
+* 可以在判断前加初始化语句：`if err := doSomething(); err != nil { ..}` (非常常用)。
+
+
+* **分支：`switch**`
+* 默认 `break`，不需要手动写（反直觉：想穿透需要写 `fallthrough`）。
+* 可以不带表达式，当做多层 `if-else` 用。
+
+
+
+### 数据结构
+
+* **数组 (Array) vs 切片 (Slice)**
+* **Array：** 值类型，长度固定。`[5]int`。在Go中很少直接使用。
+* **Slice：** 引用类型，动态扩容（类似Java的ArrayList或Python的List）。
+* 声明：`[]int` (没有长度)。
+* 操作：`append(slice, value)`。
+* **坑点：** 切片底层指向数组，修改切片可能影响原数组。
+
+
+
+
+* **Map**
+* 类似Java的HashMap或Python的Dict。
+* 初始化：`m := make(map[string]int)`。
+* 无序。
+
+
+
+### 指针 (Pointers)
+
+* **回归C语言：** Go有指针 `*T` 和取地址 `&`。
+* **区别：** Go的指针主要用于**共享内存**（避免值拷贝），但**不支持指针运算**（不能 `p++`），所以是安全的。
+* **方法接收者：** 定义对象方法时，用指针接收者 `(p *User)` 可以修改对象状态，用值接收者 `(u User)` 则无法修改。
+
+### 函数
+
+* **多返回值：** 类似Python，Go函数可以返回多个值。
+```go
+func swap(x, y string) (string, string) {
+    return y, x
+}
+
+```
+
+
+* **一等公民：** 函数可以赋值给变量，可以作为参数传递。
+
+### 面向对象 (OOP) - Go的独特之处
+
+Go没有 `class`，没有 `extends`。
+
+* **Struct (结构体)：** 类似C的struct。
+```go
+type User struct {
+    Name string
+    Age  int
+}
+
+```
+
+
+* **Methods (方法)：** 定义在Struct之外。
+```go
+func (u *User) SayHello() { ..}
+
+```
+
+
+* **Interface (接口) - 鸭子类型 (Duck Typing)：**
+* **非侵入式：** 不需要显式声明 `implements`。
+* 只要一个Struct实现了接口定义的所有方法，它就自动实现了该接口。
+* 这使得代码解耦非常容易。
+
+
+
+### 错误处理 (Error Handling)
+
+* **没有 Exception：** Go没有 `try-catch`。
+* **显式检查：** 错误被视为一种值，通常作为函数的最后一个返回值。
+```go
+file, err := os.Open("filename.txt")
+if err != nil {
+    log.Fatal(err)
+}
+
+```
+
+
+* 这经常被吐槽代码冗长，但能保证逻辑清晰，强制开发者处理每个错误。
+
+### 并发 (Concurrency) - Go的杀手锏
+
+这是Go最强大的地方，也是区别于Java/Python线程模型的关键。
+
+* **Goroutine (协程)：**
+* 用户态线程，极轻量（几KB内存）。
+* 启动：只需在函数前加 `go` 关键字。
+* `go doWork()` 瞬间启动并发任务。
+
+
+* **Channel (通道)：**
+* **理念：** "不要通过共享内存来通信，而要通过通信来共享内存。"
+* 类似Unix管道，用于在Goroutine之间传递数据，自带同步机制，避免了复杂的锁（Lock）。
+* 操作：`ch <- value` (发送), `value := <- ch` (接收)。
+
+
+
+### 资源管理 (Defer)
+
+* 类似Java的 `finally` 或 Python的 context manager。
+* `defer` 后的函数会在当前函数**返回前**执行。
+* 常用于关闭文件、释放锁。
+```go
+f, _ := os.Open(...)
+defer f.Close() // 即使下面代码panic，close也会执行
+// 业务逻辑...
+
+```
+
+
+
+### 工具链
+
+Go不仅是语言，还自带了一套强大的现代化工具链：
+
+* `go mod`：依赖管理（不需要Maven/Gradle/pip）。
+* `go fmt`：强制代码格式化（彻底终结大括号换行之争）。
+* `go test`：内置单元测试框架。
 ## 使用
 因为网络问题无法下载Go 的模块：
 - 使用国内代理镜像

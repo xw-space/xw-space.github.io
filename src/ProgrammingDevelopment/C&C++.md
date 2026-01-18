@@ -50,6 +50,14 @@ int main()
 ### 数据类型
 
 #### 基础变量
+**变量**
+- 种类
+- 声明
+- 使用
+```cpp
+int a;
+char c;
+```
 
 | 类型     | 描述                                    |
 | ------ | ------------------------------------- |
@@ -80,6 +88,10 @@ int main()
 
 
 ### 常量
+**常量的声明与使用**
+```cpp
+const int a;
+```
 
 #### 字符常量
 
@@ -217,6 +229,16 @@ const int MAX_VALUE = 100;
 |逗号|,|从左到右|
 
 ### 判断
+**分支语句的种类与使用**
+```cpp
+if(){
+
+}else if(){
+
+}else{
+
+}
+```
 C 语言提供了以下类型的判断语句。点击链接查看每个语句的细节。
 
 |语句|描述|
@@ -227,6 +249,18 @@ C 语言提供了以下类型的判断语句。点击链接查看每个语句的
 |[switch 语句](https://www.runoob.com/cprogramming/c-switch.html "C 中的 switch 语句")|一个 **switch** 语句允许测试一个变量等于多个值时的情况。|
 |[嵌套 switch 语句](https://www.runoob.com/cprogramming/c-nested-switch.html "C 中的嵌套 switch 语句")|您可以在一个 **switch** 语句内使用另一个 **switch** 语句。|
 ### 循环
+**循环语句的种类与使用**
+for循环可以理解是横向遍历，backtracking（递归）就是纵向遍历
+```cpp
+while(){
+
+}
+
+for(){
+
+}
+
+```
 #### 循环类型
 
 C 语言提供了以下几种循环类型。点击链接查看每个类型的细节。
@@ -254,6 +288,41 @@ C 提供了下列的循环控制语句。点击链接查看每个语句的细节
 |[continue 语句](https://www.runoob.com/cprogramming/c-continue-statement.html "C 中的 continue 语句")|告诉一个循环体立刻停止本次循环迭代，重新开始下次循环迭代。|
 |[goto 语句](https://www.runoob.com/cprogramming/c-goto-statement.html "C 中的 goto 语句")|将控制转移到被标记的语句。但是不建议在程序中使用 goto 语句。|
 
+### 输入输出
+**输入输出**
+```cpp
+scanf();
+printf();
+cin >> ;
+cout << ;
+```
+### 指针
+**指针**
+```cpp
+int* p;
+```
+### 函数
+**函数**
+构造与使用
+形参与实参
+
+### 预处理/头文件
+**预处理**
+```cpp
+#include<stdio>
+#define MIX 10005
+```
+### 结构体的使用
+**结构体的使用**
+```cpp
+struct{
+   int a;
+   char c;
+}
+```
+### 递归与递推
+**递归与递推**
+for循环可以理解是横向遍历，backtracking（递归）就是纵向遍历
 
 ## C++
 
@@ -528,6 +597,12 @@ int main() {
 	1. 输入：cin >> ;
 	2. 输出：cou << ;
 
+### 输入输出
+**输入输出**
+```cpp
+cin >> ;
+cout << ;
+```
 ### 面向对象编程
 #### 类
 #### 其它
@@ -549,7 +624,8 @@ struct Node {
 如果你创建了一系列的 `Node` 对象，例如 `Node ary[20121205];`，你可能会担心类中的这1000个成员函数会被复制20121205次。但实际上，成员函数与全局变量一样，函数地址是全局已知的，对象的内存空间中无需保存成员函数地址。对成员函数（非虚函数）的调用在编译时就确定了。唯一的不同是，像 `p.getDistance()` 这样的调用会被编译成类似 `getDistance(&p)` 的形式。
 因此，在编写类时，基本不需要担心成员函数占用内存空间的问题。
 
-### STL(Standard Template Library)
+### STL
+(Standard Template Library，标准模板库)
 #### 简介与示例
 C++ STL（标准模板库）是一套功能强大的 C++ 模板类，提供了通用的模板类和函数，这些模板类和函数可以实现多种流行和常用的算法和数据结构，如向量、链表、队列、栈。
 
