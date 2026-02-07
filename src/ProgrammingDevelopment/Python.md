@@ -15,6 +15,31 @@ tag:
 Pycharm 常用快捷键 - 暮良文王 - 博客园：
 https://www.cnblogs.com/liangmingshen/p/9297381.html
 
+
+## VScode
+
+格式化
+
+Black-formatter: Args
+```Python
+传递给 Black 以格式化 Python 文件的参数。应在数组中将每个参数作为单独的字符串提供。 示例: "black-formatter.args" = ["--config", "<file>"]
+
+    "[python]": {
+        "editor.formatOnType": true
+        // "editor.defaultFormatter": "ms-python.black-formatter",
+    },
+    "black-formatter.args": [
+        "--line-length", "130"  // 把行宽改成 100
+    ],
+
+
+
+```
+
+
+
+
+
 ## 基础语法
 变量、循环、分支等，略
 
@@ -136,7 +161,10 @@ for idx, (key, value) in enumerate(my_dict.items()):
 print(list(my_dict.items())[:2])  ## 输出: [('a', 1), ('b', 2)]
 ```
 
-## filter()
+
+			   
+			   
+			   ## filter()
 `filter(function, iterable)`：
 `function`是一个返回布尔值的函数，用于判断每个元素是否满足某种条件。
 适用于需要**根据某种条件筛选元素**的场景.
@@ -149,6 +177,39 @@ result = filter(lambda x: x > 2, numbers)
 print(list(result))  ## 输出: [3, 4, 5]
 
 ```
+
+## `if __name__ == "__main__":`
+和 main()区别：
+
+直接写在 if __name__ == ... 下：这里面的变量全都是全局变量。
+写在 main() 函数里：变量是局部变量。
+
+
+
+在深度学习中，显存（VRAM）是寸土寸金的。
+全局变量：生命周期伴随整个脚本的运行。只要脚本没结束，定义在 if __name__ 下的巨大的 Tensor 或 Model 就一直占着内存/显存，引用计数不会归零。
+局部变量：main() 函数运行结束（或者在函数内部使用完），局部变量超出作用域，Python 的垃圾回收机制（GC）就可以介入，释放巨大的 Tensor 占用的内存。
+
+
+
+Python 读写局部变量比读写全局变量要快。
+
+局部变量使用 LOAD_FAST 指令。
+
+全局变量使用 LOAD_GLOBAL 指令（需要查字典）。
+
+
+这里的代码能被“借用”
+想象一下，你写了一个 train.py。 两周后，你想在一个 Jupyter Notebook 里分析一下这个训练过程，或者想在另一个脚本里调用一下这个训练逻辑。
+
+
+
+
+如果写在 main() 里：
+import train
+train.main() # 可以在别的地方直接调用，非常优雅
+如果直接写在 if __name__ 下： 你没法 import 这段逻辑。你只能把代码复制粘贴过去。
+
 
 ## map()
 `map(function, iterable)`：
@@ -1186,6 +1247,9 @@ https://docs.djangoproject.com/zh-hans/2.0/
 
 ## ECharts
 【2023最新：ECharts 数据可视化大屏项目】 https://www.bilibili.com/video/BV1yu411E7cm/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
+## FastAPI
+- 学习 - FastAPI： https://fastapi.tiangolo.com/zh/learn/
+
 
 ## Flask
 高并发和异步没有flask支持好
@@ -1455,7 +1519,7 @@ logging.critical("这是严重错误信息（critical）")
 
 YOLOv5检测界面-PyQt5实现_哔哩哔哩_bilibili： https://www.bilibili.com/video/BV1sQ4y1C7Vk/?spm_id_from=333.999.0.0&vd_source=2bebef67d77d9a55c602507243628b63
 
-
+- Javacr/PyQt5-YOLOv5: PyQt5 implementation of YOLOv5 GUI： https://github.com/Javacr/PyQt5-YOLOv5
 
 
 (29条消息) Qt Designer中布局工具的使用_qt designer中的layouts怎么用的_qiu_xingye的博客-CSDN博客：
@@ -1628,7 +1692,8 @@ Year: 2023, Month: 10, Day: 08
 ## Streamlit
 Streamlit 部署 YOLOv5 目标检测 - 迷途小书童的Note迷途小书童的Note： https://xugaoxiang.com/2021/08/27/yolov5-streamlit/
 
-
+- Python开源库 Streamlit 详细介绍-CSDN博客： https://blog.csdn.net/superfreeman/article/details/148251545
+- GitHub - streamlit/streamlit: Streamlit — A faster way to build and share data apps.： https://github.com/streamlit/streamlit
 
 
 

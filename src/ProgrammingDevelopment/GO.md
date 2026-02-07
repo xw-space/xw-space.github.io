@@ -193,6 +193,8 @@ Go不仅是语言，还自带了一套强大的现代化工具链：
 * `go fmt`：强制代码格式化（彻底终结大括号换行之争）。
 * `go test`：内置单元测试框架。
 ## 使用
+- Go Playground - The Go Programming Language，简单快捷运行： https://go.dev/play/
+
 因为网络问题无法下载Go 的模块：
 - 使用国内代理镜像
 ```bash

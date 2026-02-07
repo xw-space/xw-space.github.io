@@ -13,110 +13,13 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CSBasic/Network.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "e1b966fa87a08af7",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "ProgrammingDevelopment/JavaVirtualMachine.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "cfc513d89dc53add",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "CSBasic/Network.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "1c72d9d825187be7",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Other/摘抄.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "f9c7b3ba40445b27",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "ProgrammingDevelopment/JavaBasic.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "56a908fba3330e7f",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "ProgrammingDevelopment/JavaConcurrency.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "1d4e51d0803b6450",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "ProgrammingDevelopment/JavaServiceDevTools.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "b2e4767ad155f708",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "CSBasic/DataStructuresandAlgorithms.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "872d2a81d51611d1",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "ProgrammingDevelopment/Python.md",
+                "file": "CSBasic/DataBase.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -182,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "ProgrammingDevelopment/JavaVirtualMachine.md",
+                "file": "CSBasic/DataBase.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -199,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "ProgrammingDevelopment/JavaVirtualMachine.md",
+                "file": "CSBasic/DataBase.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -222,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "ProgrammingDevelopment/JavaVirtualMachine.md"
+                "file": "CSBasic/DataBase.md"
               }
             }
           }
@@ -243,33 +146,33 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "e1b966fa87a08af7",
+  "active": "3aa545256a8380b4",
   "lastOpenFiles": [
-    "ProgrammingDevelopment/JavaSpring&SpringBoot.md",
-    "ProgrammingDevelopment/JavaServiceDevTools.md",
-    "ProgrammingDevelopment/JavaConcurrency.md",
-    "ProgrammingDevelopment/JavaCollection.md",
-    "ProgrammingDevelopment/JavaBasic.md",
-    "CSBasic/DataBase.md",
-    "CSBasic/Network.md",
-    "CSBasic/DataStructuresandAlgorithms-exercises.md",
-    "CSBasic/OperatingSystem.md",
-    "CSBasic/PrinciplesofComputerOrganization.md",
-    "CSBasic/DataStructuresandAlgorithms.md",
-    "ProgrammingDevelopment/C&C++.md",
+    "Other/语言-日语.md",
+    "Other/语言-英语.md",
+    "ProgrammingDevelopment/Linux.md",
+    "Other/语言-英语语法.md",
     "ProgrammingDevelopment/Python.md",
+    "CSBasic/Network.md",
+    "Other/摘抄-弃.md",
+    "ProgrammingDevelopment/JavaVirtualMachine.md",
+    "ProgrammingDevelopment/GO.md",
+    "Other/古代诗词.md",
+    "ProgrammingDevelopment/JavaConcurrency.md",
+    "ProgrammingDevelopment/JavaServiceDevTools.md",
+    "ProgrammingDevelopment/JavaSpring&SpringBoot.md",
+    "ProgrammingDevelopment/JavaBasic.md",
+    "ProgrammingDevelopment/JavaCollection.md",
+    "CSBasic/DataBase.md",
+    "CSBasic/DataStructuresandAlgorithms-exercises.md",
+    "CSBasic/DataStructuresandAlgorithms.md",
+    "CSBasic/PrinciplesofComputerOrganization.md",
+    "CSBasic/OperatingSystem.md",
+    "未命名.md",
+    "ProgrammingDevelopment/C&C++.md",
     "ProgrammingDevelopment/JavaDevelopment.md",
     "DailyRecord/Daily2025-06-07.md",
     "ProgrammingDevelopment/MarkDown.md",
-    "ProgrammingDevelopment/Linux.md",
-    "ProgrammingDevelopment/FastAPI.md",
-    "Other/语言-英语.md",
-    "ProgrammingDevelopment/GO.md",
-    "Other/语言-英语语法.md",
-    "Other/语言-日语.md",
-    "ProgrammingDevelopment/VuePress.md",
-    "Other/VuePress.md",
-    "Other/Linux.md",
-    "Other/摘抄.md"
+    "ProgrammingDevelopment/FastAPI.md"
   ]
 }

@@ -900,11 +900,13 @@ UDP是一个面向数据报（datagram）的协议，它以独立的数据包为
 
 【原神用的是TCP还是UDP? KCP是什么？】 https://www.bilibili.com/video/BV1wC4y1D7H3/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
 ## 教程
+【大白话半小时理解网络！】 https://www.bilibili.com/video/BV1tseyzCEoF/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
 
-1. 【强烈建议收藏！12年华为大佬九分钟把常见网络设备(交换机、路由器、防火墙、无线AP)一次讲清！】 https://www.bilibili.com/video/BV1aA411z7PU/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
-2. 【【好玩的网络-第0期】多个设备互传文件难？万物互联时代，你充分利用好你家的网络了吗？】 https://www.bilibili.com/video/BV1rj411f7Wd/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
-3. 【【网络】半小时看懂<计算机网络>】 https://www.bilibili.com/video/BV124411k7uV/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
-4. 【小白成神之路，网络知识看这一期足矣！软路由 桥接 端口转发 旁路由 单臂路由 IPv4 IPv6 DDNS】 https://www.bilibili.com/video/BV1Gz4y1r791/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
+
+- 【强烈建议收藏！12年华为大佬九分钟把常见网络设备(交换机、路由器、防火墙、无线AP)一次讲清！】 https://www.bilibili.com/video/BV1aA411z7PU/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
+- 【【好玩的网络-第0期】多个设备互传文件难？万物互联时代，你充分利用好你家的网络了吗？】 https://www.bilibili.com/video/BV1rj411f7Wd/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
+- 【【网络】半小时看懂<计算机网络>】 https://www.bilibili.com/video/BV124411k7uV/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
+- 【小白成神之路，网络知识看这一期足矣！软路由 桥接 端口转发 旁路由 单臂路由 IPv4 IPv6 DDNS】 https://www.bilibili.com/video/BV1Gz4y1r791/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
 
 
 ## END

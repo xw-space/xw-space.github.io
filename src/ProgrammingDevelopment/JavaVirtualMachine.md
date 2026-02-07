@@ -11,18 +11,25 @@ tags:
 
 一个简单的Java虚拟机入门教程
 <!-- more -->
-# JVM（Java虚拟机）
+# Java Virtual Machine
+
+
+## JVM介绍
+
+**是什么**：
+Java Virtual Machine  
+（Java虚拟机）
 Java Virtual Machine，即 Java 虚拟机，是运行 Java 字节码的虚拟环境，屏蔽了底层操作系统与硬件的差异，实现“一次编写，到处运行”。
 
 负责加载字节码、管理内存（堆、栈、方法区）、执行垃圾回收（GC）。
 
-## JVM是什么
-Java Virtual Machine  Java程序的运行环境（java二进制字节码的运行环境）
+Java程序的运行环境（java二进制字节码的运行环境）
 好处：
 一次编写，到处运行
 自动内存管理，垃圾回收机制
 ![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251224123200.png)
 
+内容：
 JVM由哪些部分组成，运行流程是什么？
 ![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251224123217.png)
 
@@ -36,6 +43,9 @@ JVM由哪些部分组成，运行流程是什么？
 
 
 ## JVM组成
+
+
+
 ### 什么是程序计数器
 程序计数器：线程私有的，内部保存的字节码的行号。用于记录正在执行的字节码指令的地址。
 javap -v  xx.class    打印堆栈大小，局部变量的数量和方法的参数。
@@ -73,6 +83,12 @@ Java Virtual machine Stacks (java 虚拟机栈)
 每个栈由多个栈帧（frame）组成，对应着每次方法调用时所占用的内存
 每个线程只能有一个活动栈帧，对应着当前正在执行的那个方法
 ![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251224123537.png)
+
+
+什么情况下会导致栈内存溢出？
+栈帧过多导致栈内存溢出，典型问题：递归调用
+栈帧过大导致栈内存溢出
+
 
 1. 垃圾回收是否涉及栈内存？
 垃圾回收主要指就是堆内存，当栈帧弹栈以后，内存就会释放
@@ -116,24 +132,6 @@ public static StringBuilder m3(){
 
 
 
-
-
-
-
-### 垃圾回收是否涉及栈内存？
-### 栈内存分配越大越好吗？
-### 方法内的局部变量是否线程安全？
-### 什么情况下会导致栈内存溢出？
-栈帧过多导致栈内存溢出，典型问题：递归调用
-栈帧过大导致栈内存溢出
-
-```Java
-public static void m4(){
-    m4();
-}
-// java.lang.StackOverflowError
-
-```
 
 
 ### 堆栈的区别是什么
@@ -839,7 +837,8 @@ jstack 40940   此处是进程id
 
 
 
-
+## 相关资料
+运维-容器化java应用进程内存使用问题排查与jvm调优 https://blog.51cto.com/u_11555417/14449300
 
 
 
