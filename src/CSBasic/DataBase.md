@@ -797,10 +797,10 @@ Downloads - DB Browser for SQLite： https://sqlitebrowser.org/dl/
 ## PostgreSQL
 
 
+介绍各种功能：【养活国内大半自研数据库团队？PostgreSQL是什么？架构是怎么样的？】 https://www.bilibili.com/video/BV1CkCQBoEyp/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
 
 
-
-
+快速介绍了下如何各种功能如何使用：【PostgreSQL能存万物！这还是你认识的数据库吗？】 https://www.bilibili.com/video/BV1FUYQz7E4H/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
 ## H2内存数据库
 **介绍**：H2 是一个纯 Java 实现的轻量级数据库，支持内存运行、嵌入式部署和兼容 SQL 标准。
 

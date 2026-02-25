@@ -15,6 +15,8 @@ tag:
 <!-- more -->
 
 # 计算机网络
+## 待整理
+【域名带www和不带www有什么区别】 https://www.bilibili.com/video/BV1TAcYzWEpW/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
 
 ## 定义-是什么
 计算机主机里的各个硬件通过电路和数据线连接在一起，但离远离了就他们就不管用了，计算机网络则是解决这个问题

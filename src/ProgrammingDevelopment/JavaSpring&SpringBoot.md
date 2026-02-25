@@ -14,15 +14,16 @@ tag:
 
 # JavaSpring&SpringBoot
 ## JavaSpring
-### 简介
-Spring是一个框架
-**Spring** 提供了许多工具、功能和约定，简化了开发流程
 
-**概念解释**：
-- 框架，就是有一系列已经实现的功能，只要按特定要求去写代码，就可以实现一些功能。
+### 重要概念速览
+
+- **框架**：就是有一系列已经实现的功能，只要按特定要求去写代码，就可以实现一些功能。
 - **上下文（ApplicationContext）** 就是Spring容器，它负责管理应用中的Bean，提供依赖注入，管理Bean的生命周期等功能。它是Spring应用的核心，确保了应用中的组件可以正确交互并自动配置。
 
 
+### 简介
+Spring是一个框架
+**Spring** 提供了许多工具、功能和约定，比如处理，简化了开发流程
 
 
 ### 统一的开发框架
@@ -1714,16 +1715,7 @@ Springmvc的执行流程是这个框架最核心的内容
 
 
 
-### 常用注解
-@RequestMapping： 用于映射请求路径，可以定义在类上和方法上。用于类上，则表示类中的所有的方法都是以该地址作为父路径
-@RequestBody： 注解实现接收http请求的json数据，将json转换为java对象
-@RequestParam： 指定请求参数的名称
-@PathViriable： 从请求路径下中获取请求参数(/user/{id})，传递给方法的形式参数
-@ResponseBody： 注解实现将controller方法返回对象转化为json对象响应给客户端
-@RequestHeader： 获取指定的请求头数据
-@RestController： @Controller + @ResponseBody
-
-### SpringMVC的组件
+### 常用组件
 - **DispatcherServlet**是Spring MVC的前端控制器，用于接收所有的请求并将其转发到适当的处理器。它是整个Spring MVC框架的核心，负责请求的分发和响应的生成。
 - **Handler Mapping**（处理器映射器）负责将请求映射到相应的处理器（Controller）。当`DispatcherServlet`收到请求后，`Handler Mapping`会根据请求的URL或其他信息，找到相应的控制器方法。
 - **Controller**（控制器）是请求处理的核心组件。控制器包含业务逻辑和请求处理方法，通常使用`@Controller`或`@RestController`注解定义。控制器接收请求数据，处理逻辑，返回数据或视图名。
@@ -1736,6 +1728,15 @@ Springmvc的执行流程是这个框架最核心的内容
 - **MultipartResolver**用于处理文件上传。它将多部分请求解析为上传的文件对象，并将文件数据注入到控制器方法中。
 - **LocaleResolver**和**ThemeResolver**分别用于国际化和主题管理。`LocaleResolver`根据请求决定语言环境，`ThemeResolver`允许应用设置和管理不同的主题风格。
 这些组件共同构成了Spring MVC的完整框架。通过配置和组合这些组件，Spring MVC可以灵活处理各种Web应用需求。
+
+### 常用注解
+@RequestMapping： 用于映射请求路径，可以定义在类上和方法上。用于类上，则表示类中的所有的方法都是以该地址作为父路径
+@RequestBody： 注解实现接收http请求的json数据，将json转换为java对象
+@RequestParam： 指定请求参数的名称
+@PathViriable： 从请求路径下中获取请求参数(/user/{id})，传递给方法的形式参数
+@ResponseBody： 注解实现将controller方法返回对象转化为json对象响应给客户端
+@RequestHeader： 获取指定的请求头数据
+@RestController： @Controller + @ResponseBody
 
 ### SpringMVC常用注解
 - `@Controller`用于定义控制器类，将类标识为Spring MVC的控制器。Spring容器会将带有此注解的类扫描为一个Bean，并用于处理Web请求。

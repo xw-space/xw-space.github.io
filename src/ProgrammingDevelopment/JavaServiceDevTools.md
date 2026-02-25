@@ -1264,6 +1264,12 @@ pom.xml：
 
 - 因为 Spring Boot BOM 已经帮你管好了版本。`spring-boot-starter`、`spring-boot-starter-web`、`spring-boot-starter-test` 不需要出现在父 POM 的 dependencyManagement。子模块需要用时直接 `<dependency>` 声明，不用版本号
 
+
+
+
+
+
+
 ## MinIO
 **介绍**：
 MinIO 是一个高性能的 **对象存储服务器**，可以用来保存图片、视频、日志、备份等大文件，功能和亚马逊的 S3（Simple Storage Service）类似。
