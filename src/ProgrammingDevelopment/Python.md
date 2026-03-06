@@ -1250,6 +1250,65 @@ https://docs.djangoproject.com/zh-hans/2.0/
 ## FastAPI
 - 学习 - FastAPI： https://fastapi.tiangolo.com/zh/learn/
 
+### PhotoShare
+启动：uvicorn app.main:app --reload
+
+初始管理员： admin@example.com ；密码：admin
+
+运行：
+```bash
+# 安装依赖
+pip install -r requirements.txt
+# 初始化数据库
+python init_db.py
+# 启动redis: 
+redis-server.exe
+sudo service redis-server start
+# 启动服务
+uvicorn app.main:app --reload
+uvicorn app.main:app --reload --no-access-log
+
+# 启动测试
+python -m pytest tests/
+python -m pytest -s tests/test_rating.py
+
+python -m pytest -s tests/test_chat_proxy.py 
+```
+
+实现功能
+- 初始化数据库，创建默认管理员
+- 日志中间件
+- 定义简单的异常处理
+- 声明周期事件，自动加载网站功能json列表
+- 用户系统：注册、登录、获取自己的信息、照片、评论，密码加密，登录鉴权
+- 管理员系统：登录，查看所有用户，删除用户、修改用户密码
+- 照片：上传、浏览、下载，照片上传通过redis加锁、redis统计浏览量
+- 评分：增删查改，websocket通知
+- 自动测试脚本
+- 使用asyncio.Queue实现消息队列
+
+
+**项目结构**：
+```bash
+photoshare/
+
+main.py                # 入口文件
+init_db.py # 初始化数据库
+init_admin() # 自动创建一个管理员
+run.sh                     # 启动脚本
+
+requirements.txt           # 依赖包
+init_admin()
+routers/               # 路由模块
+core/                  # 核心设置：配置、认证等，核心配置与基础服务逻辑
+schemas/               # Pydantic 数据模型
+models/                # SQLAlchemy ORM模型，数据库模型，用于定义数据库表结构，并通过 ORM 操作数据库中的记录
+db/                    # 数据库会话与初始化
+utils/                 # 工具函数
+
+```
+
+
 
 ## Flask
 高并发和异步没有flask支持好

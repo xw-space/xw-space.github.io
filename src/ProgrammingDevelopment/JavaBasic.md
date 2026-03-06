@@ -65,6 +65,116 @@ JAR 文件
 
 `-cp` / `-classpath`：加载的类和资源的路径，多个路径用分隔符：Windows用 **`;`**、Linux/Mac 用 **`:`**
 
+## IDEA
+### .idea
+`.idea` 文件夹是 IntelliJ IDEA 用来存储项目级配置信息的目录。
+当 IDEA 采用Directory-based format（基于目录的格式） 管理项目时（这是目前的默认和推荐方式），它会创建这个目录。
+与之相对的是旧版本的 `.ipr` 单文件格式。
+`.idea` 目录下的文件绝大多数是 XML 格式。这些文件定义了项目如何构建、如何编译、依赖库在哪里、代码风格是什么等等。
+以下是 `.idea` 目录下最常见的文件及其技术细节详解：
+
+`modules.xml`：
+项目的“骨架”描述文件。它告诉 IDEA 这个项目由哪些模块（Module）组成。IDEA 启动时读取此文件，根据路径去加载各个模块的详细配置。包含 `<modules>` 标签，内部列出了当前项目所有 `.iml` 文件的路径。
+* 示例内容：
+```xml
+<modules>
+  <module fileurl="file://$PROJECT_DIR$/my-app.iml" filepath="$PROJECT_DIR$/my-app.iml" />
+</modules>
+```
+
+`misc.xml`：杂项配置，包含关键的项目级设置。
+* Project SDK：定义项目使用的 JDK 版本（如 Java 17）和类型。
+* Output Path：定义项目编译输出的根目录（通常是 `out` 目录，虽然后来 Maven/Gradle 项目多用 `target`/`build`，但此配置依然存在）。
+
+* 示例内容：
+```xml
+<component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="17" ...>
+  <output url="file://$PROJECT_DIR$/out" />
+</component>
+```
+
+
+
+`compiler.xml`：定义 Java 编译器的行为。
+* Compiler Configuration：指定使用哪种编译器（Javac, Eclipse ECJ 等）。
+* Bytecode Version：指定每个模块编译后的 `.class` 文件兼容的 Java 版本（Target Bytecode Version）。
+* Annotation Processing：Lombok 或 MapStruct 等注解处理器的配置开关。
+* 技术用途：这是导致“本地运行没问题，线上报错 `Unsupported major.minor version`”的常见原因之一。它控制了 javac 的 `-target` 和 `-source` 参数。
+
+* 示例内容：
+```xml
+<component name="CompilerConfiguration">
+  <annotationProcessing>
+    <profile default="true" name="Default" enabled="true" />
+  </annotationProcessing>
+  <bytecodeTargetLevel target="17" />
+</component>
+```
+
+
+`encodings.xml`：字符集编码设置。定义项目、特定文件或 Properties 文件的编码格式（通常是 UTF-8）。
+
+
+`libraries/` (文件夹)：
+存放项目依赖的第三方库（Jar包）的元数据。每个 XML 文件对应一个依赖库，定义了该库的 `CLASSES`（Jar包路径）、`SOURCES`（源码路径）和 `JAVADOC`（文档路径）。
+* 注意：在 Maven/Gradle 项目中，这个文件夹的内容是根据 `pom.xml`/`build.gradle` 自动生成的。
+* 技术用途：让 IDEA 知道当你写 `import org.apache.commons...` 时，应该去磁盘的哪个位置加载类文件，以及当你按 `Ctrl+Click` 时去哪里找源码。
+
+
+`vcs.xml`：版本控制系统映射配置。定义项目的根目录对应哪个 VCS 工具（Git, SVN, Mercurial）。
+* 示例内容：
+```xml
+<mapping directory="$PROJECT_DIR$" vcs="Git" />
+```
+
+
+`workspace.xml` (最特殊的文件)：用户个人的工作区状态。
+* 技术用途：恢复你个人的开发环境上下文。
+* 窗口布局（Project 栏宽窄、打开了哪些 Tool Window）。
+* 打开的编辑器标签页历史（你上次关机前停留在哪个代码文件）。
+* 光标位置、本地查找记录。
+* ChangeLists：本地暂存的代码修改列表。
+* 绝对不能提交。因为它包含大量与代码逻辑无关的机器绝对路径和个人操作习惯，提交后会造成严重的冲突。
+
+
+`runConfigurations/` (文件夹)：共享的运行/调试配置。XML 文件，定义了 Main 类、VM 参数（`-Xms`）、环境变量、Program Arguments 等。
+* 默认情况下，Run Configuration 存储在 `workspace.xml` 中（不共享）。
+* 如果在 IDEA 运行配置里勾选了 "Store as project file"，配置就会被提取到这个文件夹中。
+* 场景：团队共享统一的启动参数，方便新人一键启动服务。
+
+
+`codeStyles/` (文件夹)：
+代码格式化规则。缩进是用 Tab 还是空格、括号是否换行、Import 的排序规则等。
+* 技术用途：通过 `Project.xml` 里的 Scheme 引用，确保团队成员按下 `Ctrl+Alt+L` 格式化代码时，结果是一致的。
+
+`inspectionProfiles/` (文件夹)：代码检查（Lint）规则。定义哪些警告是 Error，哪些是 Warning，哪些忽略（例如：拼写检查是否开启，是否允许魔法值）。
+
+### 文件与文件夹含义
+* `/shelf/`
+	* 含义： 存放 IDEA "Shelve Changes"（搁置修改）功能的临时文件。
+	* 作用： 当你不想提交代码但又想切分支时，把代码“搁置”在本地，生成的临时文件就在这里。
+* `/workspace.xml`
+	* 含义： 存储你个人的工作区配置。
+	* 作用： 比如你打开了哪些文件、窗口大小、断点打在哪里、上次运行的配置等。这是最需要被忽略的文件之一。
+* `/httpRequests/`
+	* 含义： IDEA 自带的 HTTP Client（类似于 Postman 的工具）的请求历史和响应缓存。
+	* 作用： 避免把你本地测试接口的临时结果提交上去。
+* `/dataSources/` 和 `/dataSources.local.xml`
+	* 含义： IDEA 右侧 "Database" 面板的配置信息。
+	* 作用： 这里面通常包含你连接数据库的 URL、驱动版本，甚至加密后的数据库密码。必须忽略，否则会泄露敏感信息。
+* `*.iml` 和 `//.iml`
+	* 含义： IDEA 的模块（Module）配置文件。
+	* 作用： 描述项目的依赖路径等。在现代 Maven/Gradle 项目中，这些文件是可以随时自动生成的，通常建议忽略，保持仓库整洁。
+## Eclipse
+### 文件与文件夹含义
+
+* `//.settings/`：Eclipse 的各种插件和编译器设置。
+* `//.project`：Eclipse 的项目描述文件（类似 IDEA 的 `.iml`）。
+* `//.classpath`：Eclipse 的依赖路径配置。
+* `//.externalToolBuilders/`：Eclipse 外部构建工具配置。
+
+
+
 
 ## 数据类型
 

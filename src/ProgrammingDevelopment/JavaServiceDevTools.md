@@ -1190,7 +1190,12 @@ Icon reference | IntelliJIDEA Documentation： https://www.jetbrains.com/help/id
 - JavaFx快速入门_哔哩哔哩_bilibili： https://www.bilibili.com/video/BV1pJ411q7yv/?spm_id_from=333.999.0.0&vd_source=2bebef67d77d9a55c602507243628b63
 JavaFX视频教程第1课，hello world_哔哩哔哩_bilibili： https://www.bilibili.com/video/BV1fW41167RP/?spm_id_from=333.999.0.0&vd_source=2bebef67d77d9a55c602507243628b63
 JavaFX文本域（输入框） - JavaFX教程™： https://www.yiibai.com/javafx/javafx_textfield.html
+## JRebel
+Java 热部署工具（让修改代码后不用重启服务）。
 
+* `/rebel.xml` 和 `rebel.xml`
+* 含义： JRebel 的配置文件，指定了哪些类路径需要被监控热部署。
+* 作用： 通常是本地生成的，不需要提交。
 ## JUnit——单元测试框架
 
 ## Log4j——日志
@@ -1423,21 +1428,12 @@ public class MongoDemo {
 ```
 
 ## MyBatis——ORM工具
-ORM（Object-Relational Mapping）
-**介绍**：
-MyBatis是一个ORM（对象关系映射）框架，用于简化Java应用程序与关系型数据库的交互。
 
+### 介绍
 
-优点：更加灵活和易于管理
-
-其他ORM框架强制使用面向对象的实体模型，允许开发者直接编写SQL语句来控制数据库操作，适用于复杂查询和需要细粒度控制的场景
-
-MyBatis的主要特点是SQL映射，不像，而是。‘
+**介绍**：MyBatis是一个半自动化ORM（Object-Relational Mapping，对象关系映射）框架，用于简化Java应用程序与关系型数据库的交互。
 MyBatis适用于需要直接控制SQL、复杂查询和性能优化的场景。
 
-与其他ORM框架相比，它不依赖对象模型而直接面向SQL，简化了映射过程。
-
-在应用中，MyBatis可以与Spring结合，支持注入、事务管理等功能，进一步简化数据库操作。
 
 JDBC 原始写法的问题主要有以下几点：
 1. **代码冗长重复**：每次查询都要写连接、关闭、ResultSet 遍历等模板代码。
@@ -1447,55 +1443,161 @@ JDBC 原始写法的问题主要有以下几点：
 5. **无法集中管理 SQL**：难以维护大型项目中的 SQL 语句。
 
 
-MyBatis 是一种 **半自动化 ORM 框架**，解决上述问题方式如下：
+特点/优点：
+* 更加灵活和易于管理
 * 把 SQL 从 Java 中抽离到 XML 或注解中，便于维护。
 * 自动封装参数和结果，减少 JDBC 样板代码。
-* 支持动态 SQL、缓存、插件扩展，灵活且易用。
-
-
-MyBatis的主要特性包括：
+* 支持缓存、插件扩展，灵活且易用。
 - **灵活的SQL控制**：MyBatis允许开发者手写SQL，确保数据库操作的细粒度控制，特别适合复杂查询或优化要求较高的场景。
-- **动态SQL**：MyBatis的XML映射文件支持动态SQL，开发者可以使用`<if>`、`<choose>`、`<foreach>`等标签根据不同条件构建SQL语句，适应复杂的查询需求。
 - **自动映射结果集**：MyBatis通过配置，可以将SQL查询结果自动映射到Java对象，支持将数据库字段映射到Java属性中，减少数据转换代码。
-- **多种数据库支持**：MyBatis可以配置连接多个不同的数据库，支持多种数据库方言，适合多数据源和分布式数据库的应用。
-- **事务管理**：MyBatis支持手动事务管理和与Spring集成的事务管理。在多数据库操作或业务逻辑较为复杂的情况下，可以使用事务来保证数据一致性。
+- **动态SQL**：MyBatis的XML映射文件支持动态SQL，开发者可以使用`<if>`、`<choose>`、`<foreach>`等标签根据不同条件构建SQL语句，适应复杂的查询需求。
+- **多种数据库支持**
+- **事务管理**：MyBatis支持手动事务管理和与Spring集成的事务管理。
 
-MyBatis的核心组件和工作机制如下：
-- **SqlSessionFactory**：这是MyBatis的核心接口，用于创建`SqlSession`对象。通过配置文件`mybatis-config.xml`指定数据库连接信息、映射文件位置和MyBatis的全局配置，创建`SqlSessionFactory`对象以管理会话。
-- **SqlSession**：这是MyBatis与数据库交互的接口，包含了查询、更新、删除、提交和回滚等操作。通过`SqlSession`执行映射文件中的SQL语句，每次执行数据库操作都需要一个`SqlSession`实例，通常在操作完成后关闭该实例。
-- **Mapper接口**：MyBatis支持将SQL映射到接口方法上，即Mapper接口。Mapper接口是数据库操作的抽象，通过定义接口方法，MyBatis可以自动找到对应的SQL语句并执行。每个Mapper接口的方法与一条SQL语句绑定，便于管理和复用。
+
+
+和ORM框架Hibernate的对比：
+* MyBatis 灵活、性能可控、适合复杂 SQL 场景。MyBatis 是 半自动 ORM，你写 SQL，框架帮你绑定参数和封装结果。
+* Hibernate 开发快，适合业务逻辑清晰、关系映射稳定的场景。Hibernate 是 全自动 ORM，不需要写 SQL，自动生成 SQL 和管理对象状态。Hibernate 学习曲线更陡，调优难度大。
+
+
+
+### 使用
+
+流程一览：
+- 设置好MyBatis配置文件：mybatis-config.xml加载运行环境和映射文件
+- 构造会话工厂SqlSessionFactory
+- 会话工厂创建SqlSession对象（包含了执行SQL语句的所有方法）
+- 操作数据库的接口，Executor执行器，同时负责查询缓存的维护
+- Executor接口的执行方法中有一个MappedStatement类型的参数，封装了映射信息
+- 输入参数映射
+- 输出结果映射
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223112151.png)
+
+
+详细步骤：
+1. 引入依赖 (pom.xml)
+```xml
+<dependency>
+    <groupId>org.mybatis</groupId>
+    <artifactId>mybatis</artifactId>
+    <version>3.5.15</version>
+</dependency>
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>8.0.33</version>
+</dependency>
+```
+
+2. 加载 `mybatis-config.xml` 核心配置文件。
+```xml
+<configuration>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/mydb"/>
+                <property name="username" value="root"/>
+                <property name="password" value="123456"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="UserMapper.xml"/>
+    </mappers>
+</configuration>
+```
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223112117.png)
+
+
+3. **Mapper接口**：MyBatis支持将SQL映射到接口方法上，即Mapper接口。Mapper接口是数据库操作的抽象，通过定义接口方法，MyBatis可以自动找到对应的SQL语句并执行。每个Mapper接口的方法与一条SQL语句绑定，便于管理和复用。
+实体类
+```java
+public class User {
+    private Integer id;
+    private String name;
+    
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+}
+```
+Mapper 接口
+```java
+public interface UserMapper {
+    User selectUser(int id);
+}
+```
+
+
+4. SQL 映射文件 (UserMapper.xml)
 - **XML映射文件**：MyBatis使用XML文件管理SQL语句，通过`<mapper>`标签定义数据库操作。XML映射文件通常与Mapper接口一一对应，包含`<select>`、`<insert>`、`<update>`、`<delete>`等标签定义具体的SQL操作。XML映射文件支持动态SQL，使得MyBatis能够在复杂条件下生成不同的SQL语句。
+```xml
+<mapper namespace="UserMapper">
+    <select id="selectUser" resultType="User">
+        SELECT * FROM users WHERE id = #{id}
+    </select>
+</mapper>
+```
 
-MyBatis的工作流程包括以下步骤：
-1. **加载配置文件**：MyBatis在启动时加载配置文件`mybatis-config.xml`，创建`SqlSessionFactory`对象，配置数据库连接、日志等参数。
-2. **执行Mapper接口**：通过`SqlSession`对象获取Mapper接口的代理实例，执行Mapper接口方法。MyBatis会根据方法名和参数找到对应的SQL语句，并将参数传入SQL中执行。
-3. **映射结果集**：MyBatis在执行SQL语句后，将结果集自动映射到Mapper接口方法的返回类型中，并返回结果。MyBatis的结果映射支持多种映射方式，可以将数据库字段映射到Java对象的属性。
 
-MyBatis初始化过程
-MyBatis 初始化主要包含几个步骤：
-1. 加载 `mybatis-config.xml` 配置文件。
-2. 构建 `SqlSessionFactory`，读取数据源、插件、类型处理器等配置。
-3. 加载 mapper 映射文件，构建 SQL 映射关系。
-4. 创建 `SqlSession`，从中获取 Mapper 接口的代理对象。
-初始化之后，通过 Mapper 调用 SQL，执行结果通过 `ResultHandler` 封装返回。
+5. 核心执行逻辑
+- 通过配置文件`mybatis-config.xml`指定数据库连接信息、映射文件位置和MyBatis的全局配置，创建`SqlSessionFactory`对象以管理会话。
+
+
+- 通过读取配置文件`mybatis-config.xml`中的数据源、插件、类型处理器等配置，构建 `SqlSessionFactory`。
+- 通过`SqlSessionFactory`创建 `SqlSession`。**SqlSessionFactory**：MyBatis的核心接口，用于创建`SqlSession`对象。
+- 通过`SqlSession`对象获取Mapper接口的代理实例。**SqlSession**：MyBatis与数据库交互的接口，通过`SqlSession`执行映射文件中的SQL语句。每次执行数据库操作都需要一个`SqlSession`实例，实例由SqlSessionFactory创建，通常在操作完成后关闭该实例。
+- 通过 Mapper 调用 SQL
+- MyBatis在执行SQL语句后，将结果集自动映射到Mapper接口方法的返回类型中，并返回结果
+- 
+```java
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import java.io.InputStream;
+public class Main {
+    public static void main(String[] args) throws Exception {
+        InputStream inputStream = Resources.getResourceAsStream("mybatis-config.xml");
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+        
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            UserMapper mapper = session.getMapper(UserMapper.class);
+            User user = mapper.selectUser(1);
+            System.out.println(user.getName());
+        }
+    }
+}
+```
+
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223112125.png)
+
+
+
+
+### 其它问题
+
+SQL 映射文件 (UserMapper.xml)的 #{} 与 ${} 的底层区别
+* `#{}`：底层实现为 JDBC 的 `PreparedStatement`。MyBatis 会将其替换为 `?` 占位符，调用 `setXxx` 方法为占位符设值。此机制可有效防止 SQL 注入，是参数传递的首选。
+* `${}`：底层实现为 Statement 的字符串拼接。MyBatis 会直接将参数的文本内容替换到 SQL 语句中。该方式存在 SQL 注入风险，仅适用于无法使用占位符的场景（如动态表名、动态列名、ORDER BY 子句的字段名）。
+
+
 
 
 Mybatis的动态sql
-动态 SQL 用于根据不同条件 **动态拼接 SQL 语句**，避免大量 if-else 拼接字符串的操作，极大增强SQL 的可维护性和灵活性。，MyBatis 提供的动态 SQL 标签包括：
-* `<if>`：条件判断
-* `<choose> <when> <otherwise>`：类似 switch-case
-* `<where>`：智能拼接 WHERE，自动忽略多余 and/or
-* `<set>`：用于 update 中拼接 set 子句
-* `<trim>`：自定义拼接开头、结尾和分隔符
-* `<foreach>`：用于遍历集合，构建 in (...) 语句
+MyBatis 提供了基于 OGNL (Object-Graph Navigation Language) 表达式的动态 SQL ， 用于根据不同条件 **动态拼接 SQL 语句**，避免大量 if-else 拼接字符串的操作，用于在 XML 中构建复杂的条件逻辑，极大增强SQL 的可维护性和灵活性。
 
+，MyBatis 提供的动态 SQL 标签包括：
+* `<if>`：条件判断，常用于 WHERE 子句中的可选参数拼接。
+* `<choose>, <when>, <otherwise>`：类似于 Java 中的 switch-case 语句。
+* `<where>`：智能处理 WHERE 关键字。如果内部有条件成立，则插入 WHERE 关键字，并自动去除条件前多余的 AND 或 OR。
+* `<set>`：用于 UPDATE 语句，智能插入 SET 关键字，并去除结尾多余的逗号。
+* `<foreach>`：用于遍历集合，常用于构建 IN 条件子句或批量插入语句。
 
-**Mybatis的懒加载（延迟加载）**
-懒加载（延迟加载）是指在需要的时候才加载相关数据，常用于一对多、多对一等关联查询，在需要时才进行这些耗时查询，可以提升性能，但注意使用不当容易引发 N+1 查询问题。
-N+1问题：先查主表1次，再从N个结果中每个单独查从表，导致总 SQL 数量 = 1 + N。
-MyBatis 中开启懒加载的方式：
-- 在配置中 `<settings>` 设置 `lazyLoadingEnabled=true`。
-- 在 `<association>` 或 `<collection>` 中使用 `fetchType="lazy"`。
 
 
 
@@ -1506,23 +1608,23 @@ MyBatis 在 SQL 执行后，会将数据库返回的结果封装为 Java 对象�
 - 嵌套映射：一对多、多对一关系可通过嵌套 `resultMap` 或子查询实现。
 - 注解映射：使用 `@Results`、`@Result` 注解映射字段。
 
+ResultMap 高级映射
+当数据库表的列名与 Java 对象的属性名不一致，或者需要进行复杂的关联查询（一对一、一对多）时，必须使用 `<resultMap>` 进行显式配置。
+* `id` 标签定义主键映射，提高 MyBatis 内部实例化对象的性能。
+* `result` 标签定义普通字段映射。
+* `association` 用于配置一对一或多对一的复杂类型属性映射。
+* `collection` 用于配置一对多的集合类型属性映射。
 
-Mybatis Plugin
-MyBatis 提供的插件机制MyBatis Plugin ,基于 JDK 动态代理，通过拦截器（Interceptor）拦截核心执行过程，从而实现SQL 性能监控（记录执行时间）、自动分页（PageHelper）数据脱敏、审计日志等功能，支持拦截的方法有：
+
+**插件 (Interceptor) 机制**
+MyBatis 允许开发者在已映射语句执行过程中的某一点进行拦截调用。，通过拦截器（Interceptor）拦截核心执行过程
+底层通过 JDK 动态代理实现
+从而实现SQL 性能监控（记录执行时间）、自动分页（PageHelper）数据脱敏、审计日志等功能，常用于实现物理分页、性能监控、统一的审计日志等功能。
+可以拦截的对象包括 `Executor`、`StatementHandler`、`ParameterHandler` 和 `ResultSetHandler`。
 * `Executor`：执行 SQL
 * `ParameterHandler`：参数处理
 * `ResultSetHandler`：结果映射
 * `StatementHandler`：SQL 预处理
-
-
-和ORM框架Hibernate的对比：
-* MyBatis 灵活、性能可控、适合复杂 SQL 场景。MyBatis 是 半自动 ORM，你写 SQL，框架帮你绑定参数和封装结果。
-* Hibernate 开发快，适合业务逻辑清晰、关系映射稳定的场景。Hibernate 是 全自动 ORM，不需要写 SQL，自动生成 SQL 和管理对象状态。Hibernate 学习曲线更陡，调优难度大。
-
-
-Mybatis中⼀级缓存和⼆级缓存的区别：
-- 一级缓存是 SqlSession 级别 的缓存，默认开启，生命周期是一次数据库会话。是本地缓存，不可跨 Session。相同 SQL 执行第二次时会从缓存读取。一级缓存不能配置。
-- 二级缓存是 Mapper 级别 的缓存，需要手动开启，并且缓存可被多个 SqlSession 共享，存储在内存或持久化介质中。是跨 Session 的共享缓存。二级缓存可使用 Ehcache、自定义缓存实现。
 
 
 MyBatis 接口绑定：底层实现基于 JDK 动态代理 + SQL 映射配置：MyBatis 会基于接口和配置创建一个代理对象，在调用接口方法时动态执行对应的 SQL。有两种方式：
@@ -1531,173 +1633,89 @@ MyBatis 接口绑定：底层实现基于 JDK 动态代理 + SQL 映射配置：
 
 
 
+
 Mybatis中Dao接⼝和XML⽂件的SQL如何建⽴关联：MyBatis 会自动为 DAO 创建代理对象，底层通过动态代理调用对应 SQL。MyBatis 使用 **接口与 XML 映射文件的绑定**机制。绑定方式：
 * DAO 接口的方法名与 XML 中的 `<select>`、`<insert>` 的 `id` 相同。
 * 接口全类名与 XML 文件路径相匹配，可以通过配置 mapper.xml 路径到配置文件或者或通过注解 `@MapperScan` 自动扫描接口，Mapper注册方式
 
 
-### MyBatis执行流程
-- 读取MyBatis配置文件：mybatis-config.xml加载运行环境和映射文件
-- 构造会话工厂SqlSessionFactory
-- 会话工厂创建SqlSession对象（包含了执行SQL语句的所有方法）
-- 操作数据库的接口，Executor执行器，同时负责查询缓存的维护
-- Executor接口的执行方法中有一个MappedStatement类型的参数，封装了映射信息
-- 输入参数映射
-- 输出结果映射
 
 
 
+**Mybatis的懒加载（延迟加载）**
+延迟加载：在需要用到数据时才进行加载，不需要用到数据时就不加载数据。
+常用于一对多、多对一等关联查询，在需要时才进行这些耗时查询，可以提升性能
 
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223112151.png)
+但注意使用不当容易引发 N+1 查询问题。N+1问题：先查主表1次，再从N个结果中每个单独查从表，导致总 SQL 数量 = 1 + N。
 
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223112136.png)
-
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223112117.png)
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223112125.png)
-
-
-
-### 延迟加载
-Mybatis是否支持延迟加载？
-
-延迟加载的意思是：就是在需要用到数据时才进行加载，不需要用到数据时就不加载数据。
-Mybatis支持一对一关联对象和一对多关联集合对象的延迟加载
-在Mybatis配置文件中，可以配置是否启用延迟加载lazyLoadingEnabled=true|false，默认是关闭的
-
-延迟加载的底层原理知道吗？
-1. 使用CGLIB创建目标对象的代理对象
-2. 当调用目标方法时，进入拦截器invoke方法，发现目标方法是null值，执行sql查询
-3. 获取数据以后，调用set方法设置属性值，再继续查询目标方法，就有值了
-
-
-
-Mybatis支持延迟记载，但默认没有开启
-什么叫做延迟加载？
-查询用户的时候，把用户所属的订单数据也查询出来，这个是立即加载
-查询用户的时候，暂时不查询订单数据，当需要订单的时候，再查询订单，这个就是延迟加载
+延迟加载默认是关闭的
+MyBatis 中开启懒加载的方式：
+- 在配置中 `<settings>` 设置 `lazyLoadingEnabled=true`。
+- 在 `<association>` 或 `<collection>` 中使用 `fetchType="lazy"`。
 
 延迟加载的原理：
 1. 使用CGLIB创建目标对象的代理对象
 2. 当调用目标方法user.getOrderList()时，进入拦截器invoke方法，发现user.getOrderList()是null值，执行sql查询order列表
-3. 把order查询上来，然后调用`user.setOrderList(List<Order> orderList) `，接着完成user.getOrderList()方法的调用
+3. 把order查询上来，然后调用set方法`user.setOrderList(List<Order> orderList) `设置属性值，接着继续查询目标方法，完成user.getOrderList()方法的调用
 
 ![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223112233.png)
 
 
-### 一级、二级缓存
-Mybatis的一级、二级缓存用过吗？
-
-一级缓存: 基于 PerpetualCache 的 HashMap 本地缓存，其存储作用域为 Session，当Session进行flush或close之后，该Session中的所有Cache就将清空，默认打开一级缓存
-二级缓存是基于namespace和mapper的作用域起作用的，不是依赖于SQL session，默认也是采用 PerpetualCache，HashMap 存储。需要单独开启，一个是核心配置，一个是mapper映射文件
-
-Mybatis的二级缓存什么时候会清理缓存中的数据
-当某一个作用域(一级缓存 Session/二级缓存Namespaces)的进行了新增、修改、删除操作后，默认该作用域下所有 select 中的缓存将被 clear。
 
 
-本地缓存，基于PerpetualCache，本质是一个HashMap
-一级缓存：作用域是session级别
-二级缓存：作用域是namespace和mapper的作用域，不依赖于session
 
-一级缓存
-一级缓存: 基于 PerpetualCache 的 HashMap 本地缓存，其存储作用域为 Session，当Session进行flush或close之后，该Session中的所有Cache就将清空，默认打开一级缓存
-只会执行一次sql查询
+
+**一级、二级缓存**
+
+缓存机制
+缓存机制就是把查到的数据保存起来，如果再执行相同的查询，就不再去查了，直接去读缓存。
+MyBatis 内置了两级缓存以降低数据库访问压力。
+
+* 一级缓存（本地缓存）：
+* 作用域为 `SqlSession`。在同一个 SqlSession 中执行相同的 SQL 查询，第一次会查询数据库并写入缓存，后续直接从缓存读取。生命周期是一次数据库会话。一旦执行了增删改（DML）操作或调用了 `clearCache()`，该 SqlSession 的一级缓存会被清空。一级缓存默认开启。不可跨 Session。相同 SQL 执行第二次时会从缓存读取。一级缓存不能配置。
+基于 PerpetualCache 的 HashMap 本地缓存
+当Session进行flush或close之后，该Session中的所有Cache就将清空
+
+* 二级缓存（全局缓存）：作用域为 Mapper 的 `namespace`。跨 SqlSession 共享。需要在映射文件中通过 `<cache/>` 标签手动显式开启，并且实体类必须实现 `Serializable` 接口。存储在内存或持久化介质中。当 SqlSession 提交或关闭时，一级缓存中的数据才会被刷入二级缓存。
+也是采用 PerpetualCache，HashMap 存储
+
+Mybatis的二级缓存什么时候会清理缓存中的数据：当某一个作用域(一级缓存 Session/二级缓存Namespaces)的进行了新增、修改、删除操作后，默认该作用域下所有 select 中的缓存将被 clear。
+
 ```java
-//2. 获取SqlSession对象，用它来执行sql
-SqlSession sqlSession = sqlSessionFactory.openSession();
-//3. 执行sql
-//3.1 获取UserMapper接口的代理对象
-UserMapper userMapper1 = sqlSession.getMapper(UserMapper.class);
-UserMapper userMapper2 = sqlSession.getMapper(UserMapper.class);
-
-User user = userMapper1.selectById(6);
-System.out.println(user);
-
-System.out.println("---------------------");
-User user1 = userMapper2.selectById(6);
-System.out.println(user1);
-
-```
-二级缓存
-
-二级缓存是基于namespace和mapper的作用域起作用的，不是依赖于SQL session，默认也是采用 PerpetualCache，HashMap 存储
-```java
-//2. 获取SqlSession对象，用它来执行sql
-SqlSession sqlSession1 = sqlSessionFactory.openSession();
-
-//3. 执行sql
-//3.1 获取UserMapper接口的代理对象
-UserMapper userMapper1 = sqlSession1.getMapper(UserMapper.class);
-
-User user1 = userMapper1.selectById(6);
-System.out.println(user1);
-sqlSession1.close();
-
-SqlSession sqlSession2 = sqlSessionFactory.openSession();
-
-System.out.println("---------------------");
-UserMapper userMapper2 = sqlSession2.getMapper(UserMapper.class);
-User user2 = userMapper2.selectById(6);
-System.out.println(user2);
-
-//4.关闭资源
-sqlSession2.close();
-
-```
-二级缓存默认是关闭的
-开启方式，两步：
-1，全局配置文件
-```java
-
 <settings>
     <setting name="cacheEnabled" value="true
 </settings>
 ```
-2，映射文件
 使用`<cache/>`标签让当前mapper生效二级缓存
 
-注意事项：
-1，对于缓存数据更新机制，当某一个作用域(一级缓存 Session/二级缓存Namespaces)的进行了新增、修改、删除操作后，默认该作用域下所有 select 中的缓存将被 clear
-2，二级缓存需要缓存的数据实现Serializable接口
-3，只有会话提交或者关闭以后，一级缓存中的数据才会转移到二级缓存中
 
 
 
 ## MyBatis Plus
-
+### 介绍
 和Mybatis对比，**MyBatis-Plus** 与原生 **MyBatis** 的主要区别：
 - 传统MyBatis需要 `UserMapper.xml` + `<insert|select|update|delete>` + `resultMap`，并且简单 CRUD 也要写 SQL
 - 而MyBatis Plus只要继承 `BaseMapper<T>`，立刻获得`insert、selectById、updateById、deleteById、selectList(...)` 等 20+ 个通用方法
-
 - **简化开发**：
-    
     - **MyBatis-Plus** 提供了大量的封装，减少了手动编写 SQL 的工作，例如常用的增删改查操作可以通过方法自动生成。
-        
     - **MyBatis** 需要手动编写 SQL 语句和映射文件，开发工作量较大。
-        
 - **自动化功能**：
-    
     - **MyBatis-Plus** 提供了自动分页、自动填充、乐观锁等功能，减少了很多重复的代码。
-        
     - **MyBatis** 没有这些自动化功能，需要开发者自己实现。
-        
 - **增强的 CRUD 操作**：
-    
     - **MyBatis-Plus** 提供了 `BaseMapper` 接口，集成了通用的 CRUD 操作方法。
-        
     - **MyBatis** 需要自己编写 SQL 语句，进行 CRUD 操作。
-        
 - **代码生成器**：
-    
     - **MyBatis-Plus** 提供了代码生成器，可以根据数据库表自动生成实体类、Mapper 接口、XML 映射文件等。
-        
     - **MyBatis** 需要手动编写这些类。
 
+### 使用
 
 
-
-
-```
+只需要试验接口集成BaseMapper，然后就可以用：
+```java
 package com.atguigu.mp.mapper;
+
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
 }
@@ -1717,30 +1735,17 @@ public class CRUDTests {
 }
 
 ```
-UserMapper是接口吗？接口怎么就直接实例化一个对象了？这个对象怎么就有一些方法？
-是的，**UserMapper** 是接口，但它并没有直接实例化对象。这里的 **UserMapper** 是通过 **MyBatis-Plus** 的 **`BaseMapper`** 提供的功能来实现的。
 
-具体流程如下：
 
-1. **`UserMapper` 是接口**：  
-    `UserMapper` 继承了 **`BaseMapper<User>`**，并且 **MyBatis-Plus** 会在运行时动态生成该接口的实现类。这个实现类是通过 **MyBatis** 的 **动态代理** 创建的，因此你无需手动编写实现类。
-    
-2. **Spring 注入**：  
-    在你的代码中，`@Resource` 注解告诉 Spring 容器自动注入 `UserMapper` 实现类。这个实现类由 MyBatis-Plus 提供，它实现了接口中的方法。
-    
-3. **`BaseMapper` 提供的方法**：  
-    `BaseMapper` 是 MyBatis-Plus 提供的一个通用 Mapper，里面包含了常见的 CRUD 方法（如 `selectList`、`insert`、`update` 等）。这些方法并不是你需要手动实现的，而是由 **MyBatis-Plus** 在运行时通过动态代理自动生成。
-工作流程总结：
-- 当你在 `UserMapper` 接口中调用 `selectList` 等方法时，实际上是调用了 MyBatis-Plus 自动生成的代理类的实现。
-    
-- Spring 会通过 **`@Mapper`** 注解识别 `UserMapper` 接口，并且在应用启动时自动生成代理类并注入到 `userMapper` 实例中。
-    
+**UserMapper** 是接口
+`UserMapper` 继承了 **`BaseMapper<User>`**，并且 **MyBatis-Plus** 会在运行时动态生成该接口的实现类，实现类是通过 **MyBatis** 的 **动态代理** 创建的，因此你无需手动编写实现类。
+`BaseMapper` 是 MyBatis-Plus 提供的一个通用 Mapper，里面包含了常见的 CRUD 方法（如 `selectList`、`insert`、`update` 等）。
 
-因此，虽然 **`UserMapper`** 是接口，但它通过 **MyBatis-Plus** 动态代理生成实现类，并与 Spring 集成，在运行时自动注入到你的测试类中。
+
 
 
 MyBatis自己写动态 SQL（`<where> <if> <foreach>`），维护成本高
-mby：`QueryWrapper` / `LambdaQueryWrapper` / 链式 `query()/update()`，**无 XML 的动态条件拼接**，Lambda 写法自动感知字段（避免写错列名/属性名）
+mby：`QueryWrapper` / `LambdaQueryWrapper` / 链式 `query()/update()`，无 XML 的动态条件拼接，Lambda 写法自动感知字段（避免写错列名/属性名）
 ```java
 // 查询：name 模糊，age 在区间内，按 age 降序取前 10
 List<User> list = userMapper.selectList(
@@ -1772,6 +1777,8 @@ mbp的分页器开箱即用
 mbp通过一行注解就可以实现逻辑删除（软删），自动拼接逻辑删除条件，避免误查已删除数据
 
 
+
+
 **审计字段自动填充**，不再到处手搓时间戳
 ```java
 public class User {
@@ -1794,7 +1801,10 @@ public class AuditMetaHandler implements MetaObjectHandler {
 }
 ```
 
-MBP扔兼容XML，在复杂 SQL、联表、多子查询时，仍可写 XML，同时复用 Wrapper 的动态条件，MP 的 Wrapper 可作为参数传入 XML，继续享受条件构造带来的灵活性
+
+
+
+MBP**仍兼容XML**，在复杂 SQL、联表、多子查询时，仍可写 XML，同时复用 Wrapper 的动态条件，MP 的 Wrapper 可作为参数传入 XML，继续享受条件构造带来的灵活性
 ```xml
 <!-- resources/mapper/UserMapper.xml -->
 <select id="selectJoin" resultType="com.example.demo.vo.UserOrderVO">
@@ -1821,20 +1831,20 @@ List<UserOrderVO> rows = userMapper.selectJoin(
 
 ```
 
-**升级点**：**能无缝兼容 XML**
 
 
-
-
+### LambdaQueryWrapper
 
 **查询条件构造器LambdaQueryWrapper**
 `LambdaQueryWrapper` 是 MyBatis-Plus 框架中的一个查询条件构造器，用于编写简洁、类型安全的查询条件。它与 MyBatis-Plus 的 `QueryWrapper` 类似，区别在于使用了 **Lambda 表达式**，可以避免手动输入字段名时可能出现的拼写错误等问题，从而使查询条件更加安全可靠。
+
 使用场景
 `LambdaQueryWrapper` 主要用于：
 - 构建查询条件，执行简单或复杂的查询操作。
 - 避免手写 SQL，提升代码的可读性和安全性。
 - 结合 Lambda 表达式进行条件筛选和过滤。
 基本用法
+
 以下是 `LambdaQueryWrapper` 的一些常见用法：
 1. **基本查询**
    ```java
@@ -1915,14 +1925,11 @@ List<UserOrderVO> rows = userMapper.selectJoin(
 
 
 
+
+
 ## Nacos
-
+### 介绍
 **简介**：**Nacos** 是阿里巴巴开源的一个动态服务发现、配置管理和服务管理平台，适用于构建微服务架构。
-
-**优点**
-- **微服务架构**：Nacos 可以高效地管理微服务应用中的服务注册与发现，适合微服务体系结构。
-- **多环境配置管理**：Nacos 能集中管理和动态更新多环境的配置，简化了配置管理流程。
-- **跨语言支持**：Nacos 支持不同语言的客户端，便于跨语言服务间的协同管理。
 
 
 **功能**：
@@ -1936,6 +1943,23 @@ List<UserOrderVO> rows = userMapper.selectJoin(
 - **灰度发布**：允许你将新配置逐步推送给部分应用实例，观察效果后再全面发布。
 - **集群模式**：Nacos 默认是单机模式，但支持集群模式。通过此实现负载均衡和自动故障转移，高可用；原理是Nacos 集群通过 一致性哈希 来分配服务注册和配置的存储。
 
+如何实现热更新？
+
+
+**优点**
+- **微服务架构**：Nacos 可以高效地管理微服务应用中的服务注册与发现，适合微服务体系结构。
+- **多环境配置管理**：Nacos 能集中管理和动态更新多环境的配置，简化了配置管理流程。
+- **跨语言支持**：Nacos 支持不同语言的客户端，便于跨语言服务间的协同管理。
+- **动态配置管理**，无需重启应用。
+- **服务发现**和健康检查，支持微服务架构。
+- **易用性强**，支持多种配置格式和实时更新。
+- 可以热更新计费参数
+
+
+
+与 **Apollo**、**Consul** 比较：
+- **Nacos** 支持配置管理和服务发现，Apollo 仅做配置管理，Consul 更侧重服务发现。
+- **Nacos** 更易与 Spring Cloud 集成。
 
 
 **常用组件**
@@ -1943,7 +1967,7 @@ List<UserOrderVO> rows = userMapper.selectJoin(
 - **Nacos Client**：用于与 Nacos Server 通信的客户端库，一般集成到各个服务中。
 
 
-
+### 使用
 **使用**：
 **安装Nacos**：
 - 下载，解压，安装安装包
@@ -1976,15 +2000,13 @@ private String configValue;
 nacos.discovery.server-addr=127.0.0.1:8848,127.0.0.2:8848,127.0.0.3:8848
 ```
 
+
+### 其它
 **如何防止 Nacos 单点故障？**
 - **集群部署**：通过部署多个 Nacos 实例，形成集群，避免单点故障。
-    
 - **数据复制**：配置 Nacos 集群中的每个节点进行数据同步，确保节点间数据一致性。
-    
 - **负载均衡**：使用负载均衡器（如 Nginx 或 LVS）将请求分发到多个 Nacos 实例。
-    
 - **服务发现高可用**：Nacos 集群配置多节点，确保即使某个节点宕机，其他节点依然能提供服务。
-    
 - **持久化配置**：启用 Nacos 的数据持久化，确保配置数据不会丢失。
 
 

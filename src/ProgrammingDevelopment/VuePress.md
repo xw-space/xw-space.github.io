@@ -32,12 +32,10 @@ VuePress使用教程
 
 
 ## 快速上手
-**初始化**
-
-```bash
-node -v
-npm init vuepress-theme-hope@latest blogdir_name
-```
+**本地运行起来**
+- 下载按照node.js
+- 检查node.js是否安装成功，命令：`node -v`
+- 创建或选择一个存放播客的文件夹进行VuePress初始化：`npm init vuepress-theme-hope@latest blogdir_name`，然后进行一些设置，值得注意的是，包管理器选择npm，包管理器选择webpack，我也不知道为什么，教程这么教的，还有就是记得yes需要一个自动部署的githubpage的工作流
 
 | 操作         | 命令                            |
 | ---------- | ----------------------------- |
@@ -45,6 +43,18 @@ npm init vuepress-theme-hope@latest blogdir_name
 | 启动开发 + 清缓存 | `npm run docs:clean-dev`      |
 | 构建静态站点     | `npm run docs:build`          |
 | 更新依赖工具（可选） | `npm run docs:update-package` |
+
+**部署到github**
+
+- 去github，点击“new”，创建一个新仓库，填写“repository name”等，主分支用来存储代码，还需要创建一个新的分支，来存储静态的编译好的代码，点击分支，选择一个new branch，
+- 点击setting→pages→Branch，分支现在为“None”，点击“None”，选择刚刚创建的好的新分支，然后点击save
+- 待整理。。。
+
+**学习资料**
+- 快速上手 | VuePress： https://vuepress.vuejs.org/zh/guide/getting-started.html
+- 【VuePress+Github 部署一个零成本静态站点！】 https://www.bilibili.com/video/BV16Z4heUEgi/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
+
+
 
 ## VuePress主题
 
@@ -597,9 +607,6 @@ T：和AI提问的时候，如果使用了“vuepress-theme-hope”主题，要�
 Q：8080端口被占用，但是查找不到电脑上8080端口运行了任何应用，并且距上次正常运行之间，也并没有改动相关配置
 A：没管它，电脑也没关机，第二天我再建博客的时候，自己就好了
 
-## 学习资料
 
-- 快速上手 | VuePress： https://vuepress.vuejs.org/zh/guide/getting-started.html
-- 【VuePress+Github 部署一个零成本静态站点！】 https://www.bilibili.com/video/BV16Z4heUEgi/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
 
 ## END

@@ -21,6 +21,39 @@ tag:
 - **上下文（ApplicationContext）** 就是Spring容器，它负责管理应用中的Bean，提供依赖注入，管理Bean的生命周期等功能。它是Spring应用的核心，确保了应用中的组件可以正确交互并自动配置。
 
 
+### 各种ID、name的不同
+- Group / `groupId`（组织/团队 ID）：代表创建这个项目的公司、组织或开源团队。为了全球唯一，通常使用**公司域名的反写**。**例子：** `com.alibaba`（阿里巴巴）、`org.springframework`（Spring官方）
+
+- Artifact / `artifactId`（项目/模块 ID）：代表这个组织下的具体项目名或模块名。它最后会作为生成的 `.jar` 或 `.war` 文件的名字的一部分。必须是全小写，不能包含空格，通常用连字符 `-` 连接。代码例子： `fastjson`、`spring-boot-starter-web`、`user-management-service`。
+
+- `groupId` + `artifactId` + `version`（版本号） 被统称为 **Maven 坐标**。机器就是靠这三样东西去仓库里找代码的。)
+
+Name（项目名称）**：** 项目的展示名，可以包含空格、大写字母等，怎么好看怎么写。**例子：** `Spring Boot Web Starter` 或者 `User Service`。
+
+
+Package Name (用户提示中的 packing name，正确叫法是 Package Name - 包名)**：** 这是 Java 代码里面真实存放类的**文件夹路径**（比如 `src/main/java/com/alibaba/fastjson`）。它用来防止你在代码里写的类名和别人写的类名冲突（比如你也写了一个 `User` 类，别人也写了一个 `User` 类）。**默认规则：** 通常在创建项目时，IDE 会默认把 **`groupId` + `artifactId`** 组合起来作为根包名。不过，你可以随便改，它不需要严格和 groupId/artifactId 一致（但为了规范，强烈建议保持一致）。**例子：** 如果 groupId 是 `com.example`，artifactId 是 `my-demo`，那么包名通常是 `com.example.mydemo`。
+
+
+
+
+
+### 微服务结构
+多模块聚合项目 (Multi-Module Project) —— 最常见结构
+
+在企业级微服务开发中，最标准的做法是使用 Maven 或 Gradle 的多模块（Parent-Child）结构。
+
+在这种结构下，大文件夹是一个**父工程 (Parent Project)**，内部的子文件夹是**子模块 (Sub-modules)**。
+- **父工程 (Root 目录)：** * 根目录下会有一个父级 `pom.xml`，其 `<packaging>` 属性通常被设置为 `pom`。
+    - 它**不包含**具体的业务代码和启动类，主要作用是统一声明和管理所有子模块的依赖版本（`<dependencyManagement>`）和聚合编译子模块（`<modules>`）。
+- **子模块 (子文件夹)：** * 每个子文件夹都有自己的 `pom.xml`，通过 `<parent>` 标签指向父工程。
+    - **并非所有子模块都是完整的 Spring Boot 项目。** 子模块通常分为两类：
+        1. **微服务模块：** 包含 `@SpringBootApplication` 主启动类，且 `pom.xml` 中配置了 `spring-boot-maven-plugin`。它可以被打包成独立运行的 Fat JAR。这是一个完整的 Spring Boot 项目。
+        2. **公共组件模块 (Common/API)：** 存放各个微服务共享的实体类 (DTO/VO)、工具类 (Utils) 或 RPC/Feign 客户端接口。这类模块**没有**主启动类，只是一个标准的 Java 库，被打包成普通的 JAR 供微服务模块作为依赖引入。
+
+
+
+
+
 ### 简介
 Spring是一个框架
 **Spring** 提供了许多工具、功能和约定，比如处理，简化了开发流程
@@ -366,6 +399,37 @@ SpringFactoriesLoader 机制：Spring Boot 启动时会去 **`META-INF/spring.fa
 @Bean： 使用在方法上，标注将该方法的返回值存储到Spring容器中
 @Import： 使用@Import导入的类会被Spring加载到IOC容器中
 @Aspect、@Before、@After、@Around、@Pointcut： 用于切面编程（AOP）
+
+### @Resource
+是 Java 平台标准规范（JSR-250）中定义的注解
+
+用于实现控制反转（IoC）容器中的依赖注入（Dependency Injection），
+进行依赖对象的装配
+把容器里的某个对象（Bean），强行赋值给你声明的这个变量。
+
+在 Spring 框架中，Spring IoC 容器原生支持并实现了对该注解的解析与注入逻辑。
+
+
+位于 `javax.annotation`（在较新的 Jakarta EE 规范中变更为 `jakarta.annotation`）包下。
+
+
+
+**基于名称的精确匹配**：Spring 会提取你的变量名（这里是 `myUserDao`），然后去它管理的内部注册表里，找有没有哪个对象的 ID 或名字刚好也叫 `myUserDao`。
+
+**基于类型的兜底匹配** (by-type)：既然名字对不上，Spring 会查看你声明的变量类型（这里是 `UserDao` 类或接口），然后去注册表里找类型匹配的对象。
+如果是单例且只有一个 `UserDao` 的实现类，直接赋值，注入成功
+比如你有 `UserDaoMySQLImpl` 和 `UserDaoOracleImpl` 两个实现类都在 Spring 容器里。Spring 此时无法判断你要哪一个，直接抛出 `NoUniqueBeanDefinitionException` 崩溃报错。
+
+
+一旦你加上了 `name = "..."` 属性，`@Resource` 的执行算法就变了：**它会彻底锁死在第一步（基于名称匹配）**。Spring 只会去找名字等于 `userDaoOracleImpl` 的对象，如果找不到，绝对不会去按类型找兜底，而是直接报错。
+```java
+@Resource(name = "userDaoOracleImpl")
+private UserDao myUserDao;
+```
+
+
+
+
 
 ### @SpringBootApplication
 
