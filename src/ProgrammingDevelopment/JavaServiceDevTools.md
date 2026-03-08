@@ -1245,6 +1245,8 @@ Maven 是 Java 项目的 构建工具，也是最常用的依赖管理工具。
 - **install**：将打包好的文件安装到本地 Maven 仓库。
 - **deploy**：将构建结果部署到远程仓库。
 
+
+
 使用参数：
 -DskipTests：编译测试代码，但不执行测试代码
 -Dmaven.test.skip=true：不编译测试代码，也不执行测试代码
@@ -1968,32 +1970,87 @@ List<UserOrderVO> rows = userMapper.selectJoin(
 
 
 ### 使用
-**使用**：
+
+
 **安装Nacos**：
 - 下载，解压，安装安装包
-- 或者直接下载docker，在 localhost:8848/nacos 运行，用户名和密码都是nacos
+- 或者直接下载docker，默认未8848端口，在 localhost:8848/nacos 运行，用户名和密码都是nacos
 
-**Spring中使用**：
+**二进制包单机模式启动指令：**
+* **Linux / macOS:** 运行 `sh startup.sh -m standalone`
+* **Windows:** 运行 `cmd startup.cmd -m standalone`
+* 
+#### 服务注册与发现
+(Registry)
+微服务架构中，各服务实例的网络坐标（IP 和端口）会动态变化。Nacos 提供了基于 DNS 和基于 RPC 的服务发现机制，解决“服务提供者在哪里”的问题。
+
+**技术实现机制：**
+- **服务注册 (Register)：** 服务提供者 (Provider) 启动时，通过 Nacos Client SDK 向 Nacos Server 发送 REST 请求，注册自身的元数据信息（如 IP、端口、权重、健康状态等）。
+- **健康检查 (Heartbeat)：** 对于临时实例，客户端默认每 5 秒向服务端发送一次心跳包。若 Nacos Server 在 15 秒内未收到心跳，会将实例标记为不健康；若 30 秒未收到，则直接将该实例从可用服务列表中剔除。
+- **服务发现 (Discovery)：** 服务消费者 (Consumer) 定期（默认 10 秒）从 Nacos Server 拉取最新的服务实例列表，并缓存在本地内存中。发起远程调用时，结合本地负载均衡组件（如 Spring Cloud LoadBalancer）从缓存列表中选择一个健康实例发起请求。
+
+**客户端配置示例：** 引入 `spring-cloud-starter-alibaba-nacos-discovery` 依赖后，在 `application.yml` 中声明：
+```YAML
+spring:
+  application:
+    name: user-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+```
+
+
+
+
+#### 分布式配置管理
+(Config Center)
+
+Nacos 允许将系统中各个微服务的配置文件集中提取到 Nacos Server 端进行统一存储和管理，并支持配置的动态下发，服务无需重启即可应用新配置。
+**技术实现机制：**
+* **长轮询 (Long Polling) 监听：** Nacos Client 启动后，会与 Server 端建立 HTTP 长轮询连接。Client 会携带本地缓存配置的 MD5 值发送给 Server 端进行比对。
+* **动态热刷新：** 当开发者在 Nacos 控制台修改了配置，Server 端会更新对应 Data ID 的数据，并响应挂起的长轮询请求。Client 接收到变更通知并拉取新配置后，在 Spring 环境中触发 `EnvironmentChangeEvent`，结合 `@RefreshScope` 注解通过反射机制动态更新 Bean 的属性值。
+
+**客户端配置示例：**
 - **引入依赖**：引入 `spring-cloud-starter-alibaba-nacos-config` 依赖
-- **配置 Nacos 连接信息**：在项目的 `application.yml` 或 `application.properties` 文件中配置 Nacos 的服务器地址和命名空间。例如：
+- **配置 Nacos 连接信息**：
+在项目的 `application.yml` 或 `application.properties` 文件中配置 Nacos 的服务器地址和命名空间。例如：
+在 `bootstrap.yml`（注意：由于需要在 Spring 容器初始化前加载，文件优先级必须高于 application.yml）中声明：
 ```yaml
 spring:
+  application:
+    name: user-service
   cloud:
     nacos:
       config:
-        server-addr: 127.0.0.1:8848  ## Nacos 服务地址
-        namespace: your-namespace-id  ## 可选：命名空间 ID
+        server-addr: 127.0.0.1:8848
+        file-extension: yaml
+		namespace: your-namespace-id  ## 可选：命名空间 ID
         group: DEFAULT_GROUP          ## 可选：配置组
 ```
 - **服务注册和发现**：在 Spring Boot 的主类中加上`@EnableDiscoveryClient` 注解，启用服务注册与发现
-- **使用 @RefreshScope 注解**：通过在配置类或 Bean 上添加这个注解，Spring 可以在 Nacos 中的配置发生变化时自动更新 Bean 的属性。
-- **在 Nacos 配置中心创建配置文件**：在 Nacos 控制台中创建对应的数据 ID 和配置内容。通常，Spring Boot 项目使用的配置文件命名规则为 `DataID: ${spring.application.name}.properties`，以便在 Nacos 中进行映射。例如，项目的 `application.yml` 配置会对应到 Nacos 中的 `demo-service.yml` 或 `demo-service.properties`。
+
+- **在 Nacos 配置中心创建配置文件**：在 Nacos 控制台中创建对应的数据 ID 和配置内容。通常，Spring Boot 项目使用的配置文件命名规则为 `DataID: ${spring.application.name}.properties`，以便在 Nacos 中进行映射。例如，项目的 `application.yml` 配置会对应到 Nacos 中的 `demo-service.yml` 或 `demo-service.properties`
+
 - **使用配置值**：在 Spring 项目中，通过 `@Value` 或 `@ConfigurationProperties` 注解可以直接注入从 Nacos 中加载的配置。例如：
 ```java
 @Value("${config.key:defaultValue}")
 private String configValue;
 ```
+
+- **使用 @RefreshScope 注解**：通过在配置类或 Bean 上添加这个注解，Spring 可以在 Nacos 中的配置发生变化时自动更新 Bean 的属性。
+
+```java
+@RestController
+@RefreshScope // 核心注解，开启该类的配置热刷新能力
+public class ConfigController {
+    @Value("${custom.database.timeout}")
+    private String dbTimeout;
+}
+```
+
 - **设置配置动态刷新**：配置发布到 Nacos 后，Spring 项目会自动从 Nacos 获取并应用新配置，满足微服务系统的动态更新需求。这种方式允许应用在不重启的情况下更新配置，非常适合动态配置需求较高的场景。通过这种方式，Spring 项目可以灵活、安全地使用 Nacos 配置中心的集中配置管理功能。
+
 - **配置集群模式**：在 `application.properties` 中写入 Nacos 节点信息，例如：
 ```properties
 ## 假设你有 3 个 Nacos 实例
@@ -2008,11 +2065,6 @@ nacos.discovery.server-addr=127.0.0.1:8848,127.0.0.2:8848,127.0.0.3:8848
 - **负载均衡**：使用负载均衡器（如 Nginx 或 LVS）将请求分发到多个 Nacos 实例。
 - **服务发现高可用**：Nacos 集群配置多节点，确保即使某个节点宕机，其他节点依然能提供服务。
 - **持久化配置**：启用 Nacos 的数据持久化，确保配置数据不会丢失。
-
-
-
-
-
 
 
 

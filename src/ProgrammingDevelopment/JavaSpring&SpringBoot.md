@@ -1856,7 +1856,10 @@ public interface CustomerClient {
 
 
 ### Feign
-**Feign** 是 Spring Cloud 中用于简化 HTTP 客户端调用的一个声明式 HTTP 客户端库。它提供了一种非常简便的方式来调用远程服务的 API，而无需手动编写大量的代码来发出 HTTP 请求和处理响应。Feign 接口通过注解的方式来定义远程调用接口，使用者只需像调用本地接口一样调用远程 API。
+**Feign** 是 Spring Cloud 中用于简化 HTTP 客户端调用的一个声明式 HTTP 客户端库。
+Feign 接口通过注解的方式来定义远程调用接口，使用者只需像调用本地接口一样调用远程 API。
+它提供了一种非常简便的方式来调用远程服务的 API，而无需手动编写大量的代码来发出 HTTP 请求和处理响应。
+
 当你在 Spring Boot 项目中使用`@EnableFeignClients` 注解时，Spring 会自动扫描指定包路径（如果未指定路径，则扫描当前包及其子包）下所有带有 `@FeignClient` 注解的接口，将这些接口代理为 Spring 容器中的 Bean，这样就可以在其他地方通过依赖注入来使用它们。
 Spring 会为每个 `@FeignClient` 注解的接口创建一个动态代理类，并将其注册到 Spring 的上下文中。当你调用这个接口的方法时，实际调用的是由 Feign 生成的代理对象，而这个对象会根据你定义的注解和配置来执行相应的 HTTP 请求。
 ```java
