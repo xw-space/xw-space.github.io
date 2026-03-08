@@ -299,6 +299,8 @@ https://github.com/zk-org/zk
 
 ## 学习资料
 
+深入浅出Go语言核心编程 ： https://weread.qq.com/web/reader/27b32700813ab88b4g014506
+
 - [Golang 中文学习文档](https://golang.halfiisland.com/)： https://golang.halfiisland.com/guide.html
 - 2022最新超详细的 Go 语言学习路线（建议收藏🔥） | Java程序员进阶之路x沉默王二，但我觉得沉默王二八股做的就一般，但是吧，网上成体系的资料好像也不多： https://three-musketeers.gitcode.host/tobebetterjavaer/xuexiluxian/go/
 

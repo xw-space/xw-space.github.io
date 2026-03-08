@@ -2453,18 +2453,25 @@ Zookeeper是一个分布式协调应用，可用作注册中心和配置中心�
 - 解压：apache-zookeeper-3.8.3-bin.tar.gz
 - 进入：apache-zookeeper-3.8.3-bin\conf
 - 复制文件：zoo_sample.cfg → zoo.cfg
+
 - 编辑zoo.cfg：
 	- tickTime=2000
 	- dataDir=D:/zookeeper/data
 	- clientPort=2181
-- 创建：D:\zookeeper\data
-- 进入：apache-zookeeper-3.8.3-bin\bin
+
+- 创建：<code>D:\zookeeper\data</code>
+- 进入：<code>apache-zookeeper-3.8.3-bin\bin</code>
 - 打开命令行，运行：zkServer.cmd，看输出中是否有：Starting zookeeper ... STARTED，有，就代表运行成功（输出乱七八糟的有很多）
-- 再在apache-zookeeper-3.8.3-bin\bin，打开命令行，运行：zkCli.cmd，进入 ZooKeeper 命令行客户端，默认连接 `127.0.0.1:2181`，可输入以下命令，创建一个节点并查看，来测试能否正常使用：
+
+- 再在<code>apache-zookeeper-3.8.3-bin\bin</code>，打开命令行，运行：zkCli.cmd工具，进入 ZooKeeper 命令行客户端，默认连接 `127.0.0.1:2181`，可输入以下命令，创建一个节点并查看，来测试能否正常使用（这个节点就和文件夹路径似的）：
 ```bash
 create /test hello
 get /test
 ls /
 ```
+
+
+
+
 
 ## END

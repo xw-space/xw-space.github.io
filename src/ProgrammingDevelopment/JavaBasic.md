@@ -174,7 +174,107 @@ JAR 文件
 * `//.externalToolBuilders/`：Eclipse 外部构建工具配置。
 
 
+## 程序运行
 
+简单程序是 javac 成字节码再 java 跑；项目的话，是 Maven（或 Gradle）先把项目（和依赖）编译/准备好，再由 java 用正确的 classpath 去运行。点 Run 时，IDE 就是在背后帮你执行「编译这一步 + 拼好 classpath 再执行 java」这两件事。
+
+
+## 命名规范
+- 总体命名规范
+- 类名需要使用大驼峰命名法(UpperCamelCase)风格。
+- 方法名、参数名、成员变量、局部变量需要使用小驼峰命名法(lowerCamelCase)。
+- 测试方法名、常量、枚举名称需要使用蛇形命名法(snake_case) ，比如test_get_user()、TIME_LIMIT。并且，测试方法名称要求全部小写，常量以及枚举名称需要全部大写。
+- 项目文件夹名称使用串式命名法(kebab-case)，比如dubbo-registry。
+- 包名统一使用小写，尽量使用单个名词作为包名，各个单词通过 "." 分隔符连接，并且各个单词必须为单数。
+- 抽象类命名使用 Abstract 开头。如：public abstract class AbstractClient extends AbstractEndpoint{}。
+- 异常类命名使用 Exception 结尾。如：public class NoSuchMethodException extends RuntimeException{}。
+- 测试类命名以它要测试的类的名称开始，以 Test 结尾。如：public class AnnotationUtilsTest{}。
+- 包名命名规范
+- Java的包名由小写单词组成，包的路径符合所开发的系统模块的定义，以便通过包名可得知其属于哪个模块，从而方便到对应包里找相应的实现类。
+
+- 常规包名
+
+- 为了保障每个Java Package命名的唯一性,在Java编程规范中要求开发人员在自己定义的包名前加上唯一的前缀.由于互联网上的域名称是不会重复的,所以多数开发人员采用自己公司在互联网上的域名称作为自己程序包的唯一前缀.例如 : com.sun.swt...
+
+- 公司项目 com : 公司项目,copyright由项目发起的公司所有. 包名 : com.公司名.项目名.模块名..
+- 团队项目 team : 团队项目,指由团队发起,并由该团队开发的项目,copyright属于该团队所有. 包名 : team.团队名.项目名.模块名..
+- 自定义包名
+
+- 一般公司命名为com.公司名.项目名.模块名....那我们个人的项目又怎么命名呢?个人的英语单词有individual、personal、private、one-man,进一步对以上四个单词词意进行分析并在保证了唯一性,继而使用每个单词的前4个字母作为前缀,与com也做了区分.示例如下所示:
+
+- indi : 个体项目,指个人发起,但非自己独自完成的项目,可公开或私有项目,copyright主要属于发起者. 包名 :indi.发起者名.项目名.模块名..
+- pers : 个人项目,指个人发起,独自完成,可分享的项目,copyright主要属于个人.包名 : pers.个人名.项目名.模块名..
+- priv : 私有项目,指个人发起,独自完成,非公开的私人使用的项目,copyright属于个人.包名 : priv.个人名.项目名.模块名..
+- onem : 与indi相同，推荐使用indi.
+
+## java的包
+
+在 Java 里，同包 = 同命名空间，同一个 package 下的类互相可见，直接用类名就能用。
+只有别的 package 里的类才需要 import（或用全限定名）。
+
+
+## Scanner-输入-代码
+**输入**：
+```Java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        // 读取一个字符串
+        String name = scanner.nextLine();
+        // 读取一个整数，注意，它不会吃掉换行符
+        int age = scanner.nextInt();
+        // 读取一个浮点数
+        double score = scanner.nextDouble();
+		
+		System.out.println("Name: " + name);
+        System.out.println("Age: " + age);
+        System.out.println("Score: " + score);
+        
+        // 读取整数数组：1 2 3 4 5
+		String[] parts = sc.nextLine().split(" ");
+		int[] nums = new int[parts.length];
+		for (int i = 0; i < parts.length; i++) {
+		    nums[i] = Integer.parseInt(parts[i]);
+		}
+        
+        // 读取二维数组矩阵
+		// 3 3
+		// 1 2 3
+		// 4 5 6
+		// 7 8 9
+		Scanner sc = new Scanner(System.in);
+		int rows = sc.nextInt();
+		int cols = sc.nextInt();
+		int[][] matrix = new int[rows][cols];
+		for (int i = 0; i < rows; i++) {
+		    for (int j = 0; j < cols; j++) {
+		        matrix[i][j] = sc.nextInt();
+		    }
+		}
+
+        scanner.close();
+    }
+}
+```
+
+## 输出-代码
+**输出**：
+```Java
+// 输出内容，不换行。
+System.out.print("Hello");
+// 输出内容，并自动换行。
+System.out.println("Hello");
+// 格式化输出
+int age = 25;
+double d = 1.2345;
+System.out.printf("Name: %s, Age: %d\t", name, age);
+// 输出：Name: Tom, Age: 25
+String name = "Tom";
+System.out.printf("小数：%f只保留2位是：%.2f\n", d, d);
+// 小数：1.234500只保留2位是：1.23
+```
 
 ## 数据类型
 
@@ -561,98 +661,6 @@ Integer.valueOf(String s)
 | HashSet / TreeSet | `Set<String> set`      | `set.size()`   | ✅ 要加括号  | 方法，返回集合中不重复元素的数量              |
 | HashMap / TreeMap | `Map<K, V> map`        | `map.size()`   | ✅ 要加括号  | 方法，返回键值对的数量                   |
 | Stack / Queue     | `Stack<T> stack`       | `stack.size()` | ✅ 要加括号  | 方法，返回栈中元素的数量                  |
-
-## 命名规范
-- 总体命名规范
-- 类名需要使用大驼峰命名法(UpperCamelCase)风格。
-- 方法名、参数名、成员变量、局部变量需要使用小驼峰命名法(lowerCamelCase)。
-- 测试方法名、常量、枚举名称需要使用蛇形命名法(snake_case) ，比如test_get_user()、TIME_LIMIT。并且，测试方法名称要求全部小写，常量以及枚举名称需要全部大写。
-- 项目文件夹名称使用串式命名法(kebab-case)，比如dubbo-registry。
-- 包名统一使用小写，尽量使用单个名词作为包名，各个单词通过 "." 分隔符连接，并且各个单词必须为单数。
-- 抽象类命名使用 Abstract 开头。如：public abstract class AbstractClient extends AbstractEndpoint{}。
-- 异常类命名使用 Exception 结尾。如：public class NoSuchMethodException extends RuntimeException{}。
-- 测试类命名以它要测试的类的名称开始，以 Test 结尾。如：public class AnnotationUtilsTest{}。
-- 包名命名规范
-- Java的包名由小写单词组成，包的路径符合所开发的系统模块的定义，以便通过包名可得知其属于哪个模块，从而方便到对应包里找相应的实现类。
-
-- 常规包名
-
-- 为了保障每个Java Package命名的唯一性,在Java编程规范中要求开发人员在自己定义的包名前加上唯一的前缀.由于互联网上的域名称是不会重复的,所以多数开发人员采用自己公司在互联网上的域名称作为自己程序包的唯一前缀.例如 : com.sun.swt...
-
-- 公司项目 com : 公司项目,copyright由项目发起的公司所有. 包名 : com.公司名.项目名.模块名..
-- 团队项目 team : 团队项目,指由团队发起,并由该团队开发的项目,copyright属于该团队所有. 包名 : team.团队名.项目名.模块名..
-- 自定义包名
-
-- 一般公司命名为com.公司名.项目名.模块名....那我们个人的项目又怎么命名呢?个人的英语单词有individual、personal、private、one-man,进一步对以上四个单词词意进行分析并在保证了唯一性,继而使用每个单词的前4个字母作为前缀,与com也做了区分.示例如下所示:
-
-- indi : 个体项目,指个人发起,但非自己独自完成的项目,可公开或私有项目,copyright主要属于发起者. 包名 :indi.发起者名.项目名.模块名..
-- pers : 个人项目,指个人发起,独自完成,可分享的项目,copyright主要属于个人.包名 : pers.个人名.项目名.模块名..
-- priv : 私有项目,指个人发起,独自完成,非公开的私人使用的项目,copyright属于个人.包名 : priv.个人名.项目名.模块名..
-- onem : 与indi相同，推荐使用indi.
-
-
-## Scanner-输入-代码
-**输入**：
-```Java
-import java.util.Scanner;
-
-public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        // 读取一个字符串
-        String name = scanner.nextLine();
-        // 读取一个整数，注意，它不会吃掉换行符
-        int age = scanner.nextInt();
-        // 读取一个浮点数
-        double score = scanner.nextDouble();
-		
-		System.out.println("Name: " + name);
-        System.out.println("Age: " + age);
-        System.out.println("Score: " + score);
-        
-        // 读取整数数组：1 2 3 4 5
-		String[] parts = sc.nextLine().split(" ");
-		int[] nums = new int[parts.length];
-		for (int i = 0; i < parts.length; i++) {
-		    nums[i] = Integer.parseInt(parts[i]);
-		}
-        
-        // 读取二维数组矩阵
-		// 3 3
-		// 1 2 3
-		// 4 5 6
-		// 7 8 9
-		Scanner sc = new Scanner(System.in);
-		int rows = sc.nextInt();
-		int cols = sc.nextInt();
-		int[][] matrix = new int[rows][cols];
-		for (int i = 0; i < rows; i++) {
-		    for (int j = 0; j < cols; j++) {
-		        matrix[i][j] = sc.nextInt();
-		    }
-		}
-
-        scanner.close();
-    }
-}
-```
-
-## 输出-代码
-**输出**：
-```Java
-// 输出内容，不换行。
-System.out.print("Hello");
-// 输出内容，并自动换行。
-System.out.println("Hello");
-// 格式化输出
-int age = 25;
-double d = 1.2345;
-System.out.printf("Name: %s, Age: %d\t", name, age);
-// 输出：Name: Tom, Age: 25
-String name = "Tom";
-System.out.printf("小数：%f只保留2位是：%.2f\n", d, d);
-// 小数：1.234500只保留2位是：1.23
-```
 
 ## 面向对象编程（OOP）
 - **类与对象**：理解类的定义、实例化对象、成员变量和成员方法。
