@@ -9,6 +9,7 @@ tag:
 ---
 
 一个简单的前端入门教程
+
 <!-- more -->
 
 # FrontEnd
@@ -25,265 +26,50 @@ MVC/MVP/MVVM等设计模式、UI/UE设计
 
 **前端服务没有输出**：前端服务只是一个静态文件服务器，它不会像后端那样在命令行里输出日志，也不会告诉你“某个按钮为什么没反应”。前端的问题（比如点击没反应、样式错乱、JS 报错），都要在 **浏览器的开发者工具**里排查。
 
+## 工具
+### HBuilder
 
-## React
-为什么使用react，是因为react组件化比较方便么？
-具体怎么组件化？
+### **前端服务**
 
 
-最方便的是可以组件化
 
-**组件化结构**：将 UI 分解成独立、可重用的小组件。每个组件都可以包含自己的逻辑和视图，使得代码更加结构化，易于维护和复用。
-**例子**：  
-假设你在开发一个电商网站，页面上有多个部分，如商品列表、购物车、用户信息等。你可以将这些部分拆解成独立的组件，比如：
-- `ProductList`：显示商品列表。
-- `Cart`：显示购物车中的商品。
-- `UserProfile`：显示用户个人信息。
-这些组件可以独立开发和维护，而且如果某个组件（例如 `Cart`）需要在多个页面中使用，你可以直接复用这个组件，而不需要重复编写代码。
+**为什么需要要启动前端服务**
+前端就是一堆 `HTML + CSS + JS` 文件，理论上双击 `index.html` 用浏览器也能打开。但是在实际开发和运行中，为什么还要用 `python -m http.server 3000` 启动一个服务呢：
+
+使用浏览器打开前端文件就只是预览下文件内容，浏览器会用 `file://` 协议打开文件。前端代码里的 **AJAX / Fetch 请求** 往往会被浏览器拦截，因为浏览器要求“同源”（协议、域名、端口都一致）才能访问后端 API。`file://` 协议没有端口和域名，会导致跨域问题。结果前端页面可能能显示，但一旦调用后端 API（比如 `http://localhost:8080/api/...`），就会报错。
+
+前端服务则是一个服务器，运行前端服务则是将前端服务运行在了服务器上，浏览器打开前端文件不再是使用file://协议打开文件，而是像服务器请求数据，像真实的使用场景，则那些api请求数据功能也能照常使用了。启动一个本地 Web 服务后，前端变成 `http://localhost:3000`，就有了正常的协议+域名+端口，可以和后端服务交互，避免跨域问题（或更容易配置跨域）。
 
 
 
 
-**虚拟 DOM**：React 使用虚拟 DOM 来优化页面更新过程。当数据发生变化时，React 首先更新虚拟 DOM，而不是直接更新真实 DOM。然后，React 会通过比较前后的虚拟 DOM，找到最小的差异并批量更新真实 DOM，这大大提高了性能。
-
-**例子**：  
-假设你有一个网页，其中有一个实时更新的消息列表。在传统的开发模式下，每当有新消息时，整个页面都会重新渲染。React 通过虚拟 DOM，只会对变化部分进行更新。即使有大量的数据变动，React 也会优化更新过程，仅渲染需要变化的部分，减少了对 DOM 的操作，从而提升性能。
-
-例如，假设你有一个包含数百条消息的聊天窗口。每当一条新消息进入时，React 只会更新新消息的部分，而不会重新渲染整个消息列表，从而避免了不必要的性能开销。
-
-
-**单向数据流**：React 中的数据流是单向的，父组件可以通过 props 向子组件传递数据，子组件通过事件回调来更新父组件的状态。这种方式让数据流动更加清晰，有助于调试和理解代码。
-
-**例子**：  
-假设你有一个登录表单，包含用户名和密码输入框。父组件 `LoginForm` 负责管理用户输入的状态，并通过 props 传递给子组件 `InputField`。用户每次输入内容时，`InputField` 会调用父组件的回调函数来更新父组件的状态，进而更新 UI。
-```jsx
-function LoginForm() {
-  const [username, setUsername] = useState("");
-
-  const handleChange = (event) => {
-    setUsername(event.target.value);
-  };
-
-  return <InputField value={username} onChange={handleChange} />;
-}
-
-function InputField({ value, onChange }) {
-  return <input type="text" value={value} onChange={onChange} />;
-}
-```
-这种数据流的单向性使得你可以非常清晰地跟踪状态变化，避免了复杂的双向绑定或隐式的数据流动，使得代码更易于维护和理解。
+**有哪些前端服务**
+- **Python 内置**：`python -m http.server 3000`
+- **Node.js**：`npx http-server -p 3000`
+- **Live Server**（Go Live，VS Code 插件）：插件名字通常就是 **Live Server**，右下角有 **“Go Live”** 按钮。默认端口一般是 `5500`。支持 **热重载（Hot Reload）**，你保存文件后浏览器会自动刷新。非常适合前端开发时调试。
+- **Node.js前端开发框架自带服务**：如果你用 Vue / React / Angular 这些框架，都会有自己的开发服务器：Vue CLI → `npm run serve`（默认端口 8080）、React → `npm start`（默认端口 3000）、Angular → `ng serve`（默认端口 4200）。这些服务除了一般静态服务，还支持模块打包、代码热更新、代理转发等。：
+- **专业 Web 服务器**：上线时不会用这些小工具，而是用**Nginx**、**Apache** 等这些专业工具，适合部署到生产环境。
 
 
 
-**JSX语法**：React 使用 JSX（JavaScript XML）语法，它允许开发者在 JavaScript 中写 HTML 结构。JSX 让 UI 的结构和逻辑结合在一起，更直观易懂。
-例如，在传统 JavaScript 中，更新 DOM 通常涉及许多 `document.getElementById` 和 `innerHTML` 等 DOM 操作。而在 React 中，使用 JSX 可以直观地声明 HTML 结构：
-```jsx
-function Greeting({ name }) {
-  return <h1>Hello, {name}!</h1>;
-}
-
-```
-这段代码在 JavaScript 中同时包含了逻辑和 UI，而不需要通过多个步骤来操作 DOM 元素。JSX 的这种语法使得开发者可以更直观地表达 UI 和逻辑，并且 React 会将它转换为实际的 JavaScript 代码。
-
-**React Native 跨平台开发**
-React Native 允许开发者使用 React 来构建原生应用（iOS 和 Android），让开发者能够用同一套代码跨平台开发。这意味着，你可以在 Web 开发中使用 React 的知识，直接转向移动端开发。
-
-**例子**：  
-假设你开发了一个社交应用的 Web 版本，使用 React 构建了所有的页面和交互。之后，你可以使用 React Native 将这款应用转移到 iOS 和 Android 平台，而无需重新学习新的开发框架或重新编写代码。
-```jsx
-import { View, Text } from 'react-native';
-
-function App() {
-  return (
-    <View>
-      <Text>Hello, world!</Text>
-    </View>
-  );
-}
-
-```
-这段代码在 iOS 和 Android 上会被渲染为原生控件，让你可以复用大部分的逻辑，并针对移动设备做出优化。
-## Vite
-**Vite** 是一个现代的前端构建工具，它同样会启动一个本地开发服务器。你可以通过以下命令来启动它：
+**前端服务的选择**：
+- 如果只是自己跑跑 Demo，**随便用哪种都行**
+- 如果想开发时更方便（比如保存自动刷新），那就用 **Go Live**。
+- 如果模拟真实生产环境，用Nginx/Apache
 
 
 
-## 前端调用api
-### **使用 `fetch` 调用 API**
-**fetch` 是现代浏览器中原生支持的 JavaScript API，它用来发起 HTTP 请求并获取响应数据。通常它返回的是一个 Promise，你可以通过 `then` 或 `async/await` 来处理响应。
-```javascript
 
-// 使用 fetch 发起 GET 请求
-fetch('https://api.example.com/data')
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('网络错误');
-    }
-    return response.json(); // 将响应转换为 JSON 格式
-  })
-  .then(data => {
-    console.log('获取的数据:', data);
-  })
-  .catch(error => {
-    console.error('获取数据失败:', error);
-  });
-```
+**Live Server/Go Live**
 
-如果你更喜欢使用 `async/await`，可以像这样写：
-
-```javascript
-async function fetchData() {
-  try {
-    const response = await fetch('https://api.example.com/data');
-    if (!response.ok) {
-      throw new Error('网络错误');
-    }
-    const data = await response.json();
-    console.log('获取的数据:', data);
-  } catch (error) {
-    console.error('获取数据失败:', error);
-  }
-}
-
-fetchData();
-
-```
+Live Server是vscode插件名
+Go Live是功能名字，按钮在vscode右下角
+用vscode打开项目文件，右下角点击 "Go Live"，这会在本地启动一个服务器（默认端口 5500）。浏览器会自动打开 `http://127.0.0.1:5500/index.html`。
 
 
-### 使用 `axios` 调用 API
-`axios` 是一个流行的 JavaScript 库，它提供了更加简便和强大的 API 请求方法。与 `fetch` 相比，`axios` 在发送请求时自动处理 JSON 数据的转换，还支持更丰富的功能，如请求拦截器、取消请求等。
+### Vite-构建工具
 
-
-首先，你需要通过 npm 安装 `axios`：
-
-```bash
-npm install axios
-```
-
-示例代码（`axios`）：
-
-```javascript
-
-import axios from 'axios';
-
-// 使用 axios 发起 GET 请求
-axios.get('https://api.example.com/data')
-  .then(response => {
-    console.log('获取的数据:', response.data);
-  })
-  .catch(error => {
-    console.error('获取数据失败:', error);
-  });
-```
-
-如果你使用 `async/await`：
-```javascript
-import axios from 'axios';
-
-async function fetchData() {
-  try {
-    const response = await axios.get('https://api.example.com/data');
-    console.log('获取的数据:', response.data);
-  } catch (error) {
-    console.error('获取数据失败:', error);
-  }
-}
-
-fetchData();
-```
-
-### **传递参数到 API**
-
-有时候你需要向 API 传递参数（例如查询字符串、请求体数据等）。这里我们分别展示如何在 `fetch` 和 `axios` 中传递参数。
-
-`fetch` 示例：
-
-对于 GET 请求，可以通过 URL 查询参数传递参数：
-```javascript
-fetch('https://api.example.com/data?search=query')
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error('请求失败:', error));
-```
-
-对于 POST 请求，通常需要在请求体中发送 JSON 数据：
-```javascript
-fetch('https://api.example.com/data', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({ name: 'John', age: 30 })
-})
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error('请求失败:', error));
-```
-
-`axios`示例：
-`axios`支持通过查询参数和请求体发送数据。
-```javascript
-// GET 请求传递查询参数
-axios.get('https://api.example.com/data', {
-  params: { search: 'query' }
-})
-  .then(response => console.log(response.data))
-  .catch(error => console.error('请求失败:', error));
-
-// POST 请求传递数据
-axios.post('https://api.example.com/data', {
-  name: 'John',
-  age: 30
-})
-  .then(response => console.log(response.data))
-  .catch(error => console.error('请求失败:', error));
-```
-
-### **React 中如何调用 API**
-
-在 React 中，通常会在组件的生命周期函数或 `useEffect` 钩子中进行 API 调用。以下是使用 `useEffect`和 `fetch`进行数据获取的示例：
-
-使用 `useEffect` 和 `fetch` 示例：
-```javascript
-import React, { useState, useEffect } from 'react';
-
-function App() {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    fetch('https://api.example.com/data')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('网络错误');
-        }
-        return response.json();
-      })
-      .then(data => {
-        setData(data);
-        setLoading(false);
-      })
-      .catch(error => {
-        setError(error);
-        setLoading(false);
-      });
-  }, []); // 空数组意味着只在组件挂载时执行一次
-
-  if (loading) return <div>加载中...</div>;
-  if (error) return <div>发生错误: {error.message}</div>;
-
-  return (
-    <div>
-      <h1>获取的数据</h1>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
-    </div>
-  );
-}
-
-export default App;
-```
-
+- **Vite** 是一个现代的前端构建工具，它同样会启动一个本地开发服务器。你可以通过以下命令来启动它：
 
 ## HTML
 ### 示例
@@ -805,10 +591,272 @@ HTML对空格和回车的处理比较特殊。在HTML文件中，一个空格和
 </html>
 ```
 
-## Vue
+## 前端调用api
+### **使用 `fetch` 调用 API**
+**fetch` 是现代浏览器中原生支持的 JavaScript API，它用来发起 HTTP 请求并获取响应数据。通常它返回的是一个 Promise，你可以通过 `then` 或 `async/await` 来处理响应。
+```javascript
+
+// 使用 fetch 发起 GET 请求
+fetch('https://api.example.com/data')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('网络错误');
+    }
+    return response.json(); // 将响应转换为 JSON 格式
+  })
+  .then(data => {
+    console.log('获取的数据:', data);
+  })
+  .catch(error => {
+    console.error('获取数据失败:', error);
+  });
+```
+
+如果你更喜欢使用 `async/await`，可以像这样写：
+
+```javascript
+async function fetchData() {
+  try {
+    const response = await fetch('https://api.example.com/data');
+    if (!response.ok) {
+      throw new Error('网络错误');
+    }
+    const data = await response.json();
+    console.log('获取的数据:', data);
+  } catch (error) {
+    console.error('获取数据失败:', error);
+  }
+}
+
+fetchData();
+
+```
+
+
+### 使用 `axios` 调用 API
+`axios` 是一个流行的 JavaScript 库，它提供了更加简便和强大的 API 请求方法。与 `fetch` 相比，`axios` 在发送请求时自动处理 JSON 数据的转换，还支持更丰富的功能，如请求拦截器、取消请求等。
+
+
+首先，你需要通过 npm 安装 `axios`：
+
+```bash
+npm install axios
+```
+
+示例代码（`axios`）：
+
+```javascript
+
+import axios from 'axios';
+
+// 使用 axios 发起 GET 请求
+axios.get('https://api.example.com/data')
+  .then(response => {
+    console.log('获取的数据:', response.data);
+  })
+  .catch(error => {
+    console.error('获取数据失败:', error);
+  });
+```
+
+如果你使用 `async/await`：
+```javascript
+import axios from 'axios';
+
+async function fetchData() {
+  try {
+    const response = await axios.get('https://api.example.com/data');
+    console.log('获取的数据:', response.data);
+  } catch (error) {
+    console.error('获取数据失败:', error);
+  }
+}
+
+fetchData();
+```
+
+### **传递参数到 API**
+
+有时候你需要向 API 传递参数（例如查询字符串、请求体数据等）。这里我们分别展示如何在 `fetch` 和 `axios` 中传递参数。
+
+`fetch` 示例：
+
+对于 GET 请求，可以通过 URL 查询参数传递参数：
+```javascript
+fetch('https://api.example.com/data?search=query')
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('请求失败:', error));
+```
+
+对于 POST 请求，通常需要在请求体中发送 JSON 数据：
+```javascript
+fetch('https://api.example.com/data', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ name: 'John', age: 30 })
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('请求失败:', error));
+```
+
+`axios`示例：
+`axios`支持通过查询参数和请求体发送数据。
+```javascript
+// GET 请求传递查询参数
+axios.get('https://api.example.com/data', {
+  params: { search: 'query' }
+})
+  .then(response => console.log(response.data))
+  .catch(error => console.error('请求失败:', error));
+
+// POST 请求传递数据
+axios.post('https://api.example.com/data', {
+  name: 'John',
+  age: 30
+})
+  .then(response => console.log(response.data))
+  .catch(error => console.error('请求失败:', error));
+```
+
+### **React 中如何调用 API**
+
+在 React 中，通常会在组件的生命周期函数或 `useEffect` 钩子中进行 API 调用。以下是使用 `useEffect`和 `fetch`进行数据获取的示例：
+
+使用 `useEffect` 和 `fetch` 示例：
+```javascript
+import React, { useState, useEffect } from 'react';
+
+function App() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch('https://api.example.com/data')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('网络错误');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setData(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        setError(error);
+        setLoading(false);
+      });
+  }, []); // 空数组意味着只在组件挂载时执行一次
+
+  if (loading) return <div>加载中...</div>;
+  if (error) return <div>发生错误: {error.message}</div>;
+
+  return (
+    <div>
+      <h1>获取的数据</h1>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+    </div>
+  );
+}
+
+export default App;
+```
+
+
+## 常用库
+### JQuery
+
+### Ajax
+一个请求对应一个回复
+
+## 框架
+### React
+为什么使用react，是因为react组件化比较方便么？
+具体怎么组件化？
+
+
+最方便的是可以组件化
+
+**组件化结构**：将 UI 分解成独立、可重用的小组件。每个组件都可以包含自己的逻辑和视图，使得代码更加结构化，易于维护和复用。
+**例子**：  
+假设你在开发一个电商网站，页面上有多个部分，如商品列表、购物车、用户信息等。你可以将这些部分拆解成独立的组件，比如：
+- `ProductList`：显示商品列表。
+- `Cart`：显示购物车中的商品。
+- `UserProfile`：显示用户个人信息。
+这些组件可以独立开发和维护，而且如果某个组件（例如 `Cart`）需要在多个页面中使用，你可以直接复用这个组件，而不需要重复编写代码。
+
+
+
+
+**虚拟 DOM**：React 使用虚拟 DOM 来优化页面更新过程。当数据发生变化时，React 首先更新虚拟 DOM，而不是直接更新真实 DOM。然后，React 会通过比较前后的虚拟 DOM，找到最小的差异并批量更新真实 DOM，这大大提高了性能。
+
+**例子**：  
+假设你有一个网页，其中有一个实时更新的消息列表。在传统的开发模式下，每当有新消息时，整个页面都会重新渲染。React 通过虚拟 DOM，只会对变化部分进行更新。即使有大量的数据变动，React 也会优化更新过程，仅渲染需要变化的部分，减少了对 DOM 的操作，从而提升性能。
+
+例如，假设你有一个包含数百条消息的聊天窗口。每当一条新消息进入时，React 只会更新新消息的部分，而不会重新渲染整个消息列表，从而避免了不必要的性能开销。
+
+
+**单向数据流**：React 中的数据流是单向的，父组件可以通过 props 向子组件传递数据，子组件通过事件回调来更新父组件的状态。这种方式让数据流动更加清晰，有助于调试和理解代码。
+
+**例子**：  
+假设你有一个登录表单，包含用户名和密码输入框。父组件 `LoginForm` 负责管理用户输入的状态，并通过 props 传递给子组件 `InputField`。用户每次输入内容时，`InputField` 会调用父组件的回调函数来更新父组件的状态，进而更新 UI。
+```jsx
+function LoginForm() {
+  const [username, setUsername] = useState("");
+
+  const handleChange = (event) => {
+    setUsername(event.target.value);
+  };
+
+  return <InputField value={username} onChange={handleChange} />;
+}
+
+function InputField({ value, onChange }) {
+  return <input type="text" value={value} onChange={onChange} />;
+}
+```
+这种数据流的单向性使得你可以非常清晰地跟踪状态变化，避免了复杂的双向绑定或隐式的数据流动，使得代码更易于维护和理解。
+
+
+
+**JSX语法**：React 使用 JSX（JavaScript XML）语法，它允许开发者在 JavaScript 中写 HTML 结构。JSX 让 UI 的结构和逻辑结合在一起，更直观易懂。
+例如，在传统 JavaScript 中，更新 DOM 通常涉及许多 `document.getElementById` 和 `innerHTML` 等 DOM 操作。而在 React 中，使用 JSX 可以直观地声明 HTML 结构：
+```jsx
+function Greeting({ name }) {
+  return <h1>Hello, {name}!</h1>;
+}
+
+```
+这段代码在 JavaScript 中同时包含了逻辑和 UI，而不需要通过多个步骤来操作 DOM 元素。JSX 的这种语法使得开发者可以更直观地表达 UI 和逻辑，并且 React 会将它转换为实际的 JavaScript 代码。
+
+**React Native 跨平台开发**
+React Native 允许开发者使用 React 来构建原生应用（iOS 和 Android），让开发者能够用同一套代码跨平台开发。这意味着，你可以在 Web 开发中使用 React 的知识，直接转向移动端开发。
+
+**例子**：  
+假设你开发了一个社交应用的 Web 版本，使用 React 构建了所有的页面和交互。之后，你可以使用 React Native 将这款应用转移到 iOS 和 Android 平台，而无需重新学习新的开发框架或重新编写代码。
+```jsx
+import { View, Text } from 'react-native';
+
+function App() {
+  return (
+    <View>
+      <Text>Hello, world!</Text>
+    </View>
+  );
+}
+
+```
+这段代码在 iOS 和 Android 上会被渲染为原生控件，让你可以复用大部分的逻辑，并针对移动设备做出优化。
+
+### Vue
 Examples | Vue.js： https://cn.vuejs.org/examples/#hello-world
 
-### render
+#### render
  `render` 函数和`<template>` 标签的作用相似，都是用来替换页面的一部分元素，`<template>` 标签定义一部分内容，而`render` 函数则是生成的内容，两者最终的目的是告诉 Vue 应该如何渲染组件的 DOM 结构。
 举例：
 ```javascript
@@ -833,7 +881,7 @@ new Vue({
 ```
  `render` 函数中的 `h('div', this.message)` 会创建一个包含 `message` 内容的 `<div>` 元素，最终替换掉挂载点 `#app` 中的内容
 
-### 虚拟DOM
+#### 虚拟DOM
 
 虚拟DOM（Virtual DOM）是前端框架（如Vue.js、React）中用来提高性能的一种概念和技术。
 虚拟DOM的主要目的是通过在内存中模拟DOM结构，从而减少对真实DOM的直接操作，提高网页的渲染效率。
@@ -857,7 +905,7 @@ DOM（Document Object Model，文档对象模型）是表示HTML文档结构的�
 5. **虚拟DOM的缺点**
 - 额外的计算开销：虽然虚拟DOM减少了直接操作真实DOM的次数，但它在内存中创建和比较虚拟DOM也会带来一定的性能开销。对于一些简单的页面或操作频率非常高的场景，虚拟DOM的优势可能并不明显。
 
-### `<template>`
+#### `<template>`
 
 `<template>`是一个容器，用来包裹一段 HTML 代码或 Vue.js 模板代码，最终这些内容会根据**设定逻辑**被渲染到页面上。
 举例：
@@ -906,7 +954,7 @@ export default {
 </template>
 ```
 
-### createElement和h
+#### createElement和h
 1. `createElement` 是什么？**
 **createElement` 是 Vue.js 用来创建虚拟 DOM 的函数。虚拟 DOM 是 Vue.js 的一个核心概念，它在内存中表示 DOM 结构，之后再与实际 DOM 进行比较（diff），以确定需要更新的部分，从而高效地更新界面。
 **createElement` 可以接收多个参数：
@@ -941,7 +989,7 @@ render: h => h(App)
 - `h(App)` 调用 `createElement` 函数，创建一个 `App` 组件的虚拟 DOM。
 - `render: h => h(App)` 表示用 `App` 组件的虚拟 DOM 来渲染这个 Vue 实例。
 
-### =>
+#### =>
  `=>` 是在 ECMAScript 6（ES6）中引入的箭头函数（Arrow Function）的符号，用于定义简洁的匿名函数。
 1. **箭头函数的基本语法**
 箭头函数的基本语法如下：
@@ -978,6 +1026,7 @@ new Vue({
 - `this` 绑定：箭头函数不会创建自己的 `this`，而是从它的外层上下文中继承 `this`。这意味着在箭头函数中使用 `this` 时，`this` 的值由外层作用域决定，而不会因为函数的调用方式而改变。
 - 不能用作构造函数：箭头函数不能用作构造函数（即不能使用 `new` 关键字调用）。
 - 没有 `arguments` 对象：箭头函数没有自己的 `arguments` 对象。如果需要访问参数，可以使用剩余参数语法 `...args`。
+
 
 ## marked.js
 
@@ -1080,60 +1129,23 @@ console.log(html);
 
 
 
-## Ajax
-一个请求对应一个回复
-
-## 工具
-**v0.dev**：AI写代码，自动根据代码生成前端代码的工具 https://v0.dev/chat
-
-
-## 好看示例
-- 【JS是没有上限的】 https://www.bilibili.com/video/BV1yG4y127bs/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
-
-## 项目教程
-- 【第8讲 【HTML+CSS+JS】实战，用API制作一个单词查询App(上)】 https://www.bilibili.com/video/BV1CM4y1w7py/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
 ## 学习资料
 - 前端面试题汇总： https://www.yuque.com/cuggz/interview
 
 
+## 项目教程
+- 【第8讲 【HTML+CSS+JS】实战，用API制作一个单词查询App(上)】 https://www.bilibili.com/video/BV1CM4y1w7py/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
+
+## 好看示例
+- 【JS是没有上限的】 https://www.bilibili.com/video/BV1yG4y127bs/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
+
+## 其它工具
+**v0.dev**：AI写代码，自动根据代码生成前端代码的工具 https://v0.dev/chat
+
+
+
+
 ## 其它
-
-
-### **前端服务**
-
-
-**为什么需要要启动前端服务**
-前端就是一堆 `HTML + CSS + JS` 文件，理论上双击 `index.html` 用浏览器也能打开。但是在实际开发和运行中，为什么还要用 `python -m http.server 3000` 启动一个服务呢：
-
-使用浏览器打开前端文件就只是预览下文件内容，浏览器会用 `file://` 协议打开文件。前端代码里的 **AJAX / Fetch 请求** 往往会被浏览器拦截，因为浏览器要求“同源”（协议、域名、端口都一致）才能访问后端 API。`file://` 协议没有端口和域名，会导致跨域问题。结果前端页面可能能显示，但一旦调用后端 API（比如 `http://localhost:8080/api/...`），就会报错。
-
-前端服务则是一个服务器，运行前端服务则是将前端服务运行在了服务器上，浏览器打开前端文件不再是使用file://协议打开文件，而是像服务器请求数据，像真实的使用场景，则那些api请求数据功能也能照常使用了。启动一个本地 Web 服务后，前端变成 `http://localhost:3000`，就有了正常的协议+域名+端口，可以和后端服务交互，避免跨域问题（或更容易配置跨域）。
-
-
-
-
-**有哪些前端服务**
-- **Python 内置**：`python -m http.server 3000`
-- **Node.js**：`npx http-server -p 3000`
-- **Live Server**（Go Live，VS Code 插件）：插件名字通常就是 **Live Server**，右下角有 **“Go Live”** 按钮。默认端口一般是 `5500`。支持 **热重载（Hot Reload）**，你保存文件后浏览器会自动刷新。非常适合前端开发时调试。
-- **Node.js前端开发框架自带服务**：如果你用 Vue / React / Angular 这些框架，都会有自己的开发服务器：Vue CLI → `npm run serve`（默认端口 8080）、React → `npm start`（默认端口 3000）、Angular → `ng serve`（默认端口 4200）。这些服务除了一般静态服务，还支持模块打包、代码热更新、代理转发等。：
-- **专业 Web 服务器**：上线时不会用这些小工具，而是用**Nginx**、**Apache** 等这些专业工具，适合部署到生产环境。
-
-
-**前端服务的选择**：
-- 如果只是自己跑跑 Demo，**随便用哪种都行**
-- 如果想开发时更方便（比如保存自动刷新），那就用 **Go Live**。
-- 如果模拟真实生产环境，用Nginx/Apache
-
-
-
-
-### Live Server/Go Live
-
-Live Server是vscode插件名
-Go Live是功能名字，按钮在vscode右下角
-用vscode打开项目文件，右下角点击 "Go Live"，这会在本地启动一个服务器（默认端口 5500）。浏览器会自动打开 `http://127.0.0.1:5500/index.html`。
-
 
 
 ### 现代前端技术解析知识导图

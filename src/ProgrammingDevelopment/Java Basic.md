@@ -66,6 +66,58 @@ JAR 文件
 `-cp` / `-classpath`：加载的类和资源的路径，多个路径用分隔符：Windows用 **`;`**、Linux/Mac 用 **`:`**
 
 ## IDEA
+
+**介绍**
+【intellij idea】Project Structure 讲解 - hellozay - 博客园： https://www.cnblogs.com/zadomn0920/p/6196962.html
+IntelliJ IDEA（七） ：Project Structure - JaJian - 博客园： https://www.cnblogs.com/jajian/p/8081640.html
+IntelliJ IDEA 学习笔记 - 常见图标介绍-CSDN博客： https://blog.csdn.net/cgl125167016/article/details/78671232
+Icon reference | IntelliJIDEA Documentation： https://www.jetbrains.com/help/idea/symbols.html#file-status
+
+**设置**
+- IDEA自己有个简单的构建工具，可通过在设置中勾选`"将IDE构建/运行操作委托给Maven(D)"`，把构建工作还给Maven
+- **编辑器-代码样式-Java设置**：
+	- 换行和大括号：链式方法的调研：始终换行（默认 不换行）、多行时对齐
+	- 大括号位置：在类声明中：下一行（如果换行）
+
+
+**操作技巧**
+- 写的正确但找不到依赖项：关掉IDE，重新打开一下
+- IDEA高效使用教程： https://idea.javaguide.cn/tips/efficient-use-guide.html
+
+**使用问题**
+- 问题信息乱码：Windows 控制台默认是 GBK 编码，但IDEA 默认用 UTF-8 编译运行 Java 程序，更改IDEA设置或者更换JDK，从 JDK 18 开始，默认编码就是 UTF-8，所以不会再出现 UTF-8/GBK 不一致的问题
+- 下载依赖项很慢：解决IDEA中Maven下载依赖包过慢或报错的问题-csdn： https://blog.csdn.net/weixin_40276431/article/details/136250858
+
+**maven**：
+- 同步/加载所有 Maven 项目 (Reimport / Reload All Maven Projects)：当修改了 `pom.xml`（新增/删除依赖，修改版本号）或变成了父子模块关系，让pom.xml变化后，让IDEA 会重新读取 Maven 的依赖树，把最新的依赖、插件、模块信息加载到 IDE 里。
+- 为所有项目生成源代码并更新文件夹 (Generate Sources and Update Folders)：最好在初次 clone 项目后运行一次，或者IDEA 报错找不到生成的类，但实际编译是可以通过的。
+- 下载源代码和/或文档 (Download Sources and/or Documentation)：下载依赖 jar 包对应的 源码（-sources.jar） 和 Javadoc（-javadoc.jar）：第一次接触新依赖时就下载源码和文档，想要阅读第三方库的实现细节（比如 Spring, MyBatis, Guava），鼠标悬停方法时没有 Javadoc 注释
+
+
+
+**快捷键**
+- (20条消息) Idea快捷键大全（Windows）_Lymanyu的博客-CSDN博客_idea快捷键： https://blog.csdn.net/qq_38963960/article/details/89552704
+
+- **快速导航到类或文件**：按 `Ctrl + N`（Windows/Linux）或 `Cmd + N`（macOS）快速打开类，按 `Ctrl + Shift + N`（Windows/Linux）或 `Cmd + Shift + N`（macOS）快速打开文件。    
+- **跳转到方法或变量定义**：将光标放在方法名或变量名上，按 `Ctrl + B`（Windows/Linux）或 `Cmd + B`（macOS）跳转到定义。
+- **快速修复（Quick Fix）**：当IDEA检测到错误时，将光标放在错误上，按 `Alt + Enter` 提供修复建议。
+- **智能代码补全**：按 `Ctrl + Space`（Windows/Linux）或 `Cmd + Space`（macOS）触发代码补全，IDEA会根据上下文提供相关的变量、方法和类名补全建议。
+- **重构代码**：按 `Ctrl + Alt + Shift + T`（Windows/Linux）或 `Cmd + Alt + Shift + T`（macOS）打开重构菜单，你可以进行方法提取、重命名、内联等重构操作。
+- **查看代码结构**：按 `Ctrl + F12`（Windows/Linux）或 `Cmd + F12`（macOS）查看当前文件的结构，快速跳转到类、方法、字段等。
+- **快速切换分支**：在Git集成下，按 `Ctrl + Alt + Shift + K`（Windows/Linux）或 `Cmd + Alt + Shift + K`（macOS）来快速切换Git分支。
+- **快速查看文档**：将光标悬停在方法或类上，按 `Ctrl + Q`（Windows/Linux）或 `Cmd + J`（macOS）查看文档或注释。
+- **局部变量高亮**：按 `Ctrl + Shift + F7`（Windows/Linux）或 `Cmd + Shift + F7`（macOS）高亮显示当前方法或类中的所有局部变量。
+- **多光标编辑**：按住 `Alt`（Windows/Linux）或 `Option`（macOS）并点击多个位置来添加多个光标，你可以同时编辑多个地方的内容。
+- **快速打开最近文件**：按 `Ctrl + E`（Windows/Linux）或 `Cmd + E`（macOS）快速查看和打开最近的文件。
+- **代码格式化**：按 `Ctrl + Alt + L`（Windows/Linux）或 `Cmd + Option + L`（macOS）自动格式化当前文件或代码块。
+- **调试操作**：按 `Shift + F9`（Windows/Linux）或 `Cmd + F9`（macOS）启动调试，按 `F8` 跳过当前行，按 `F7` 进入当前方法，查看调用堆栈和变量值。
+- **查看版本历史**：右键点击文件，选择 `Git → Show History` 来查看文件的版本历史和变更记录
+- **智能提示快速修复**：在编写代码时，IDEA会自动提供变量、方法和类名的智能提示，你可以通过 `Ctrl + Space` 强制触发。
+- **编辑多行**：按住 `Ctrl`（Windows/Linux）或 `Cmd`（macOS），然后点击多行，IDEA会在多个行上添加光标，可以同时编辑多个位置的内容。
+- **使用Live Templates**：IDEA支持代码模板，通过输入快捷缩写并按 `Tab` 键，IDEA会自动扩展为完整的代码块。你可以自定义模板。
+
+
+## IDEA
 ### .idea
 `.idea` 文件夹是 IntelliJ IDEA 用来存储项目级配置信息的目录。
 当 IDEA 采用Directory-based format（基于目录的格式） 管理项目时（这是目前的默认和推荐方式），它会创建这个目录。
@@ -173,6 +225,72 @@ JAR 文件
 * `//.classpath`：Eclipse 的依赖路径配置。
 * `//.externalToolBuilders/`：Eclipse 外部构建工具配置。
 
+## Maven
+Maven Repository: Search/Browse/Explore： https://mvnrepository.com/
+
+
+Maven 是 Java 项目的 构建工具，也是最常用的依赖管理工具。
+构建工具的作用是管理项目的依赖和构建过程
+
+主要功能有：
+* 
+
+主要功能：
+- **依赖管理**：Maven 可以自动下载项目所需的外部依赖库（JAR 包），并确保项目中各个依赖库的版本一致。例如，如果你的项目使用了 Spring Framework，Maven 会自动帮你下载 Spring 的相关 JAR 包。
+- **构建生命周期管理**：Maven 会根据 生命周期 来自动执行一系列构建任务（如编译、测试、打包、部署等）。例如，执行 `mvn compile` 命令，就是进入生命周期的编译阶段，Maven编译项目中的所有源代码；执行 `mvn install` 命令，Maven 会依次完成编译、测试、打包、安装等操作；
+
+- **构建和部署**：Maven 还支持构建项目的可执行包（JAR、WAR 文件），并可以将这些包发布到公共仓库或私有仓库。    
+- **插件管理**：Maven 提供了丰富的插件来支持其他任务，例如运行单元测试、代码质量检查、文档生成、部署等，使用 `pom.xml` 来声明依赖和插件。
+
+* 常见命令：`mvn clean install`, `mvn package`
+
+生命周期：
+- **clean**：清理项目，删除编译后的文件。
+- **validate**：验证项目是否正确。
+- **compile**：编译源代码。
+- **test**：执行单元测试。
+- **package**：打包代码（如生成 JAR 或 WAR 文件）。
+- **install**：将打包好的文件安装到本地 Maven 仓库。
+- **deploy**：将构建结果部署到远程仓库。
+
+
+
+使用参数：
+-DskipTests：编译测试代码，但不执行测试代码
+-Dmaven.test.skip=true：不编译测试代码，也不执行测试代码
+
+
+pom.xml：
+`<scope>` 是**依赖作用范围**，决定了：
+- **依赖在编译、测试、运行等阶段是否可用**
+- **依赖会不会打进最终的包（jar/war）里**
+- **子模块是否会继承**
+
+- `compile`（默认）：如果不写 `<scope>`，就是 `compile`。编译 / 测试 / 运行 都可用。会被打进最终 jar/war。
+- `provided`：编译 / 测试可用，运行时不打包。
+- `runtime`：编译时不需要，运行时才需要。测试也能用。
+- `test`：只在测试阶段生效。不会打进最终包。
+- `import`：用来 导入 BOM（Bill of Materials）。不是实际依赖，而是把别的 POM 的依赖管理引入进来。
+
+`<artifactId>spring-boot-dependencies</artifactId>`是 Spring Boot 的 **依赖管理 POM**，专门列出了 Spring Boot 生态里所有常用依赖的版本号（Spring Framework、Jackson、Hibernate、Tomcat、Netty 等几十上百个）。你不用自己一个个去写版本。
+
+
+`<type>pom</type>`因为 `spring-boot-dependencies` 本质上不是一个 jar 包，而是一个 **POM 文件**。它里面只有 `<dependencyManagement>`，没有源码/字节码。所以这里要指定 `<type>pom`，告诉 Maven 这是一个 POM 类型的 artifact。
+
+- 因为 Spring Boot BOM 已经帮你管好了版本。`spring-boot-starter`、`spring-boot-starter-web`、`spring-boot-starter-test` 不需要出现在父 POM 的 dependencyManagement。子模块需要用时直接 `<dependency>` 声明，不用版本号
+
+
+## Gradle
+
+Gradle 是另一个现代化的 Java **构建工具**，比 Maven 更灵活、性能更高，支持更多语言。
+特点如下：
+* 使用 Groovy 或 Kotlin DSL 脚本，比 XML 更简洁。
+* 支持增量构建和并行构建。
+* 被 Android Studio 默认采用（用于构建 Android 应用）。
+* 比 Maven 更适合复杂项目或多语言项目。
+
+
+
 
 ## 程序运行
 
@@ -276,6 +394,8 @@ System.out.printf("小数：%f只保留2位是：%.2f\n", d, d);
 // 小数：1.234500只保留2位是：1.23
 ```
 
+## Java基础知识
+## 基础语法
 ## 数据类型
 
 **基本数据类型**
@@ -974,7 +1094,7 @@ abstract 修饰方法
 
 
 
-
+## 异常处理
 
 ## 错误和异常
 `Throwable` 是 Java 所有错误和异常的根类，它有两个直接子类：
@@ -1029,11 +1149,6 @@ Java 使用 **异常捕获和抛出机制（try-catch-finally）** 来处理异�
 
 （3）finalize是java.lang.Object中的方法，也就是每一个对象都有这个方法，一个对象的finalize方法只会调用一次，调用了不一定被回收，因为只有对象被回收的时候才会被回收，就会导致前面调用，后面回收的时候出现问题，不推荐使用。
 
-## 反射
-**概念**：通过类的对象动态获取类的信息（比如字段、方法、构造函数等），以及动态调用类的方法
-
-
-
 ## 注解——常用注解
 
 @**AllArgsConstructor**：生成一个全参构造函数
@@ -1087,6 +1202,11 @@ public class WxMiniAppConfig {
 @**NoArgsConstructor**：自动生成一个无参构造函数
 
 @**PathVariable**：获取由@GetMapping注解的处理GET请求的方法的HTTP路径中的路径变量
+
+
+## 反射
+**概念**：通过类的对象动态获取类的信息（比如字段、方法、构造函数等），以及动态调用类的方法
+
 
 
 ## 泛型
@@ -1367,6 +1487,9 @@ List<String> result = stringCollection.stream()
    ↓ .collect(...)
 最终结果（List）
 ```
+
+## Java网络编程
+
 
 ## 数据库
 

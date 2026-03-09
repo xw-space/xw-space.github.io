@@ -744,8 +744,11 @@ WHERE MONTH(birth_date) = 2;
 
 
 
+## 举例说明数据不一致的问题
+扣减优惠券、课程报名订单生成并写入数据库、推送报名成功消息
 
-## 悲观锁和乐观锁
+## 锁
+### 悲观锁和乐观锁
 - 悲观锁：对资源上锁以防止冲突
 - 乐观锁：通过版本号机制解决并发问题
 
@@ -764,113 +767,7 @@ WHERE MONTH(birth_date) = 2;
 在选择使用悲观锁还是乐观锁时，需要根据业务的并发性和数据一致性要求来权衡。
 
 
-## 举例说明数据不一致的问题
-扣减优惠券、课程报名订单生成并写入数据库、推送报名成功消息
-
-## Neo4j
-
-
-
-
-
-
-## SQLite
-
-**特点**：
-- 轻量级、嵌入式数据库
-- 适用场景（移动设备、嵌入式系统）.
-
-**使用**：
-Downloads - DB Browser for SQLite： https://sqlitebrowser.org/dl/
-
-
-## PostgreSQL
-
-
-介绍各种功能：【养活国内大半自研数据库团队？PostgreSQL是什么？架构是怎么样的？】 https://www.bilibili.com/video/BV1CkCQBoEyp/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
-
-
-快速介绍了下如何各种功能如何使用：【PostgreSQL能存万物！这还是你认识的数据库吗？】 https://www.bilibili.com/video/BV1FUYQz7E4H/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
-## H2内存数据库
-**介绍**：H2 是一个纯 Java 实现的轻量级数据库，支持内存运行、嵌入式部署和兼容 SQL 标准。
-
-**H2有三种常用运行模式**：
-
-|模式|含义|是否持久化|用途|
-|---|---|---|---|
-|**内存模式** (`jdbc:h2:mem:xxx`)|数据只存在内存中，程序结束即消失|❌ 否|单元测试、演示|
-|**嵌入模式** (`jdbc:h2:~/test`)|数据文件存到硬盘上的项目文件中|✅ 是|本地开发用轻量数据库|
-|**服务器模式** (`jdbc:h2:tcp://...`)|启动 H2 服务端，客户端远程连接|✅ 是|模拟真正的数据库部署|
-
-**使用**，`application.yml` 中这样配置：：
-```yaml
-spring:
-  datasource:
-    url: jdbc:h2:mem:testdb;MODE=MySQL;DB_CLOSE_DELAY=-1
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-  sql:
-    init:
-      mode: always
-```
-- 可以通过`http://localhost:8080/h2-console`访问，登录名：sa，密码留空
-- 代码解释：
-
-| 配置项                       | 说明                             |
-| ------------------------- | ------------------------------ |
-| `jdbc:h2:mem:testdb`      | 使用内存数据库，名字叫 testdb             |
-| `MODE=MySQL`              | 让 SQL 语法兼容 MySQL（如 `LIMIT`）    |
-| `DB_CLOSE_DELAY=-1`       | 避免连接断开后数据库立即销毁                 |
-| `h2.console.enabled=true` | 开启 Web 管理控制台                   |
-| `sql.init.mode=always`    | 自动执行 `schema.sql` 和 `data.sql` |
-
-## MySQL
-
-### MySQL和MongoDB有哪些区别
-
-- **数据结构**：
-	- **MongoDB**：是一个文档型数据库，使用JSON类似的BSON格式存储数据，支持嵌套和灵活的数据结构。
-	- **MySQL**：是关系型数据库，使用表格结构存储数据，数据模式固定，每行数据需符合表结构。
-- **查询语言**：
-	- **MongoDB**：使用查询语法，类似JSON格式的语法，支持多样的查询方式，如聚合管道和地理空间查询。
-	- **MySQL**：使用SQL查询语言，支持复杂的查询、连接、事务、分组等操作，适合结构化数据。
-
-- **事务处理**：
-	- **MongoDB**：支持基本的事务功能，4.0版本后支持多文档事务，适合简单的事务需求。
-	- **MySQL**：提供完整的事务支持，保证ACID特性，适合金融、订单等强一致性要求的业务。
-
-- **扩展性**：
-	- **MongoDB**：支持水平扩展，天然支持分片，适合大数据量和高并发场景。
-	- **MySQL**：一般通过主从复制和分库分表实现扩展，扩展性相对受限。
-
-- **数据关系**：
-	- **MongoDB**：没有表关系，数据通常通过嵌套存储，适合文档型和无固定关系的数据。
-	- **MySQL**：有严格的表关系，通过外键建立表之间的关联，适合处理复杂的关系数据。
-
-- **使用场景**：
-	- **MongoDB**：MongoDB灵活性强，适合快速迭代和变化较大的数据结构；适合文档存储、内容管理、物联网、大数据等非结构化数据场景。
-	- **MySQL**：MySQL则适合结构化和高一致性需求的场景。适合电商、金融、社交网络等关系结构复杂且数据一致性要求高的场景。 
-
-
-
-### MySQL体系结构
-- 连接层
-- 服务层
-- 引擎层
-- 存储层
-
-
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251224102452.png)
-
-
-
-
-### 索引
+## 索引
 了解过索引吗？（什么是索引）
 索引（index）是帮助MySQL高效获取数据的数据结构(有序)。在数据之外，数据库系统还维护着满足特定查找算法的数据结构（B+树），这些数据结构以某种方式引用（指向）数据， 这样就可以在这些数据结构上实现高级查找算法，这种数据结构就是索引。
 
@@ -975,6 +872,48 @@ select id，name，gender from tb_user where name = ‘Arm’
 - 使用id查询，直接走聚集索引查询，一次索引扫描，直接返回数据，性能高。
 - 如果返回的列中没有创建索引，有可能会触发回表查询，尽量避免使用select *
 知道什么叫覆盖索引嘛 ? 
+
+
+## MySQL
+
+### MySQL和MongoDB有哪些区别
+
+- **数据结构**：
+	- **MongoDB**：是一个文档型数据库，使用JSON类似的BSON格式存储数据，支持嵌套和灵活的数据结构。
+	- **MySQL**：是关系型数据库，使用表格结构存储数据，数据模式固定，每行数据需符合表结构。
+- **查询语言**：
+	- **MongoDB**：使用查询语法，类似JSON格式的语法，支持多样的查询方式，如聚合管道和地理空间查询。
+	- **MySQL**：使用SQL查询语言，支持复杂的查询、连接、事务、分组等操作，适合结构化数据。
+
+- **事务处理**：
+	- **MongoDB**：支持基本的事务功能，4.0版本后支持多文档事务，适合简单的事务需求。
+	- **MySQL**：提供完整的事务支持，保证ACID特性，适合金融、订单等强一致性要求的业务。
+
+- **扩展性**：
+	- **MongoDB**：支持水平扩展，天然支持分片，适合大数据量和高并发场景。
+	- **MySQL**：一般通过主从复制和分库分表实现扩展，扩展性相对受限。
+
+- **数据关系**：
+	- **MongoDB**：没有表关系，数据通常通过嵌套存储，适合文档型和无固定关系的数据。
+	- **MySQL**：有严格的表关系，通过外键建立表之间的关联，适合处理复杂的关系数据。
+
+- **使用场景**：
+	- **MongoDB**：MongoDB灵活性强，适合快速迭代和变化较大的数据结构；适合文档存储、内容管理、物联网、大数据等非结构化数据场景。
+	- **MySQL**：MySQL则适合结构化和高一致性需求的场景。适合电商、金融、社交网络等关系结构复杂且数据一致性要求高的场景。 
+
+
+
+### MySQL体系结构
+- 连接层
+- 服务层
+- 引擎层
+- 存储层
+
+
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251224102452.png)
+
+
+
 
 ### 索引底层数据结构
 **索引的底层数据结构了解过嘛** ? 
@@ -2664,6 +2603,204 @@ ranking → {
   "Bob": 200
 }
 ```
+
+## MongoDB
+
+**简介**：
+MongoDB 是一个文档型 NoSQL 数据库，具有高写入能力，适合 “不断写入 + 查询历史 + 数据结构灵活” 的业务场景：
+
+**优点**：
+- 实时高频高并发写入能力
+- 支持嵌套结构，支持动态拓展字段
+- 无需 schema，数据结构灵活（所以其是NoSQL），不要求字段统一，每条数据的结构可以不同，因为同一种信息有个字段可能有，有的字段可能没有
+- 支持写入分片（sharding），可以分布式横向扩展，水平扩展（多节点分布式），易扩容
+- 天然无事务写入：性能比 MySQL 更高效（适用于不需要强事务的场景），弱事务（适合高性能）
+- 支持高效的索引（orderId、timestamp、地理位置等）
+- 支持范围查询、排序、聚合管道，以字段为单位，查询语法支持“路径式查询”，可以直接查 `.a.b.c` 结构，查询举例：`db.tracks.find({ "location.coordinates": [116.40, 39.91] })`
+- 非常适合做时间序列数据的查询（虽然不是 TSDB，但灵活）
+
+**缺点**：
+- 事务支持弱：MongoDB 在 4.0 之前不支持多文档（表）事务，现在虽支持，但性能不如关系型数据库，例如金融系统涉及账户余额+日志+ 扣款流水等的多表一致写入，写入高并发时难保证强一致性。
+- 强一致性较弱：默认是最终一致性，副本同步存在延迟，主从切换时可能读到旧数据（除非使用 majority 读写策略）。
+- 过度灵活带来数据混乱：不强制 schema，可能导致数据结构不一致、难维护，初期方便，后期有人乱加字段，查询一地鸡毛。
+- 索引机制有限：不支持复杂联合索引（如 `A or B and C` 这类复杂查询），优化能力不如 MySQL，写多读少场景还行，分析型查询不如关系型。
+- 大文档性能差：BSON 单个文档最大 16MB，嵌套太深或字段过多会拖慢查询，比如保存聊天记录、日志流水要注意文档大小。
+- 资源占用高：WiredTiger 存储引擎需要大量内存支撑热数据，数据越多内存压力越大，如果内存不足会导致性能抖动。
+- 聚合分析能力不足：聚合功能不如 SQL 灵活，跨集合聚合很难，不适合 OLAP 场景，常需配合 Spark/Hive 做分析。
+- 权限与安全机制偏弱：内建权限机制简单，不如关系型数据库成熟，多租户或精细化权限控制往往需要额外封装。
+- 写冲突不可控：默认并发写入无行锁，容易出现“最后写覆盖”，多个客户端同时写同一字段可能互相覆盖，适合补偿式事务。
+- 生态和兼容性一般：Mongo 查询语法独立，不支持标准 SQL，工具链不统一，很多 BI 工具或数据中台天然支持 MySQL，但对 Mongo 支持较弱。
+- 面对长期大量数据表现不加，比如存储巨量日志，每天几十亿条，虽然 MongoDB 可以承受高写入，但历史数据归档麻烦、单表太大后索引性能下降、分片配置复杂、维护难度大
+- 
+
+**适合场景**：
+- 灵活存储，适合结构变化频繁的数据
+ - 写入性能强，适合海量实时数据
+- 天生适合 JSON/BSON 结构，如轨迹、日志、用户行为
+- 不适合的场景：强依赖事务、多表一致、数据结构变化不多且规则严谨的数据、需要复杂统计/JOIN/子查询、数据量超大（亿级）且结构固定的存储
+
+
+**结构**：
+- 每个 **集合** 类似于关系型数据库中的一张表，每个集合里的文档（Document）就是 JSON/BSON 结构，MongoDB 的设计哲学：文档即数据
+```scss
+数据库(db) →
+    集合(collection) →
+        文档(document) →
+            BSON → 存入数据页 → 磁盘文件
+```
+
+- BSON（Binary JSON） —— 是一种专为机器优化的、类似 JSON 的二进制格式。可以把 MongoDB 想象成是“存储 JSON 的数据库”，只不过它用的是一种叫 BSON 的二进制格式，更高效。一条 MongoDB 记录可以长这样：
+```json
+{
+  "userId": "u123",
+  "orderId": "o567",
+  "location": {
+    "type": "Point",
+    "coordinates": [116.397, 39.918]
+  },
+  "timestamp": "2025-04-25T10:45:00Z"
+}
+```
+
+- MongoDB 是通过**存储引擎**（默认是 **WiredTiger**）将 BSON 文档写入磁盘。MongoDB 数据文件通常是 `.wt` 文件（WiredTiger 的压缩二进制文件），例如：
+```cpp
+dbpath/
+  ├── collection-1--123456789.wt   // 存储一个集合的所有 BSON 文档
+  ├── index-3--987654321.wt        // 索引文件
+  └── WiredTiger.wt                // 全局元数据
+```
+
+
+**使用**：
+命令行命令：
+```bash
+show dbs
+db.version() #当前db版本
+db.getMongo() #查看当前db的链接机器地址
+db.help() #帮助
+quit() #退出命令行
+```
+
+java中操作使用：
+- pom.xml引入依赖：
+```xml
+<dependency>
+  <groupId>org.mongodb</groupId>
+  <artifactId>mongodb-driver-sync</artifactId>
+  <version>4.11.1</version> <!-- 版本可根据需要调整 -->
+</dependency>
+```
+
+```java
+package com.example.mongo_demo;
+
+import com.mongodb.client.*;
+import org.bson.Document;
+
+public class MongoDemo {
+    public static void main(String[] args) {
+        // 1. 创建连接（默认 localhost:27017）
+        try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
+
+            // 2. 获取数据库（没有则自动创建）
+            MongoDatabase database = mongoClient.getDatabase("testdb");
+
+            // 3. 获取集合（没有则自动创建）
+            MongoCollection<Document> collection = database.getCollection("users");
+
+            // 4. 插入文档
+            Document user = new Document("name", "Alice")
+                    .append("age", 25)
+                    .append("email", "alice@example.com");
+            collection.insertOne(user);
+            System.out.println("插入完成: " + user.toJson());
+
+            // 5. 查询文档
+            Document query = new Document("name", "Alice");
+            FindIterable<Document> results = collection.find(query);
+            for (Document doc : results) {
+                System.out.println("查询结果: " + doc.toJson());
+            }
+
+            // 6. 更新文档
+            Document update = new Document("$set", new Document("age", 26));
+            collection.updateOne(query, update);
+            System.out.println("更新完成");
+
+            // 7. 删除文档
+            collection.deleteOne(query);
+            System.out.println("删除完成");
+        }
+    }
+}
+```
+输出：
+```text
+插入完成: { "_id": { "$oid": "64f...." }, "name": "Alice", "age": 25, "email": "alice@example.com" }
+查询结果: { "_id": { "$oid": "64f...." }, "name": "Alice", "age": 25, "email": "alice@example.com" }
+更新完成
+删除完成
+```
+
+
+## Neo4j
+
+
+## SQLite
+
+**特点**：
+- 轻量级、嵌入式数据库
+- 适用场景（移动设备、嵌入式系统）.
+
+**使用**：
+Downloads - DB Browser for SQLite： https://sqlitebrowser.org/dl/
+
+
+## PostgreSQL
+
+
+介绍各种功能：【养活国内大半自研数据库团队？PostgreSQL是什么？架构是怎么样的？】 https://www.bilibili.com/video/BV1CkCQBoEyp/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
+
+
+快速介绍了下如何各种功能如何使用：【PostgreSQL能存万物！这还是你认识的数据库吗？】 https://www.bilibili.com/video/BV1FUYQz7E4H/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
+## H2内存数据库
+**介绍**：H2 是一个纯 Java 实现的轻量级数据库，支持内存运行、嵌入式部署和兼容 SQL 标准。
+
+**H2有三种常用运行模式**：
+
+|模式|含义|是否持久化|用途|
+|---|---|---|---|
+|**内存模式** (`jdbc:h2:mem:xxx`)|数据只存在内存中，程序结束即消失|❌ 否|单元测试、演示|
+|**嵌入模式** (`jdbc:h2:~/test`)|数据文件存到硬盘上的项目文件中|✅ 是|本地开发用轻量数据库|
+|**服务器模式** (`jdbc:h2:tcp://...`)|启动 H2 服务端，客户端远程连接|✅ 是|模拟真正的数据库部署|
+
+**使用**，`application.yml` 中这样配置：：
+```yaml
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=MySQL;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  sql:
+    init:
+      mode: always
+```
+- 可以通过`http://localhost:8080/h2-console`访问，登录名：sa，密码留空
+- 代码解释：
+
+| 配置项                       | 说明                             |
+| ------------------------- | ------------------------------ |
+| `jdbc:h2:mem:testdb`      | 使用内存数据库，名字叫 testdb             |
+| `MODE=MySQL`              | 让 SQL 语法兼容 MySQL（如 `LIMIT`）    |
+| `DB_CLOSE_DELAY=-1`       | 避免连接断开后数据库立即销毁                 |
+| `h2.console.enabled=true` | 开启 Web 管理控制台                   |
+| `sql.init.mode=always`    | 自动执行 `schema.sql` 和 `data.sql` |
+
 
 ## 其它
 ### 数据分片

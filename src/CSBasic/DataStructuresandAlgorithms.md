@@ -193,15 +193,6 @@ n的阶乘分之一，Σ（1/n！）是一个绝对收敛的幂级数，这个�
 
 
 
-## 暴力方法-枚举
-- 什么是枚举算法：在搜索结果的过程中，把各种可能的情况都考虑到，并对所得的结果逐一进行判断，过滤掉那些不符合要求的，保留那些符合要求的，这种方法叫枚举算法
-- 并不是所有的问题都可以使用枚举算法来求解，只有当问题的所有可能解的个数不太多时，并在可以接受的时间内得到问题的所有解，才有可能使用枚举算法 。
-- 枚举算法的解题过程分两步
-    - 逐一列举可能的解的范围。  这个过程用循环结构实现
-    - 并对每一个列举可能的解进行检验，判断是否为真正的解 。  这个过程用选择结构实现
-    - 枚举算法=循环结构+选择结构，循环结构内嵌套选择结构
-
-
 ## 数组
 数组（Array）是一种用连续的内存空间存储相同数据类型数据的线性数据结构。
 
@@ -224,9 +215,7 @@ n的阶乘分之一，Σ（1/n！）是一个绝对收敛的幂级数，这个�
 例题：
 LeetCode：704.二分查找、59.螺旋矩阵Ⅱ
 
-## 普通数组
 
-## 矩阵
 
 ## 字符串
 ### 子串
@@ -236,121 +225,9 @@ LeetCode：704.二分查找、59.螺旋矩阵Ⅱ
 
 
 
-## 哈希
-
-## 哈希表/散列表
-
-散列表(Hash Table)又名哈希表/Hash表，是根据键（Key）直接访问在内存存储位置值（Value）的数据结构，它是由数组演化而来的，利用了数组支持按照下标进行随机访问数据的特性
-
-假设有100个人参加马拉松，不采用1-100的自然数对选手进行编号，编号有一定的规则比如：2023ZHBJ001，其中2023代表年份，ZH代表中国，BJ代表北京，001代表原来的编号，那此时的编号2023ZHBJ001不能直接作为数组的下标，此时应该如何实现呢？
-通过散列函数，将键转换为数组下标
-
-将键(key)映射为数组下标的函数叫做散列函数。可以表示为：hashValue = hash(key)
-
-散列函数的基本要求：
-- 散列函数计算得到的散列值必须是大于等于0的正整数，因为hashValue需要作为数组的下标。
-- 如果`key1==key2`，那么经过hash后得到的哈希值也必相同即：`hash(key1) == hash(key2）`
-- 如果key1 != key2，那么经过hash后得到的哈希值也必不相同即：hash(key1) != hash(key2)
-
-散列冲突
-实际的情况下想找一个散列函数能够做到对于不同的key计算得到的散列值都不同几乎是不可能的，即便像著名的MD5,SHA等哈希算法也无法避免这一情况，这就是散列冲突(或者哈希冲突，哈希碰撞，就是指多个key映射到同一个数组下标位置)
-
-
-
-
-
-
-
-
-
-**使用哈希表的情况**：
-当我们需要查询一个元素是否出现过，或者一个元素是否在集合里的时候，就要第一时间想到哈希法。
-
-**构造方法**：
-- 直接定址法
-- 除留余数法
-- 叠加法
-- 随机数法
-
-**哈希冲突**：
-- 开放地址法
-- 线性探查法
-- 平方探查法
-- 双散列函数探查法
-- 分离链接法
-
-- 链表法（拉链）：在散列表中，数组的每个下标位置我们可以称之为桶（bucket）或者槽（slot），每个桶(槽)会对应一条链表，所有散列值相同的元素我们都放到相同槽位对应的链表中。
-	- 插入操作，通过散列函数计算出对应的散列槽位，将其插入到对应链表中即可，插入的时间复杂度是 O(1)
-	- 当查找、删除一个元素时，我们同样通过散列函数计算出对应的槽，然后遍历链表查找或者删除
-		- 平均情况下基于链表法解决冲突时查询的时间复杂度是O(1)
-		- 散列表可能会退化为链表,查询的时间复杂度就从 O(1) 退化为 O(n)
-		- 将链表法中的链表改造为其他高效的动态数据结构，比如红黑树，查询的时间复杂度是 O(logn)
-			- 将链表法中的链表改造红黑树还有一个非常重要的原因，可以防止DDos攻击
-			- DDos 攻击，分布式拒绝服务攻击(英文意思是Distributed Denial of Service，简称DDoS），处于不同位置的多个攻击者同时向一个或数个目标发动攻击，或者一个攻击者控制了位于不同位置的多台机器并利用这些机器对受害者同时实施攻击。由于攻击的发出点是分布在不同地方的，这类攻击称为分布式拒绝服务攻击，其中的攻击者可以有多个
-
-
-
-
-
-
-
-**例题**：
-LeetCode：1.两数之和、242.有效的字母异位词、349.两个数组的交集
-
 ## 链表
 
-## 链表-java代码
-
-
-```Java
-// 定义单向链表节点
-class ListNode {
-    int val;
-    ListNode next;
-    ListNode(int val) {
-        this.val = val;
-    }
-}
-
-// 创建链表（1 -> 2 -> 3）
-ListNode head = new ListNode(1);
-head.next = new ListNode(2);
-head.next.next = new ListNode(3);
-
-// 读取链表：`1 2 3 4 5` 表示链表 1→2→3→4→5
-public static ListNode readList(Scanner sc) {
-    String[] parts = sc.nextLine().split(" ");
-    ListNode dummy = new ListNode(0);
-    ListNode cur = dummy;
-    for (String part : parts) {
-        cur.next = new ListNode(Integer.parseInt(part));
-        cur = cur.next;
-    }
-    return dummy.next;
-}
-
-
-// 遍历链表
-ListNode cur = head;
-while (cur != null) {
-    System.out.println(cur.val);
-    cur = cur.next;
-}
-
-// 反转链表
-ListNode prev = null;
-ListNode cur = head;
-while (cur != null) {
-    ListNode next = cur.next;
-    cur.next = prev;
-    prev = cur;
-    cur = next;
-}
-
-```
-
-
-## 链表
+### 链表
 
 环形链表
 
@@ -417,94 +294,117 @@ private static class Node<E> {
 
 
 
-## 树-java代码
+### 链表-java代码
+
 
 ```Java
-// 定义二叉树节点
-class TreeNode {
+// 定义单向链表节点
+class ListNode {
     int val;
-    TreeNode left, right;
-    TreeNode(int val) {
+    ListNode next;
+    ListNode(int val) {
         this.val = val;
     }
 }
-// 构建简单的二叉树
-TreeNode root = new TreeNode(1);
-root.left = new TreeNode(2);
-root.right = new TreeNode(3);
 
-// 读取二叉树
-//     1
-//    / \
-//   2   3
-//    \
-//     4
+// 创建链表（1 -> 2 -> 3）
+ListNode head = new ListNode(1);
+head.next = new ListNode(2);
+head.next.next = new ListNode(3);
 
-public static TreeNode buildTree(String[] parts) {
-    if (parts.length == 0 || parts[0].equals("null")) return null;
-
-    TreeNode root = new TreeNode(Integer.parseInt(parts[0]));
-    Queue<TreeNode> queue = new LinkedList<>();
-    queue.offer(root);
-    int i = 1;
-
-    while (!queue.isEmpty() && i < parts.length) {
-        TreeNode node = queue.poll();
-        if (!parts[i].equals("null")) {
-            node.left = new TreeNode(Integer.parseInt(parts[i]));
-            queue.offer(node.left);
-        }
-        i++;
-        if (i < parts.length && !parts[i].equals("null")) {
-            node.right = new TreeNode(Integer.parseInt(parts[i]));
-            queue.offer(node.right);
-        }
-        i++;
+// 读取链表：`1 2 3 4 5` 表示链表 1→2→3→4→5
+public static ListNode readList(Scanner sc) {
+    String[] parts = sc.nextLine().split(" ");
+    ListNode dummy = new ListNode(0);
+    ListNode cur = dummy;
+    for (String part : parts) {
+        cur.next = new ListNode(Integer.parseInt(part));
+        cur = cur.next;
     }
-
-    return root;
+    return dummy.next;
 }
 
 
-// 前序遍历（根 → 左 → 右）：
-void preorder(TreeNode root) {
-    if (root == null) return;
-    System.out.print(root.val + " ");
-    preorder(root.left);
-    preorder(root.right);
+// 遍历链表
+ListNode cur = head;
+while (cur != null) {
+    System.out.println(cur.val);
+    cur = cur.next;
 }
 
-// 中序遍历（左 → 根 → 右）：
-void inorder(TreeNode root) {
-    if (root == null) return;
-    inorder(root.left);
-    System.out.print(root.val + " ");
-    inorder(root.right);
-}
-
-// 后序遍历（左 → 右 → 根）：
-void postorder(TreeNode root) {
-    if (root == null) return;
-    postorder(root.left);
-    postorder(root.right);
-    System.out.print(root.val + " ");
-}
-
-// 层序遍历（BFS）：
-Queue<TreeNode> queue = new LinkedList<>();
-queue.offer(root);
-while (!queue.isEmpty()) {
-    TreeNode node = queue.poll();
-    System.out.print(node.val + " ");
-    if (node.left != null) queue.offer(node.left);
-    if (node.right != null) queue.offer(node.right);
+// 反转链表
+ListNode prev = null;
+ListNode cur = head;
+while (cur != null) {
+    ListNode next = cur.next;
+    cur.next = prev;
+    prev = cur;
+    cur = next;
 }
 
 ```
 
 
+## 哈希
+
+### 哈希表/散列表
+
+散列表(Hash Table)又名哈希表/Hash表，是根据键（Key）直接访问在内存存储位置值（Value）的数据结构，它是由数组演化而来的，利用了数组支持按照下标进行随机访问数据的特性
+
+假设有100个人参加马拉松，不采用1-100的自然数对选手进行编号，编号有一定的规则比如：2023ZHBJ001，其中2023代表年份，ZH代表中国，BJ代表北京，001代表原来的编号，那此时的编号2023ZHBJ001不能直接作为数组的下标，此时应该如何实现呢？
+通过散列函数，将键转换为数组下标
+
+将键(key)映射为数组下标的函数叫做散列函数。可以表示为：hashValue = hash(key)
+
+散列函数的基本要求：
+- 散列函数计算得到的散列值必须是大于等于0的正整数，因为hashValue需要作为数组的下标。
+- 如果`key1==key2`，那么经过hash后得到的哈希值也必相同即：`hash(key1) == hash(key2）`
+- 如果key1 != key2，那么经过hash后得到的哈希值也必不相同即：hash(key1) != hash(key2)
+
+散列冲突
+实际的情况下想找一个散列函数能够做到对于不同的key计算得到的散列值都不同几乎是不可能的，即便像著名的MD5,SHA等哈希算法也无法避免这一情况，这就是散列冲突(或者哈希冲突，哈希碰撞，就是指多个key映射到同一个数组下标位置)
 
 
+
+
+
+
+
+
+
+**使用哈希表的情况**：
+当我们需要查询一个元素是否出现过，或者一个元素是否在集合里的时候，就要第一时间想到哈希法。
+
+**构造方法**：
+- 直接定址法
+- 除留余数法
+- 叠加法
+- 随机数法
+
+**哈希冲突**：
+- 开放地址法
+- 线性探查法
+- 平方探查法
+- 双散列函数探查法
+- 分离链接法
+
+- 链表法（拉链）：在散列表中，数组的每个下标位置我们可以称之为桶（bucket）或者槽（slot），每个桶(槽)会对应一条链表，所有散列值相同的元素我们都放到相同槽位对应的链表中。
+	- 插入操作，通过散列函数计算出对应的散列槽位，将其插入到对应链表中即可，插入的时间复杂度是 O(1)
+	- 当查找、删除一个元素时，我们同样通过散列函数计算出对应的槽，然后遍历链表查找或者删除
+		- 平均情况下基于链表法解决冲突时查询的时间复杂度是O(1)
+		- 散列表可能会退化为链表,查询的时间复杂度就从 O(1) 退化为 O(n)
+		- 将链表法中的链表改造为其他高效的动态数据结构，比如红黑树，查询的时间复杂度是 O(logn)
+			- 将链表法中的链表改造红黑树还有一个非常重要的原因，可以防止DDos攻击
+			- DDos 攻击，分布式拒绝服务攻击(英文意思是Distributed Denial of Service，简称DDoS），处于不同位置的多个攻击者同时向一个或数个目标发动攻击，或者一个攻击者控制了位于不同位置的多台机器并利用这些机器对受害者同时实施攻击。由于攻击的发出点是分布在不同地方的，这类攻击称为分布式拒绝服务攻击，其中的攻击者可以有多个
+
+
+
+
+
+
+
+**例题**：
+LeetCode：1.两数之和、242.有效的字母异位词、349.两个数组的交集
 
 ## 树
 ### **性质**
@@ -719,12 +619,95 @@ B+树是B树的变种，它通常用于数据库索引。
 - 最外面的方块，的块我们称之为一个磁盘块，可以看到每个磁盘块包含几个数据项（粉色所示）和指针（黄色/灰色所示），如根节点磁盘包含数据项 17 和 35，包含指针 P1、P2、P3，P1 表示小于 17 的磁盘块，P2 表示在 17 和 35 之间的磁盘块，P3 表示大于 35 的磁盘块。真实的数据存在于叶子节点即 3、4、5……、65。非叶子节点只不存储真实的数据，只存储指引搜索方向的数据项，如 17、35 并不真实存在于数据表中。
 - 叶子节点之间使用双向指针连接，最底层的叶子节点形成了一个双向有序链表，可以进行范围查询。
 
-## 二叉树
+### 树-java代码
+
+```Java
+// 定义二叉树节点
+class TreeNode {
+    int val;
+    TreeNode left, right;
+    TreeNode(int val) {
+        this.val = val;
+    }
+}
+// 构建简单的二叉树
+TreeNode root = new TreeNode(1);
+root.left = new TreeNode(2);
+root.right = new TreeNode(3);
+
+// 读取二叉树
+//     1
+//    / \
+//   2   3
+//    \
+//     4
+
+public static TreeNode buildTree(String[] parts) {
+    if (parts.length == 0 || parts[0].equals("null")) return null;
+
+    TreeNode root = new TreeNode(Integer.parseInt(parts[0]));
+    Queue<TreeNode> queue = new LinkedList<>();
+    queue.offer(root);
+    int i = 1;
+
+    while (!queue.isEmpty() && i < parts.length) {
+        TreeNode node = queue.poll();
+        if (!parts[i].equals("null")) {
+            node.left = new TreeNode(Integer.parseInt(parts[i]));
+            queue.offer(node.left);
+        }
+        i++;
+        if (i < parts.length && !parts[i].equals("null")) {
+            node.right = new TreeNode(Integer.parseInt(parts[i]));
+            queue.offer(node.right);
+        }
+        i++;
+    }
+
+    return root;
+}
+
+
+// 前序遍历（根 → 左 → 右）：
+void preorder(TreeNode root) {
+    if (root == null) return;
+    System.out.print(root.val + " ");
+    preorder(root.left);
+    preorder(root.right);
+}
+
+// 中序遍历（左 → 根 → 右）：
+void inorder(TreeNode root) {
+    if (root == null) return;
+    inorder(root.left);
+    System.out.print(root.val + " ");
+    inorder(root.right);
+}
+
+// 后序遍历（左 → 右 → 根）：
+void postorder(TreeNode root) {
+    if (root == null) return;
+    postorder(root.left);
+    postorder(root.right);
+    System.out.print(root.val + " ");
+}
+
+// 层序遍历（BFS）：
+Queue<TreeNode> queue = new LinkedList<>();
+queue.offer(root);
+while (!queue.isEmpty()) {
+    TreeNode node = queue.poll();
+    System.out.print(node.val + " ");
+    if (node.left != null) queue.offer(node.left);
+    if (node.right != null) queue.offer(node.right);
+}
+
+```
+
 
 
 ## 栈
 
-## 栈
 
 ## 堆
 **堆的定义**：
@@ -751,21 +734,21 @@ B+树是B树的变种，它通常用于数据库索引。
 复杂度分析：初始化最小堆和插入前十个元素的复杂度是$O(10)$，之后对于每个元素的操作复杂度为$O(1og10)$，总的时间复杂度是$(Nlog10)$，其中$N$是数据集的大小，即一亿。由于堆的大小固定为10，所以这个算法的效率很高。
 LeetCode：239、347
 
-## 堆
 
 ## 队列
 
-## 图
-图的实现：
-- 邻接矩阵
-- 邻接表
 
 
 
 
 ## 图论
 
-## 并查集
+图的实现：
+- 邻接矩阵
+- 邻接表
+
+
+### 并查集
 并查集（DSU，Disjoint-Set Union），即“不相交集合”，是一种用于处理集合合并和查询等问题的数据结构。
 
 **用途**：它主要用于解决一些集合的动态连接性问题，例如判断两个元素是否属于同一个集合、合并两个集合等。其将编号分别为1…N的N个对象划分为不相交集合，在每个集合中，选择其中某个元素代表所在集合。
@@ -783,6 +766,18 @@ LeetCode：239、347
 
 **相关题目**：
 HDU：[1232.畅通工程](http://acm.hdu.edu.cn/showproblem.php?pid=1232)
+
+## 暴力方法-枚举
+- 什么是枚举算法：在搜索结果的过程中，把各种可能的情况都考虑到，并对所得的结果逐一进行判断，过滤掉那些不符合要求的，保留那些符合要求的，这种方法叫枚举算法
+- 并不是所有的问题都可以使用枚举算法来求解，只有当问题的所有可能解的个数不太多时，并在可以接受的时间内得到问题的所有解，才有可能使用枚举算法 。
+- 枚举算法的解题过程分两步
+    - 逐一列举可能的解的范围。  这个过程用循环结构实现
+    - 并对每一个列举可能的解进行检验，判断是否为真正的解 。  这个过程用选择结构实现
+    - 枚举算法=循环结构+选择结构，循环结构内嵌套选择结构
+
+
+## 查找
+
 
 ## 排序
 
@@ -843,117 +838,6 @@ HDU：[1232.畅通工程](http://acm.hdu.edu.cn/showproblem.php?pid=1232)
    * 特点：适合整数、字符串等离散型数据。
 
 
-## 分治
-经典算法之分治算法 - 墨天轮： https://www.modb.pro/db/1714252220550701056
-
-分治策略是一种通过将问题分解为若干个更小的子问题，分别解决子问题，然后合并子问题的解来得到原问题解的方法。
-
-
-**特点与应用**：时间复杂度相对较低，适用于解决大规模问题，如排序、快速傅里叶变换、矩阵乘法等。如果题目要求复杂度为O(logn)，就要思考通过分治策略解决问题。使用分治策略一般都要用到递归。
-
-**基本思想**：
-- 分解 (Divide)：将原问题分解成若干个规模较小的子问题。
-- 解决 (Conquer)：递归地解决这些子问题。如果子问题足够小，直接解决。
-- 合并 (Combine)：将子问题的解合并成原问题的解。
-
-**计算渐近紧确界（在T（n）中，n为问题的求解代价）**：
-- 迭代法（递归树法，树节点只写问题大小）
-   - 算法分析基础——递归树求解递推方程 - 剪开黑夜 - 博客园： https://www.cnblogs.com/Jeffrey-Y/p/10303290.html
-   - 【复杂度递归式之展开法和代入法】 https://www.bilibili.com/video/BV1qw411A7Zj/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
-   - 
-- 主定理法（用新的带k的）
-   - 时间复杂度-主定理分析_主定理计算时间复杂度_Swayzzu的博客-CSDN博客： https://blog.csdn.net/Swayzzu/article/details/121299748
-- 
-
-
-
-**使用**：
-- 归并排序 (Merge Sort)：将数组从中间分成两部分，分别对两部分进行排序。递归地对每部分继续分割，直到每个部分只有一个元素。将排序后的子数组合并成一个有序数组。
-- 最近点对问题
-- 凸包问题
-- 最大子数组问题
-- Strassen矩阵乘法算法
-
-**练习题**：
-LeetCode：704、34、35、367
-POJ：[2456.Aggressive cows](http://poj.org/problem?id=2456)
-HDU：[2199.Can you solve this equation?](https://acm.hdu.edu.cn/showproblem.php?pid=2199)
-
-## 双指针
-
-## 二分
-## 滑动窗口
-
-## 回溯法(Backtracking)
-回溯算法套路详解 - 知乎： https://zhuanlan.zhihu.com/p/93530380
-批处理作业调度【回溯算法】_回溯法求解作业调度问题-CSDN博客： https://blog.csdn.net/m0_46308522/article/details/109425775
-
-
-回溯法是一种通过构建问题的解，并在构建过程中逐步撤销不合适的部分来寻找所有可能解的算法。回溯的本质是穷举，穷举所有可能，然后选出我们想要的答案，如果想让回溯法高效一些，可以加一些剪枝的操作，但也改不了回溯法就是穷举的本质。回溯是递归的副产品，只要有递归就会有回溯。所有回溯法的问题都可以抽象为树形结构。它适用于解决搜索和组合问题，问题的解时离散的，通过尝试和回溯来找到所有可能的解，例如数独、八皇后问题、旅行商问题等。
-
-**回溯法解决问题策略**：
-用递归处理问题，把问题分解，从可能的选择中选出一个尝试，判断当前选择是否满足问题的约束条件，如果当前选择可行，则继续进行下一个选择，如果当前选择不可行，则撤销选择，尝试其他可能的选择。
-
-解决问题时要思考：解（节点）怎么表达？以及要判断节点是否合法
-哪些状态之间存在父子关系，怎么组织节点间的父子上下级关系形成树
-怎么找到最优解，即怎么搜索树？一般使用DFS回溯，或者界限分支法(Branch and Bound)（找上界剪枝） BFS 寻优
-
-回溯算法模板框架如下：
-```c++
-void backtracking(参数) {
-    if (终止条件) {
-        存放结果;
-        return;
-    }
-
-    for (选择：本层集合中元素（树中节点孩子的数量就是集合的大小）) {
-        处理节点;
-        backtracking(路径，选择列表); // 递归
-        回溯，撤销处理结果
-    }
-}
-```
-
-
-**效率问题**：回溯法时间复杂度通常较高，适合于解空间较小的问题，算法复杂度为指数级O（bd），b是每个决策的分支数，d是问题的深度（递归层数或决策序列的长度），通过剪枝可以提高回溯法的效率
-剪枝：状态合法，但预判下面无解→如何判断？
-
-
-**回溯法的应用**：
-- 组合问题：N个数里面按一定规则找出k个数的集合
-   - 对于同一集合问题：需要使用startindex记录横向遍历的起始位置
-   - 给定数组中的元素是否可以重复多次选择问题：若可重复选择，下一层递归的起始位置为i；若不可重复选择，下一层递归的起始位置i
-
-- 切割问题：一个字符串按一定规则有几种切割方式。实质也是组合问题，切割的方式就是选择的起始位置。关键是截取子串是什么：`s.substr（startIndex，i-startIndex+1）;`
-- 子集问题：一个N个数的集合里有多少符合条件的子集
-- 排列问题：N个数按一定规则全排列，有几种排列方式
-   - 需要使用标记数组，记录当前元素是否访问过，访问过设置为true：`vector<bool> used（candidates.size（），false）；`
-   - 组合排序通用问题、给定vector中可能包含重复的元素，要求不能出现重复的组合（即为树的树枝的节点可以重复，但是同一层不允许重复）,解决方法：
-      0. 前提：需要先对数组升序【排序】，保证相同元素相邻，便于判断前后是否相等【关键】
-      1. 定义标识数组 `vector used（candidates.size（），false）；`
-      2. 标识数组的含义：
-         - `used[i-1]==true`：表示同一树枝使用过；
-         - `used[i-1]== false`，说明同一树层 `candidates[i-1]`使用过；
-         - 做选择时`used[i]=true`撤销选择时：`used[i]= false`；
-      3. 判断一定是前一个元素，因为要和当前元素比较；
-      4. 真正的去重代码：`if（i>0&&candidates[i-1]== candidates[i]&&used[i-1]==false）continue；`
-- 棋盘问题：N皇后，解数独等等
-   - 八皇后问题：
-      - 在8x8的棋盘上放置8个皇后，使得任何两个皇后不在同一行、同一列或同一对角线上。
-      - 解决办法为从第一行开始，尝试在每一列放置一个皇后。每次放置一个皇后后，递归地尝试在下一行放置一个皇后。如果在某一行无法放置皇后，则回溯到上一行，重新尝试其他列。
-      - n后问题没有剪枝，只是排除一些无意义状态
-      - 一个数组就可以描述4皇后问题
-- 组合求和问题
-   剪枝操作（关键）：
-   ```c++
-   if（sum > target）return；
-   //1.当前累加和已经大于目标和
-   sum + candidates[i]<= tartget；
-   //2.先判断当前和是否大于目标和，是则不累加下一层的节点
-   ```
-
-- LeetCode回溯类问题总结「一文搞懂回溯算法」 - 知乎： https://zhuanlan.zhihu.com/p/356947604
-- 算法总结-回溯法 - 知乎： https://zhuanlan.zhihu.com/p/82255820
 ## 贪心
 
 **简介**：
@@ -1039,6 +923,42 @@ Greedy(A)
    - Dijkstra算法是解单源最短路径问题的一个贪心算法
    - 设置顶点集合S并不断地做贪心选择来扩充这个集合。初始时，S中仅含有源，设u是G的某一个顶点，把从源到u且中间只经过S中顶点的路称为从源到u的特殊路径，并用数组dist记录当前每个顶点所对应的最短特殊路径长度。Dijkstra算法每次从V—S中取出具有最短特殊路长度的顶点u，将u添加到S中，同时对数组dist作必要的修改，一旦S包含了所有V中顶点，dist就记录了从源到所有其它顶点之间的最短路径长度。
 
+
+## 分治
+经典算法之分治算法 - 墨天轮： https://www.modb.pro/db/1714252220550701056
+
+分治策略是一种通过将问题分解为若干个更小的子问题，分别解决子问题，然后合并子问题的解来得到原问题解的方法。
+
+
+**特点与应用**：时间复杂度相对较低，适用于解决大规模问题，如排序、快速傅里叶变换、矩阵乘法等。如果题目要求复杂度为O(logn)，就要思考通过分治策略解决问题。使用分治策略一般都要用到递归。
+
+**基本思想**：
+- 分解 (Divide)：将原问题分解成若干个规模较小的子问题。
+- 解决 (Conquer)：递归地解决这些子问题。如果子问题足够小，直接解决。
+- 合并 (Combine)：将子问题的解合并成原问题的解。
+
+**计算渐近紧确界（在T（n）中，n为问题的求解代价）**：
+- 迭代法（递归树法，树节点只写问题大小）
+   - 算法分析基础——递归树求解递推方程 - 剪开黑夜 - 博客园： https://www.cnblogs.com/Jeffrey-Y/p/10303290.html
+   - 【复杂度递归式之展开法和代入法】 https://www.bilibili.com/video/BV1qw411A7Zj/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
+   - 
+- 主定理法（用新的带k的）
+   - 时间复杂度-主定理分析_主定理计算时间复杂度_Swayzzu的博客-CSDN博客： https://blog.csdn.net/Swayzzu/article/details/121299748
+- 
+
+
+
+**使用**：
+- 归并排序 (Merge Sort)：将数组从中间分成两部分，分别对两部分进行排序。递归地对每部分继续分割，直到每个部分只有一个元素。将排序后的子数组合并成一个有序数组。
+- 最近点对问题
+- 凸包问题
+- 最大子数组问题
+- Strassen矩阵乘法算法
+
+**练习题**：
+LeetCode：704、34、35、367
+POJ：[2456.Aggressive cows](http://poj.org/problem?id=2456)
+HDU：[2199.Can you solve this equation?](https://acm.hdu.edu.cn/showproblem.php?pid=2199)
 
 ## 动态规划
 简介：
@@ -1137,7 +1057,82 @@ Greedy(A)
 动态规划_分段最小二乘法 动态规划-CSDN博客： https://blog.csdn.net/BigFatSheep/article/details/78644018
 动态规划算法_分段最小二乘法 动态规划-CSDN博客： https://blog.csdn.net/bajiaoyu517/article/details/109524684
 动态规划终极绝杀！ LeetCode：72.编辑距离_哔哩哔哩_bilibili： https://www.bilibili.com/video/BV1qv4y1q78f/?spm%20id%20from=333.788&vd%20source=83e2da3cf676560948f9dd65a24486cbe&vd_source=2bebef67d77d9a55c602507243628b63
-## 多维动态规划
+
+
+## 回溯法(Backtracking)
+回溯算法套路详解 - 知乎： https://zhuanlan.zhihu.com/p/93530380
+批处理作业调度【回溯算法】_回溯法求解作业调度问题-CSDN博客： https://blog.csdn.net/m0_46308522/article/details/109425775
+
+
+回溯法是一种通过构建问题的解，并在构建过程中逐步撤销不合适的部分来寻找所有可能解的算法。回溯的本质是穷举，穷举所有可能，然后选出我们想要的答案，如果想让回溯法高效一些，可以加一些剪枝的操作，但也改不了回溯法就是穷举的本质。回溯是递归的副产品，只要有递归就会有回溯。所有回溯法的问题都可以抽象为树形结构。它适用于解决搜索和组合问题，问题的解时离散的，通过尝试和回溯来找到所有可能的解，例如数独、八皇后问题、旅行商问题等。
+
+**回溯法解决问题策略**：
+用递归处理问题，把问题分解，从可能的选择中选出一个尝试，判断当前选择是否满足问题的约束条件，如果当前选择可行，则继续进行下一个选择，如果当前选择不可行，则撤销选择，尝试其他可能的选择。
+
+解决问题时要思考：解（节点）怎么表达？以及要判断节点是否合法
+哪些状态之间存在父子关系，怎么组织节点间的父子上下级关系形成树
+怎么找到最优解，即怎么搜索树？一般使用DFS回溯，或者界限分支法(Branch and Bound)（找上界剪枝） BFS 寻优
+
+回溯算法模板框架如下：
+```c++
+void backtracking(参数) {
+    if (终止条件) {
+        存放结果;
+        return;
+    }
+
+    for (选择：本层集合中元素（树中节点孩子的数量就是集合的大小）) {
+        处理节点;
+        backtracking(路径，选择列表); // 递归
+        回溯，撤销处理结果
+    }
+}
+```
+
+
+**效率问题**：回溯法时间复杂度通常较高，适合于解空间较小的问题，算法复杂度为指数级O（bd），b是每个决策的分支数，d是问题的深度（递归层数或决策序列的长度），通过剪枝可以提高回溯法的效率
+剪枝：状态合法，但预判下面无解→如何判断？
+
+
+**回溯法的应用**：
+- 组合问题：N个数里面按一定规则找出k个数的集合
+   - 对于同一集合问题：需要使用startindex记录横向遍历的起始位置
+   - 给定数组中的元素是否可以重复多次选择问题：若可重复选择，下一层递归的起始位置为i；若不可重复选择，下一层递归的起始位置i
+
+- 切割问题：一个字符串按一定规则有几种切割方式。实质也是组合问题，切割的方式就是选择的起始位置。关键是截取子串是什么：`s.substr（startIndex，i-startIndex+1）;`
+- 子集问题：一个N个数的集合里有多少符合条件的子集
+- 排列问题：N个数按一定规则全排列，有几种排列方式
+   - 需要使用标记数组，记录当前元素是否访问过，访问过设置为true：`vector<bool> used（candidates.size（），false）；`
+   - 组合排序通用问题、给定vector中可能包含重复的元素，要求不能出现重复的组合（即为树的树枝的节点可以重复，但是同一层不允许重复）,解决方法：
+      0. 前提：需要先对数组升序【排序】，保证相同元素相邻，便于判断前后是否相等【关键】
+      1. 定义标识数组 `vector used（candidates.size（），false）；`
+      2. 标识数组的含义：
+         - `used[i-1]==true`：表示同一树枝使用过；
+         - `used[i-1]== false`，说明同一树层 `candidates[i-1]`使用过；
+         - 做选择时`used[i]=true`撤销选择时：`used[i]= false`；
+      3. 判断一定是前一个元素，因为要和当前元素比较；
+      4. 真正的去重代码：`if（i>0&&candidates[i-1]== candidates[i]&&used[i-1]==false）continue；`
+- 棋盘问题：N皇后，解数独等等
+   - 八皇后问题：
+      - 在8x8的棋盘上放置8个皇后，使得任何两个皇后不在同一行、同一列或同一对角线上。
+      - 解决办法为从第一行开始，尝试在每一列放置一个皇后。每次放置一个皇后后，递归地尝试在下一行放置一个皇后。如果在某一行无法放置皇后，则回溯到上一行，重新尝试其他列。
+      - n后问题没有剪枝，只是排除一些无意义状态
+      - 一个数组就可以描述4皇后问题
+- 组合求和问题
+   剪枝操作（关键）：
+   ```c++
+   if（sum > target）return；
+   //1.当前累加和已经大于目标和
+   sum + candidates[i]<= tartget；
+   //2.先判断当前和是否大于目标和，是则不累加下一层的节点
+   ```
+
+- LeetCode回溯类问题总结「一文搞懂回溯算法」 - 知乎： https://zhuanlan.zhihu.com/p/356947604
+- 算法总结-回溯法 - 知乎： https://zhuanlan.zhihu.com/p/82255820
+
+## 双指针
+
+
 ## 字符串匹配
 BM算法
 AC自动机

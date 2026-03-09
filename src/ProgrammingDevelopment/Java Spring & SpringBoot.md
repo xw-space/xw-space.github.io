@@ -982,38 +982,25 @@ https://weread.qq.com/web/reader/64532fc071c96a44645204f
 ## SpringBoot
 
 ### 介绍
-- **Spring Boot**是Spring框架的子项目，它简化了Spring应用的配置。通过自动配置和预设的依赖管理，Spring Boot让开发者无需繁琐的XML配置即可快速构建Spring应用，适合微服务和现代Web应用的开发。
+
+是什么？
+是基于Spring的快速开发工具
+是Spring框架的子项目，
+
+做什么？
+通过 **约定优于配置** 的方式快速启动 Web 应用，而无需编写大量的配置文件。
+
+特点：
+快速启动和运行Spring应用，不需要复杂的XML配置，
 
 
-Spring Boot是基于Spring的快速开发工具，它通过自动配置和内置的服务器支持（如Tomcat），简化了Spring应用的开发过程。Spring Boot可以快速启动和运行Spring应用，不需要复杂的XML配置，通过起步依赖（Starters）引入所需的模块，减少了配置时间。Spring Boot集成了Spring的核心功能和Spring MVC，适合构建微服务架构、云原生应用等现代应用。
-* **Spring Boot** 是 Spring 的一个子项目，它简化了 Spring 应用的配置和部署，尤其是在开发 Web 服务时。Spring Boot 让开发者可以通过 **约定优于配置** 的方式快速启动 Web 应用，而无需编写大量的配置文件。
-* Spring Boot 使得你可以通过简单的注解（如 `@SpringBootApplication`）来快速构建并运行 Web 服务，而无需自己手动配置很多内容。
-* **内嵌服务器**：Spring Boot 提供了 **内嵌 Web 服务器**（如 Tomcat、Jetty），让你可以不依赖外部服务器，直接在应用中嵌入服务器。
+通过起步依赖（Starters）引入所需的模块，
+通过简单的注解（如 `@SpringBootApplication`）来快速构建并运行 Web 服务，而无需自己手动配置很多内容。
+减少了配置时间。
 
-**示例**：Spring Boot 启动类和控制器：
-  ```java
-  @SpringBootApplication
-  public class Application {
-      public static void main(String[] args) {
-          SpringApplication.run(Application.class, args);  // 启动应用
-      }
-  }
-  @RestController
-  @RequestMapping("/api")
-  public class UserController {
-      @GetMapping("/users")
-      public List<User> getUsers() {
-          return userService.getAllUsers();
-      }
-  }
-  ```
-这里，Spring Boot 会自动配置一个内嵌的 Tomcat 服务器，并启动 Web 应用。
+通过自动配置、和
 
-
-Spring Boot 学习示例： https://github.com/ityouknow/spring-boot-examples
-
-
-
+内置的服务器支持（如Tomcat）、提供了 **内嵌 Web 服务器**（如 Tomcat、Jetty），让你可以不依赖外部服务器，直接在应用中嵌入服务器。
 **提供嵌入式 Web 服务器**
    Spring Boot 提供了 **嵌入式 Web 服务器**（如 Tomcat、Jetty、Undertow 等），意味着你可以轻松启动一个 Spring 应用而不需要安装和配置外部 Web 服务器。
    * **没有 Spring Boot 时**，你必须手动配置 Web 服务器（如 Tomcat 或 Jetty）。这通常意味着你需要下载和配置 Tomcat 服务器，然后将应用部署到其中。每次开发和测试时，你需要手动启动 Tomcat 并部署你的 Web 应用。
@@ -1021,6 +1008,31 @@ Spring Boot 学习示例： https://github.com/ityouknow/spring-boot-examples
      * 安装 Tomcat。
      * 在 `webapps` 目录中部署 WAR 文件。
      * 配置 `server.xml` 文件来设置端口和其他参数。
+
+部署
+预设的依赖管理，简化了Spring应用的配置开发过程，Spring Boot让开发者无需繁琐的XML配置即可快速构建Spring应用
+
+
+特点：
+Spring Boot集成了Spring的核心功能和Spring MVC
+
+用途：
+适合构建微服务架构、云原生应用等现代应用。
+
+
+**Spring Boot** 是 Spring 的一个子项目，旨在简化 Spring 应用的配置和部署，消除复杂的 XML 配置，并且通过 **约定优于配置** 的原则让开发者能够快速启动应用程序。
+* Spring Boot 使得创建和配置 Spring 项目变得非常容易，开发者只需要少量的配置就能开始工作，很多基础设置（如数据库连接、Web 配置）都已为你自动配置好。
+* **快速启动**：你只需要写一个 `@SpringBootApplication` 注解的主类，Spring Boot 会自动设置所有所需的基础设施，帮助你快速启动和运行应用。
+示例：一个简单的 Spring Boot 启动类：
+```java
+@SpringBootApplication
+public class MyApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(MyApplication.class, args);
+    }
+}
+```
+
 
 
 
@@ -1086,10 +1098,13 @@ JavaSpringBootDemo
 `DemoApplication.java`文件中的内容：
 ```java
 package com.example.demo;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 // http://localhost:8080/api/user
 // http://localhost:8080/api/user?name=John
+
 @SpringBootApplication
 public class DemoApplication {
     public static void main(String[] args) {
@@ -1097,6 +1112,7 @@ public class DemoApplication {
     }
 }
 ```
+
 `UserController.java`文件中的内容：
 ```java
 package com.example.demo.controller;
@@ -1104,20 +1120,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 @RestController
+@RequestMapping("/api")
 public class UserController {
-    @GetMapping("/api/user")
+    @GetMapping("/user")
     public String getUser(@RequestParam(value = "name", defaultValue = "World") String name) {
         return "Hello, " + name;
     }
 }
 ```
+
+
 **运行**
 - 右键点击“JavaSpringBootDemo”这个文件夹，选择“Open Folder as IntelliJ IDEA Project”用IDEA打开这个文件夹
 - 然后先点击`pom.xml`文件，然后在代码编辑区域点击鼠标右键，然后选择Maven-重新加载项目
 - 加载完成后，点击`DemoApplication.java`文件，可以通过点击IDEA上边框的绿色三角按钮、代码行旁边的绿色三角按钮、代码编辑区域点击鼠标右键出现的绿色三角按钮，运行`DemoApplication`这个程序
 - 运行后，通过浏览器访问` http://localhost:8080/api/user`,则显示`Hello, World`，访问`http://localhost:8080/api/user?name=John`，则显示`Hello, John`
 
-### **示例代码中部分知识的讲解**
+
+**示例代码中部分知识的讲解**
 - 为什么即使你没有在代码中显式调用 `UserController`，它仍然可以工作：
 	- Spring Boot 通过其自动配置（Auto Configuration）和组件扫描（Component Scan）功能，可以自动找到你定义的 `@RestController` 类并将它注册为一个可处理 HTTP 请求的 Spring MVC 控制器。
 - `@SpringBootApplication` 注解
@@ -1130,21 +1150,55 @@ public class UserController {
 	- 由于 `@RestController` 被扫描并注册为 Spring 的一个 Bean，Spring MVC 会将它与 HTTP 请求映射起来。
 	- 这里 `@GetMapping("/api/user")` 将 `/api/user` 这个路径的 GET 请求与 `getUser` 方法关联起来。
 
-### 自动装配
-#### 自动装配
 
+
+### 自动装配
 （Auto Configuration）
+
 只要在主类上写一个 `@SpringBootApplication`注解，很多东西（Web 容器、数据源、事务、日志、MVC 配置……）就自动准备好了，就有了一堆默认配置
 
-`@SpringBootApplication` = `@SpringBootConfiguration` + `@EnableAutoConfiguration` + `@ComponentScan`
-正让“自动装配”生效的是 **`@EnableAutoConfiguration`**
 
-SpringFactoriesLoader 机制：Spring Boot 启动时会去 **`META-INF/spring.factories`** 里找配置。里面写着一大堆自动配置类（例如 `DataSourceAutoConfiguration`、`RedisAutoConfiguration`）
+`@SpringBootApplication`这个注解对`@SpringBootConfiguration`、`@EnableAutoConfiguration`、`@ComponentScan`三个注解进行了封装
 
+
+- @SpringBootConfiguration：该注解与 @Configuration 注解作用相同，用来声明当前也是一个配置类。
+- @ComponentScan：组件扫描，默认扫描当前引导类所在包及其子包。
+- @EnableAutoConfiguration：
+	- 是SpringBoot实现自动化配置的核心注解，让“自动装配”生效。
+	- 该注解通过@Import注解导入对应的配置选择器。使应用根据类路径中的依赖和配置自动装配所需的Bean，大大简化了配置工作。
+	- 它结合`@SpringBootApplication`使用时，会扫描类路径中的所有`spring.factories`文件。
+	- `spring-boot-autoconfigure`包中定义了这个文件，列出了多个自动配置类，每个配置类负责特定的功能模块，比如Web、JPA、数据源等。
+
+SpringFactoriesLoader 机制：
+内部就是读取了该项目和该项目引用的Jar包的的classpath路径下META-INF/spring.factories文件中的所配置的类的全类名。
+Spring Boot 启动时会去 **`META-INF/spring.factories`** 里找配置。里面写着一大堆自动配置类（例如 `DataSourceAutoConfiguration`、`RedisAutoConfiguration`）
+
+
+当应用启动时，Spring Boot会在`SpringApplication.run()`过程中，利用`SpringFactoriesLoader`加载所有自动配置类，将它们作为候选配置类进行装配。
+
+然后，Spring Boot将根据条件注解（如`@ConditionalOnClass`、`@ConditionalOnMissingBean`等）检查当前环境，决定哪些Bean需要装配。这个机制允许应用在类路径中存在某些特定类时自动配置对应的组件，比如在类路径中存在`DataSource`时自动配置数据源。
+
+在加载自动配置类时，Spring Boot根据条件注解中的条件逐步判断。若某个Bean符合所有条件，它将被注册到Spring容器中；如果条件不符合（如缺少相关类或属性），Spring Boot会跳过该Bean的注册。这种条件装配机制使得Spring Boot在不同的场景下能够动态加载不同的配置。
+
+当所有符合条件的Bean加载完成后，Spring Boot还会在`ApplicationContext`中执行进一步的初始化工作，加载配置文件（如`application.properties`）中的属性，将其注入到Bean中，以确保Bean的配置符合实际环境需求。
+
+Spring Boot的自动装配过程利用了`@ConfigurationProperties`注解，可以自动将配置文件中的属性绑定到Bean上，使开发者能够通过配置文件来控制Bean的行为，而无需手动修改代码。
+
+总结而言，Spring Boot的自动装配过程通过`@EnableAutoConfiguration`加载自动配置类，使用条件注解筛选合适的Bean并进行装配，最终将符合条件的Bean注册到容器中并配置好它们的属性。整个过程实现了“按需装配”，使得应用能够灵活适应不同环境配置，实现快速开发和轻松扩展。
+
+
+
+
+
+
+在这些配置类中所定义的Bean会根据条件注解所指定的条件来决定是否需要将其导入到Spring容器中。
+ 条件判断会有像@ConditionalOnClass这样的注解，判断是否有对应的class文件，如果有则加载该类，把这个配置类的所有的Bean放入spring容器中使用。
 条件装配 (@Conditional)，自动配置类里不会强制生效，而是根据条件判断，这样可以做到有则用，无则自动帮你创建默认的 Bean。：
 - `@ConditionalOnClass`：类路径下是否有某个类（比如 JDBC 驱动）
 - `@ConditionalOnMissingBean`：容器里是否已经有你自定义的 Bean
 - `@ConditionalOnProperty`：配置文件里是否启用了某个开关
+
+
 
 绑定配置 (@ConfigurationProperties)，自动配置类还能把 `application.yml` 里的参数自动绑定到 Bean 上。
 
@@ -1170,11 +1224,7 @@ public class UserApplication {
     }
 }
 ```
-@SpringBootApplication：
 ![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223101145.png)
-- @SpringBootConfiguration：该注解与 @Configuration 注解作用相同，用来声明当前也是一个配置类。
-- @ComponentScan：组件扫描，默认扫描当前引导类所在包及其子包。
-- @EnableAutoConfiguration：SpringBoot实现自动化配置的核心注解。
 
 
 
@@ -1192,57 +1242,54 @@ EnableAutoConfiguration：
 
 
 
-**Springboot自动配置原理**
-1,  在Spring Boot项目中的引导类上有一个注解@SpringBootApplication，这个注解是对三个注解进行了封装，分别是：
-@SpringBootConfiguration
-@EnableAutoConfiguration
-@ComponentScan
-2,  其中@EnableAutoConfiguration是实现自动化配置的核心注解。 该注解通过@Import注解导入对应的配置选择器。
-内部就是读取了该项目和该项目引用的Jar包的的classpath路径下META-INF/spring.factories文件中的所配置的类的全类名。 在这些配置类中所定义的Bean会根据条件注解所指定的条件来决定是否需要将其导入到Spring容器中。
-3, 条件判断会有像@ConditionalOnClass这样的注解，判断是否有对应的class文件，如果有则加载该类，把这个配置类的所有的Bean放入spring容器中使用。
 
 
 
 
 
 
+### Spring Boot Starter
+- Spring Boot Starter是Spring Boot是一个结合了众多配置和依赖的依赖包，
+- 只需添加一个Starter依赖，Spring Boot就会自动配置和加载相关组件，快速引入并配置各种常见的Spring组件。
+- 简化依赖管理，开发者无需手动调整大多数细节，从而能够专注于业务开发。
 
+主要内容（包括一些常用的Starters）：
+- spring-boot-starter-web用于开发Web应用，包括MVC架构和RESTful接口。它集成了Spring MVC、Tomcat、Jackson（用于JSON处理）等，适合快速构建Web应用和API服务。
+- spring-boot-starter-data-jpa用于JPA（Java持久化API）和数据库操作。它封装了Spring Data JPA和Hibernate等库，提供数据库访问和ORM功能，简化数据库交互的配置。
+- spring-boot-starter-security用于引入Spring Security的安全功能，提供认证、授权、加密等一系列安全工具，适合构建安全的Web应用。
+- spring-boot-starter-test包含了JUnit、Mockito和Spring Test等测试框架和工具，支持单元测试、集成测试和Mock测试，使得测试配置和运行更加方便。
+- spring-boot-starter-thymeleaf用于集成Thymeleaf模板引擎，适合构建动态HTML页面的Web应用。它让视图层能更直观地渲染动态数据。
+- spring-boot-starter-actuator用于监控和管理Spring Boot应用。它包含了健康检查、性能指标、日志查看等端点，可以集成到运维和监控工具中。
+- spring-boot-starter-amqp用于AMQP协议的消息传递（如RabbitMQ）。它封装了Spring AMQP的相关依赖，适合构建基于消息队列的应用。
+- spring-boot-starter-cache用于引入缓存管理功能。它支持多种缓存方案（如EhCache、Redis等），通过缓存加速应用的数据访问。
 
-
-
-
-
-
-
-
-
-Spring 和其他组件（如数据源、事务管理、Web 服务器、Spring MVC 等）
+### 如果没有springboot
 
 1. **手动配置 Spring 项目**
    在没有 Spring Boot 时，使用 **Spring Framework** 开发 Web 应用或企业级应用时，开发者必须手动配置许多组件和设置。你需要配置 Web 服务器、数据源、事务管理、Spring MVC、Spring Security 等。
    * **Spring 配置文件**：没有 Spring Boot，你通常需要编写大量的 **XML 配置** 或通过 Java 类来配置 Spring 的各个组件。这些配置通常会包含数据源、JDBC、事务、视图解析等。
    * **示例**：没有 Spring Boot，你可能需要编写像下面这样复杂的 XML 配置文件：
-     ```xml
-     <beans xmlns="http://www.springframework.org/schema/beans"
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://www.springframework.org/schema/beans
-            http://www.springframework.org/schema/beans/spring-beans.xsd">
-         <!-- 数据源配置 -->
-         <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
-             <property name="url" value="jdbc:mysql://localhost:3306/mydb"/>
-             <property name="username" value="root"/>
-             <property name="password" value="password"/>
-         </bean>
-         <!-- Spring MVC 配置 -->
-         <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
-         <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerAdapter"/>
-         <!-- 事务管理器配置 -->
-         <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-             <property name="dataSource" ref="dataSource"/>
-         </bean>
-     </beans>
-     ```
-   这些配置文件可能很庞大且难以维护，尤其在应用复杂时，配置项会成倍增加。
+ ```xml
+ <beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd">
+	 <!-- 数据源配置 -->
+	 <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+		 <property name="url" value="jdbc:mysql://localhost:3306/mydb"/>
+		 <property name="username" value="root"/>
+		 <property name="password" value="password"/>
+	 </bean>
+	 <!-- Spring MVC 配置 -->
+	 <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
+	 <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerAdapter"/>
+	 <!-- 事务管理器配置 -->
+	 <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		 <property name="dataSource" ref="dataSource"/>
+	 </bean>
+ </beans>
+ ```
+这些配置文件可能很庞大且难以维护，尤其在应用复杂时，配置项会成倍增加。
 
 
 1. **没有自动化的项目设置**
@@ -1265,51 +1312,12 @@ Spring 和其他组件（如数据源、事务管理、Web 服务器、Spring MV
 
 
 
-**Spring Boot** 是 Spring 的一个子项目，旨在简化 Spring 应用的配置和部署，消除复杂的 XML 配置，并且通过 **约定优于配置** 的原则让开发者能够快速启动应用程序。
-* Spring Boot 使得创建和配置 Spring 项目变得非常容易，开发者只需要少量的配置就能开始工作，很多基础设置（如数据库连接、Web 配置）都已为你自动配置好。
-* **快速启动**：你只需要写一个 `@SpringBootApplication` 注解的主类，Spring Boot 会自动设置所有所需的基础设施，帮助你快速启动和运行应用。
-示例：一个简单的 Spring Boot 启动类：
-```java
-@SpringBootApplication
-public class MyApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(MyApplication.class, args);
-    }
-}
-```
 
 
-
-
-#### Spring Boot⾃动装配的过程
-Spring Boot的自动装配过程通过`@EnableAutoConfiguration`注解实现，它使应用根据类路径中的依赖和配置自动装配所需的Bean，大大简化了配置工作。以下是Spring Boot自动装配的主要过程：
-`@EnableAutoConfiguration`注解是自动装配的核心。它结合`@SpringBootApplication`使用时会扫描类路径中的所有`spring.factories`文件。`spring-boot-autoconfigure`包中定义了这个文件，列出了多个自动配置类，每个配置类负责特定的功能模块，比如Web、JPA、数据源等。
-当应用启动时，Spring Boot会在`SpringApplication.run()`过程中，利用`SpringFactoriesLoader`加载所有自动配置类，将它们作为候选配置类进行装配。然后，Spring Boot将根据条件注解（如`@ConditionalOnClass`、`@ConditionalOnMissingBean`等）检查当前环境，决定哪些Bean需要装配。这个机制允许应用在类路径中存在某些特定类时自动配置对应的组件，比如在类路径中存在`DataSource`时自动配置数据源。
-在加载自动配置类时，Spring Boot根据条件注解中的条件逐步判断。若某个Bean符合所有条件，它将被注册到Spring容器中；如果条件不符合（如缺少相关类或属性），Spring Boot会跳过该Bean的注册。这种条件装配机制使得Spring Boot在不同的场景下能够动态加载不同的配置。
-当所有符合条件的Bean加载完成后，Spring Boot还会在`ApplicationContext`中执行进一步的初始化工作，加载配置文件（如`application.properties`）中的属性，将其注入到Bean中，以确保Bean的配置符合实际环境需求。
-Spring Boot的自动装配过程利用了`@ConfigurationProperties`注解，可以自动将配置文件中的属性绑定到Bean上，使开发者能够通过配置文件来控制Bean的行为，而无需手动修改代码。
-总结而言，Spring Boot的自动装配过程通过`@EnableAutoConfiguration`加载自动配置类，使用条件注解筛选合适的Bean并进行装配，最终将符合条件的Bean注册到容器中并配置好它们的属性。整个过程实现了“按需装配”，使得应用能够灵活适应不同环境配置，实现快速开发和轻松扩展。
-
-
-
-
-### Spring Boot Starter
-- Spring Boot Starter是Spring Boot是一个结合了众多配置和依赖的依赖包，
-- 只需添加一个Starter依赖，Spring Boot就会自动配置和加载相关组件，快速引入并配置各种常见的Spring组件。
-- 简化依赖管理，开发者无需手动调整大多数细节，从而能够专注于业务开发。
-
-主要内容（包括一些常用的Starters）：
-- spring-boot-starter-web用于开发Web应用，包括MVC架构和RESTful接口。它集成了Spring MVC、Tomcat、Jackson（用于JSON处理）等，适合快速构建Web应用和API服务。
-- spring-boot-starter-data-jpa用于JPA（Java持久化API）和数据库操作。它封装了Spring Data JPA和Hibernate等库，提供数据库访问和ORM功能，简化数据库交互的配置。
-- spring-boot-starter-security用于引入Spring Security的安全功能，提供认证、授权、加密等一系列安全工具，适合构建安全的Web应用。
-- spring-boot-starter-test包含了JUnit、Mockito和Spring Test等测试框架和工具，支持单元测试、集成测试和Mock测试，使得测试配置和运行更加方便。
-- spring-boot-starter-thymeleaf用于集成Thymeleaf模板引擎，适合构建动态HTML页面的Web应用。它让视图层能更直观地渲染动态数据。
-- spring-boot-starter-actuator用于监控和管理Spring Boot应用。它包含了健康检查、性能指标、日志查看等端点，可以集成到运维和监控工具中。
-- spring-boot-starter-amqp用于AMQP协议的消息传递（如RabbitMQ）。它封装了Spring AMQP的相关依赖，适合构建基于消息队列的应用。
-- spring-boot-starter-cache用于引入缓存管理功能。它支持多种缓存方案（如EhCache、Redis等），通过缓存加速应用的数据访问。
 
 ### 启动流程
-- Spring Boot的启动流程包含了一系列自动化的初始化步骤，以便迅速启动和配置应用。这一过程从`SpringApplication.run()`方法开始，贯穿多个核心步骤：
+- Spring Boot的启动流程包含了一系列自动化的初始化步骤，以便迅速启动和配置应用。
+- 这一过程从`SpringApplication.run()`方法开始。
 - 首先，调用`SpringApplication.run()`方法，这是Spring Boot启动的入口。`SpringApplication`类负责初始化应用上下文并配置相关环境。
 - `SpringApplication`会准备启动环境，包括系统属性、环境变量、命令行参数和配置文件（如`application.properties`或`application.yml`）等。这个阶段会创建一个`Environment`对象，将各类属性添加到环境中，为后续Bean初始化提供配置数据。
 - 随后，`SpringApplication`加载并触发各种`SpringApplicationRunListener`事件，包括启动开始（`starting`）、环境准备（`environmentPrepared`）、上下文准备（`contextPrepared`）、上下文加载（`contextLoaded`）和运行完成（`started`）等阶段。Spring Boot中的一些事件监听器（Listeners）可以订阅这些事件，执行特定的初始化任务。
@@ -1319,7 +1327,7 @@ Spring Boot的自动装配过程利用了`@ConfigurationProperties`注解，可�
 - 在所有Bean加载和初始化完成后，`SpringApplication`触发`ApplicationStartedEvent`和`ApplicationReadyEvent`事件，标识应用已完全启动并可以接受请求。
 - 整个启动流程的目的是自动化和简化配置，使Spring Boot应用能够在几乎无需手动干预的情况下自动配置和运行。通过这一步步的自动化过程，Spring Boot将环境准备、Bean初始化、事件发布等功能串联起来，以便在最短时间内完成应用的启动并提供服务。
 
-### **执行流程**
+### 执行流程
 - 入口触发：通过 @SpringBootApplication 主类的 main 方法调用 SpringApplication.run()。
 - 环境准备：加载配置、激活 Profile，确定应用运行环境。
 - 上下文创建：根据应用类型（Web/非 Web）实例化对应的 ApplicationContext。
@@ -1386,6 +1394,7 @@ public class MyDatabaseService {
 `@EnableScheduling`用于开启Spring的任务调度功能，结合`@Scheduled`注解可以执行定时任务。
 `@EnableAsync`用于开启异步处理功能，结合`@Async`注解可以异步执行方法，提高应用的响应速度和性能。
 这些注解简化了开发流程，极大地减少了配置工作，使得Spring Boot开发更加简洁高效。
+
 ### 数据库
 #### 数据库初始化数据
 - 在Spring Boot中，有几种方式可以在启动时设置初始化数据，这对于需要默认配置、基础数据或测试数据的应用非常有用。以下是常用的几种方法：
@@ -1430,6 +1439,8 @@ public void demo() {
 
 
 ### 资料
+Spring Boot 学习示例： https://github.com/ityouknow/spring-boot-examples
+
 geekidea/spring-boot-plus: :fire: Spring-Boot-Plus is a easy-to-use, high-speed, high-efficient,feature-rich, open source spring boot scaffolding. :rocket:： https://github.com/geekidea/spring-boot-plus
 ityouknow/spring-boot-examples: about learning Spring Boot via examples. Spring Boot 教程、技术栈示例代码，快速简单上手教程。： https://github.com/ityouknow/spring-boot-examples
 yudaocode/SpringBoot-Labs: 一个涵盖六个专栏：Spring Boot 2.X、Spring Cloud、Spring Cloud Alibaba、Dubbo、分布式消息队列、分布式事务的仓库。希望胖友小手一抖，右上角来个 Star，感恩 1024： https://github.com/yudaocode/SpringBoot-Labs
@@ -1437,17 +1448,31 @@ yudaocode/SpringBoot-Labs: 一个涵盖六个专栏：Spring Boot 2.X、Spring C
 
 
 ## Spring MVC
-- **Spring MVC**模块用于构建基于Web的应用程序，遵循模型-视图-控制器（MVC）设计模式。它将请求处理、视图渲染和业务逻辑分离，通过控制器接收请求，将数据传递到视图层显示，适合构建RESTful服务和Web应用。
+### 介绍
+**Spring MVC** 是 Spring 框架中专门用于 Web 开发的一个子模块
+
+功能
+处理 HTTP 请求并将其路由到相应的控制器方法
+**请求路由**、**视图解析** 和 **数据绑定** 
+支持丰富的视图模板
 
 
-* **Spring MVC** 是 Spring 框架中专门用于 Web 开发的模块，它提供了强大的 **请求路由**、**视图解析** 和 **数据绑定** 等功能。它基于 **前端控制器模式**（Dispatcher Servlet），可以处理 HTTP 请求并将其路由到相应的控制器方法。
-Spring MVC是Spring框架的一个子模块，用于构建MVC（模型-视图-控制器）架构的应用。支持丰富的视图模板和数据绑定功能。
+特点
+基于 **前端控制器模式**（Dispatcher Servlet）
+遵循模型-视图-控制器（MVC）设计模式。
+将请求处理、视图渲染和业务逻辑分离，通过控制器接收请求，将数据传递到视图层显示
 
-Spring MVC 的核心组件包括：
-* **Controller**：处理 HTTP 请求的类。
-* **DispatcherServlet**：前端控制器，用于接收请求并将其分发到适当的 Controller。
-* **View Resolver**：将数据渲染到客户端的视图（通常是 HTML、JSON、XML 等）。
-* **Model**：封装数据的对象，用于与视图交互。
+用途：
+用于构建MVC（模型-视图-控制器）架构的应用
+适合构建RESTful服务和Web应用。
+
+
+
+
+
+
+  
+### 执行流程
 
 **示例**：处理 HTTP 请求的 Spring MVC 控制器：
 ```java
@@ -1466,8 +1491,8 @@ public class UserController {
   }
 }
 ```
-  
-### 执行流程
+
+
 Springmvc的执行流程是这个框架最核心的内容
 - 视图阶段（老旧JSP等）
 - 前后端分离阶段（接口开发，异步）
@@ -1502,9 +1527,14 @@ Springmvc的执行流程是这个框架最核心的内容
 - 方法上添加了@ResponseBody
 - 通过HttpMessageConverter来返回结果转换为JSON并响应
 
+### 组件
+Spring MVC 的核心组件包括：
+* **Controller**：处理 HTTP 请求的类。
+* **DispatcherServlet**：前端控制器，用于接收请求并将其分发到适当的 Controller。
+* **View Resolver**：将数据渲染到客户端的视图（通常是 HTML、JSON、XML 等）。
+* **Model**：封装数据的对象，用于与视图交互。
 
 
-### 常用组件
 - **DispatcherServlet**是Spring MVC的前端控制器，用于接收所有的请求并将其转发到适当的处理器。它是整个Spring MVC框架的核心，负责请求的分发和响应的生成。
 - **Handler Mapping**（处理器映射器）负责将请求映射到相应的处理器（Controller）。当`DispatcherServlet`收到请求后，`Handler Mapping`会根据请求的URL或其他信息，找到相应的控制器方法。
 - **Controller**（控制器）是请求处理的核心组件。控制器包含业务逻辑和请求处理方法，通常使用`@Controller`或`@RestController`注解定义。控制器接收请求数据，处理逻辑，返回数据或视图名。
@@ -1518,7 +1548,10 @@ Springmvc的执行流程是这个框架最核心的内容
 - **LocaleResolver**和**ThemeResolver**分别用于国际化和主题管理。`LocaleResolver`根据请求决定语言环境，`ThemeResolver`允许应用设置和管理不同的主题风格。
 这些组件共同构成了Spring MVC的完整框架。通过配置和组合这些组件，Spring MVC可以灵活处理各种Web应用需求。
 
-### 常用注解
+
+
+### SpringMVC常用注解
+
 @RequestMapping： 用于映射请求路径，可以定义在类上和方法上。用于类上，则表示类中的所有的方法都是以该地址作为父路径
 @RequestBody： 注解实现接收http请求的json数据，将json转换为java对象
 @RequestParam： 指定请求参数的名称
@@ -1527,7 +1560,8 @@ Springmvc的执行流程是这个框架最核心的内容
 @RequestHeader： 获取指定的请求头数据
 @RestController： @Controller + @ResponseBody
 
-### SpringMVC常用注解
+
+
 - `@Controller`用于定义控制器类，将类标识为Spring MVC的控制器。Spring容器会将带有此注解的类扫描为一个Bean，并用于处理Web请求。
 - `@RestController`是`@Controller`和`@ResponseBody`的组合注解，通常用于RESTful API开发。它表示该控制器中的所有方法默认返回JSON或XML等格式的响应数据，而非视图页面。
 - `@RequestMapping`用于映射请求URL到指定的控制器类或方法上。可以应用在类和方法级别，并支持配置请求方式（如`GET`、`POST`）、URL路径参数等。方法级的`@RequestMapping`更常见，定义方法与特定URL的映射关系。
@@ -1540,7 +1574,7 @@ Springmvc的执行流程是这个框架最核心的内容
 - `@SessionAttributes`用于声明需要存储在HTTP会话（Session）中的模型属性。Spring会将指定的属性添加到Session中，适合跨请求保存用户会话数据。
 - `@ExceptionHandler`用于定义异常处理方法，捕获并处理控制器中的异常。可以在类或方法上使用，通常配合`@ControllerAdvice`全局异常处理器进行使用。
 - `@ControllerAdvice`用于定义全局控制器增强功能，通常用于全局异常处理、数据绑定配置等。带有`@ControllerAdvice`的类可以包含多种增强功能，应用于整个应用的控制器。
-### SpringMVC Interceptor（拦截器）
+### Interceptor（拦截器）
 Spring MVC拦截器（Interceptor）用于在请求进入控制器之前、处理请求之后以及视图渲染之前，插入自定义逻辑。它类似于过滤器，但比过滤器更灵活和精确，能够针对控制器的执行环节提供切入点。拦截器通常用于实现日志记录、权限验证、性能监控等功能，从而提高应用的可扩展性和可维护性。
 Spring MVC拦截器通过实现`HandlerInterceptor`接口来定义，并通过重写接口中的三个方法实现不同阶段的逻辑：
 `preHandle`方法在请求到达控制器之前执行。它通常用于权限检查、参数验证等操作。如果`preHandle`返回`true`，请求将继续执行；如果返回`false`，请求将被中断，不会进入控制器。
@@ -1550,6 +1584,7 @@ Spring MVC的拦截器链支持多个拦截器，按配置顺序依次执行。�
 配置拦截器时，可以在`WebMvcConfigurer`的`addInterceptors`方法中注册拦截器，并指定需要拦截的URL模式。例如，拦截所有请求或特定路径下的请求。Spring MVC拦截器可以灵活地应用到不同的URL路径，还可以结合条件过滤特定的请求，满足不同的应用场景需求。
 ## SpringCloud
 
+### 介绍
 - **Spring Cloud**扩展了Spring的功能，专注于分布式系统和微服务架构。它提供了一套解决方案，用于服务发现、负载均衡、配置管理、断路器等，使得开发者能够快速构建可靠的微服务系统。
 
 **Spring Cloud** 提供了一系列用于构建微服务架构的工具和框架，帮助处理分布式系统中的网络请求。它包括服务发现（Eureka）、配置管理（Config Server）、负载均衡（Ribbon）、断路器（Hystrix）等功能，能够使你更容易地构建和管理微服务应用。
@@ -1565,156 +1600,25 @@ public class MyServiceApplication {
 }
 ```
 
+### 5大组件
+基础的内容考察
+回答原则：简单的问题不能答错（一道面试题就能淘汰一个人）新手和老手都要注意
 
-### Feign
+通常情况下：
+- Eureka   : 注册中心
+- Ribbon  : 负载均衡
+- Feign     : 远程调用
+- Hystrix :  服务熔断
+- Zuul/Gateway  : 网关
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223204421.png)
 
-FeignCustomDataDecoder
-`FeignCustomDataDecoder` 不会自动生效
-- 创建一个配置类，并将 `FeignCustomDataDecoder` 注册为 Feign 的 `Decoder`。
-```java
-@Configuration
-public class FeignConfig {
+随着SpringCloudAlibba在国内兴起 , 我们项目中使用了一些阿里巴巴的组件 
+- 注册中心/配置中心 Nacos
+- 负载均衡 Ribbon
+- 服务调用 Feign
+- 服务保护 sentinel
+- 服务网关 Gateway
 
-    @Bean
-    public Decoder feignDecoder() {
-        return new FeignCustomDataDecoder(new SpringDecoder(new ObjectFactory<HttpMessageConverters>() {
-            @Override
-            public HttpMessageConverters getObject() throws BeansException {
-                return new HttpMessageConverters(new MappingJackson2HttpMessageConverter());
-            }
-        }));
-    }
-}
-```
-你的 `@FeignClient` 注解中，指定这个配置类
-```java
-@FeignClient(name = "customer-service", configuration = FeignConfig.class)
-public interface CustomerClient {
-    @GetMapping("/customer/info/{id}")
-    Customer getCustomerById(@PathVariable("id") Long id);
-}
-```
-
-
-
-### Feign
-**Feign** 是 Spring Cloud 中用于简化 HTTP 客户端调用的一个声明式 HTTP 客户端库。
-Feign 接口通过注解的方式来定义远程调用接口，使用者只需像调用本地接口一样调用远程 API。
-它提供了一种非常简便的方式来调用远程服务的 API，而无需手动编写大量的代码来发出 HTTP 请求和处理响应。
-
-当你在 Spring Boot 项目中使用`@EnableFeignClients` 注解时，Spring 会自动扫描指定包路径（如果未指定路径，则扫描当前包及其子包）下所有带有 `@FeignClient` 注解的接口，将这些接口代理为 Spring 容器中的 Bean，这样就可以在其他地方通过依赖注入来使用它们。
-Spring 会为每个 `@FeignClient` 注解的接口创建一个动态代理类，并将其注册到 Spring 的上下文中。当你调用这个接口的方法时，实际调用的是由 Feign 生成的代理对象，而这个对象会根据你定义的注解和配置来执行相应的 HTTP 请求。
-```java
-@EnableFeignClients(basePackages = "com.example.demo.clients")
-```
-**主要特点**
-1. **声明式 HTTP 客户端**：Feign 允许你通过简单的 Java 接口和注解来定义 HTTP 请求方式，隐藏了底层复杂的网络请求逻辑。
-2. **与 Spring 集成良好**：Feign 可以与 Spring Boot 和 Spring Cloud 无缝集成。通过与 Eureka、Ribbon、Hystrix 等其他 Spring Cloud 组件结合，Feign 可以支持服务发现、负载均衡和容错。
-3. **自动序列化和反序列化**：Feign 可以自动将请求和响应数据序列化为 JSON、XML 或其他格式，并将响应反序列化为 Java 对象。
-**优点**
-- 简洁性：大大简化了编写 HTTP 客户端的工作，代码清晰明了。
-- 与 Spring Cloud 生态系统无缝集成：结合 Ribbon、Hystrix 等组件，支持负载均衡和容错。
-- 强大的扩展能力：支持自定义的序列化、反序列化逻辑和请求拦截器。
-通过 Feign，开发者可以更轻松地实现微服务间的通信，减少了手动编写网络请求的代码，提升了开发效率。
-**常见用途**
-- **微服务之间的通信**：在微服务架构中，服务之间的通信通常通过 HTTP 请求进行。Feign 简化了这个过程，使得开发人员可以像调用本地方法一样去调用远程服务的 API。
-- **服务发现**：与 Eureka 等服务发现工具结合，Feign 可以通过服务名称自动找到服务的实例，实现负载均衡和自动故障转移。
-- **简化 API 网关开发**：在 API 网关中，可以通过 Feign 来代理内部服务的接口，方便地转发请求。
-**基本用法**
-1. **引入依赖**
-   在 Spring Boot 项目中，首先要引入 Feign 的依赖：
-   ```xml
-   <dependency>
-       <groupId>org.springframework.cloud</groupId>
-       <artifactId>spring-cloud-starter-openfeign</artifactId>
-   </dependency>
-   ```
-2. **定义 Feign 接口**
-   Feign 接口就像是服务的代理，主要通过注解定义。可以使用 `@FeignClient` 注解来声明一个 Feign 客户端，并通过方法上的注解来定义 HTTP 请求。
-   ```java
-   @FeignClient(name = "user-service")
-   public interface UserClient {
-       @GetMapping("/api/user/{id}")
-       User getUserById(@PathVariable("id") Long id);
-   }
-   ```
-   在这个例子中，`@FeignClient(name = "user-service")` 表示这个 Feign 客户端将调用名为 `user-service` 的服务，而 `@GetMapping` 注解指定了它将进行一个 `GET` 请求来获取用户信息。
-3. **启用 Feign**
-   
-   在主启动类中，使用 `@EnableFeignClients` 注解启用 Feign 客户端。
-```java
-   @SpringBootApplication
-   @EnableFeignClients
-   public class FeignApplication {
-       public static void main(String[] args) {
-           SpringApplication.run(FeignApplication.class, args);
-       }
-   }
-```
-当 Spring Boot 启动时，它会扫描带有 `@FeignClient` 注解的接口，并为每个接口生成一个动态代理类。这个代理类实现了接口中的方法，并将这些方法与 HTTP 请求关联起来。
-4. **请求构建**：
-    
-    - 当我们调用 Feign 接口的方法时，例如 `userService.getUserById(1L)`，Feign 的代理对象会捕获这个方法调用。
-    - Feign 根据接口方法上的注解（如 `@GetMapping`、`@PostMapping` 等）来构建一个 HTTP 请求。它会替换路径中的参数，设置请求方法（GET、POST 等）、请求头和请求体等。
-5. **HTTP 请求执行**：
-    - Feign 使用 HTTP 客户端（如 Apache HttpClient 或 OkHttp）执行构建好的 HTTP 请求。Feign 默认使用 `JDK HttpURLConnection`，但可以通过配置切换到其他 HTTP 客户端。
-    - Feign 将请求发送到指定的服务地址（如 `http://localhost:8080`），并等待服务的响应。
-6. **响应处理**：
-    
-    - 收到远程服务的响应后，Feign 会根据接口方法的返回类型解析响应数据。比如，如果返回类型是 `User`，Feign 会自动将响应体解析为 `User` 对象（假设返回的是 JSON 数据）。
-    - Feign 使用 Jackson 或其他 JSON 解析库将响应体转化为 Java 对象，并返回给调用方。
-7. **错误处理与重试机制**：
-    
-    - 如果请求失败，Feign 可以通过配置重试策略或错误处理器（`ErrorDecoder`）来处理错误。例如，可以设置在请求失败时重试多次，或者捕获特定的 HTTP 错误代码并执行相应的逻辑。
-Feign 的整个调用流程使得开发者可以像调用本地方法一样调用远程 API，大大简化了远程调用的代码量和复杂度。Spring Cloud Feign 集成了 Spring Boot 和 Eureka 等组件，进一步简化了微服务间的通信。
-**进阶功能**
-- **请求参数和头信息**：Feign 支持通过注解传递请求参数和头信息。例如，你可以通过 `@RequestParam` 传递查询参数，通过 `@RequestHeader` 设置请求头。
-   ```java
-   @FeignClient(name = "user-service")
-   public interface UserClient {
-       @GetMapping("/api/user")
-       User getUser(@RequestParam("name") String name, @RequestHeader("Authorization") String token);
-   }
-   ```
-- **容错机制**：Feign 可以与 Hystrix 集成，提供服务降级功能，当远程服务不可用时，自动调用备用逻辑。
-   ```java
-   @FeignClient(name = "user-service", fallback = UserClientFallback.class)
-   public interface UserClient {
-       @GetMapping("/api/user/{id}")
-       User getUserById(@PathVariable("id") Long id);
-   }
-   @Component
-   public class UserClientFallback implements UserClient {
-       @Override
-       public User getUserById(Long id) {
-           return new User(); // 返回一个默认用户对象
-       }
-   }
-   ```
-Feign 客户端时不需要显式指定 `url` 参数的情况：
-1. **使用服务发现**：
-- 如果你的应用程序使用了 Spring Cloud Eureka 或其他类似的服务发现机制，那么 Feign 客户端可以通过服务名来定位远程服务，而不需要显式提供 `url` 参数。
-- 例如，当你在 `@FeignClient` 注解中指定 `name`（即服务名）而不指定 `url` 时，Feign 会使用注册在服务发现中的服务地址来调用该服务。这种方式假设你的应用已经正确注册并配置了服务发现组件。
-   - 示例：
-     ```java
-     @FeignClient(name = "userService")
-     public interface UserService {
-         @GetMapping("/users/{id}")
-         User getUserById(@PathVariable("id") Long id);
-     }
-     ```
-   - 在这个例子中，Feign 客户端会自动去服务发现中查找 `userService` 服务的地址，并调用相应的 API。
-2. **通过 Spring Cloud 配置管理地址**：
-   - 如果你的应用没有使用服务发现，但你希望将服务的地址配置在外部（例如配置文件或配置中心），也可以不在 `@FeignClient` 注解中指定 `url` 参数。
-   - 你可以在 `application.yml` 或 `application.properties` 中配置服务地址，例如：
-     ```yaml
-     userService.url=http://localhost:8080
-     ```
-   - 然后在 `@FeignClient` 中只需要指定 `name`，框架会自动从配置中读取相应的 URL。
-   
-3. **调用本地服务**：
-   - 如果是本地服务，不需要指定 `url` 参数，只要在配置中把该服务的名字指向本地地址即可。这样，Feign 依然能够通过服务名找到正确的服务。
-总的来说，如果你不指定 `url`，通常需要服务发现机制（例如 Eureka）来为你解析服务地址。如果你没有使用服务发现，则需要在 `url` 中明确指定地址，或者在配置文件中提供地址映射。
 ### Spring Cloud Eureka
 Spring Cloud Eureka 是一个基于 Netflix Eureka 的服务发现和注册机制，是 Spring Cloud 生态系统中的重要组件之一，用于帮助微服务架构下的应用实现服务发现和自动化注册，从而实现各个服务之间的动态连接。
 **Eureka 的基本概念**：
@@ -1849,25 +1753,6 @@ Spring Cloud Eureka 的服务发现机制简化了微服务之间的通信。它
 
 
 
-### 5大组件
-基础的内容考察
-回答原则：简单的问题不能答错（一道面试题就能淘汰一个人）新手和老手都要注意
-
-通常情况下：
-- Eureka   : 注册中心
-- Ribbon  : 负载均衡
-- Feign     : 远程调用
-- Hystrix :  服务熔断
-- Zuul/Gateway  : 网关
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223204421.png)
-
-随着SpringCloudAlibba在国内兴起 , 我们项目中使用了一些阿里巴巴的组件 
-- 注册中心/配置中心 Nacos
-- 负载均衡 Ribbon
-- 服务调用 Feign
-- 服务保护 sentinel
-- 服务网关 Gateway
-
 ### 服务注册
 服务注册和发现是什么意思？Spring Cloud 如何实现服务注册发现？
 - 微服务中必须要使用的组件，考察我们使用微服务的程度
@@ -1915,428 +1800,12 @@ Nacos的工作流程
 
 
 
-### 负载均衡
-负载均衡 Ribbon，发起远程调用feign就会使用Ribbon
-Ribbon负载均衡策略有哪些 ?
-如果想自定义负载均衡策略如何实现 ?  
-
-你们项目负载均衡如何实现的 ? 
-
-微服务的负载均衡主要使用了一个组件Ribbon，比如，我们在使用feign远程调用的过程中，底层的负载均衡就是使用了ribbon
-
-
-
-Ribbon负载均衡流程
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223204725.png)
-
-Ribbon负载均衡策略有哪些 ?
-- RoundRobinRule：简单轮询服务列表来选择服务器
-- WeightedResponseTimeRule：按照权重来选择服务器，响应时间越长，权重越小
-- RandomRule：随机选择一个可用的服务器
-- BestAvailableRule：忽略那些短路的服务器，并选择并发数较低的服务器
-- RetryRule：重试机制的选择逻辑
-- AvailabilityFilteringRule：可用性敏感策略，先过滤非健康的，再选择连接数较小的实例
-- ZoneAvoidanceRule：以区域可用的服务器为基础进行服务器的选择。使用Zone对服务器进行分类，这个Zone可以理解为一个机房、一个机架等。而后再对Zone内的多个服务做轮询
-
-
-如果想自定义负载均衡策略如何实现 ? 
-可以自己创建类实现IRule接口 , 然后再通过配置类或者配置文件配置即可 ，通过定义IRule实现可以修改负载均衡规则，有两种方式：
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223204754.png)
-
-如果想自定义负载均衡策略如何实现 ? 
-提供了两种方式：
-1，创建类实现IRule接口，可以指定负载均衡策略（全局）
-2，在客户端的配置文件中，可以配置某一个服务调用的负载均衡策略（局部）
-
-
-
-
-
-
-服务雪崩，熔断、降级
-什么是服务雪崩？
-雪崩：一个服务失败，导致整条链路的服务都失败的情形
-服务降级
-服务降级是服务自我保护的一种方式，或者保护下游服务的一种方式，用于确保服务不会受请求突增影响变得不可用，确保服务不会崩溃
-如果降级太多，则会触发熔断机制
-
-
-服务熔断
-Hystrix 熔断机制，用于监控微服务调用情况， 默认是关闭的，如果需要开启需要在引导类上添加注解：@EnableCircuitBreaker
-如果检测到 10 秒内请求的失败率超过 50%，就触发熔断机制。之后每隔 5 秒重新尝试请求微服务，如果微服务不能响应，继续走熔断机制。如果微服务可达，则关闭熔断机制，恢复正常请求
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223204937.png)
-
-
-什么是服务雪崩，怎么解决这个问题？
-- 服务雪崩：一个服务失败，导致整条链路的服务都失败的情形
-- 服务降级：服务自我保护的一种方式，或者保护下游服务的一种方式，用于确保服务不会受请求突增影响变得不可用，确保服务不会崩溃，一般在实际开发中与feign接口整合，编写降级逻辑
-- 服务熔断：默认关闭，需要手动打开，如果检测到 10 秒内请求的失败率超过 50%，就触发熔断机制。之后每隔 5 秒重新尝试请求微服务，如果微服务不能响应，继续走熔断机制。如果微服务可达，则关闭熔断机制，恢复正常请求
-
-
-
-微服务监控
-为什么需要监控？
-- 问题定位
-- 性能分析
-- 服务关系
-- 服务告警
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223205051.png)
-
-
-- Springboot-admin
-- prometheus+Grafana
-- 链路追踪工具
-	- zipkin
-	- skywalking
-
-skywalking
-一个分布式系统的应用程序性能监控工具（ Application Performance Managment ），提供了完善的链路追踪能力， apache的顶级项目（前华为产品经理吴晟主导开源）
-
-- 服务（service）：业务资源应用系统（微服务）
-- 端点（endpoint）：应用系统对外暴露的功能接口（接口）
-- 实例（instance）：物理机
-
-
-你们的微服务是怎么监控的？
-我们项目中采用的skywalking进行监控的
-1，skywalking主要可以监控接口、服务、物理实例的一些状态。特别是在压测的时候可以看到众多服务中哪些服务和接口比较慢，我们可以针对性的分析和优化。
-2，我们还在skywalking设置了告警规则，特别是在项目上线以后，如果报错，我们分别设置了可以给相关负责人发短信和发邮件，第一时间知道项目的bug情况，第一时间修复
-
-
-
-
-
-### 业务相关
-
-### 限流
-为什么要限流？
-1，并发的确大（突发流量）
-2，防止用户恶意刷接口
-
-限流的实现方式：
-- Tomcat：可以设置最大连接数
-- Nginx，漏桶算法
-- 网关，令牌桶算法
-- 自定义拦截器
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223205259.png)
-
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223205251.png)
-
-Nginx限流
-控制速率（突发流量）
-
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223205309.png)
-语法：`limit_req_zone key zone rate `
-- key:定义限流对象，binary_remote_addr就是一种key，基于客户端ip限流
-- Zone：定义共享存储区来存储访问信息，10m可以存储16wip地址访问信息
-- Rate：最大访问速率，rate=10r/s  表示每秒最多请求10个请求
-- burst=20：相当于桶的大小
-- Nodelay：快速处理
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223205346.png)
-控制并发连接数
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223205356.png)
-
-- limit_conn perip 20：对应的key是 $binary_remote_addr，表示限制单个IP同时最多能持有20个连接。
-- limit_conn perserver 100：对应的key是 $server_name，表示虚拟主机(server) 同时能处理并发连接的总数。
-
-网关限流
-yml配置文件中，微服务路由设置添加局部过滤器RequestRateLimiter
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223205409.png)
-- key-resolver ：定义限流对象（ ip 、路径、参数），需代码实现，使用spel表达式获取
-- replenishRate ：令牌桶每秒填充平均速率。
-- urstCapacity ：令牌桶总容量。
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223205428.png)
-你们项目中有没有做过限流 ? 怎么做的 ?
-1，先来介绍业务，什么情况下去做限流，需要说明QPS具体多少
-- 我们当时有一个活动，到了假期就会抢购优惠券，QPS最高可以达到2000，平时10-50之间，为了应对突发流量，需要做限流
-- 常规限流，为了防止恶意攻击，保护系统正常运行，我们当时系统能够承受最大的QPS是多少（压测结果）
-2，nginx限流
-- 控制速率（突发流量），使用的漏桶算法来实现过滤，让请求以固定的速率处理请求，可以应对突发流量
-- 控制并发数，限制单个ip的链接数和并发链接的总数
-3，网关限流
-- 在spring cloud gateway中支持局部过滤器RequestRateLimiter来做限流，使用的是令牌桶算法
-- 可以根据ip或路径进行限流，可以设置每秒填充平均速率，和令牌桶总容量
-
-
-限流常见的算法有哪些呢？
-
-
-
-
-
-### 分布式事务
-- 分布式事务方案的指导
-- 分布式系统设计方向
-- 根据业务指导使用正确的技术选择
-
-
-解释一下CAP和BASE
-CAP定理
-
-1998年，加州大学的计算机科学家 Eric Brewer 提出，分布式系统有三个指标：
-- Consistency（一致性）
-- Availability（可用性）
-- Partition tolerance （分区容错性）
-Eric Brewer 说，分布式系统无法同时满足这三个指标。
-这个结论就叫做 CAP 定理。
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223205528.png)
-Consistency（一致性）：用户访问分布式系统中的任意节点，得到的数据必须一致
-Availability （可用性）：用户访问集群中的任意健康节点，必须能得到响应，而不是超时或拒绝
-Partition（分区）：因为网络故障或其它原因导致分布式系统中的部分节点与其它节点失去连接，形成独立分区。
-Tolerance（容错）：在集群出现分区时，整个系统也要持续对外提供服务
-
-
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223205547.png)
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223205553.png)
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223205612.png)
-
-结论：
-- 分布式系统节点之间肯定是需要网络连接的，分区（P）是必然存在的
-- 如果保证访问的高可用性（A）,可以持续对外提供服务，但不能保证数据的强一致性-->  AP
-- 如果保证访问的数据强一致性（C）,就要放弃高可用性   --> CP
-
-**BASE理论**
-BASE理论是对CAP的一种解决思路，包含三个思想：
-Basically Available （基本可用）：分布式系统在出现故障时，允许损失部分可用性，即保证核心可用。
-Soft State（软状态）：在一定时间内，允许出现中间状态，比如临时的不一致状态。
-Eventually Consistent（最终一致性）：虽然无法保证强一致性，但是在软状态结束后，最终达到数据一致。
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223205632.png)
-
-解释一下CAP和BASE
-- CAP 定理(一致性、可用性、分区容错性)
-	- 分布式系统节点通过网络连接，一定会出现分区问题（P）
-	- 当分区出现时，系统的一致性（C）和可用性（A）就无法同时满足
-- BASE理论
-	- 基本可用
-	- 软状态
-	- 最终一致
-- 解决分布式事务的思想和模型：
-	- 最终一致思想：各分支事务分别执行并提交，如果有不一致的情况，再想办法恢复数据（AP）
-	- 强一致思想：各分支事务执行完业务不要提交，等待彼此结果。而后统一提交或回滚（CP）
-
-
-你们采用哪种分布式事务解决方案？
-- 简历上写的是微服务项目
-- Seata框架(XA、AT、TCC)
-- MQ
-
-Seata架构
-Seata事务管理中有三个重要的角色：
-- TC (Transaction Coordinator) - 事务协调者：维护全局和分支事务的状态，协调全局事务提交或回滚。
-- TM (Transaction Manager) - 事务管理器：定义全局事务的范围、开始全局事务、提交或回滚全局事务。
-- RM (Resource Manager) - 资源管理器：管理分支事务处理的资源，与TC交谈以注册分支事务和报告分支事务的状态，并驱动分支事务提交或回滚。
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223205727.png)
-
-seata的XA模式
-RM一阶段的工作：
-- 注册分支事务到TC
-- 执行分支业务sql但不提交
-- 报告执行状态到TC
-TC二阶段的工作：
-- TC检测各分支事务执行状态
-- 如果都成功，通知所有RM提交事务
-- 如果有失败，通知所有RM回滚事务
-RM二阶段的工作：
-- 接收TC指令，提交或回滚事务
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223205750.png)
-
-AT模式原理
-AT模式同样是分阶段提交的事务模型，不过缺弥补了XA模型中资源锁定周期过长的缺陷。
-阶段一RM的工作：
-- 注册分支事务
-- 记录undo-log（数据快照）
-- 执行业务sql并提交
-- 报告事务状态
-阶段二提交时RM的工作：
-- 删除undo-log即可
-阶段二回滚时RM的工作：
-- 根据undo-log恢复数据到更新前
-
-
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223205802.png)
-
-TCC模式原理
-1、Try：资源的检测和预留； 
-2、Confirm：完成资源操作业务；要求 Try 成功 Confirm 一定要能成功。
-3、Cancel：预留资源释放，可以理解为try的反向操作。
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223205839.png)
-
-
-MQ分布式事务
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223205851.png)
-
-
-你们采用哪种分布式事务解决方案？
-- 简历上写的微服务，只要是发生了多个服务之间的写操作，都需要进行分布式事务控制
-- 描述项目中采用的哪种方案（seata | MQ）
-- 四选一：
-	- seata的XA模式，CP，需要互相等待各个分支事务提交，可以保证强一致性，性能差（银行业务）
-	- seata的AT模式，AP，底层使用undo log 实现，性能好（互联网业务）
-	- seata的TCC模式，AP，性能较好，不过需要人工编码实现（银行业务）
-	- MQ模式实现分布式事务，在A服务写数据的时候，需要在同一个事务内发送消息到另外一个事务，异步，性能最好（互联网业务）
-
-
-
-
-### 分布式服务接口幂等
-分布式服务的接口幂等性如何设计？
-幂等: 多次调用方法或者接口不会改变业务状态，可以保证重复调用的结果和单次调用的结果一致。
-
-需要幂等场景
-- 用户重复点击(网络波动)
-- MQ消息重复
-- 应用使用失败或超时重试机制
-
-接口幂等
-基于RESTful API的角度对部分常见类型请求的幂等性特点进行分析
-- GET，查询操作，天然幂等
-- POST  新增操作，请求一次与请求多次造成的结果不同，不是幂等的
-- PUT，更新操作，如果是以绝对值更新，则是幂等的。如果是通过增量的方式更新，则不是幂等的
-- DELETE，删除操作，根据唯一值删除，是幂等的
-
-
-数据库唯一索引：新增
-token+redis：新增、修改
-分布式锁：新增、修改
-
-
-
-
-
-token+redis
-创建商品、提交订单、转账、支付等操作
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223210122.png)
-
-分布式锁
-- 快速失败（抢不到锁的线程）
-- 控制锁的粒度
-```java
-public void saveOrder(Item item) throws InterruptedException {
-    //获取锁（重入锁），执行锁的名称
-  RLock lock = redissonClient.getLock("heimalock");
-    //尝试获取锁，参数分别是：获取锁的最大等待时间（期间会重试），锁自动释放时间，时间单位
-  boolean isLock = lock.tryLock(10, TimeUnit.SECONDS);
-    try {
-        //判断是否获取成功
-    if (!isLock) {
-           log.info("下单操作获取锁失败,order:{}",item);
-           throw new RuntimeException("新增或修改失败");
-        }
-        //下单操作
-        
-    } finally {
-        //释放锁
-    lock.unlock();
-    }
-}
-
-```
-
-分布式服务的接口幂等性如何设计？
-- 幂等: 多次调用方法或者接口不会改变业务状态，可以保证重复调用的结果和单次调用的结果一致
-- 如果是新增数据，可以使用数据库的唯一索引
-- 如果是新增或修改数据
-	- 分布式锁，性能较低
-	- 使用token+redis来实现，性能较好
-		- 第一次请求，生成一个唯一token存入redis，返回给前端
-		- 第二次请求，业务处理，携带之前的token，到redis进行验证，如果存在，可以执行业务，删除token；如果不存在，则直接返回，不处理业务
-
-
-
-
-
-
-
-
-
-
-
-
-
-### 分布式任务调度
-xxl-job
-你们项目中使用了什么分布式任务调度
-首先，还是要描述当时是什么场景用了任务调度
-
-xxl-job解决的问题
-- 解决集群任务的重复执行问题
-- cron表达式定义灵活
-- 定时任务失败了，重试和统计
-- 任务量大，分片执行
-
-
-xxl-job路由策略有哪些？
-xxl-job任务执行失败怎么解决？
-如果有大数据量的任务同时都需要执行，怎么解决？
-
-
-xxl-job路由策略有哪些？
-- FIRST（第一个）：固定选择第一个机器；
-- LAST（最后一个）：固定选择最后一个机器；
-- ROUND（轮询）
-- RANDOM（随机）：随机选择在线的机器；
-- CONSISTENT_HASH（一致性HASH）：每个任务按照Hash算法固定选择某一台机器，且所有任务均匀散列在不同机器上。
-- LEAST_FREQUENTLY_USED（最不经常使用）：使用频率最低的机器优先被选举；
-- LEAST_RECENTLY_USED（最近最久未使用）：最久未使用的机器优先被选举；
-- FAILOVER（故障转移）：按照顺序依次进行心跳检测，第一个心跳检测成功的机器选定为目标执行器并发起调度；
-- BUSYOVER（忙碌转移）：按照顺序依次进行空闲检测，第一个空闲检测成功的机器选定为目标执行器并发起调度；
-- SHARDING_BROADCAST(分片广播)：广播触发对应集群中所有机器执行一次任务，同时系统自动传递分片参数；可根据分片参数开发分片任务；
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223210344.png)
-
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223210335.png)
-
-xxl-job任务执行失败怎么解决？
-故障转移+失败重试，查看日志分析----> 邮件告警
-
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223210355.png)
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223210358.png)
-
-如果有大数据量的任务同时都需要执行，怎么解决？
-执行器集群部署时，任务路由策略选择分片广播情况下，一次任务调度将会广播触发对应集群中所有执行器执行一次任务
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223210412.png)
-分片参数
-- index：当前分片序号(从0开始)，执行器集群列表中当前执行器的序号；
-- total：总分片数，执行器集群的总机器数量；
-```java
-@XxlJob("shadingSample")
-public void shardingJobHandler() throws Exception {
-    // 分片参数
-    int shardIndex = XxlJobHelper.getShardIndex();
-    int shardTotal = XxlJobHelper.getShardTotal();
-    XxlJobHelper.log("分片参数：当前分片序号 = {}, 总分片数 = {}", shardIndex, shardTotal);
-    // 业务逻辑
-    List<Integer> list = getList();
-
-    for (Integer integer : list) {
-        if(integer % shardTotal == shardIndex){
-            System.out.println("第"+shardIndex+"分片执行，执行数据为："+integer);
-        }
-    }
-}
-
-```
-
-xxl-job路由策略有哪些？
-xxl-job提供了很多的路由策略，我们平时用的较多就是：轮询、故障转移、分片广播…
-
-
-xxl-job任务执行失败怎么解决？
-- 路由策略选择故障转移，使用健康的实例来执行任务
-- 设置重试次数
-- 查看日志+邮件告警来通知相关负责人解决
-
-如果有大数据量的任务同时都需要执行，怎么解决？
-- 让多个实例一块去执行（部署集群），路由策略分片广播
-- 在任务执行的代码中可以获取分片总数和当前分片，按照取模的方式分摊到各个实例执行
-
-
-
-
 ### 资料
 Spring Cloud教程（非常详细）： https://c.biancheng.net/springcloud/
 
 
 Spring Cloud微服务和分布式系统实践 https://weread.qq.com/web/reader/2fe329c071e041322feb53d
+
 
 
 ## Spring Security安全框架
