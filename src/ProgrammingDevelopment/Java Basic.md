@@ -61,41 +61,22 @@ JDK 是开发 Java 程序的完整环境。
 
 JAR 文件
 
-## java命令行参数
-
-`-cp` / `-classpath`：加载的类和资源的路径，多个路径用分隔符：Windows用 **`;`**、Linux/Mac 用 **`:`**
-
 ## IDEA
 
-**介绍**
+### **介绍**
 【intellij idea】Project Structure 讲解 - hellozay - 博客园： https://www.cnblogs.com/zadomn0920/p/6196962.html
 IntelliJ IDEA（七） ：Project Structure - JaJian - 博客园： https://www.cnblogs.com/jajian/p/8081640.html
 IntelliJ IDEA 学习笔记 - 常见图标介绍-CSDN博客： https://blog.csdn.net/cgl125167016/article/details/78671232
 Icon reference | IntelliJIDEA Documentation： https://www.jetbrains.com/help/idea/symbols.html#file-status
 
-**设置**
+### **设置**
 - IDEA自己有个简单的构建工具，可通过在设置中勾选`"将IDE构建/运行操作委托给Maven(D)"`，把构建工作还给Maven
 - **编辑器-代码样式-Java设置**：
 	- 换行和大括号：链式方法的调研：始终换行（默认 不换行）、多行时对齐
 	- 大括号位置：在类声明中：下一行（如果换行）
 
 
-**操作技巧**
-- 写的正确但找不到依赖项：关掉IDE，重新打开一下
-- IDEA高效使用教程： https://idea.javaguide.cn/tips/efficient-use-guide.html
-
-**使用问题**
-- 问题信息乱码：Windows 控制台默认是 GBK 编码，但IDEA 默认用 UTF-8 编译运行 Java 程序，更改IDEA设置或者更换JDK，从 JDK 18 开始，默认编码就是 UTF-8，所以不会再出现 UTF-8/GBK 不一致的问题
-- 下载依赖项很慢：解决IDEA中Maven下载依赖包过慢或报错的问题-csdn： https://blog.csdn.net/weixin_40276431/article/details/136250858
-
-**maven**：
-- 同步/加载所有 Maven 项目 (Reimport / Reload All Maven Projects)：当修改了 `pom.xml`（新增/删除依赖，修改版本号）或变成了父子模块关系，让pom.xml变化后，让IDEA 会重新读取 Maven 的依赖树，把最新的依赖、插件、模块信息加载到 IDE 里。
-- 为所有项目生成源代码并更新文件夹 (Generate Sources and Update Folders)：最好在初次 clone 项目后运行一次，或者IDEA 报错找不到生成的类，但实际编译是可以通过的。
-- 下载源代码和/或文档 (Download Sources and/or Documentation)：下载依赖 jar 包对应的 源码（-sources.jar） 和 Javadoc（-javadoc.jar）：第一次接触新依赖时就下载源码和文档，想要阅读第三方库的实现细节（比如 Spring, MyBatis, Guava），鼠标悬停方法时没有 Javadoc 注释
-
-
-
-**快捷键**
+### **快捷键**
 - (20条消息) Idea快捷键大全（Windows）_Lymanyu的博客-CSDN博客_idea快捷键： https://blog.csdn.net/qq_38963960/article/details/89552704
 
 - **快速导航到类或文件**：按 `Ctrl + N`（Windows/Linux）或 `Cmd + N`（macOS）快速打开类，按 `Ctrl + Shift + N`（Windows/Linux）或 `Cmd + Shift + N`（macOS）快速打开文件。    
@@ -116,16 +97,43 @@ Icon reference | IntelliJIDEA Documentation： https://www.jetbrains.com/help/id
 - **编辑多行**：按住 `Ctrl`（Windows/Linux）或 `Cmd`（macOS），然后点击多行，IDEA会在多个行上添加光标，可以同时编辑多个位置的内容。
 - **使用Live Templates**：IDEA支持代码模板，通过输入快捷缩写并按 `Tab` 键，IDEA会自动扩展为完整的代码块。你可以自定义模板。
 
+### 高级断点
+掌握条件断点（Condition Breakpoints，只在特定变量值时停下）、异常断点（Exception Breakpoints，抛出特定异常时自动拦截）。
 
-## IDEA
-### .idea
-`.idea` 文件夹是 IntelliJ IDEA 用来存储项目级配置信息的目录。
-当 IDEA 采用Directory-based format（基于目录的格式） 管理项目时（这是目前的默认和推荐方式），它会创建这个目录。
-与之相对的是旧版本的 `.ipr` 单文件格式。
-`.idea` 目录下的文件绝大多数是 XML 格式。这些文件定义了项目如何构建、如何编译、依赖库在哪里、代码风格是什么等等。
-以下是 `.idea` 目录下最常见的文件及其技术细节详解：
+### 动态执行
+熟练使用 Evaluate Expression (Alt+F8) 在调试期动态修改变量值或执行方法，以验证逻辑分支。
+### 依赖管理
+maven
+借助 Maven Helper 等插件，通过图形化界面快速找出并 Exclude 掉冲突的 jar 包。
 
-`modules.xml`：
+- 同步/加载所有 Maven 项目 (Reimport / Reload All Maven Projects)：当修改了 `pom.xml`（新增/删除依赖，修改版本号）或变成了父子模块关系，让pom.xml变化后，让IDEA 会重新读取 Maven 的依赖树，把最新的依赖、插件、模块信息加载到 IDE 里。
+- 为所有项目生成源代码并更新文件夹 (Generate Sources and Update Folders)：最好在初次 clone 项目后运行一次，或者IDEA 报错找不到生成的类，但实际编译是可以通过的。
+- 下载源代码和/或文档 (Download Sources and/or Documentation)：下载依赖 jar 包对应的 源码（-sources.jar） 和 Javadoc（-javadoc.jar）：第一次接触新依赖时就下载源码和文档，想要阅读第三方库的实现细节（比如 Spring, MyBatis, Guava），鼠标悬停方法时没有 Javadoc 注释
+
+
+
+### **操作技巧**
+- 写的正确但找不到依赖项：关掉IDE，重新打开一下
+- IDEA高效使用教程： https://idea.javaguide.cn/tips/efficient-use-guide.html
+
+### 文件与文件夹/.idea
+- `.idea` 文件夹是 IntelliJ IDEA 用来存储项目级配置信息的目录。
+- `.idea` 目录下的文件绝大多数是 XML 格式。这些文件定义了项目如何构建、如何编译、依赖库在哪里、代码风格是什么等等。
+- 当 IDEA 采用Directory-based format（基于目录的格式） 管理项目时（这是目前的默认和推荐方式），它会创建这个目录。旧版本使用`.ipr` 单文件格式。
+
+
+`workspace.xml` (最特殊的文件)：用户个人的工作区状态。
+* 技术用途：恢复你个人的开发环境上下文。
+* 窗口布局（Project 栏宽窄、打开了哪些 Tool Window）。
+* 打开的编辑器标签页历史（你上次关机前停留在哪个代码文件）。
+* 光标位置、本地查找记录。
+* ChangeLists：本地暂存的代码修改列表。
+* 绝对不能提交。因为它包含大量与代码逻辑无关的机器绝对路径和个人操作习惯，提交后会造成严重的冲突。
+* `/workspace.xml`
+	* 含义： 存储你个人的工作区配置。
+	* 作用： 比如你打开了哪些文件、窗口大小、断点打在哪里、上次运行的配置等。这是最需要被忽略的文件之一。
+
+**`modules.xml`**：
 项目的“骨架”描述文件。它告诉 IDEA 这个项目由哪些模块（Module）组成。IDEA 启动时读取此文件，根据路径去加载各个模块的详细配置。包含 `<modules>` 标签，内部列出了当前项目所有 `.iml` 文件的路径。
 * 示例内容：
 ```xml
@@ -134,10 +142,9 @@ Icon reference | IntelliJIDEA Documentation： https://www.jetbrains.com/help/id
 </modules>
 ```
 
-`misc.xml`：杂项配置，包含关键的项目级设置。
+**`misc.xml`**：杂项配置，包含关键的项目级设置。
 * Project SDK：定义项目使用的 JDK 版本（如 Java 17）和类型。
 * Output Path：定义项目编译输出的根目录（通常是 `out` 目录，虽然后来 Maven/Gradle 项目多用 `target`/`build`，但此配置依然存在）。
-
 * 示例内容：
 ```xml
 <component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="17" ...>
@@ -146,13 +153,11 @@ Icon reference | IntelliJIDEA Documentation： https://www.jetbrains.com/help/id
 ```
 
 
-
 `compiler.xml`：定义 Java 编译器的行为。
 * Compiler Configuration：指定使用哪种编译器（Javac, Eclipse ECJ 等）。
 * Bytecode Version：指定每个模块编译后的 `.class` 文件兼容的 Java 版本（Target Bytecode Version）。
 * Annotation Processing：Lombok 或 MapStruct 等注解处理器的配置开关。
 * 技术用途：这是导致“本地运行没问题，线上报错 `Unsupported major.minor version`”的常见原因之一。它控制了 javac 的 `-target` 和 `-source` 参数。
-
 * 示例内容：
 ```xml
 <component name="CompilerConfiguration">
@@ -167,10 +172,6 @@ Icon reference | IntelliJIDEA Documentation： https://www.jetbrains.com/help/id
 `encodings.xml`：字符集编码设置。定义项目、特定文件或 Properties 文件的编码格式（通常是 UTF-8）。
 
 
-`libraries/` (文件夹)：
-存放项目依赖的第三方库（Jar包）的元数据。每个 XML 文件对应一个依赖库，定义了该库的 `CLASSES`（Jar包路径）、`SOURCES`（源码路径）和 `JAVADOC`（文档路径）。
-* 注意：在 Maven/Gradle 项目中，这个文件夹的内容是根据 `pom.xml`/`build.gradle` 自动生成的。
-* 技术用途：让 IDEA 知道当你写 `import org.apache.commons...` 时，应该去磁盘的哪个位置加载类文件，以及当你按 `Ctrl+Click` 时去哪里找源码。
 
 
 `vcs.xml`：版本控制系统映射配置。定义项目的根目录对应哪个 VCS 工具（Git, SVN, Mercurial）。
@@ -179,44 +180,46 @@ Icon reference | IntelliJIDEA Documentation： https://www.jetbrains.com/help/id
 <mapping directory="$PROJECT_DIR$" vcs="Git" />
 ```
 
-
-`workspace.xml` (最特殊的文件)：用户个人的工作区状态。
-* 技术用途：恢复你个人的开发环境上下文。
-* 窗口布局（Project 栏宽窄、打开了哪些 Tool Window）。
-* 打开的编辑器标签页历史（你上次关机前停留在哪个代码文件）。
-* 光标位置、本地查找记录。
-* ChangeLists：本地暂存的代码修改列表。
-* 绝对不能提交。因为它包含大量与代码逻辑无关的机器绝对路径和个人操作习惯，提交后会造成严重的冲突。
+* `*.iml` 和 `//.iml`
+	* 含义： IDEA 的模块（Module）配置文件。
+	* 作用： 描述项目的依赖路径等。在现代 Maven/Gradle 项目中，这些文件是可以随时自动生成的，通常建议忽略，保持仓库整洁。
 
 
-`runConfigurations/` (文件夹)：共享的运行/调试配置。XML 文件，定义了 Main 类、VM 参数（`-Xms`）、环境变量、Program Arguments 等。
+* `/dataSources/` 和 `/dataSources.local.xml`
+	* 含义： IDEA 右侧 "Database" 面板的配置信息。
+	* 作用： 这里面通常包含你连接数据库的 URL、驱动版本，甚至加密后的数据库密码。必须忽略，否则会泄露敏感信息。
+
+
+* `/shelf/`
+	* 含义： 存放 IDEA "Shelve Changes"（搁置修改）功能的临时文件。
+	* 作用： 当你不想提交代码但又想切分支时，把代码“搁置”在本地，生成的临时文件就在这里。
+* `/httpRequests/`
+	* 含义： IDEA 自带的 HTTP Client（类似于 Postman 的工具）的请求历史和响应缓存。
+	* 作用： 避免把你本地测试接口的临时结果提交上去。
+
+`libraries/`：存放项目依赖的第三方库（Jar包）的元数据。每个 XML 文件对应一个依赖库，定义了该库的 `CLASSES`（Jar包路径）、`SOURCES`（源码路径）和 `JAVADOC`（文档路径）。
+* 注意：在 Maven/Gradle 项目中，这个文件夹的内容是根据 `pom.xml`/`build.gradle` 自动生成的。
+* 技术用途：让 IDEA 知道当你写 `import org.apache.commons...` 时，应该去磁盘的哪个位置加载类文件，以及当你按 `Ctrl+Click` 时去哪里找源码。
+
+`runConfigurations/`：共享的运行/调试配置。XML 文件，定义了 Main 类、VM 参数（`-Xms`）、环境变量、Program Arguments 等。
 * 默认情况下，Run Configuration 存储在 `workspace.xml` 中（不共享）。
 * 如果在 IDEA 运行配置里勾选了 "Store as project file"，配置就会被提取到这个文件夹中。
 * 场景：团队共享统一的启动参数，方便新人一键启动服务。
 
 
-`codeStyles/` (文件夹)：
-代码格式化规则。缩进是用 Tab 还是空格、括号是否换行、Import 的排序规则等。
+`codeStyles/`：代码格式化规则。缩进是用 Tab 还是空格、括号是否换行、Import 的排序规则等。
 * 技术用途：通过 `Project.xml` 里的 Scheme 引用，确保团队成员按下 `Ctrl+Alt+L` 格式化代码时，结果是一致的。
 
-`inspectionProfiles/` (文件夹)：代码检查（Lint）规则。定义哪些警告是 Error，哪些是 Warning，哪些忽略（例如：拼写检查是否开启，是否允许魔法值）。
+`inspectionProfiles/`：代码检查（Lint）规则。定义哪些警告是 Error，哪些是 Warning，哪些忽略（例如：拼写检查是否开启，是否允许魔法值）。
 
-### 文件与文件夹含义
-* `/shelf/`
-	* 含义： 存放 IDEA "Shelve Changes"（搁置修改）功能的临时文件。
-	* 作用： 当你不想提交代码但又想切分支时，把代码“搁置”在本地，生成的临时文件就在这里。
-* `/workspace.xml`
-	* 含义： 存储你个人的工作区配置。
-	* 作用： 比如你打开了哪些文件、窗口大小、断点打在哪里、上次运行的配置等。这是最需要被忽略的文件之一。
-* `/httpRequests/`
-	* 含义： IDEA 自带的 HTTP Client（类似于 Postman 的工具）的请求历史和响应缓存。
-	* 作用： 避免把你本地测试接口的临时结果提交上去。
-* `/dataSources/` 和 `/dataSources.local.xml`
-	* 含义： IDEA 右侧 "Database" 面板的配置信息。
-	* 作用： 这里面通常包含你连接数据库的 URL、驱动版本，甚至加密后的数据库密码。必须忽略，否则会泄露敏感信息。
-* `*.iml` 和 `//.iml`
-	* 含义： IDEA 的模块（Module）配置文件。
-	* 作用： 描述项目的依赖路径等。在现代 Maven/Gradle 项目中，这些文件是可以随时自动生成的，通常建议忽略，保持仓库整洁。
+
+
+
+### **使用问题**
+- 问题信息乱码：Windows 控制台默认是 GBK 编码，但IDEA 默认用 UTF-8 编译运行 Java 程序，更改IDEA设置或者更换JDK，从 JDK 18 开始，默认编码就是 UTF-8，所以不会再出现 UTF-8/GBK 不一致的问题
+- 下载依赖项很慢：解决IDEA中Maven下载依赖包过慢或报错的问题-csdn： https://blog.csdn.net/weixin_40276431/article/details/136250858
+
+
 ## Eclipse
 ### 文件与文件夹含义
 
@@ -226,6 +229,13 @@ Icon reference | IntelliJIDEA Documentation： https://www.jetbrains.com/help/id
 * `//.externalToolBuilders/`：Eclipse 外部构建工具配置。
 
 ## Maven
+* Maven 核心机制与依赖原则：
+    * 生命周期： 清晰理解 Clean、Compile、Test、Package、Install、Deploy 阶段，执行后续阶段会自动触发前面的阶段。
+    * 依赖冲突解决： 理解 Maven 的“最短路径优先”和“第一声明优先”原则。熟练在 `<dependency>` 中使用 `<exclusions>` 标签解决常见的日志框架冲突（如 slf4j 冲突）或版本不一致问题。
+
+Download Apache Maven – Maven
+https://maven.apache.org/download.cgi
+
 Maven Repository: Search/Browse/Explore： https://mvnrepository.com/
 
 
@@ -290,94 +300,19 @@ Gradle 是另一个现代化的 Java **构建工具**，比 Maven 更灵活、�
 * 比 Maven 更适合复杂项目或多语言项目。
 
 
+## 基础中的基础
+
+### 程序运行
+
+简单程序是由 javac 将代码文本变成字节码再 java 跑；
 
 
-## 程序运行
-
-简单程序是 javac 成字节码再 java 跑；项目的话，是 Maven（或 Gradle）先把项目（和依赖）编译/准备好，再由 java 用正确的 classpath 去运行。点 Run 时，IDE 就是在背后帮你执行「编译这一步 + 拼好 classpath 再执行 java」这两件事。
-
-
-## 命名规范
-- 总体命名规范
-- 类名需要使用大驼峰命名法(UpperCamelCase)风格。
-- 方法名、参数名、成员变量、局部变量需要使用小驼峰命名法(lowerCamelCase)。
-- 测试方法名、常量、枚举名称需要使用蛇形命名法(snake_case) ，比如test_get_user()、TIME_LIMIT。并且，测试方法名称要求全部小写，常量以及枚举名称需要全部大写。
-- 项目文件夹名称使用串式命名法(kebab-case)，比如dubbo-registry。
-- 包名统一使用小写，尽量使用单个名词作为包名，各个单词通过 "." 分隔符连接，并且各个单词必须为单数。
-- 抽象类命名使用 Abstract 开头。如：public abstract class AbstractClient extends AbstractEndpoint{}。
-- 异常类命名使用 Exception 结尾。如：public class NoSuchMethodException extends RuntimeException{}。
-- 测试类命名以它要测试的类的名称开始，以 Test 结尾。如：public class AnnotationUtilsTest{}。
-- 包名命名规范
-- Java的包名由小写单词组成，包的路径符合所开发的系统模块的定义，以便通过包名可得知其属于哪个模块，从而方便到对应包里找相应的实现类。
-
-- 常规包名
-
-- 为了保障每个Java Package命名的唯一性,在Java编程规范中要求开发人员在自己定义的包名前加上唯一的前缀.由于互联网上的域名称是不会重复的,所以多数开发人员采用自己公司在互联网上的域名称作为自己程序包的唯一前缀.例如 : com.sun.swt...
-
-- 公司项目 com : 公司项目,copyright由项目发起的公司所有. 包名 : com.公司名.项目名.模块名..
-- 团队项目 team : 团队项目,指由团队发起,并由该团队开发的项目,copyright属于该团队所有. 包名 : team.团队名.项目名.模块名..
-- 自定义包名
-
-- 一般公司命名为com.公司名.项目名.模块名....那我们个人的项目又怎么命名呢?个人的英语单词有individual、personal、private、one-man,进一步对以上四个单词词意进行分析并在保证了唯一性,继而使用每个单词的前4个字母作为前缀,与com也做了区分.示例如下所示:
-
-- indi : 个体项目,指个人发起,但非自己独自完成的项目,可公开或私有项目,copyright主要属于发起者. 包名 :indi.发起者名.项目名.模块名..
-- pers : 个人项目,指个人发起,独自完成,可分享的项目,copyright主要属于个人.包名 : pers.个人名.项目名.模块名..
-- priv : 私有项目,指个人发起,独自完成,非公开的私人使用的项目,copyright属于个人.包名 : priv.个人名.项目名.模块名..
-- onem : 与indi相同，推荐使用indi.
-
-## java的包
-
-在 Java 里，同包 = 同命名空间，同一个 package 下的类互相可见，直接用类名就能用。
-只有别的 package 里的类才需要 import（或用全限定名）。
+项目的话，是 
+Maven（或 Gradle）先把项目（和依赖）编译/准备好，再由 java 用正确的 classpath 去运行。
+点 Run 时，IDE 就是在背后帮你执行「编译这一步 + 拼好 classpath 再执行 java」这两件事。
 
 
-## Scanner-输入-代码
-**输入**：
-```Java
-import java.util.Scanner;
-
-public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        // 读取一个字符串
-        String name = scanner.nextLine();
-        // 读取一个整数，注意，它不会吃掉换行符
-        int age = scanner.nextInt();
-        // 读取一个浮点数
-        double score = scanner.nextDouble();
-		
-		System.out.println("Name: " + name);
-        System.out.println("Age: " + age);
-        System.out.println("Score: " + score);
-        
-        // 读取整数数组：1 2 3 4 5
-		String[] parts = sc.nextLine().split(" ");
-		int[] nums = new int[parts.length];
-		for (int i = 0; i < parts.length; i++) {
-		    nums[i] = Integer.parseInt(parts[i]);
-		}
-        
-        // 读取二维数组矩阵
-		// 3 3
-		// 1 2 3
-		// 4 5 6
-		// 7 8 9
-		Scanner sc = new Scanner(System.in);
-		int rows = sc.nextInt();
-		int cols = sc.nextInt();
-		int[][] matrix = new int[rows][cols];
-		for (int i = 0; i < rows; i++) {
-		    for (int j = 0; j < cols; j++) {
-		        matrix[i][j] = sc.nextInt();
-		    }
-		}
-
-        scanner.close();
-    }
-}
-```
-
-## 输出-代码
+### 输出-代码
 **输出**：
 ```Java
 // 输出内容，不换行。
@@ -394,9 +329,7 @@ System.out.printf("小数：%f只保留2位是：%.2f\n", d, d);
 // 小数：1.234500只保留2位是：1.23
 ```
 
-## Java基础知识
-## 基础语法
-## 数据类型
+### 数据类型
 
 **基本数据类型**
 基本数据类型直接表示变量的值，它们存储的是实际的数据值。
@@ -439,7 +372,7 @@ int primitiveValue intValue；
 注意：
 所有整型包装类对象之间值的比较使用equals方法比较。
 
-## 数组Arrays
+### 数组Arrays
 所在位置：`java.util.Arrays`
 **工具类**，里面全是 `static` 方法（比如 `sort()`、`asList()`、`binarySearch()`）。
 主要作用是操作 **数组**（`array`），和集合不一样。
@@ -486,7 +419,7 @@ String str = Arrays.toString(arr);
 Set<String> set = new HashSet<>(Arrays.asList(arr));
 ```
 
-## Char-代码
+### Char-代码
 
 ```java
 import java.util.Arrays;
@@ -585,7 +518,7 @@ switch(type) {
 
 ```
 
-## String
+### String
 **String存储的底层原理**
 `String`底层是通过一个被`final`修饰的字符数组来存储字符内容，这样做是为了保证字符串对象内部的字符内容不能被修改，从而提高安全性和性能。
 ```java
@@ -645,7 +578,7 @@ String c = b + "world";
 ```
 - 如果频繁拼接字符串，应使用 `StringBuilder` 来避免创建大量临时对象。
 
-## String-代码
+### String-代码
 
 
 
@@ -764,7 +697,35 @@ Integer.parseInt(String s)
 Integer.valueOf(String s)
 ```
 
-## java数据结构如何获取大小长度
+### 命名规范
+- 总体命名规范
+- 类名需要使用大驼峰命名法(UpperCamelCase)风格。
+- 方法名、参数名、成员变量、局部变量需要使用小驼峰命名法(lowerCamelCase)。
+- 测试方法名、常量、枚举名称需要使用蛇形命名法(snake_case) ，比如test_get_user()、TIME_LIMIT。并且，测试方法名称要求全部小写，常量以及枚举名称需要全部大写。
+- 项目文件夹名称使用串式命名法(kebab-case)，比如dubbo-registry。
+- 包名统一使用小写，尽量使用单个名词作为包名，各个单词通过 "." 分隔符连接，并且各个单词必须为单数。
+- 抽象类命名使用 Abstract 开头。如：public abstract class AbstractClient extends AbstractEndpoint{}。
+- 异常类命名使用 Exception 结尾。如：public class NoSuchMethodException extends RuntimeException{}。
+- 测试类命名以它要测试的类的名称开始，以 Test 结尾。如：public class AnnotationUtilsTest{}。
+- 包名命名规范
+- Java的包名由小写单词组成，包的路径符合所开发的系统模块的定义，以便通过包名可得知其属于哪个模块，从而方便到对应包里找相应的实现类。
+
+- 常规包名
+
+- 为了保障每个Java Package命名的唯一性,在Java编程规范中要求开发人员在自己定义的包名前加上唯一的前缀.由于互联网上的域名称是不会重复的,所以多数开发人员采用自己公司在互联网上的域名称作为自己程序包的唯一前缀.例如 : com.sun.swt...
+
+- 公司项目 com : 公司项目,copyright由项目发起的公司所有. 包名 : com.公司名.项目名.模块名..
+- 团队项目 team : 团队项目,指由团队发起,并由该团队开发的项目,copyright属于该团队所有. 包名 : team.团队名.项目名.模块名..
+- 自定义包名
+
+- 一般公司命名为com.公司名.项目名.模块名....那我们个人的项目又怎么命名呢?个人的英语单词有individual、personal、private、one-man,进一步对以上四个单词词意进行分析并在保证了唯一性,继而使用每个单词的前4个字母作为前缀,与com也做了区分.示例如下所示:
+
+- indi : 个体项目,指个人发起,但非自己独自完成的项目,可公开或私有项目,copyright主要属于发起者. 包名 :indi.发起者名.项目名.模块名..
+- pers : 个人项目,指个人发起,独自完成,可分享的项目,copyright主要属于个人.包名 : pers.个人名.项目名.模块名..
+- priv : 私有项目,指个人发起,独自完成,非公开的私人使用的项目,copyright属于个人.包名 : priv.个人名.项目名.模块名..
+- onem : 与indi相同，推荐使用indi.
+
+### java数据结构如何获取大小长度
 总结：
 - 数组是 `.length` → 它是一个属性（field）
 - 字符串是 `.length()` → 它是一个方法
@@ -782,6 +743,64 @@ Integer.valueOf(String s)
 | HashMap / TreeMap | `Map<K, V> map`        | `map.size()`   | ✅ 要加括号  | 方法，返回键值对的数量                   |
 | Stack / Queue     | `Stack<T> stack`       | `stack.size()` | ✅ 要加括号  | 方法，返回栈中元素的数量                  |
 
+### 基础语法
+
+### 输入-Scanner-代码
+**输入**：
+```Java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        // 读取一个字符串
+        String name = scanner.nextLine();
+        // 读取一个整数，注意，它不会吃掉换行符
+        int age = scanner.nextInt();
+        // 读取一个浮点数
+        double score = scanner.nextDouble();
+		
+		System.out.println("Name: " + name);
+        System.out.println("Age: " + age);
+        System.out.println("Score: " + score);
+        
+        // 读取整数数组：1 2 3 4 5
+		String[] parts = sc.nextLine().split(" ");
+		int[] nums = new int[parts.length];
+		for (int i = 0; i < parts.length; i++) {
+		    nums[i] = Integer.parseInt(parts[i]);
+		}
+        
+        // 读取二维数组矩阵
+		// 3 3
+		// 1 2 3
+		// 4 5 6
+		// 7 8 9
+		Scanner sc = new Scanner(System.in);
+		int rows = sc.nextInt();
+		int cols = sc.nextInt();
+		int[][] matrix = new int[rows][cols];
+		for (int i = 0; i < rows; i++) {
+		    for (int j = 0; j < cols; j++) {
+		        matrix[i][j] = sc.nextInt();
+		    }
+		}
+
+        scanner.close();
+    }
+}
+```
+
+### java的包
+
+在 Java 里，同包 = 同命名空间，同一个 package 下的类互相可见，直接用类名就能用。
+只有别的 package 里的类才需要 import（或用全限定名）。
+
+
+### java命令行参数
+
+`-cp` / `-classpath`：加载的类和资源的路径，多个路径用分隔符：Windows用 **`;`**、Linux/Mac 用 **`:`**
+
 ## 面向对象编程（OOP）
 - **类与对象**：理解类的定义、实例化对象、成员变量和成员方法。
 - **封装**：通过访问修饰符（private, public, protected）来实现数据的保护。
@@ -796,7 +815,7 @@ Integer.valueOf(String s)
 
 
 
-## 类与对象
+### 类与对象
 **类（Class）**：是对象的模板或蓝图，定义了对象的属性和行为。
 **构造方法**：用于初始化对象。构造方法与类名相同，没有返回值。
 **方法重载（Method Overloading）**：在同一个类中，可以定义多个方法名相同但参数不同的方法。方法的返回类型不同不会构成重载。
@@ -820,7 +839,7 @@ Integer.valueOf(String s)
 
 
 
-## 深拷贝和浅拷贝
+### 深拷贝和浅拷贝
 
 浅拷贝：
 只复制基本的值
@@ -836,13 +855,13 @@ Integer.valueOf(String s)
 
 
 
-## 封装
+### 封装
 **封装（Encapsulation）**：通过访问修饰符（如private、protected、public）隐藏对象的内部实现，只暴露必要的接口（方法）。
 - private：仅在当前类中访问。
 - protected：在当前类、同包的类以及子类中访问。
 - public：在任何地方都可以访问。
 
-## 继承
+### 继承
 **继承（Inheritance）**：子类可以继承父类的属性和方法。使用`extends`关键字实现继承。
 - **super关键字**：指代父类的对象，可以通过它访问父类的成员和构造方法。
 - **方法重写（Method Overriding）**：
@@ -851,7 +870,7 @@ Integer.valueOf(String s)
 	- 构造方法不能重写。因为构造方法需要和类保持同名，而重写的要求是子类方法要和父类方法保持同名。如果允许重写构造方法的话，那么子类中将会存在与类名不同的构造方法，这与构造方法的要求是矛盾的。
 - **方法重载**：与方法重写不同，方法重载是在同一类中方法名相同但参数不同。
 
-## 多态
+### 多态
 **多态（Polymorphism）**：同一操作作用于不同对象时，产生不同的行为。可以通过父类引用指向子类对象，从而实现动态绑定。
 **重载**：在同一个类中，可以有多个方法具有相同的名称，但是它们的参数列表不同（参数的类型、数、顺序），方法的重载与方法的访问修饰符和返回类型无关，方法的返回类型可以相同也可以不同。
 **重写**：指的是在子类中重新定义父类中已经定义的方法，方法名、参数列表和返回类型都必须相同。重写的方法不能比被重写的方法有更低的访问权限。子类方法不能抛出比父类方法更多的异常（子类方法可以不抛出异常或抛出父类异常的子类）。
@@ -859,7 +878,7 @@ Integer.valueOf(String s)
 - 编译时多态是通过方法的重载在编译阶段确定调用的方法。
 - 运行时多态是通过方法的重写在程序运行时确定调用的方法，实现动态绑定。
 
-## 接口
+### 接口
 （Interface）
 
 **定义**：接口是实际定义了一组约定，接口通过`interface`关键字定义，一个类可以通过`implements`关键字表明要实现的接口，并要实现接口中的所有抽象方法。接口支持多继承，一个类可以实现多个接口，这也解决了Java不支持多继承的问题。。
@@ -1061,7 +1080,7 @@ public class OrderServiceTest {
 
 
 
-## 抽象类和抽象方法
+### 抽象类和抽象方法
 **抽象（Abstraction）**：通过抽象类或接口，只提供方法签名而不实现细节，让具体实现留给子类。
 
 - **abstract类**：不能直接实例化，必须由子类继承并实现其中的抽象方法。
@@ -1096,7 +1115,7 @@ abstract 修饰方法
 
 ## 异常处理
 
-## 错误和异常
+### 错误和异常
 `Throwable` 是 Java 所有错误和异常的根类，它有两个直接子类：
 * `Error`：系统级严重错误，程序无法控制；
 * `Exception`：程序可捕获并处理的异常。
@@ -1142,7 +1161,7 @@ Java 使用 **异常捕获和抛出机制（try-catch-finally）** 来处理异�
 
 
 
-## final、finally、finalize的区别
+### final、finally、finalize的区别
 （1）final就是不可变的意思，可以修饰变量、方法和类。修饰变量时，这个变量必须初始化，所以也称为常量。
 
 （2）finally是异常处理的一部分，只能用在try/catch中，并且附带一个语句块表示这段语句一定会被执行，无论是否抛出异常。

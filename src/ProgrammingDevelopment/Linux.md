@@ -16,6 +16,15 @@ tag:
 
 # Linux
 
+
+
+### 开发环境实战能力
+
+* 资源瓶颈排查： 熟练使用 `top` 查看 CPU 和内存负载，`free -h` 检查可用物理内存，`df -h` 检查磁盘使用率。
+* Java 进程深度定位： 遇到 CPU 飙升，通过 `top` 找到进程，再用 `top -Hp <pid>` 找到具体的消耗线程，将线程 ID 转为 16 进制后，配合 `jstack` 定位到具体的 Java 代码行。
+* 网络状态诊断： `netstat -tunlp` 或 `ss -tunlp` 查看端口占用情况，`ping` 和 `telnet` 测试网络连通性，`curl` 模拟 HTTP 请求测试接口响应。
+* 日志分析提取： `tail -f` 实时追踪日志，`grep` 配合正则表达式过滤异常栈（如 `grep -A 10 "Exception" error.log`）。进阶需掌握 `awk` 和 `sed` 对日志内容进行分列提取或统计。
+
 ## 用户相关
 修改用户密码
 - 输入命令`whoami`（一个整体，没有空格）
