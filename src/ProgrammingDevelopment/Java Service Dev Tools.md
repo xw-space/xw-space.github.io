@@ -12,7 +12,160 @@ tag:
 
 # Java Service Dev Tools
 
-## MyBatis——ORM框架
+## Feign—服务调用
+### 介绍
+**是什么**：
+Feign 是 Spring Cloud 中用于简化 HTTP 客户端调用的一个声明式 HTTP 客户端库。
+
+**作用**：
+它提供了一种非常简便的方式来调用远程服务的 API，而无需手动编写大量的代码来发出 HTTP 请求和处理响应。
+Feign 接口通过注解的方式来定义远程调用接口，使用者只需像调用本地接口一样调用远程 API。
+
+
+**主要特点**
+- **声明式 HTTP 客户端**：Feign 允许你通过简单的 Java 接口和注解来定义 HTTP 请求方式，隐藏了底层复杂的网络请求逻辑。
+- **与 Spring 集成良好**：Feign 可以与 Spring Boot 和 Spring Cloud 无缝集成。通过与 Eureka、Ribbon、Hystrix 等其他 Spring Cloud 组件结合，Feign 可以支持服务发现、负载均衡和容错。
+- **自动序列化和反序列化**：Feign 可以自动将请求和响应数据序列化为 JSON、XML 或其他格式，并将响应反序列化为 Java 对象。
+
+**优点**
+- 简洁性：大大简化了编写 HTTP 客户端的工作，代码清晰明了。
+- 与 Spring Cloud 生态系统无缝集成：结合 Ribbon、Hystrix 等组件，支持负载均衡和容错。
+- 强大的扩展能力：支持自定义的序列化、反序列化逻辑和请求拦截器。
+- 通过 Feign，开发者可以更轻松地实现微服务间的通信，减少了手动编写网络请求的代码，提升了开发效率。
+
+**常见用途**
+- **微服务之间的通信**：在微服务架构中，服务之间的通信通常通过 HTTP 请求进行。Feign 简化了这个过程，使得开发人员可以像调用本地方法一样去调用远程服务的 API。
+- **服务发现**：与 Eureka 等服务发现工具结合，Feign 可以通过服务名称自动找到服务的实例，实现负载均衡和自动故障转移。
+- **简化 API 网关开发**：在 API 网关中，可以通过 Feign 来代理内部服务的接口，方便地转发请求。
+
+
+
+
+**作用原理**：
+当你在 Spring Boot 项目中使用`@EnableFeignClients` 注解时，Spring 会自动扫描指定包路径（如果未指定路径，则扫描当前包及其子包）下所有带有`@FeignClient` 注解的接口，将这些接口代理为 Spring 容器中的 Bean，这样就可以在其他地方通过依赖注入来使用它们。
+Spring 会为每个 `@FeignClient` 注解的接口创建一个动态代理类，并将其注册到 Spring 的上下文中。当你调用这个接口的方法时，实际调用的是由 Feign 生成的代理对象，而这个对象会根据你定义的注解和配置来执行相应的 HTTP 请求。
+```java
+@EnableFeignClients(basePackages = "com.example.demo.clients")
+```
+
+
+
+### **用法**
+- **引入依赖**：在 Spring Boot 项目中，首先要引入 Feign 的依赖：
+```xml
+<dependency>
+   <groupId>org.springframework.cloud</groupId>
+   <artifactId>spring-cloud-starter-openfeign</artifactId>
+</dependency>
+```
+
+- **定义 Feign 接口**：Feign 接口就像是服务的代理，主要通过注解定义。可以使用 `@FeignClient` 注解来声明一个 Feign 客户端，并通过方法上的注解来定义 HTTP 请求。
+```java
+@FeignClient(name = "user-service")
+public interface UserClient {
+   @GetMapping("/api/user/{id}")
+   User getUserById(@PathVariable("id") Long id);
+}
+```
+   在这个例子中，`@FeignClient(name = "user-service")` 表示这个 Feign 客户端将调用名为 `user-service` 的服务，而 `@GetMapping` 注解指定了它将进行一个 `GET` 请求来获取用户信息。
+   
+- **启用 Feign**：在主启动类中，使用 `@EnableFeignClients` 注解启用 Feign 客户端。
+```java
+@SpringBootApplication
+@EnableFeignClients
+public class FeignApplication {
+   public static void main(String[] args) {
+	   SpringApplication.run(FeignApplication.class, args);
+   }
+}
+```
+当 Spring Boot 启动时，它会扫描带有 `@FeignClient` 注解的接口，并为每个接口生成一个动态代理类。这个代理类实现了接口中的方法，并将这些方法与 HTTP 请求关联起来。
+
+- **请求构建**：
+	- 当我们调用 Feign 接口的方法时，例如`userService.getUserById(1L)` ，Feign 的代理对象会捕获这个方法调用。
+	- Feign 根据接口方法上的注解（如 `@GetMapping`、`@PostMapping` 等）来构建一个 HTTP 请求。它会替换路径中的参数，设置请求方法（GET、POST 等）、请求头和请求体等。
+
+- **HTTP 请求执行**：
+    - Feign 使用 HTTP 客户端（如 Apache HttpClient 或 OkHttp）执行构建好的 HTTP 请求。Feign 默认使用 `JDK HttpURLConnection`，但可以通过配置切换到其他 HTTP 客户端。
+    - Feign 将请求发送到指定的服务地址（如 `http://localhost:8080`），并等待服务的响应。
+
+- **响应处理**：
+    - 收到远程服务的响应后，Feign 会根据接口方法的返回类型解析响应数据。比如，如果返回类型是 `User`，Feign 会自动将响应体解析为 `User` 对象（假设返回的是 JSON 数据）。
+    - Feign 使用 Jackson 或其他 JSON 解析库将响应体转化为 Java 对象，并返回给调用方。
+
+- **错误处理与重试机制**：
+    - 如果请求失败，Feign 可以通过配置重试策略或错误处理器（`ErrorDecoder`）来处理错误。例如，可以设置在请求失败时重试多次，或者捕获特定的 HTTP 错误代码并执行相应的逻辑。
+
+### **如果没有fegin**
+- 老方法：RestTemplate（经典手写调用）
+	- 需要手动拼接 URL。
+	- 需要自己处理返回值类型转换（泛型还要用 `ParameterizedTypeReference`，代码更啰嗦）。
+	- 虽然也能配合 Ribbon/LoadBalancer 做服务发现，但写法更麻烦。
+```java
+@Autowired
+private RestTemplate restTemplate;
+
+public Long doLogin(String code) {
+    String url = "http://service-customer/customer/info/login/" + code;
+    ResponseEntity<Result> response = restTemplate.getForEntity(url, Result.class);
+    Result<Long> result = response.getBody();
+    return result.getData();
+}
+```
+- **使用feign**：
+	- 调用远程方法就像调用本地方法一样。
+	- Feign 自动处理请求路径、参数拼装、返回值反序列化。
+	- 可直接集成负载均衡（Ribbon 或 Spring Cloud LoadBalancer）+ 熔断降级（Sentinel / Resilience4j）。
+```java
+// 声明接口
+@FeignClient(value = "service-customer")
+public interface CustomerInfoFeignClient {
+    @GetMapping("/customer/info/login/{code}")
+    Result<Long> login(@PathVariable String code);
+}
+
+// 调用
+@Autowired
+private CustomerInfoFeignClient customerInfoFeignClient;
+public Long doLogin(String code) {
+    Result<Long> result = customerInfoFeignClient.login(code);
+    return result.getData();
+}
+```
+
+
+
+
+
+### **进阶功能**
+- **请求参数和头信息**：Feign 支持通过注解传递请求参数和头信息。例如，你可以通过 `@RequestParam` 传递查询参数，通过 `@RequestHeader` 设置请求头。
+```java
+@FeignClient(name = "user-service")
+public interface UserClient {
+   @GetMapping("/api/user")
+   User getUser(@RequestParam("name") String name, @RequestHeader("Authorization") String token);
+}
+```
+
+- **容错机制**：Feign 可以与 Hystrix 集成，提供服务降级功能，当远程服务不可用时，自动调用备用逻辑。
+```java
+@FeignClient(name = "user-service", fallback = UserClientFallback.class)
+public interface UserClient {
+   @GetMapping("/api/user/{id}")
+   User getUserById(@PathVariable("id") Long id);
+}
+
+@Component
+public class UserClientFallback implements UserClient {
+   @Override
+   public User getUserById(Long id) {
+	   return new User(); // 返回一个默认用户对象
+   }
+}
+```
+
+
+## MyBatis—ORM框架
 
 ### 介绍
 
@@ -276,7 +429,7 @@ Mybatis的二级缓存什么时候会清理缓存中的数据：当某一个作�
 
 
 
-## MyBatis Plus——ORM框架
+## MyBatis Plus—ORM框架
 ### 介绍
 和Mybatis对比，**MyBatis-Plus** 与原生 **MyBatis** 的主要区别：
 - 传统MyBatis需要 `UserMapper.xml` + `<insert|select|update|delete>` + `resultMap`，并且简单 CRUD 也要写 SQL
@@ -509,386 +662,8 @@ List<UserOrderVO> rows = userMapper.selectJoin(
 `LambdaQueryWrapper` 提供了便捷、类型安全的条件构造方式，在 MyBatis-Plus 中极大简化了 SQL 查询的编写工作。同时它还支持动态构建查询条件、分页查询、排序等功能，非常适合处理复杂的业务查询场景。
 
 
-## Nacos——服务发现/注册
-### 使用
-
-
-**安装Nacos**：
-- 下载，解压，安装安装包
-- 或者直接下载docker，默认未8848端口，在 localhost:8848/nacos 运行，用户名和密码都是nacos
-
-**二进制包单机模式启动指令：**
-* **Linux / macOS:** 运行 `sh startup.sh -m standalone`
-* **Windows:** 运行 `cmd startup.cmd -m standalone`
-* 
-
-### 介绍
-**简介**：**Nacos** 是阿里巴巴开源的一个动态服务发现、配置管理和服务管理平台，适用于构建微服务架构。
-
-
-**功能**：
-- **服务注册与发现**：Nacos 可以像 Eureka、Consul 等服务注册中心一样，通过提供一个中心化的目录来跟踪微服务的实例。Nacos 维护了所有注册到它的服务信息，当一个服务实例启动时，它会向 Nacos 注册自己的信息（ IP 和端口），其他服务可以通过 Nacos 查找和调用它。
-- **配置管理**：Nacos 还提供了配置中心功能，可以在其中集中管理应用的配置信息。如果需要更新配置，只需修改 Nacos 中的配置，服务会自动获取新的配置。
-- **动态配置推送**：当配置发生变化时，nacos可以立即推送到客户端应用程序，不用客户端定时拉取。传统方法是开发人员需要手动修改配置文件并重启服务。原理是使用一种类似 长轮询（Long Polling）或 WebSocket 的机制将配置变更通知给客户端。
-- **动态路由和负载均衡**：Nacos 支持动态的服务路由，可以在服务之间进行智能路由，确保请求被路由到健康的服务实例。它还与 Ribbon 和其他负载均衡器集成，以实现智能负载均衡，确保更高的可靠性和性能。
-- **服务健康监测**：传统的配置管理通常是定时拉取配置的方式，也就是说，服务会每隔一定时间去检查配置是否发生了变化。Nacos 提供了健康检查和服务监控功能。它可以定期检查服务实例的健康状况，对服务进行心跳检测，监控服务的可用性状态，如果某个服务实例不可用，则 Nacos 将自动更新注册表，将请求转移到其他健康实例，确保服务的高可用性。
-- **命名空间和多环境管理**：Nacos 提供了命名空间（Namespace）管理功能，方便开发者在不同环境（如开发、测试、生产）之间隔离配置信息。此外，它的配置分组（Group）功能允许将相同的配置划分到不同的分组，以实现更加细粒度的管理。
-- **版本控制**：可以在 Nacos 控制台中查看配置的历史版本，并在需要时回滚到某个版本。
-- **灰度发布**：允许你将新配置逐步推送给部分应用实例，观察效果后再全面发布。
-- **集群模式**：Nacos 默认是单机模式，但支持集群模式。通过此实现负载均衡和自动故障转移，高可用；原理是Nacos 集群通过 一致性哈希 来分配服务注册和配置的存储。
-
-如何实现热更新？
-
-
-**优点**
-- **微服务架构**：Nacos 可以高效地管理微服务应用中的服务注册与发现，适合微服务体系结构。
-- **多环境配置管理**：Nacos 能集中管理和动态更新多环境的配置，简化了配置管理流程。
-- **跨语言支持**：Nacos 支持不同语言的客户端，便于跨语言服务间的协同管理。
-- **动态配置管理**，无需重启应用。
-- **服务发现**和健康检查，支持微服务架构。
-- **易用性强**，支持多种配置格式和实时更新。
-- 可以热更新计费参数
-
-
-
-与 **Apollo**、**Consul** 比较：
-- **Nacos** 支持配置管理和服务发现，Apollo 仅做配置管理，Consul 更侧重服务发现。
-- **Nacos** 更易与 Spring Cloud 集成。
-
-
-**常用组件**
-- **Nacos Server**：提供服务注册、配置管理和服务监控的功能。
-- **Nacos Client**：用于与 Nacos Server 通信的客户端库，一般集成到各个服务中。
-
-
-### 服务注册与发现
-(Registry)
-微服务架构中，各服务实例的网络坐标（IP 和端口）会动态变化。Nacos 提供了基于 DNS 和基于 RPC 的服务发现机制，解决“服务提供者在哪里”的问题。
-
-**技术实现机制：**
-- **服务注册 (Register)：** 服务提供者 (Provider) 启动时，通过 Nacos Client SDK 向 Nacos Server 发送 REST 请求，注册自身的元数据信息（如 IP、端口、权重、健康状态等）。
-- **健康检查 (Heartbeat)：** 对于临时实例，客户端默认每 5 秒向服务端发送一次心跳包。若 Nacos Server 在 15 秒内未收到心跳，会将实例标记为不健康；若 30 秒未收到，则直接将该实例从可用服务列表中剔除。
-- **服务发现 (Discovery)：** 服务消费者 (Consumer) 定期（默认 10 秒）从 Nacos Server 拉取最新的服务实例列表，并缓存在本地内存中。发起远程调用时，结合本地负载均衡组件（如 Spring Cloud LoadBalancer）从缓存列表中选择一个健康实例发起请求。
-
-**客户端配置示例：** 引入 `spring-cloud-starter-alibaba-nacos-discovery` 依赖后，在 `application.yml` 中声明：
-```YAML
-spring:
-  application:
-    name: user-service
-  cloud:
-    nacos:
-      discovery:
-        server-addr: 127.0.0.1:8848
-```
-
-
-
-
-### 分布式配置管理
-(Config Center)
-
-Nacos 允许将系统中各个微服务的配置文件集中提取到 Nacos Server 端进行统一存储和管理，并支持配置的动态下发，服务无需重启即可应用新配置。
-**技术实现机制：**
-* **长轮询 (Long Polling) 监听：** Nacos Client 启动后，会与 Server 端建立 HTTP 长轮询连接。Client 会携带本地缓存配置的 MD5 值发送给 Server 端进行比对。
-* **动态热刷新：** 当开发者在 Nacos 控制台修改了配置，Server 端会更新对应 Data ID 的数据，并响应挂起的长轮询请求。Client 接收到变更通知并拉取新配置后，在 Spring 环境中触发 `EnvironmentChangeEvent`，结合 `@RefreshScope` 注解通过反射机制动态更新 Bean 的属性值。
-
-**客户端配置示例：**
-- **引入依赖**：引入 `spring-cloud-starter-alibaba-nacos-config` 依赖
-- **配置 Nacos 连接信息**：
-在项目的 `application.yml` 或 `application.properties` 文件中配置 Nacos 的服务器地址和命名空间。例如：
-在 `bootstrap.yml`（注意：由于需要在 Spring 容器初始化前加载，文件优先级必须高于 application.yml）中声明：
-```yaml
-spring:
-  application:
-    name: user-service
-  cloud:
-    nacos:
-      config:
-        server-addr: 127.0.0.1:8848
-        file-extension: yaml
-		namespace: your-namespace-id  # 可选：命名空间 ID
-        group: DEFAULT_GROUP          # 可选：配置组
-```
-- **服务注册和发现**：在 Spring Boot 的主类中加上`@EnableDiscoveryClient` 注解，启用服务注册与发现
-
-- **在 Nacos 配置中心创建配置文件**：在 Nacos 控制台中创建对应的数据 ID 和配置内容。通常，Spring Boot 项目使用的配置文件命名规则为 `DataID: ${spring.application.name}.properties`，以便在 Nacos 中进行映射。例如，项目的 `application.yml` 配置会对应到 Nacos 中的 `demo-service.yml` 或 `demo-service.properties`
-
-- **使用配置值**：在 Spring 项目中，通过 `@Value` 或 `@ConfigurationProperties` 注解可以直接注入从 Nacos 中加载的配置。例如：
-```java
-@Value("${config.key:defaultValue}")
-private String configValue;
-```
-
-- **使用 @RefreshScope 注解**：通过在配置类或 Bean 上添加这个注解，Spring 可以在 Nacos 中的配置发生变化时自动更新 Bean 的属性。
-
-```java
-@RestController
-@RefreshScope // 核心注解，开启该类的配置热刷新能力
-public class ConfigController {
-    @Value("${custom.database.timeout}")
-    private String dbTimeout;
-}
-```
-
-- **设置配置动态刷新**：配置发布到 Nacos 后，Spring 项目会自动从 Nacos 获取并应用新配置，满足微服务系统的动态更新需求。这种方式允许应用在不重启的情况下更新配置，非常适合动态配置需求较高的场景。通过这种方式，Spring 项目可以灵活、安全地使用 Nacos 配置中心的集中配置管理功能。
-
-- **配置集群模式**：在 `application.properties` 中写入 Nacos 节点信息，例如：
-```properties
-# 假设你有 3 个 Nacos 实例
-nacos.discovery.server-addr=127.0.0.1:8848,127.0.0.2:8848,127.0.0.3:8848
-```
-
-
-### 其它
-**如何防止 Nacos 单点故障？**
-- **集群部署**：通过部署多个 Nacos 实例，形成集群，避免单点故障。
-- **数据复制**：配置 Nacos 集群中的每个节点进行数据同步，确保节点间数据一致性。
-- **负载均衡**：使用负载均衡器（如 Nginx 或 LVS）将请求分发到多个 Nacos 实例。
-- **服务发现高可用**：Nacos 集群配置多节点，确保即使某个节点宕机，其他节点依然能提供服务。
-- **持久化配置**：启用 Nacos 的数据持久化，确保配置数据不会丢失。
-
-
-
-
-
-## Zookeeper——服务发现/注册
-https://zookeeper.apache.org
-简介：
-Zookeeper是一个分布式协调应用，可用作注册中心和配置中心，
-
-结构：
-比如你有一个服务名叫 `order-service`，它的注册结构如下：
-```text
-/registry
-  └── /order-service
-        ├── 192.168.1.101:8080   ← provider1（临时节点）
-        ├── 192.168.1.102:8080   ← provider2
-        └── ...
-```
-
-本地缓存：
-客户端通过建立**本地缓存**避免频繁访问 ZK，并使用 **Watcher 监听节点变化（增、删、改）**，实时同步服务列表，当有新增/下线时及时触发事件更新本地数据，在**高并发、海量节点**场景下实现稳定可靠的服务发现机制。
-
-
-**使用**：
-下载地址： https://zookeeper.apache.org/releases.html
-- 下载：apache-zookeeper-3.8.3-bin.tar.gz
-- 解压：apache-zookeeper-3.8.3-bin.tar.gz
-- 进入：apache-zookeeper-3.8.3-bin\conf
-- 复制文件：zoo_sample.cfg → zoo.cfg
-
-- 编辑zoo.cfg：
-	- tickTime=2000
-	- dataDir=D:/zookeeper/data
-	- clientPort=2181
-
-- 创建：<code>D:\zookeeper\data</code>
-- 进入：<code>apache-zookeeper-3.8.3-bin\bin</code>
-- 打开命令行，运行：zkServer.cmd，看输出中是否有：Starting zookeeper ... STARTED，有，就代表运行成功（输出乱七八糟的有很多）
-
-- 再在<code>apache-zookeeper-3.8.3-bin\bin</code>，打开命令行，运行：zkCli.cmd工具，进入 ZooKeeper 命令行客户端，默认连接 `127.0.0.1:2181`，可输入以下命令，创建一个节点并查看，来测试能否正常使用（这个节点就和文件夹路径似的）：
-```bash
-create /test hello
-get /test
-ls /
-```
-
-
-## Feign——服务调用
-
-FeignCustomDataDecoder
-`FeignCustomDataDecoder` 不会自动生效
-- 创建一个配置类，并将 `FeignCustomDataDecoder` 注册为 Feign 的 `Decoder`。
-```java
-@Configuration
-public class FeignConfig {
-
-    @Bean
-    public Decoder feignDecoder() {
-        return new FeignCustomDataDecoder(new SpringDecoder(new ObjectFactory<HttpMessageConverters>() {
-            @Override
-            public HttpMessageConverters getObject() throws BeansException {
-                return new HttpMessageConverters(new MappingJackson2HttpMessageConverter());
-            }
-        }));
-    }
-}
-```
-你的 `@FeignClient` 注解中，指定这个配置类
-```java
-@FeignClient(name = "customer-service", configuration = FeignConfig.class)
-public interface CustomerClient {
-    @GetMapping("/customer/info/{id}")
-    Customer getCustomerById(@PathVariable("id") Long id);
-}
-```
-
-
-
-## Feign
-**Feign** 是 Spring Cloud 中用于简化 HTTP 客户端调用的一个声明式 HTTP 客户端库。
-Feign 接口通过注解的方式来定义远程调用接口，使用者只需像调用本地接口一样调用远程 API。
-它提供了一种非常简便的方式来调用远程服务的 API，而无需手动编写大量的代码来发出 HTTP 请求和处理响应。
-
-当你在 Spring Boot 项目中使用`@EnableFeignClients` 注解时，Spring 会自动扫描指定包路径（如果未指定路径，则扫描当前包及其子包）下所有带有 `@FeignClient` 注解的接口，将这些接口代理为 Spring 容器中的 Bean，这样就可以在其他地方通过依赖注入来使用它们。
-Spring 会为每个 `@FeignClient` 注解的接口创建一个动态代理类，并将其注册到 Spring 的上下文中。当你调用这个接口的方法时，实际调用的是由 Feign 生成的代理对象，而这个对象会根据你定义的注解和配置来执行相应的 HTTP 请求。
-```java
-@EnableFeignClients(basePackages = "com.example.demo.clients")
-```
-**主要特点**
-1. **声明式 HTTP 客户端**：Feign 允许你通过简单的 Java 接口和注解来定义 HTTP 请求方式，隐藏了底层复杂的网络请求逻辑。
-2. **与 Spring 集成良好**：Feign 可以与 Spring Boot 和 Spring Cloud 无缝集成。通过与 Eureka、Ribbon、Hystrix 等其他 Spring Cloud 组件结合，Feign 可以支持服务发现、负载均衡和容错。
-3. **自动序列化和反序列化**：Feign 可以自动将请求和响应数据序列化为 JSON、XML 或其他格式，并将响应反序列化为 Java 对象。
-**优点**
-- 简洁性：大大简化了编写 HTTP 客户端的工作，代码清晰明了。
-- 与 Spring Cloud 生态系统无缝集成：结合 Ribbon、Hystrix 等组件，支持负载均衡和容错。
-- 强大的扩展能力：支持自定义的序列化、反序列化逻辑和请求拦截器。
-通过 Feign，开发者可以更轻松地实现微服务间的通信，减少了手动编写网络请求的代码，提升了开发效率。
-**常见用途**
-- **微服务之间的通信**：在微服务架构中，服务之间的通信通常通过 HTTP 请求进行。Feign 简化了这个过程，使得开发人员可以像调用本地方法一样去调用远程服务的 API。
-- **服务发现**：与 Eureka 等服务发现工具结合，Feign 可以通过服务名称自动找到服务的实例，实现负载均衡和自动故障转移。
-- **简化 API 网关开发**：在 API 网关中，可以通过 Feign 来代理内部服务的接口，方便地转发请求。
-**基本用法**
-1. **引入依赖**
-   在 Spring Boot 项目中，首先要引入 Feign 的依赖：
-   ```xml
-   <dependency>
-       <groupId>org.springframework.cloud</groupId>
-       <artifactId>spring-cloud-starter-openfeign</artifactId>
-   </dependency>
-   ```
-2. **定义 Feign 接口**
-   Feign 接口就像是服务的代理，主要通过注解定义。可以使用 `@FeignClient` 注解来声明一个 Feign 客户端，并通过方法上的注解来定义 HTTP 请求。
-   ```java
-   @FeignClient(name = "user-service")
-   public interface UserClient {
-       @GetMapping("/api/user/{id}")
-       User getUserById(@PathVariable("id") Long id);
-   }
-   ```
-   在这个例子中，`@FeignClient(name = "user-service")` 表示这个 Feign 客户端将调用名为 `user-service` 的服务，而 `@GetMapping` 注解指定了它将进行一个 `GET` 请求来获取用户信息。
-3. **启用 Feign**
-   
-   在主启动类中，使用 `@EnableFeignClients` 注解启用 Feign 客户端。
-```java
-   @SpringBootApplication
-   @EnableFeignClients
-   public class FeignApplication {
-       public static void main(String[] args) {
-           SpringApplication.run(FeignApplication.class, args);
-       }
-   }
-```
-当 Spring Boot 启动时，它会扫描带有 `@FeignClient` 注解的接口，并为每个接口生成一个动态代理类。这个代理类实现了接口中的方法，并将这些方法与 HTTP 请求关联起来。
-4. **请求构建**：
-    
-    - 当我们调用 Feign 接口的方法时，例如 `userService.getUserById(1L)`，Feign 的代理对象会捕获这个方法调用。
-    - Feign 根据接口方法上的注解（如 `@GetMapping`、`@PostMapping` 等）来构建一个 HTTP 请求。它会替换路径中的参数，设置请求方法（GET、POST 等）、请求头和请求体等。
-5. **HTTP 请求执行**：
-    - Feign 使用 HTTP 客户端（如 Apache HttpClient 或 OkHttp）执行构建好的 HTTP 请求。Feign 默认使用 `JDK HttpURLConnection`，但可以通过配置切换到其他 HTTP 客户端。
-    - Feign 将请求发送到指定的服务地址（如 `http://localhost:8080`），并等待服务的响应。
-6. **响应处理**：
-    
-    - 收到远程服务的响应后，Feign 会根据接口方法的返回类型解析响应数据。比如，如果返回类型是 `User`，Feign 会自动将响应体解析为 `User` 对象（假设返回的是 JSON 数据）。
-    - Feign 使用 Jackson 或其他 JSON 解析库将响应体转化为 Java 对象，并返回给调用方。
-7. **错误处理与重试机制**：
-    
-    - 如果请求失败，Feign 可以通过配置重试策略或错误处理器（`ErrorDecoder`）来处理错误。例如，可以设置在请求失败时重试多次，或者捕获特定的 HTTP 错误代码并执行相应的逻辑。
-Feign 的整个调用流程使得开发者可以像调用本地方法一样调用远程 API，大大简化了远程调用的代码量和复杂度。Spring Cloud Feign 集成了 Spring Boot 和 Eureka 等组件，进一步简化了微服务间的通信。
-**进阶功能**
-- **请求参数和头信息**：Feign 支持通过注解传递请求参数和头信息。例如，你可以通过 `@RequestParam` 传递查询参数，通过 `@RequestHeader` 设置请求头。
-   ```java
-   @FeignClient(name = "user-service")
-   public interface UserClient {
-       @GetMapping("/api/user")
-       User getUser(@RequestParam("name") String name, @RequestHeader("Authorization") String token);
-   }
-   ```
-- **容错机制**：Feign 可以与 Hystrix 集成，提供服务降级功能，当远程服务不可用时，自动调用备用逻辑。
-   ```java
-   @FeignClient(name = "user-service", fallback = UserClientFallback.class)
-   public interface UserClient {
-       @GetMapping("/api/user/{id}")
-       User getUserById(@PathVariable("id") Long id);
-   }
-   @Component
-   public class UserClientFallback implements UserClient {
-       @Override
-       public User getUserById(Long id) {
-           return new User(); // 返回一个默认用户对象
-       }
-   }
-   ```
-Feign 客户端时不需要显式指定 `url` 参数的情况：
-1. **使用服务发现**：
-- 如果你的应用程序使用了 Spring Cloud Eureka 或其他类似的服务发现机制，那么 Feign 客户端可以通过服务名来定位远程服务，而不需要显式提供 `url` 参数。
-- 例如，当你在 `@FeignClient` 注解中指定 `name`（即服务名）而不指定 `url` 时，Feign 会使用注册在服务发现中的服务地址来调用该服务。这种方式假设你的应用已经正确注册并配置了服务发现组件。
-   - 示例：
-     ```java
-     @FeignClient(name = "userService")
-     public interface UserService {
-         @GetMapping("/users/{id}")
-         User getUserById(@PathVariable("id") Long id);
-     }
-     ```
-   - 在这个例子中，Feign 客户端会自动去服务发现中查找 `userService` 服务的地址，并调用相应的 API。
-2. **通过 Spring Cloud 配置管理地址**：
-   - 如果你的应用没有使用服务发现，但你希望将服务的地址配置在外部（例如配置文件或配置中心），也可以不在 `@FeignClient` 注解中指定 `url` 参数。
-   - 你可以在 `application.yml` 或 `application.properties` 中配置服务地址，例如：
-     ```yaml
-     userService.url=http://localhost:8080
-     ```
-   - 然后在 `@FeignClient` 中只需要指定 `name`，框架会自动从配置中读取相应的 URL。
-   
-3. **调用本地服务**：
-   - 如果是本地服务，不需要指定 `url` 参数，只要在配置中把该服务的名字指向本地地址即可。这样，Feign 依然能够通过服务名找到正确的服务。
-总的来说，如果你不指定 `url`，通常需要服务发现机制（例如 Eureka）来为你解析服务地址。如果你没有使用服务发现，则需要在 `url` 中明确指定地址，或者在配置文件中提供地址映射。
-
-## Feign
-
-**RestTemplate（经典手写调用）**
-```java
-@Autowired
-private RestTemplate restTemplate;
-
-public Long doLogin(String code) {
-    String url = "http://service-customer/customer/info/login/" + code;
-    ResponseEntity<Result> response = restTemplate.getForEntity(url, Result.class);
-    Result<Long> result = response.getBody();
-    return result.getData();
-}
-```
-- 需要手动拼接 URL。
-- 需要自己处理返回值类型转换（泛型还要用 `ParameterizedTypeReference`，代码更啰嗦）。
-- 虽然也能配合 Ribbon/LoadBalancer 做服务发现，但写法更麻烦。
-
-**使用feign**：
-```java
-// 声明接口
-@FeignClient(value = "service-customer")
-public interface CustomerInfoFeignClient {
-    @GetMapping("/customer/info/login/{code}")
-    Result<Long> login(@PathVariable String code);
-}
-
-// 调用
-@Autowired
-private CustomerInfoFeignClient customerInfoFeignClient;
-public Long doLogin(String code) {
-    Result<Long> result = customerInfoFeignClient.login(code);
-    return result.getData();
-}
-```
-
-- 调用远程方法就像调用本地方法一样。
-- Feign 自动处理请求路径、参数拼装、返回值反序列化。
-- 可直接集成负载均衡（Ribbon 或 Spring Cloud LoadBalancer）+ 熔断降级（Sentinel / Resilience4j）。
-
-
-
-## Nacos——配置中心
-## Kafka——消息队列
-### Kafka是如何保证消息不丢失
+## Kafka—消息队列
+### 如何保证消息不丢失
 
 使用Kafka在消息的收发过程都会出现消息丢失  , Kafka分别给出了解决方案
 - 生产者发送消息到Brocker丢失
@@ -971,7 +746,7 @@ Kafka中消息的重复消费问题如何解决的
 ![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223203357.png)
 
 
-### Kafka是如何保证消费的顺序性
+### 如何保证消费顺序性
 应用场景：
 - 即时消息中的单对单聊天和群聊，保证发送方消息发送顺序与接收方的顺序一致
 - 充值转账两个渠道在同一个时间进行余额变更，短信通知必须要有顺序
@@ -1078,7 +853,7 @@ Kafka存储结构
 
 
 
-## Rabbitmq——消息队列
+## Rabbitmq—消息队列
 使用信息：
 - rabbitmq management： http://localhost:15672
 - java链接地址：127.0.0.1:5672
@@ -1204,7 +979,7 @@ MQ 如何保证消息的顺序性？
 - 过期后进入“订单超时处理队列”
 - 消费者消费后检查订单状态：如果已支付：忽略；如果未支付：修改订单状态为“已取消”
 
-### RabbitMQ-如何保证消息不丢失
+### 如何保证消息不丢失
 - 开启生产者确认机制，确保生产者的消息能到达队列
 - 开启持久化功能，确保消息未消费前在队列中不会丢失
 - 开启消费者确认机制为auto，由spring确认消息处理成功后完成ack
@@ -1405,7 +1180,194 @@ RabbitMQ的高可用机制有了解过嘛
 ![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223202957.png)
 
 
-## Seata——分布式事务
+## Zookeeper—服务发现/注册
+https://zookeeper.apache.org
+### 介绍
+Zookeeper是一个分布式协调应用，可用作注册中心和配置中心，
+
+结构：
+比如你有一个服务名叫 `order-service`，它的注册结构如下：
+```text
+/registry
+  └── /order-service
+        ├── 192.168.1.101:8080   ← provider1（临时节点）
+        ├── 192.168.1.102:8080   ← provider2
+        └── ...
+```
+
+本地缓存：
+客户端通过建立**本地缓存**避免频繁访问 ZK，并使用 **Watcher 监听节点变化（增、删、改）**，实时同步服务列表，当有新增/下线时及时触发事件更新本地数据，在**高并发、海量节点**场景下实现稳定可靠的服务发现机制。
+
+
+### **使用**
+下载地址： https://zookeeper.apache.org/releases.html
+- 下载：apache-zookeeper-3.8.3-bin.tar.gz
+- 解压：apache-zookeeper-3.8.3-bin.tar.gz
+- 进入：apache-zookeeper-3.8.3-bin\conf
+- 复制文件：zoo_sample.cfg → zoo.cfg
+
+- 编辑zoo.cfg：
+	- tickTime=2000
+	- dataDir=D:/zookeeper/data
+	- clientPort=2181
+
+- 创建：<code>D:\zookeeper\data</code>
+- 进入：<code>apache-zookeeper-3.8.3-bin\bin</code>
+- 打开命令行，运行：zkServer.cmd，看输出中是否有：Starting zookeeper ... STARTED，有，就代表运行成功（输出乱七八糟的有很多）
+
+- 再在<code>apache-zookeeper-3.8.3-bin\bin</code>，打开命令行，运行：zkCli.cmd工具，进入 ZooKeeper 命令行客户端，默认连接 `127.0.0.1:2181`，可输入以下命令，创建一个节点并查看，来测试能否正常使用（这个节点就和文件夹路径似的）：
+```bash
+create /test hello
+get /test
+ls /
+```
+
+
+## Nacos—服务发现/注册
+### 使用
+
+
+**安装Nacos**：
+- 下载，解压，安装安装包
+- 或者直接下载docker，默认未8848端口，在 localhost:8848/nacos 运行，用户名和密码都是nacos
+
+**二进制包单机模式启动指令：**
+* **Linux / macOS:** 运行 `sh startup.sh -m standalone`
+* **Windows:** 运行 `cmd startup.cmd -m standalone`
+* 
+
+### 介绍
+**简介**：**Nacos** 是阿里巴巴开源的一个动态服务发现、配置管理和服务管理平台，适用于构建微服务架构。
+
+
+**功能**：
+- **服务注册与发现**：Nacos 可以像 Eureka、Consul 等服务注册中心一样，通过提供一个中心化的目录来跟踪微服务的实例。Nacos 维护了所有注册到它的服务信息，当一个服务实例启动时，它会向 Nacos 注册自己的信息（ IP 和端口），其他服务可以通过 Nacos 查找和调用它。
+- **配置管理**：Nacos 还提供了配置中心功能，可以在其中集中管理应用的配置信息。如果需要更新配置，只需修改 Nacos 中的配置，服务会自动获取新的配置。
+- **动态配置推送**：当配置发生变化时，nacos可以立即推送到客户端应用程序，不用客户端定时拉取。传统方法是开发人员需要手动修改配置文件并重启服务。原理是使用一种类似 长轮询（Long Polling）或 WebSocket 的机制将配置变更通知给客户端。
+- **动态路由和负载均衡**：Nacos 支持动态的服务路由，可以在服务之间进行智能路由，确保请求被路由到健康的服务实例。它还与 Ribbon 和其他负载均衡器集成，以实现智能负载均衡，确保更高的可靠性和性能。
+- **服务健康监测**：传统的配置管理通常是定时拉取配置的方式，也就是说，服务会每隔一定时间去检查配置是否发生了变化。Nacos 提供了健康检查和服务监控功能。它可以定期检查服务实例的健康状况，对服务进行心跳检测，监控服务的可用性状态，如果某个服务实例不可用，则 Nacos 将自动更新注册表，将请求转移到其他健康实例，确保服务的高可用性。
+- **命名空间和多环境管理**：Nacos 提供了命名空间（Namespace）管理功能，方便开发者在不同环境（如开发、测试、生产）之间隔离配置信息。此外，它的配置分组（Group）功能允许将相同的配置划分到不同的分组，以实现更加细粒度的管理。
+- **版本控制**：可以在 Nacos 控制台中查看配置的历史版本，并在需要时回滚到某个版本。
+- **灰度发布**：允许你将新配置逐步推送给部分应用实例，观察效果后再全面发布。
+- **集群模式**：Nacos 默认是单机模式，但支持集群模式。通过此实现负载均衡和自动故障转移，高可用；原理是Nacos 集群通过 一致性哈希 来分配服务注册和配置的存储。
+
+如何实现热更新？
+
+
+**优点**
+- **微服务架构**：Nacos 可以高效地管理微服务应用中的服务注册与发现，适合微服务体系结构。
+- **多环境配置管理**：Nacos 能集中管理和动态更新多环境的配置，简化了配置管理流程。
+- **跨语言支持**：Nacos 支持不同语言的客户端，便于跨语言服务间的协同管理。
+- **动态配置管理**，无需重启应用。
+- **服务发现**和健康检查，支持微服务架构。
+- **易用性强**，支持多种配置格式和实时更新。
+- 可以热更新计费参数
+
+
+
+与 **Apollo**、**Consul** 比较：
+- **Nacos** 支持配置管理和服务发现，Apollo 仅做配置管理，Consul 更侧重服务发现。
+- **Nacos** 更易与 Spring Cloud 集成。
+
+
+**常用组件**
+- **Nacos Server**：提供服务注册、配置管理和服务监控的功能。
+- **Nacos Client**：用于与 Nacos Server 通信的客户端库，一般集成到各个服务中。
+
+
+### 服务注册与发现
+(Registry)
+微服务架构中，各服务实例的网络坐标（IP 和端口）会动态变化。Nacos 提供了基于 DNS 和基于 RPC 的服务发现机制，解决“服务提供者在哪里”的问题。
+
+**技术实现机制：**
+- **服务注册 (Register)：** 服务提供者 (Provider) 启动时，通过 Nacos Client SDK 向 Nacos Server 发送 REST 请求，注册自身的元数据信息（如 IP、端口、权重、健康状态等）。
+- **健康检查 (Heartbeat)：** 对于临时实例，客户端默认每 5 秒向服务端发送一次心跳包。若 Nacos Server 在 15 秒内未收到心跳，会将实例标记为不健康；若 30 秒未收到，则直接将该实例从可用服务列表中剔除。
+- **服务发现 (Discovery)：** 服务消费者 (Consumer) 定期（默认 10 秒）从 Nacos Server 拉取最新的服务实例列表，并缓存在本地内存中。发起远程调用时，结合本地负载均衡组件（如 Spring Cloud LoadBalancer）从缓存列表中选择一个健康实例发起请求。
+
+**客户端配置示例：** 引入 `spring-cloud-starter-alibaba-nacos-discovery` 依赖后，在 `application.yml` 中声明：
+```YAML
+spring:
+  application:
+    name: user-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+```
+
+
+
+
+### 分布式配置管理
+(Config Center)
+
+Nacos 允许将系统中各个微服务的配置文件集中提取到 Nacos Server 端进行统一存储和管理，并支持配置的动态下发，服务无需重启即可应用新配置。
+**技术实现机制：**
+* **长轮询 (Long Polling) 监听：** Nacos Client 启动后，会与 Server 端建立 HTTP 长轮询连接。Client 会携带本地缓存配置的 MD5 值发送给 Server 端进行比对。
+* **动态热刷新：** 当开发者在 Nacos 控制台修改了配置，Server 端会更新对应 Data ID 的数据，并响应挂起的长轮询请求。Client 接收到变更通知并拉取新配置后，在 Spring 环境中触发 `EnvironmentChangeEvent`，结合 `@RefreshScope` 注解通过反射机制动态更新 Bean 的属性值。
+
+**客户端配置示例：**
+- **引入依赖**：引入 `spring-cloud-starter-alibaba-nacos-config` 依赖
+- **配置 Nacos 连接信息**：
+在项目的 `application.yml` 或 `application.properties` 文件中配置 Nacos 的服务器地址和命名空间。例如：
+在 `bootstrap.yml`（注意：由于需要在 Spring 容器初始化前加载，文件优先级必须高于 application.yml）中声明：
+```yaml
+spring:
+  application:
+    name: user-service
+  cloud:
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yaml
+		namespace: your-namespace-id  # 可选：命名空间 ID
+        group: DEFAULT_GROUP          # 可选：配置组
+```
+- **服务注册和发现**：在 Spring Boot 的主类中加上`@EnableDiscoveryClient` 注解，启用服务注册与发现
+
+- **在 Nacos 配置中心创建配置文件**：在 Nacos 控制台中创建对应的数据 ID 和配置内容。通常，Spring Boot 项目使用的配置文件命名规则为 `DataID: ${spring.application.name}.properties`，以便在 Nacos 中进行映射。例如，项目的 `application.yml` 配置会对应到 Nacos 中的 `demo-service.yml` 或 `demo-service.properties`
+
+- **使用配置值**：在 Spring 项目中，通过 `@Value` 或 `@ConfigurationProperties` 注解可以直接注入从 Nacos 中加载的配置。例如：
+```java
+@Value("${config.key:defaultValue}")
+private String configValue;
+```
+
+- **使用 @RefreshScope 注解**：通过在配置类或 Bean 上添加这个注解，Spring 可以在 Nacos 中的配置发生变化时自动更新 Bean 的属性。
+
+```java
+@RestController
+@RefreshScope // 核心注解，开启该类的配置热刷新能力
+public class ConfigController {
+    @Value("${custom.database.timeout}")
+    private String dbTimeout;
+}
+```
+
+- **设置配置动态刷新**：配置发布到 Nacos 后，Spring 项目会自动从 Nacos 获取并应用新配置，满足微服务系统的动态更新需求。这种方式允许应用在不重启的情况下更新配置，非常适合动态配置需求较高的场景。通过这种方式，Spring 项目可以灵活、安全地使用 Nacos 配置中心的集中配置管理功能。
+
+- **配置集群模式**：在 `application.properties` 中写入 Nacos 节点信息，例如：
+```properties
+# 假设你有 3 个 Nacos 实例
+nacos.discovery.server-addr=127.0.0.1:8848,127.0.0.2:8848,127.0.0.3:8848
+```
+
+
+### 其它
+**如何防止 Nacos 单点故障？**
+- **集群部署**：通过部署多个 Nacos 实例，形成集群，避免单点故障。
+- **数据复制**：配置 Nacos 集群中的每个节点进行数据同步，确保节点间数据一致性。
+- **负载均衡**：使用负载均衡器（如 Nginx 或 LVS）将请求分发到多个 Nacos 实例。
+- **服务发现高可用**：Nacos 集群配置多节点，确保即使某个节点宕机，其他节点依然能提供服务。
+- **持久化配置**：启用 Nacos 的数据持久化，确保配置数据不会丢失。
+
+
+
+
+
+## Nacos—配置中心
+
+## Seata—分布式事务
 
 **介绍**：Seata （Simple Extensible Autonomous Transaction Architecture）是阿里开源的分布式事务中间件，是一套开源的分布式事务解决方案，用于确保在多个微服务中操作多个数据库时的数据一致性。
 
@@ -1627,9 +1589,9 @@ public interface StockFeignClient {
 正常下单：订单和库存都成功
 模拟异常：订单插入会被回滚，库存也不会减少
 
-## xxl-job——任务调度
+## xxl-job—任务调度
 
-## Dubbo——RPC框架
+## Dubbo—RPC框架
 阿里巴巴开源的高性能分布式服务框架
 
 **核心组件**：服务提供者、服务消费者和注册中心。
@@ -1644,7 +1606,7 @@ public interface StockFeignClient {
 - 监控模块：调用链追踪、请求统计和性能监控，提供实时的服务状态数据
 
 
-## Netty——网络通信框架
+## Netty—网络通信框架
 是一个Java 高性能网络通信框架，封装 NIO、支持异步事件驱动、零拷贝等
 Netty 通过 **ChannelHandler** 链式处理入站/出站数据
 每个 Channel 对应一个 TCP 连接
@@ -1688,9 +1650,9 @@ public class NettyRpcServer {
 ```
 
 
-## JUnit——单元测试框架
+## JUnit—单元测试框架
 
-## Log4j——日志
+## Log4j—日志
 Log4j 目前已被 Log4j2、SLF4J+Logback 组合部分替代，但仍有大量项目使用它。
 Log4j 是 Java 最早期、最经典的 日志框架
 **主要功能**：打印日志、写入文件、发送到控制台等。
@@ -1904,7 +1866,7 @@ public class ThenAcceptDemo {
 
 
 
-## Drools——规则引擎
+## Drools—规则引擎
 **介绍**：
 Drools 是一个开源的 Java 规则引擎，由 Red Hat 维护。
 
@@ -2244,7 +2206,7 @@ datasource:
 
 
 
-## JavaFX——图形化界面
+## JavaFX—图形化界面
 教程视频
 - JavaFx快速入门： https://www.bilibili.com/video/BV1pJ411q7yv
 - JavaFX视频教程第1课，hello world： https://www.bilibili.com/video/BV1fW41167RP
@@ -2290,7 +2252,7 @@ MinIO支持大文件断点续传
 
 ## 前端
 
-### Thymeleaf——模板引擎
+### Thymeleaf—模板引擎
 
 thymeleaf官方文档 https://www.thymeleaf.org/documentation.html
 

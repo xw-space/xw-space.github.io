@@ -1291,6 +1291,115 @@ int main() {
 
 
 ### 其它
+
+#### 虚函数
+
+虚函数是在父类中用`virtual`关键字声明的成员函数，允许子类重写（override）该函数，程序运行时会根据对象的实际类型，调用对应类的函数版本，而非指针 / 引用的静态类型。
+打破 “编译期绑定”，实现 “运行期绑定”—— 比如父类指针 / 引用指向子类对象时，能调用子类重写后的函数，而非父类原函数。
+虚函数是 C++ 实现**动态多态（运行时多态）** 的核心机制
+
+- **虚函数的底层实现**：含有虚函数的类会生成一张 “虚函数表（vtable）”，存储虚函数的地址；每个对象会有一个 “虚表指针（vptr）” 指向该表。运行时通过 vptr 找到对应类的 vtable，再调用正确的函数。
+
+- **必须注意的细节**：
+    - 虚函数只能是类的**非静态成员函数**（静态函数属于类，不属于对象，无法动态绑定）。
+    - 父类声明`virtual`后，子类重写时无需再写`virtual`（但推荐加`override`，避免拼写错误导致 “重载” 而非 “重写”）。
+    - **虚析构函数**：如果父类指针指向子类对象，删除指针时，若析构函数不是虚函数，只会调用父类析构，导致子类资源泄漏！因此含虚函数的类，析构函数建议声明为虚函数（如示例中的`virtual ~Animal()`）。
+
+**纯虚函数（拓展）**：若父类只想定义接口，不想实现函数，可声明 “纯虚函数”，此时类变为 “抽象类”，无法实例化，只能被继承
+
+
+
+**示例**
+```c++
+#include <iostream>
+using namespace std;
+
+// 父类：动物
+class Animal {
+public:
+    // 声明虚函数：发出声音
+    virtual void makeSound() {
+        cout << "动物发出通用声音" << endl;
+    }
+
+    // 虚析构函数（重要！后续解释）
+    virtual ~Animal() {}
+};
+
+// 子类：狗（重写父类虚函数）
+class Dog : public Animal {
+public:
+    // 重写虚函数（override可选，但推荐加，编译器会检查是否真的重写）
+    void makeSound() override {
+        cout << "狗汪汪叫" << endl;
+    }
+};
+
+// 子类：猫（重写父类虚函数）
+class Cat : public Animal {
+public:
+    void makeSound() override {
+        cout << "猫喵喵叫" << endl;
+    }
+};
+
+int main() {
+    // 父类指针指向不同子类对象
+    Animal* animal1 = new Dog();
+    Animal* animal2 = new Cat();
+    Animal* animal3 = new Animal();
+
+    // 运行时根据对象实际类型调用函数（动态多态）
+    animal1->makeSound(); // 输出：狗汪汪叫（调用Dog的版本）
+    animal2->makeSound(); // 输出：猫喵喵叫（调用Cat的版本）
+    animal3->makeSound(); // 输出：动物发出通用声音（调用Animal的版本）
+
+    // 释放内存
+    delete animal1;
+    delete animal2;
+    delete animal3;
+    return 0;
+}
+
+
+```
+#### nullptr
+
+`nullptr`是 C++11 引入的**空指针常量**，专门用来表示空指针，它的类型是`std::nullptr_t`，可以隐式转换为任意指针类型（包括类的成员指针）。
+
+
+**nullptr 与 NULL 的区别**
+
+| 维度    | nullptr                       | NULL                                        |
+| ----- | ----------------------------- | ------------------------------------------- |
+| 本质    | 是**空指针类型（std::nullptr_t）的常量** | 是**宏定义**，通常被定义为`0`或`(void*)0`               |
+| 类型安全性 | 类型安全：仅能隐式转换为指针类型，不会被误当作整数     | 类型不安全：可能被当作整数（比如`NULL`是`0`时，会匹配到`int`参数的函数） |
+| 适用场景  | 所有需要表示空指针的场景（推荐使用）            | C++ 中不推荐使用，多用于 C 语言或旧 C++ 代码                |
+
+示例（体现类型安全的区别）
+```c++
+#include <iostream>
+using namespace std;
+
+void func(int x) {
+    cout << "调用了int参数的func" << endl;
+}
+
+void func(char* p) {
+    cout << "调用了指针参数的func" << endl;
+}
+
+int main() {
+    // 用NULL调用：NULL被当作0，匹配到func(int)
+    func(NULL);   // 输出“调用了int参数的func”（不符合预期）
+
+    // 用nullptr调用：匹配到func(char*)
+    func(nullptr); // 输出“调用了指针参数的func”（符合预期）
+    return 0;
+}
+```
+
+
 #### WPF
 教程：
 【1.课程目标】 https://www.bilibili.com/video/BV1hP411W766/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef

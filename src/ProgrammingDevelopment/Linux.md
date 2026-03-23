@@ -16,14 +16,11 @@ tag:
 
 # Linux
 
+### 一些命令题
+为vsftpd服务的服名用户创建主目录/var/ftp.然后复制/etc目录下所有扩展名为.conf的文件
+`mkdir /var/ftp && cp /etc/*.conf /var/ftp`
 
 
-### 开发环境实战能力
-
-* 资源瓶颈排查： 熟练使用 `top` 查看 CPU 和内存负载，`free -h` 检查可用物理内存，`df -h` 检查磁盘使用率。
-* Java 进程深度定位： 遇到 CPU 飙升，通过 `top` 找到进程，再用 `top -Hp <pid>` 找到具体的消耗线程，将线程 ID 转为 16 进制后，配合 `jstack` 定位到具体的 Java 代码行。
-* 网络状态诊断： `netstat -tunlp` 或 `ss -tunlp` 查看端口占用情况，`ping` 和 `telnet` 测试网络连通性，`curl` 模拟 HTTP 请求测试接口响应。
-* 日志分析提取： `tail -f` 实时追踪日志，`grep` 配合正则表达式过滤异常栈（如 `grep -A 10 "Exception" error.log`）。进阶需掌握 `awk` 和 `sed` 对日志内容进行分列提取或统计。
 
 ## 用户相关
 修改用户密码
@@ -34,16 +31,18 @@ tag:
 
 
 ## 关机与重启
-- 按下 `Ctrl + Alt + Delete` 来尝试重启
 
-**立即关机**：sudo shutdown now
-**延时关机**（例如1分钟后关机）：sudo shutdown +1
-**指定具体时间关机**（例如晚上11点关机）：sudo shutdown 23:00
-**立刻关机并关闭电源，`-h` 表示 halt，命令立即关机并关闭电源。**：sudo shutdown -h now
-立刻关闭系统：sudo poweroff
-停止系统的所有进程并关闭计算机，但不一定会切断电源：sudo halt
-立刻重启系统：sudo reboot
-使用 `shutdown` 命令来重启系统，`-r` 选项表示重启，`now` 表示立即重启：sudo shutdown -r now
+- 立即关机：sudo shutdown now
+- 延时关机：sudo shutdown +1，例如1分钟后关机
+- 指定具体时间关机：sudo shutdown 23:00，例如晚上11点关机
+- 立刻关机并关闭电源：sudo shutdown -h now，`-h` 表示 halt。
+- 立刻关闭系统：sudo poweroff
+- 停止系统的所有进程，并关闭计算机，但不一定会切断电源：sudo halt
+
+
+- 重启快捷键：`Ctrl + Alt + Delete`
+- 立刻重启系统：sudo reboot
+- 重启系统：sudo shutdown -r now，`-r` 选项表示重启，`now` 表示立即重启
 
 ## 文件夹说明
 
@@ -65,6 +64,9 @@ tag:
 		- `/etc/passwd` 文件包含所有用户的账户信息
 
 ## 查看系统资源
+* 资源瓶颈排查： 熟练使用 `top` 查看 CPU 和内存负载，`free -h` 检查可用物理内存，`df -h` 检查磁盘使用率。
+* Java 进程深度定位： 遇到 CPU 飙升，通过 `top` 找到进程，再用 `top -Hp <pid>` 找到具体的消耗线程，将线程 ID 转为 16 进制后，配合 `jstack` 定位到具体的 Java 代码行。
+
 - **查看资源使用情况**
 ```bash
 top
@@ -127,6 +129,9 @@ ifconfig
 ## 网络管理
 使用 `hostname -I` 命令会返回所有分配给该主机的IP地址。
 使用 `ip addr` 命令会显示所有网络接口的信息，包括IP地址。通常你会看到类似 `inet` 开头的行，后面跟着的就是IP地址。
+
+* 网络状态诊断： `netstat -tunlp` 或 `ss -tunlp` 查看端口占用情况，`ping` 和 `telnet` 测试网络连通性，`curl` 模拟 HTTP 请求测试接口响应。
+
 ## 设备管理
 ```shell
 设备管理：
@@ -182,6 +187,8 @@ cat ~/.bash_history
 https://juejin.cn/post/7524216834619408430
 
 grep （缩写来自Globally search a Regular Expression and Print,全面搜索正则表达式并打印出来）
+
+* 日志分析提取： `tail -f` 实时追踪日志，`grep` 配合正则表达式过滤异常栈（如 `grep -A 10 "Exception" error.log`）。进阶需掌握 `awk` 和 `sed` 对日志内容进行分列提取或统计。
 
 
 查日志（Java）：
@@ -474,6 +481,7 @@ xrandr --output eDp-1-1 --right-of HDMI-0 -auto
 
 AMD Radeon 和 Radeon PRO 显卡 Linux® 驱动程序 https://www.amd.com/zh-cn/support/download/linux-drivers.html
 Radeon™ Software for Linux® Installation文档 https://amdgpu-install.readthedocs.io/en/latest/
+
 ### 复制粘贴
 在 Linux 中，当你用鼠标选中文字时，这段文字会自动进入选择剪切板：
 - **复制**：选中文字（无需额外操作）。

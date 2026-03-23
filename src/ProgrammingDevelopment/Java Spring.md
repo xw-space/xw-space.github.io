@@ -10,15 +10,13 @@ tag:
 一个简单的JavaSpring&SpringBoot入门教程
 <!-- more -->
 
-
-
 # JavaSpring&SpringBoot
 ## JavaSpring
 
 ### 重要概念速览
 
-- **框架**：就是有一系列已经实现的功能，只要按特定要求去写代码，就可以实现一些功能。
-- **上下文（ApplicationContext）** 就是Spring容器，它负责管理应用中的Bean，提供依赖注入，管理Bean的生命周期等功能。它是Spring应用的核心，确保了应用中的组件可以正确交互并自动配置。
+- **框架**：就是针对某个要实现的目的，已经完成一系列基础代码构建，只要按特定要求去补充完整代码，就可以实现功能。
+- **上下文（ApplicationContext）** ：Spring容器。
 
 
 ### 简介
@@ -29,32 +27,20 @@ Spring是一个框架
 ### 使用
 Spring Initializr： https://start.spring.io/
 
-#### 各种ID、name的不同
-- Group / `groupId`（组织/团队 ID）：代表创建这个项目的公司、组织或开源团队。为了全球唯一，通常使用**公司域名的反写**。**例子：** `com.alibaba`（阿里巴巴）、`org.springframework`（Spring官方）
 
-- Artifact / `artifactId`（项目/模块 ID）：代表这个组织下的具体项目名或模块名。它最后会作为生成的 `.jar` 或 `.war` 文件的名字的一部分。必须是全小写，不能包含空格，通常用连字符 `-` 连接。代码例子： `fastjson`、`spring-boot-starter-web`、`user-management-service`。
+- Spring主要用于后端开发，后端开发其实就是开发web服务，web服务就是webAPI（应用程序接口），用于接收和响应外部请求（如HTTP请求）。
+- Spring Boot Web服务可以被看作是由多个Bean和控制器（Controller）组成的API，它们通过HTTP进行交互。
+- Web服务是由Spring控制器（通常是`@RestController`）处理HTTP请求，响应这些请求的数据（例如JSON）。
+- Spring会在启动时创建一个HTTP服务器（例如Tomcat、Jetty等），并将它配置为接收HTTP请求。
+- HTTP请求：客户端（如浏览器、移动应用或其他服务器）通过HTTP向你的Spring应用发起请求。请求的内容可能是GET、POST、PUT、DELETE等。
+- 请求路由：Spring使用`@RequestMapping`或具体的注解（如`@GetMapping`、`@PostMapping`）来将HTTP请求映射到相应的处理方法上。
+- 每当请求到达时，Spring会自动将请求路由到正确的控制器方法，然后执行该方法的业务逻辑，最后返回结果给客户端。
+- 每个请求都会触发对应的处理方法（在控制器中实现，控制器方法上会标有`@RestController`或`@Controller`注解的类来定义）
+- Spring会自动处理请求和响应的映射、转换和管理。
+- 响应：处理请求的方法返回一个响应，通常是JSON或HTML格式的响应，Spring会自动将返回值转换为适合的格式并返回给客户端。
 
-- `groupId` + `artifactId` + `version`（版本号） 被统称为 **Maven 坐标**。机器就是靠这三样东西去仓库里找代码的。)
-
-Name（项目名称）**：** 项目的展示名，可以包含空格、大写字母等，怎么好看怎么写。**例子：** `Spring Boot Web Starter` 或者 `User Service`。
 
 
-Package Name (用户提示中的 packing name，正确叫法是 Package Name - 包名)**：** 这是 Java 代码里面真实存放类的**文件夹路径**（比如 `src/main/java/com/alibaba/fastjson`）。它用来防止你在代码里写的类名和别人写的类名冲突（比如你也写了一个 `User` 类，别人也写了一个 `User` 类）。**默认规则：** 通常在创建项目时，IDE 会默认把 **`groupId` + `artifactId`** 组合起来作为根包名。不过，你可以随便改，它不需要严格和 groupId/artifactId 一致（但为了规范，强烈建议保持一致）。**例子：** 如果 groupId 是 `com.example`，artifactId 是 `my-demo`，那么包名通常是 `com.example.mydemo`。
-
-
-### Web服务
-**Spring Web 服务（API）**
-当我们提到 **Web 服务** 或 **API**，通常指的是应用程序中的接口，它们用于接收和响应外部请求（如 HTTP 请求）。在 Spring 中，这些 API 通常通过 **`@RestController`** 或 **`@Controller`** 注解的类来定义。
-
-* 对于 **Web 服务**（即 API），Spring 会在启动时创建一个 HTTP 服务器（例如 Tomcat、Jetty 等），并将它配置为接收 HTTP 请求。每个请求都会触发对应的处理方法（通常是控制器中的方法）。
-* 这些服务方法就像你提到的 **API**，它们会根据客户端的请求来响应相应的数据，或者执行相应的操作。Spring 会自动处理请求和响应的映射、转换和管理。
-* **Spring Boot Web 服务** 可以被看作是由多个 Bean 和控制器（Controller）组成的 API，它们通过 HTTP 进行交互。每当请求到达时，Spring 会自动将请求路由到正确的控制器方法，然后执行该方法的业务逻辑，最后返回结果给客户端。
-* **Web 服务** 是由 **Spring 控制器**（通常是 `@RestController`）处理 HTTP 请求，响应这些请求的数据（例如 JSON）。
-
-* **Web 服务的工作原理**：
-  * **HTTP 请求**：客户端（如浏览器、移动应用或其他服务器）通过 HTTP 向你的 Spring 应用发起请求。请求的内容可能是 GET、POST、PUT、DELETE 等。
-  * **请求路由**：Spring 使用 `@RequestMapping` 或具体的注解（如 `@GetMapping`、`@PostMapping`）来将 HTTP 请求映射到相应的处理方法上。
-  * **响应**：处理请求的方法返回一个响应，通常是 JSON 或 HTML 格式的响应，Spring 会自动将返回值转换为适合的格式并返回给客户端。
 示例：在 Spring 中定义一个简单的 API：
 ```java
 @RestController  // 声明这个类是一个 RESTful 控制器
@@ -72,70 +58,134 @@ public class UserController {
     }
 }
 ```
-* **自动响应请求**：当客户端请求 `/api/users` 时，Spring 会自动调用 `getUsers()` 方法，返回所有用户的 JSON 数据。当客户端发送一个 POST 请求时，Spring 会调用 `createUser()` 方法来处理请求并创建一个新用户。
-
-### IoC
-IOC（Inversion of Control，控制反转）：是一种设计原则，将对象创建和依赖管理的控制权从程序转移至外部容器。即程序使用的依赖对象由 Spring 容器创建并管理，而不是由程序主动创建，通过依赖注入（DI）的方式将Spring容器创建的依赖传给需要使用的程序，这样做可以降低代码耦合，增强了模块的可复用性和测试性。
+当客户端请求 `/api/users` 时，Spring 会自动调用 `getUsers()` 方法，返回所有用户的 JSON 数据。当客户端发送一个 POST 请求时，Spring 会调用 `createUser()` 方法来处理请求并创建一个新用户。
 
 
+### 启动流程
 
+在一个 Java Spring 应用程序中，程序的运行逻辑可以从 **应用启动** 到 **依赖注入**、**Bean 生命周期管理**，直到 **服务的运行与处理** 进行详细讲解。
 
-### 依赖注入
+下面将详细说明 Spring 程序的典型执行流程和各个程序的逻辑。
 
-- DI（Dependency Injection，依赖注入）：Spring通过依赖注入（Dependency Injection, DI）来实现IOC。IOC容器的具体工作流程是，通过配置文件或注解扫描，Spring容器读取到Bean及其依赖的定义，然后按照依赖关系初始化Bean对象并将其注入到相应的位置。这样，被管理的对象就不再需要主动去查找或创建其依赖，而是“被动”地从容器中获取，这种控制权的转移即“控制反转”。IOC的好处在于代码结构清晰，依赖关系分明，降低了对象之间的耦合度，使得应用程序的模块化和可测试性更强。
-	- 主要的注入方式包括构造函数注入和属性注入：
-		- 构造函数注入在创建对象时通过构造函数传入依赖对象
-		- 属性注入则是在创建对象后通过属性设置依赖对象。
-	- 常用的注入方式包括：
-		- 构造函数注入，通过构造函数将依赖对象传入，这种方式使依赖关系在对象创建时就被确定，适合于必须且固定的依赖。
-		- Setter方法注入，通过调用setter方法将依赖对象注入，适合于可选依赖或后期可以修改的依赖。
-- 
-**依赖注入**（DI）：通过Spring的依赖注入，可以降低代码冗余，降低代码耦合，方便进行单元测试，而没有 **Spring** 的依赖注入机制时，开发者必须手动管理所有对象的创建和依赖：
-```java
-public class MainApp {
-  public static void main(String[] args) {
-      // 手动创建对象并注入依赖
-      UserRepository userRepository = new UserRepository();
-      UserService userService = new UserService(userRepository);
-  }
-}
-```
+1. 应用启动
+当你启动一个 Spring 应用时，通常是通过 `SpringApplication.run(Application.class, args)` 来启动的。在这个过程中，Spring 做了以下几件事情：
+* **加载 Spring 容器**：`SpringApplication.run` 方法会初始化一个 **Spring 上下文**（Spring ApplicationContext），并加载所有的 Bean 和配置。
+* **扫描包路径**：Spring 会根据注解 `@ComponentScan` 或 `@SpringBootApplication` 来扫描指定的包路径，查找所有的类，并将符合条件的类注册为 Spring Bean。
+* **加载配置**：Spring 会根据 `application.properties` 或 `application.yml` 文件中的配置加载应用的环境、数据库连接、端口、日志等信息。
 
-Spring 提供了非常强大的 **依赖注入** 功能，它帮助开发者通过 **控制反转（IoC，Inversion of Control）** 的方式来解耦应用程序的各个组件，减少组件之间的耦合度。这使得代码更加灵活、可维护，便于单元测试。
-* **好处**：开发者不需要手动创建对象，Spring 容器负责创建和管理对象及其生命周期，让开发者能够专注于业务逻辑。
-示例：你可以通过 `@Autowired` 自动注入依赖：
+**2. **Bean 的初始化与依赖注入**
+* **扫描并注册 Bean**：当 Spring 启动时，它会扫描所有的类并根据注解（如 `@Service`、`@Component`、`@Repository` 等）将其注册为 Bean，管理它们的生命周期。
+* **依赖注入**：Spring 会为这些 Bean 注入它们的依赖，常见的方式有：
+  * **构造函数注入**：通过构造函数将依赖传入类中。
+  * **字段注入（不推荐）**：直接在字段上使用 `@Autowired` 注解。
+  * **Setter 注入**：通过 setter 方法进行注入。
+例如：
 ```java
 @Service
-public class UserService {
+public class MyService {
     @Autowired
-    private UserRepository userRepository;  // 自动注入
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    private MyRepository myRepository;  // 依赖注入
+    public void process() {
+        myRepository.save();
     }
 }
 ```
 
-**注册 (Registration)**
-注册是指将某个类或组件告诉 Spring 容器，让 Spring 容器知道某个类的存在，以便容器能够在需要的时候创建和管理它。注册的过程可以理解为将类或组件放入 Spring 容器的“目录”中，这样需要的他们的时候就可以找到它们。
-注册可以通过多种方式完成，例如通过注解（如 `@Component`, `@Service`, `@Repository`）或者 XML 配置文件。
+**3. **Spring Boot 启动流程**
+* **`@SpringBootApplication` 注解**：这是 Spring Boot 的核心注解，结合了多个注解，如 `@Configuration`、`@EnableAutoConfiguration` 和 `@ComponentScan`，指示 Spring 启动时执行哪些配置和扫描哪些类。
+  ```java
+  @SpringBootApplication
+  public class MyApplication {
+      public static void main(String[] args) {
+          SpringApplication.run(MyApplication.class, args);  
+          // 启动 Spring Boot 应用
+      }
+  }
+  ```
+* **`SpringApplication.run()`**：这个方法启动了整个 Spring 应用，它会创建 Spring 容器（ApplicationContext），加载所有的 Bean，初始化 Web 环境（如果是 Web 应用的话），并调用 `run` 方法执行 `CommandLineRunner` 或 `ApplicationRunner` 接口的 `run()` 方法（如果有实现）。
 
-**注入 (Injection)**
-注入是指将 Spring 容器中管理的对象（通常是已注册的组件）注入到其他类中，以便在这些类中使用。注入的本质是自动为类提供它所依赖的其他对象，而不需要手动创建这些对象。这种方式使得代码更加简洁和易于维护。
-注入的方式有多种，包括构造函数注入、属性注入和方法注入。在 Spring 中，常用的注入方式是通过 `@Autowired` 注解，这个注解会告诉 Spring 容器在创建类的实例时，自动将所需的依赖注入进去。
+**4. **生命周期管理**
+Spring 管理的 Bean 都有生命周期，它们的生命周期在 Spring 容器的生命周期内自动管理。典型的生命周期步骤如下：
+1. **Bean 实例化**：Spring 容器根据类的定义创建 Bean 实例。
+2. **依赖注入**：Spring 会注入该 Bean 所依赖的其他 Bean（通过构造函数注入、字段注入等方式）。
+3. **初始化**：如果 Bean 实现了 `InitializingBean` 接口或使用了 `@PostConstruct` 注解，Spring 会调用 `afterPropertiesSet` 方法或相关的初始化方法。
+4. **使用 Bean**：该 Bean 现在可以在应用中使用，处理业务逻辑。
+5. **销毁**：当 Spring 容器关闭时，Spring 会销毁所有的 Bean。如果 Bean 实现了 `DisposableBean` 接口，或者使用了 `@PreDestroy` 注解，Spring 会调用销毁方法。
 
 
+**5. **请求处理与控制器执行**
+在 Web 应用程序中，Spring 使用 **DispatcherServlet** 来处理 HTTP 请求。它是一个前端控制器，所有的 HTTP 请求都会被该控制器接收。
+* **请求映射**：当请求到达时，`DispatcherServlet` 会将请求分发到相应的控制器（Controller）。控制器方法通常使用 `@RequestMapping` 或更具体的注解（如 `@GetMapping`、`@PostMapping`）来映射 URL 请求。
+例如：
+```java
+@RestController
+@RequestMapping("/users")
+public class UserController {
+    @Autowired
+    private UserService userService;
+    @GetMapping("/{id}")
+    public User getUser(@PathVariable Long id) {
+        return userService.findUserById(id);
+    }
+    @PostMapping
+    public User createUser(@RequestBody User user) {
+        return userService.createUser(user);
+    }
+}
+```
+* **请求处理**：
+  * Spring 会根据请求的 URL 和请求方法（GET, POST 等）匹配到对应的控制器方法。
+  * 控制器方法会调用相关的业务逻辑层（如 `Service`）来处理请求。
+  * 最后，Spring 会将处理结果返回给客户端（通常是 JSON 或 HTML 格式）。
 
-
-### Spring 容器
-* **Spring 容器** 会自动管理多个 **Bean**，这些 Bean 可能包含业务逻辑、数据访问、控制器等，它们在整个 Spring 应用程序中协同工作。
-* Spring 容器在启动时会自动创建和初始化所有 Bean，并且这些 Bean 会随着 Spring 应用的生命周期一直运行。你可以在这些 Bean 中执行不同的业务逻辑，而 Spring 会管理它们的依赖关系、生命周期等。
-* 在 Spring Boot 中，启动应用后，Spring 容器会自动创建并管理这些 Bean，它们负责处理 HTTP 请求、执行业务逻辑等操作。
-
+**6. **异步执行与事件监听**
+Spring 提供了支持 **异步执行** 和 **事件监听** 的功能。例如，可以使用 `@Async` 注解来使方法异步执行，或者使用事件发布机制（`ApplicationEventPublisher`）来触发和处理自定义事件。
+* **异步执行**：
+  ```java
+  @Service
+  public class MyService {
+      @Async
+      public CompletableFuture<String> processAsync() {
+          // 处理耗时的任务
+          return CompletableFuture.completedFuture("Processed");
+      }
+  }
+  ```
+* **事件发布**：
+  ```java
+  @Component
+  public class MyEventPublisher {
+      
+      @Autowired
+      private ApplicationEventPublisher eventPublisher;
+      
+      public void publishEvent() {
+          eventPublisher.publishEvent(new CustomEvent(this));
+      }
+  }
+  ```
+**7. **Spring Boot 应用的退出**
+* **关闭 Spring 应用**：当应用执行完毕，或者需要关闭时，Spring 会通过 `SpringApplication.exit()` 或者 JVM 进程退出来关闭应用。
+* **销毁 Bean**：在应用关闭时，Spring 会销毁所有的 Bean，并执行销毁方法（如实现 `DisposableBean` 接口或者 `@PreDestroy` 注解的方法）。
+**总结：
+1. **启动流程**：通过 `SpringApplication.run()` 启动应用，Spring 容器初始化并扫描包路径，注册 Bean。
+2. **依赖注入**：Spring 会为管理的 Bean 注入它们所依赖的其他 Bean。
+3. **生命周期管理**：Spring 会管理 Bean 的生命周期，包括实例化、依赖注入、初始化、销毁等步骤。
+4. **请求处理**：在 Web 应用中，`DispatcherServlet` 会根据请求分发到对应的控制器，控制器执行业务逻辑并返回结果。
+5. **事件和异步处理**：Spring 支持事件监听和异步执行，以增强应用的功能。
+这种流程保证了 Spring 应用的高效、松耦合和可扩展性。希望这个概述能够帮助你理解 Spring 应用的运行逻辑！
 
 ### Bean
+介绍
 * **Bean** 是 Spring 容器中的组件，它们可以是 Web 服务的一部分，也可以是其他服务（如数据库、消息队列等）的部分。
-**Bean** 是 Spring 中的核心概念，它是一个由 Spring 容器管理的对象，通常是应用程序中的服务、数据访问层、控制器等。Spring 容器会在应用启动时创建这些 Bean，并在需要时将它们注入到其他类中。
-* 在一个 **Spring Boot 应用** 中，当你启动服务时，Spring 容器会创建和管理多个 Bean。每个 Bean 代表一个组件或服务，它们可以执行各种功能（例如数据库访问、业务逻辑处理、消息传递等）。
+* 
+**Bean** 是 Spring 中的核心概念，它是一个由 Spring 容器管理的对象，通常是应用程序中的服务、数据访问层、控制器等。
+
+Spring 容器会在应用启动时创建这些 Bean，并在需要时将它们注入到其他类中。
+
+* 在一个 **Spring Boot 应用** 中，当你启动服务时，Spring 容器会创建和管理多个 Bean。
+* 每个 Bean 代表一个组件或服务，它们可以执行各种功能（例如数据库访问、业务逻辑处理、消息传递等）。
+* 
 **自动管理 Bean**：Spring 会根据注解（如 `@Component`、`@Service`、`@Repository` 等）自动扫描并注册这些 Bean。这些 Bean 被 Spring 管理和维护其生命周期，处理相关的业务逻辑或服务。
 **启动 Spring 应用程序时**，Spring 会初始化所有的 Bean，处理它们的依赖，并将它们纳入管理。Spring 提供了一种松耦合的方式，使得这些 Bean 可以彼此协作而不需要明确的依赖关系。
 
@@ -175,14 +225,15 @@ Spring容器在进行实例化时，会将xml配置的`<bean>`的信息封装成
 
 Spring的bean的生命周期
 
-通过BeanDefinition获取bean的定义信息
+通过Bean Definition获取bean的定义信息
 调用构造函数实例化bean
 bean的依赖注入
-处理Aware接口(BeanNameAware、BeanFactoryAware、ApplicationContextAware)
-Bean的后置处理器BeanPostProcessor-前置
-初始化方法(InitializingBean、init-method)
-Bean的后置处理器BeanPostProcessor-后置
+处理Aware接口(Bean Name Aware、Bean Factory Aware、Application Context Aware)
+Bean的后置处理器Bean Post Processor-前置
+初始化方法(Initializing Bean、init-method)
+Bean的后置处理器Bean Post Processor-后置
 销毁bean
+
 ![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223100337.png)
 
 
@@ -203,7 +254,6 @@ public class UserServiceImpl implements UserService {
 - prototype：一个bean的定义可以有多个实例。 
 
 不是线程安全的
-
 
 Spring bean并没有可变的状态(比如Service类和DAO类)，所以在某种程度上说Spring的单例bean是线程安全的。
 
@@ -242,12 +292,11 @@ Spring框架中有一个@Scope注解，默认的值就是singleton，单例的�
 循环依赖在spring中是允许存在，spring框架依据三级缓存已经解决了大部分的循环依赖
 一级缓存：单例池，缓存已经经历了完整的生命周期，已经初始化完成的bean对象
 二级缓存：缓存早期的bean对象（生命周期还没走完）
-三级缓存：缓存的是ObjectFactory，表示对象工厂，用来创建某个对象的
+三级缓存：缓存的是Object Factory，表示对象工厂，用来创建某个对象的
 
 A依赖于B，B依赖于A，注入的方式是构造函数
-原因：由于bean的生命周期中构造函数是第一个执行的，spring框架并不能解决构造函数的的依赖注入
+原因：由于bean的生命周期中构造函数是第一个执行的，spring框架并不能解决构造函数的依赖注入
 解决方案：使用@Lazy进行懒加载，什么时候需要对象再进行bean对象的创建
-
 
 在创建A对象的同时需要使用的B对象，在创建B对象的同时需要使用到A对象
 
@@ -315,127 +364,141 @@ public A(@Lazy B b){
 
 ```
 
-Spring中的循环依赖是指两个或多个Bean相互依赖，形成一个闭环。例如，Bean A依赖于Bean B，而Bean B又依赖于Bean A。
+Spring中的循环依赖是指两个或多个Bean相互依赖，形成一个闭环。
+
+例如，Bean A依赖于Bean B，而Bean B又依赖于Bean A。
+
 循环依赖会导致Spring容器在创建Bean时陷入死循环或抛出异常，特别是在构造函数注入的情况下更容易出现这个问题。
+
 Spring的循环依赖主要有两种情况：
 构造函数注入的循环依赖。这种情况下，Spring在创建Bean时发现循环依赖后会抛出异常，因为Spring无法解决通过构造函数注入的循环依赖。构造函数注入要求所有依赖在实例化Bean时必须完整，所以无法解决这种类型的循环依赖。
 属性注入的循环依赖。这是Spring可以自动解决的，因为Spring容器会先实例化Bean（即创建Bean的半成品），然后再注入属性。当Spring在创建Bean时遇到循环依赖，它会先创建一个半成品Bean并放入三级缓存中，使其他依赖可以先引用到这个半成品，从而避免循环依赖。
+
 Spring的三级缓存机制通过以下缓存解决循环依赖：
 第一级缓存为singletonObjects，用于存储已经完全初始化好的单例Bean。
 第二级缓存为earlySingletonObjects，用于存储实例化但未完全初始化的Bean。Spring会将正在创建中的Bean引用放入该缓存。
 第三级缓存为singletonFactories，用于存储Bean工厂对象，负责创建一个实例化但未初始化的半成品Bean，并暴露其引用供其他Bean使用。
-当一个Bean被创建时，如果发现依赖的Bean未完全初始化，Spring会先尝试从一级缓存获取已初始化的Bean。如果未找到，Spring再从二级缓存获取实例化但未完全初始化的Bean，如果还未找到，则通过三级缓存获取Bean工厂对象并创建一个半成品Bean，以满足循环依赖需求。这样，所有互相依赖的Bean都可以顺利完成初始化。
+
+当一个Bean被创建时，如果发现依赖的Bean未完全初始化，Spring会先尝试从一级缓存获取已初始化的Bean。
+如果未找到，Spring再从二级缓存获取实例化但未完全初始化的Bean，如果还未找到，则通过三级缓存获取Bean工厂对象并创建一个半成品Bean，以满足循环依赖需求。这样，所有互相依赖的Bean都可以顺利完成初始化。
+
 解决循环依赖的建议是，尽量使用属性注入而非构造函数注入。此外，还可以通过拆分依赖关系、使用`@Lazy`注解延迟加载依赖、或者在Bean中引入`ObjectFactory`等方法来手动控制依赖关系的初始化。
 
-### 启动流程
-在一个 Java Spring 应用程序中，程序的运行逻辑可以从 **应用启动** 到 **依赖注入**、**Bean 生命周期管理**，直到 **服务的运行与处理** 进行详细讲解。下面将详细说明 Spring 程序的典型执行流程和各个程序的逻辑。
-**1. **应用启动**
-当你启动一个 Spring 应用时，通常是通过 `SpringApplication.run(Application.class, args)` 来启动的。在这个过程中，Spring 做了以下几件事情：
-* **加载 Spring 容器**：`SpringApplication.run` 方法会初始化一个 **Spring 上下文**（Spring ApplicationContext），并加载所有的 Bean 和配置。
-* **扫描包路径**：Spring 会根据注解 `@ComponentScan` 或 `@SpringBootApplication` 来扫描指定的包路径，查找所有的类，并将符合条件的类注册为 Spring Bean。
-* **加载配置**：Spring 会根据 `application.properties` 或 `application.yml` 文件中的配置加载应用的环境、数据库连接、端口、日志等信息。
-**2. **Bean 的初始化与依赖注入**
-* **扫描并注册 Bean**：当 Spring 启动时，它会扫描所有的类并根据注解（如 `@Service`、`@Component`、`@Repository` 等）将其注册为 Bean，管理它们的生命周期。
-* **依赖注入**：Spring 会为这些 Bean 注入它们的依赖，常见的方式有：
-  * **构造函数注入**：通过构造函数将依赖传入类中。
-  * **字段注入（不推荐）**：直接在字段上使用 `@Autowired` 注解。
-  * **Setter 注入**：通过 setter 方法进行注入。
-例如：
+### Spring 容器
+，它负责管理应用中的Bean，提供依赖注入，管理Bean的生命周期等功能。它是Spring应用的核心，确保了应用中的组件可以正确交互并自动配置
+
+* **Spring 容器** 会自动管理多个 **Bean**，这些 Bean 可能包含业务逻辑、数据访问、控制器等，它们在整个 Spring 应用程序中协同工作。
+* Spring 容器在启动时会自动创建和初始化所有 Bean，并且这些 Bean 会随着 Spring 应用的生命周期一直运行。你可以在这些 Bean 中执行不同的业务逻辑，而 Spring 会管理它们的依赖关系、生命周期等。
+* 在 Spring Boot 中，启动应用后，Spring 容器会自动创建并管理这些 Bean，它们负责处理 HTTP 请求、执行业务逻辑等操作。
+
+
+### IOC-控制反转
+IOC（Inversion of Control，控制反转）：是一种设计原则，将对象创建和依赖管理的控制权从程序转移至外部容器。即程序使用的依赖对象由 Spring 容器创建并管理，而不是由程序主动创建，通过依赖注入（DI）的方式将Spring容器创建的依赖传给需要使用的程序，这样做可以降低代码耦合，增强了模块的可复用性和测试性。
+
+
+
+
+### DI-依赖注入
+
+- DI（Dependency Injection，依赖注入）：
+- Spring通过依赖注入（Dependency Injection, DI）来实现IOC。
+- 
+- IOC容器的具体工作流程是，通过配置文件或注解扫描，Spring容器读取到Bean及其依赖的定义，然后按照依赖关系初始化Bean对象并将其注入到相应的位置。
+- 
+- 这样，被管理的对象就不再需要主动去查找或创建其依赖，而是“被动”地从容器中获取，这种控制权的转移即“控制反转”。
+- 
+- IOC的好处在于代码结构清晰，依赖关系分明，降低了对象之间的耦合度，使得应用程序的模块化和可测试性更强。
+
+- 主要的注入方式包括构造函数注入和属性注入：
+	- 构造函数注入在创建对象时通过构造函数传入依赖对象
+	- 属性注入则是在创建对象后通过属性设置依赖对象。
+- 常用的注入方式包括：
+	- 构造函数注入，通过构造函数将依赖对象传入，这种方式使依赖关系在对象创建时就被确定，适合于必须且固定的依赖。
+	- Setter方法注入，通过调用setter方法将依赖对象注入，适合于可选依赖或后期可以修改的依赖。
+- 
+**依赖注入**（DI）：
+通过Spring的依赖注入，可以降低代码冗余，降低代码耦合，方便进行单元测试，而没有 **Spring** 的依赖注入机制时，开发者必须手动管理所有对象的创建和依赖：
+```java
+public class MainApp {
+  public static void main(String[] args) {
+      // 手动创建对象并注入依赖
+      UserRepository userRepository = new UserRepository();
+      UserService userService = new UserService(userRepository);
+  }
+}
+```
+
+Spring 提供了非常强大的 **依赖注入** 功能，它帮助开发者通过 **控制反转（IoC，Inversion of Control）** 的方式来解耦应用程序的各个组件，减少组件之间的耦合度。这使得代码更加灵活、可维护，便于单元测试。
+
+* **好处**：开发者不需要手动创建对象，Spring 容器负责创建和管理对象及其生命周期，让开发者能够专注于业务逻辑。
+
+示例：你可以通过 `@Autowired` 自动注入依赖：
 ```java
 @Service
-public class MyService {
+public class UserService {
     @Autowired
-    private MyRepository myRepository;  // 依赖注入
-    public void process() {
-        myRepository.save();
+    private UserRepository userRepository;  // 自动注入
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }
 ```
-**3. **Spring Boot 启动流程**
-* **`@SpringBootApplication` 注解**：这是 Spring Boot 的核心注解，结合了多个注解，如 `@Configuration`、`@EnableAutoConfiguration` 和 `@ComponentScan`，指示 Spring 启动时执行哪些配置和扫描哪些类。
-  ```java
-  @SpringBootApplication
-  public class MyApplication {
-      public static void main(String[] args) {
-          SpringApplication.run(MyApplication.class, args);  // 启动 Spring Boot 应用
-      }
-  }
-  ```
-* **`SpringApplication.run()`**：这个方法启动了整个 Spring 应用，它会创建 Spring 容器（ApplicationContext），加载所有的 Bean，初始化 Web 环境（如果是 Web 应用的话），并调用 `run` 方法执行 `CommandLineRunner` 或 `ApplicationRunner` 接口的 `run()` 方法（如果有实现）。
-**4. **生命周期管理**
-Spring 管理的 Bean 都有生命周期，它们的生命周期在 Spring 容器的生命周期内自动管理。典型的生命周期步骤如下：
-1. **Bean 实例化**：Spring 容器根据类的定义创建 Bean 实例。
-2. **依赖注入**：Spring 会注入该 Bean 所依赖的其他 Bean（通过构造函数注入、字段注入等方式）。
-3. **初始化**：如果 Bean 实现了 `InitializingBean` 接口或使用了 `@PostConstruct` 注解，Spring 会调用 `afterPropertiesSet` 方法或相关的初始化方法。
-4. **使用 Bean**：该 Bean 现在可以在应用中使用，处理业务逻辑。
-5. **销毁**：当 Spring 容器关闭时，Spring 会销毁所有的 Bean。如果 Bean 实现了 `DisposableBean` 接口，或者使用了 `@PreDestroy` 注解，Spring 会调用销毁方法。
-**5. **请求处理与控制器执行**
-在 Web 应用程序中，Spring 使用 **DispatcherServlet** 来处理 HTTP 请求。它是一个前端控制器，所有的 HTTP 请求都会被该控制器接收。
-* **请求映射**：当请求到达时，`DispatcherServlet` 会将请求分发到相应的控制器（Controller）。控制器方法通常使用 `@RequestMapping` 或更具体的注解（如 `@GetMapping`、`@PostMapping`）来映射 URL 请求。
-例如：
+
+**注册 (Registration)**
+注册是指将某个类或组件告诉 Spring 容器，让 Spring 容器知道某个类的存在，以便容器能够在需要的时候创建和管理它。
+
+注册的过程可以理解为将类或组件放入 Spring 容器的“目录”中，这样需要的他们的时候就可以找到它们。
+
+注册可以通过多种方式完成，例如通过注解（如 `@Component`, `@Service`, `@Repository`）或者 XML 配置文件。
+
+**注入 (Injection)**
+注入是指将 Spring 容器中管理的对象（通常是已注册的组件）注入到其他类中，以便在这些类中使用。
+
+注入的本质是自动为类提供它所依赖的其他对象，而不需要手动创建这些对象。
+
+这种方式使得代码更加简洁和易于维护。
+
+注入的方式有多种，包括构造函数注入、属性注入和方法注入。
+
+在 Spring 中，常用的注入方式是通过 `@Autowired` 注解，这个注解会告诉 Spring 容器在创建类的实例时，自动将所需的依赖注入进去。
+
+
+
+
+### @Resource
+是 Java 平台标准规范（JSR-250）中定义的注解
+
+用于实现控制反转（IoC）容器中的依赖注入（Dependency Injection），
+进行依赖对象的装配
+把容器里的某个对象（Bean），强行赋值给你声明的这个变量。
+
+
+
+位于 `javax.annotation`（在较新的 Jakarta EE 规范中变更为 `jakarta.annotation`）包下。
+
+
+
+**基于名称的精确匹配**：Spring 会提取你的变量名（这里是 `myUserDao`），然后去它管理的内部注册表里，找有没有哪个对象的 ID 或名字刚好也叫 `myUserDao`。
+
+**基于类型的兜底匹配** (by-type)：既然名字对不上，Spring 会查看你声明的变量类型（这里是 `UserDao` 类或接口），然后去注册表里找类型匹配的对象。
+如果是单例且只有一个 `UserDao` 的实现类，直接赋值，注入成功
+比如你有 `UserDaoMySQLImpl` 和 `UserDaoOracleImpl` 两个实现类都在 Spring 容器里。Spring 此时无法判断你要哪一个，直接抛出 `NoUniqueBeanDefinitionException` 崩溃报错。
+
+
+一旦你加上了 `name = "..."` 属性，`@Resource` 的执行算法就变了：**它会彻底锁死在第一步（基于名称匹配）**。Spring 只会去找名字等于 `userDaoOracleImpl` 的对象，如果找不到，绝对不会去按类型找兜底，而是直接报错。
 ```java
-@RestController
-@RequestMapping("/users")
-public class UserController {
-    @Autowired
-    private UserService userService;
-    @GetMapping("/{id}")
-    public User getUser(@PathVariable Long id) {
-        return userService.findUserById(id);
-    }
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
-    }
-}
+@Resource(name = "userDaoOracleImpl")
+private UserDao myUserDao;
 ```
-* **请求处理**：
-  * Spring 会根据请求的 URL 和请求方法（GET, POST 等）匹配到对应的控制器方法。
-  * 控制器方法会调用相关的业务逻辑层（如 `Service`）来处理请求。
-  * 最后，Spring 会将处理结果返回给客户端（通常是 JSON 或 HTML 格式）。
-**6. **异步执行与事件监听**
-Spring 提供了支持 **异步执行** 和 **事件监听** 的功能。例如，可以使用 `@Async` 注解来使方法异步执行，或者使用事件发布机制（`ApplicationEventPublisher`）来触发和处理自定义事件。
-* **异步执行**：
-  ```java
-  @Service
-  public class MyService {
-      @Async
-      public CompletableFuture<String> processAsync() {
-          // 处理耗时的任务
-          return CompletableFuture.completedFuture("Processed");
-      }
-  }
-  ```
-* **事件发布**：
-  ```java
-  @Component
-  public class MyEventPublisher {
-      
-      @Autowired
-      private ApplicationEventPublisher eventPublisher;
-      
-      public void publishEvent() {
-          eventPublisher.publishEvent(new CustomEvent(this));
-      }
-  }
-  ```
-**7. **Spring Boot 应用的退出**
-* **关闭 Spring 应用**：当应用执行完毕，或者需要关闭时，Spring 会通过 `SpringApplication.exit()` 或者 JVM 进程退出来关闭应用。
-* **销毁 Bean**：在应用关闭时，Spring 会销毁所有的 Bean，并执行销毁方法（如实现 `DisposableBean` 接口或者 `@PreDestroy` 注解的方法）。
-**总结：
-1. **启动流程**：通过 `SpringApplication.run()` 启动应用，Spring 容器初始化并扫描包路径，注册 Bean。
-2. **依赖注入**：Spring 会为管理的 Bean 注入它们所依赖的其他 Bean。
-3. **生命周期管理**：Spring 会管理 Bean 的生命周期，包括实例化、依赖注入、初始化、销毁等步骤。
-4. **请求处理**：在 Web 应用中，`DispatcherServlet` 会根据请求分发到对应的控制器，控制器执行业务逻辑并返回结果。
-5. **事件和异步处理**：Spring 支持事件监听和异步执行，以增强应用的功能。
-这种流程保证了 Spring 应用的高效、松耦合和可扩展性。希望这个概述能够帮助你理解 Spring 应用的运行逻辑！
+
+
+
+
 
 ### AOP面向切面编程
 （Aspect-Oriented Programming）
 
 - **Spring AOP**（面向切面编程）模块允许通过切面（Aspect）和切入点（Pointcut）来定义横切关注点，方便实现事务管理、日志记录等功能。这可以帮助将一些通用功能从核心业务逻辑中分离，提高代码的可维护性和复用性。
-
-
 
 AOP称为面向切面编程，用于将那些与业务无关，但却对多个对象产生影响的公共行为和逻辑，抽取并封装为一个可重用的模块，这个模块被命名为“切面”（Aspect），减少系统中的重复代码，降低了模块间的耦合度，同时提高了系统的可维护性。
 
@@ -454,12 +517,12 @@ Spring中内置的事务处理
 ```java
 @Around("pointcut()")
 public Object around(ProceedingJoinPoint joinPoint) {
-        //获取用户名
+    //获取用户名
     //获取请求方式
     //获取访问结果
     //获取模块名称
     //登录IP
-       //操作时间
+    //操作时间
     
     //保存到数据库（操作日志）
     return null;
@@ -469,7 +532,9 @@ public Object around(ProceedingJoinPoint joinPoint) {
 
 
 
-定义：把一些横切关注点（cross-cutting concerns）从核心业务逻辑中剥离出来，用“切面”的方式独立定义，然后在需要的地方横向织入业务流程。（我觉得这个定义挺傻逼的，后面那些概念也挺傻逼的，不说人话，其实就是把一些重复用到的又不和业务逻辑有关的代码抽离出来，比如日志记录参数、返回值、耗时等很多地方都会用到，但是日志记录这部分和业务逻辑又不会有关联，只是记录，对于实现这些功能的代码，在某个地方写一次，然后通过一些方式，重复使用）
+定义：
+把一些横切关注点（cross-cutting concerns）从核心业务逻辑中剥离出来，用“切面”的方式独立定义，然后在需要的地方横向织入业务流程。
+（我觉得这个定义挺傻逼的，后面那些概念也挺傻逼的，不说人话，其实就是把一些重复用到的又不和业务逻辑有关的代码抽离出来，比如日志记录参数、返回值、耗时等很多地方都会用到，但是日志记录这部分和业务逻辑又不会有关联，只是记录，对于实现这些功能的代码，在某个地方写一次，然后通过一些方式，重复使用）
 
 作用：在不修改核心业务逻辑的情况下增强或修改程序的功能。
 
@@ -532,34 +597,29 @@ AOP 的环绕通知与前置通知有何区别？
 **AOP 的环绕通知（`@Around`）** 和 **前置通知（`@Before`）** 之间的主要区别如下：
 
 1. **执行时机不同**：
-
 * **前置通知（`@Before`）**：在目标方法执行之前执行，不能控制目标方法是否执行。它只在方法调用之前进行处理。
 * **环绕通知（`@Around`）**：它是最强大的通知类型，可以在目标方法执行之前、执行之后以及方法抛出异常时进行控制。环绕通知能够决定是否执行目标方法，并且可以在目标方法执行前后添加额外的逻辑。
 
-2. **是否可以控制目标方法的执行**：
-
+1. **是否可以控制目标方法的执行**：
 * **前置通知（`@Before`）**：不允许修改目标方法的执行过程，只能执行前置的逻辑，不能决定是否继续执行目标方法。
 * **环绕通知（`@Around`）**：可以控制目标方法的执行。通过 `joinPoint.proceed()` 可以决定是否执行目标方法，或者直接阻止目标方法的执行。例如，环绕通知可以在方法执行之前做判断，决定是否执行目标方法。
 
-3. **返回值**：
-
+1. **返回值**：
 * **前置通知（`@Before`）**：没有返回值。它只负责在目标方法之前执行某些逻辑。
 * **环绕通知（`@Around`）**：必须返回一个对象，通常返回目标方法的执行结果。如果没有调用 `proceed()` 方法，则没有返回值。
 
-4. **异常处理**：
-
+1. **异常处理**：
 * **前置通知（`@Before`）**：如果前置通知抛出异常，会导致目标方法不执行。
 * **环绕通知（`@Around`）**：环绕通知可以处理目标方法抛出的异常，并可以决定是否继续抛出异常，或者返回默认值。
 
-5. **使用场景**：
-
+1. **使用场景**：
 * **前置通知（`@Before`）**：适用于执行某些操作，比如日志记录、权限校验等，必须在方法执行之前完成的任务。
 * **环绕通知（`@Around`）**：适用于更复杂的场景，如缓存处理、事务管理、性能监控等，需要控制方法执行的时机或者方法的返回值。
 
 总结：
-
 * **前置通知（`@Before`）**：只能在目标方法之前执行，不控制目标方法的执行。
 * **环绕通知（`@Around`）**：在目标方法执行前后都可以控制，能够决定是否执行目标方法，返回值和异常也都可以进行控制。
+
 
 示例代码：
 
@@ -578,7 +638,6 @@ public class MyAspect {
 ```
 
 **环绕通知（`@Around`）**：
-
 ```java
 @Aspect
 @Component
@@ -603,7 +662,12 @@ public class MyAspect {
 史上最完整的AOP底层原理 https://www.bilibili.com/video/BV1SY41117zq
 
 ### 配置
-**统一的应用配置**：Spring 提供了统一的 **应用配置**（如 `application.properties` 或 `application.yml`），可以集中管理应用的配置。没有 Spring，你需要自己管理不同的配置文件。**举例**：没有 Spring，你可能需要手动读取配置文件（如 `config.properties`），并在代码中进行相应的处理：
+**统一的应用配置**：
+Spring 提供了统一的 **应用配置**（如 `application.properties` 或 `application.yml`），可以集中管理应用的配置。
+
+没有 Spring，你需要自己管理不同的配置文件。
+
+**举例**：没有 Spring，你可能需要手动读取配置文件（如 `config.properties`），并在代码中进行相应的处理：
 ```java
 Properties properties = new Properties();
 properties.load(new FileInputStream("config.properties"));
@@ -611,7 +675,12 @@ String dbUrl = properties.getProperty("db.url");
 ```
 
 ### 测试
-**测试支持**：Spring 提供了对 **单元测试** 和 **集成测试** 的强大支持，特别是通过 **Spring TestContext Framework** 和 **Mockito** 等集成。没有 Spring，你需要手动设置测试环境和模拟依赖，工作量大。**举例**：没有 Spring，测试环境的搭建变得更复杂，你必须手动创建和管理模拟对象。
+**测试支持**：
+Spring 提供了对 **单元测试** 和 **集成测试** 的强大支持，特别是通过 **Spring TestContext Framework** 和 **Mockito** 等集成。
+
+没有 Spring，你需要手动设置测试环境和模拟依赖，工作量大。
+
+**举例**：没有 Spring，测试环境的搭建变得更复杂，你必须手动创建和管理模拟对象。
 
 使用 `@SpringBootTest` 进行集成测试：
 ```java
@@ -627,175 +696,12 @@ public class UserServiceTest {
 }
 ```
 
-### 常用注解
-@SpringBootApplication（主启动类）
-@RestController（定义REST控制器）、
-@RequestMapping（映射HTTP请求）、
-@Autowired（依赖注入）、
-@Configuration和@Bean（配置类及组件注册）。
-此外还有@Service、@Repository等分层标识注解。
-
-
-**声明Bean的注解**（标记类/方法为可被 IOC 管理的组件）：
-- @Component：通用组件标记（所有被 IOC 管理的类的基础注解）。
-- @Service：标记业务层（Service 层）组件（等价于@Component，语义更明确）。
-- @Controller：标记 Web 控制器组件（等价于@Component，语义更明确）。
-- @Repository：标记数据访问层（DAO 层）组件（等价于@Component，语义更明确，Spring 会自动处理数据访问异常）。
-- @Configuration：标记配置类（通常用于声明@Bean方法），等价于传统 Spring 的 XML 配置文件。
-- @Bean：声明一个 Bean（标注在方法上，方法返回值会被注册到 IOC 容器）。
-
-**注入 Bean 的注解**（从 IOC 容器中获取 Bean）：
-- @Autowired：Spring 原生注入注解（默认按类型注入，可配合@Qualifier按名称指定）；
-- @Resource： JSR-250 标准注解（默认按名称注入，无名称时按类型注入，来自javax.annotation）；
-- @Qualifier：配合@Autowired使用，指定注入的 Bean 名称（解决同类型多 Bean 的歧义问题）；
-- @Primary：标记同类型 Bean 中的“主选” Bean（当@Autowired遇到多 Bean 时优先选择它）；
-- @Lazy： 标记 Bean 为延迟加载（默认 IOC 启动时创建 Bean，@Lazy会在首次使用时创建）；
-- @Scope：指定 Bean 的作用域（如singleton（默认单例）、prototype（多例）、request（HTTP 请求作用域）等）；
-
-
-**配置管理注解**：
-- @Value：读取单个配置属性（支持 SpEL 表达式），如@Value("${server.port}")；
-- @ConfigurationProperties：批量绑定配置到 Java 对象（适用于复杂配置，如prefix="spring.datasource"绑定一组属性）；
-- @PropertySource：加载自定义配置文件（默认加载application.properties，可用此注解加载其他文件，如@PropertySource("classpath:my-config.properties")）；
-- @EnableConfigurationProperties：启用@ConfigurationProperties标记的类（通常配合@Configuration使用）
-
-**Web开发注解-控制器与请求映射**：
-@RestController：RESTful 控制器（等价于@Controller + @ResponseBody，返回数据直接序列化为 JSON/XML）；
-@Controller：传统 MVC 控制器（需配合@ResponseBody返回数据，或返回视图）；
-@RequestMapping：通用请求映射（可标记类或方法，指定 URL 路径、请求方法等，如@RequestMapping("/user")）；
-@GetMapping：@RequestMapping(method = RequestMethod.GET)的简写（处理 GET 请求）；
-@PostMapping： 处理 POST 请求（类似@GetMapping）；
-@PutMapping：处理 PUT 请求；
-@DeleteMapping：处理 DELETE 请求；
-
-**Web开发注解-请求参数与响应**：
-@RequestBody： 将请求体（如 JSON）反序列化为 Java 对象（用于 POST/PUT 等带请求体的请求）；
-@RequestParam：读取 URL 中的查询参数（如@RequestParam("username") String name）；
-@PathVariable：读取 URL 路径中的占位符（如@GetMapping("/user/{id}")配合@PathVariable("id") Long userId）；
-@ResponseBody：将返回值序列化为 JSON/XML（通常配合@Controller使用，@RestController已内置此注解）；
-@ResponseStatus 设置响应状态码（如@ResponseStatus(HttpStatus.CREATED)返回 201 状态码）；
-@CrossOrigin： 解决跨域问题（标记类或方法，指定允许的源、方法等）；
-
-**条件装配注解（自动配置核心）**：
-@Conditional： 通用条件装配（需自定义Condition接口实现，很少直接使用）；
-@ConditionalOnClass 当类路径中存在指定类时，才加载当前 Bean（如@ConditionalOnClass(DataSource.class)）；
-@ConditionalOnMissingClass：当类路径中不存在指定类时，才加载当前 Bean；
-@ConditionalOnBean：当 IOC 容器中存在指定 Bean 时，才加载当前 Bean；
-@ConditionalOnMissingBean：当 IOC 容器中不存在指定 Bean 时，才加载当前 Bean（用于提供默认实现）；
-@ConditionalOnProperty：当配置文件中存在指定属性且值符合条件时，才加载当前 Bean（如@ConditionalOnProperty(prefix="redis", name="enable", havingValue="true")）；
-@ConditionalOnResource：当类路径中存在指定资源（如文件）时，才加载当前 Bean；
-
-**拓展功能启用注解（@Enable 系列）**
-- @EnableAutoConfiguration： 开启自动配置（@SpringBootApplication已包含此注解）；
-- @EnableScheduling：开启任务调度（支持@Scheduled注解）；
-- @EnableAsync： 开启异步方法支持（配合@Async使用）；
-- @EnableCaching：开启缓存支持（配合@Cacheable、@CachePut等注解）；
-- @EnableTransactionManagement： 开启声明式事务支持（配合@Transactional使用）；
-- @EnableFeignClients 开启 Feign 客户端（用于微服务远程调用）；
-
-
-**其它常用注解**
-- @Transactional：声明事务（标记方法或类，支持事务隔离级别、传播行为等配置）；
-- @Valid/@Validated：开启参数校验（配合javax.validation约束注解，如@NotBlank、@Max）；
-- @Profile： 标记 Bean 仅在指定环境（如dev、prod）中生效（通过spring.profiles.active配置）；
-- @Import 手动导入其他配置类或 Bean（类似 XML 中的`<import>`）；
-- @Aspect 标记 AOP 切面类（配合@Pointcut、@Before等实现切面编程）；
-
-#### Spring的常⽤注解
-@Component、@Controller、@Service、@Repository： 使用在类上用于实例化Bean
-@Autowired： 使用在字段上用于根据类型依赖注入
-@Qualifier： 结合@Autowired一起使用用于根据名称进行依赖注入
-@Scope： 标注Bean的作用范围
-@Configuration： 指定当前类是一个 Spring 配置类，当创建容器时会从该类上加载注解
-@ComponentScan： 用于指定 Spring   在初始化容器时要扫描的包
-@Bean： 使用在方法上，标注将该方法的返回值存储到Spring容器中
-@Import： 使用@Import导入的类会被Spring加载到IOC容器中
-@Aspect、@Before、@After、@Around、@Pointcut： 用于切面编程（AOP）
-
-#### @Resource
-是 Java 平台标准规范（JSR-250）中定义的注解
-
-用于实现控制反转（IoC）容器中的依赖注入（Dependency Injection），
-进行依赖对象的装配
-把容器里的某个对象（Bean），强行赋值给你声明的这个变量。
-
-在 Spring 框架中，Spring IoC 容器原生支持并实现了对该注解的解析与注入逻辑。
-
-
-位于 `javax.annotation`（在较新的 Jakarta EE 规范中变更为 `jakarta.annotation`）包下。
-
-
-
-**基于名称的精确匹配**：Spring 会提取你的变量名（这里是 `myUserDao`），然后去它管理的内部注册表里，找有没有哪个对象的 ID 或名字刚好也叫 `myUserDao`。
-
-**基于类型的兜底匹配** (by-type)：既然名字对不上，Spring 会查看你声明的变量类型（这里是 `UserDao` 类或接口），然后去注册表里找类型匹配的对象。
-如果是单例且只有一个 `UserDao` 的实现类，直接赋值，注入成功
-比如你有 `UserDaoMySQLImpl` 和 `UserDaoOracleImpl` 两个实现类都在 Spring 容器里。Spring 此时无法判断你要哪一个，直接抛出 `NoUniqueBeanDefinitionException` 崩溃报错。
-
-
-一旦你加上了 `name = "..."` 属性，`@Resource` 的执行算法就变了：**它会彻底锁死在第一步（基于名称匹配）**。Spring 只会去找名字等于 `userDaoOracleImpl` 的对象，如果找不到，绝对不会去按类型找兜底，而是直接报错。
-```java
-@Resource(name = "userDaoOracleImpl")
-private UserDao myUserDao;
-```
-
-
-
-
-
-#### @SpringBootApplication
-
-**启动类核心注解**
-是以下三个注解的组合：  
-- @SpringBootConfiguration：声明当前类是配置类（等价于@Configuration）；  
-- @EnableAutoConfiguration：开启自动配置（关键功能，让 Spring Boot 自动加载符合条件的 Bean）；  
-- @ComponentScan：扫描当前包及子包下的@Component及其衍生注解（如@Service）标记的类，注册为 Bean。
-
-
-
-#### `@RestController`
-- **`@RestController`** 是用于暴露本地 API，处理来自客户端的请求。
-- **用途**：用于标记一个类为 Spring MVC 的控制器，处理 HTTP 请求并返回数据。
-- **典型用法**：定义本地的 RESTful API 服务。
-- **特性**：结合 `@RequestMapping`，可以指定 URL 路径和请求方法（GET、POST 等）。
-- **示例**：
-    
-    JAVA
-    
-    `@RestController @RequestMapping("/customer/info") public class CustomerInfoController {          @GetMapping("/{id}")     public Customer getCustomerById(@PathVariable Long id) {         // 处理逻辑         return customerService.findById(id);     } }`
-    
-- **功能**：接受 HTTP 请求、处理业务逻辑、返回 JSON/XML 等格式的数据。
-
-#### `@FeignClient`
-- **`@FeignClient`** 是用于调用其他服务的远程 API，通常在微服务架构中用于服务间通信。
-- **用途**：用于创建一个声明式的 HTTP 客户端，通过接口与远程服务通信。
-- **典型用法**：调用远程 RESTful 服务（通常是微服务架构中的其他服务）。
-- **特性**：通过接口方法定义 HTTP 请求，Feign 自动实现这些接口，并发送请求。
-- **示例**：
-    
-    JAVA
-    
-    `@FeignClient(name = "customer-service", url = "http://customerservice") public interface CustomerClient {     @GetMapping("/customer/info/{id}")     Customer getCustomerById(@PathVariable("id") Long id); }`
-    
-- **功能**：简化 HTTP 请求的调用，易于集成负载均衡和熔断器等机制。
-
-
-
-### Spring中⽤到的设计模式
-- **工厂模式**（Factory Pattern）用于创建对象实例。Spring的IOC容器就是一个工厂模式的实现。它通过配置文件或注解管理Bean的创建和依赖注入，使得开发者不必直接使用`new`关键字创建对象。
-- **单例模式**（Singleton Pattern）用于确保一个类只有一个实例。Spring的默认Bean作用域为单例模式，即在整个应用中共享同一个Bean实例。通过这种方式，Spring可以节省内存并提高性能。
-- **代理模式**（Proxy Pattern）用于增强或控制对目标对象的访问。Spring AOP（面向切面编程）就大量使用了代理模式。在Spring中，可以通过JDK动态代理或CGLIB代理来创建代理对象，以在不修改原始代码的情况下添加功能，如事务管理和日志记录。
-- **模板方法模式**（Template Method Pattern）用于定义算法骨架。Spring的`JdbcTemplate`、`RestTemplate`等模板类使用了模板方法模式，将通用的操作步骤封装起来，开发者只需实现自定义部分即可，这减少了重复代码，提高了代码复用性。
-- 装饰器模式（Decorator Pattern）用于动态地给对象添加额外的职责。Spring的`BeanWrapper`、`DataSource`和`Transaction`相关功能都使用了装饰器模式，允许在不改变原始对象的前提下扩展功能。
-- 观察者模式（Observer Pattern）用于对象间的消息通知机制。Spring的事件机制使用了观察者模式，例如，ApplicationContext可以发布事件，监听器可以监听并响应这些事件，实现组件之间的松耦合。
-- 适配器模式（Adapter Pattern）用于转换不同接口之间的兼容性。Spring MVC中的`HandlerAdapter`将不同类型的处理器（如`Controller`、`HttpRequestHandler`）统一到相同的调用接口上，以支持不同的控制器类型。
-- 策略模式（Strategy Pattern）用于动态选择算法。Spring中的`TaskExecutor`、`TransactionManager`等使用了策略模式，让开发者可以根据需求配置不同的执行策略或事务管理策略。
-- 责任链模式（Chain of Responsibility Pattern）用于处理请求的多个处理器。Spring Security的过滤器链、Spring MVC的拦截器链都使用了责任链模式，以便多个过滤器或拦截器可以依次处理请求。
-通过这些设计模式，Spring实现了高度的解耦和可扩展性，帮助开发者更方便地管理代码复杂性、提高代码的复用性和灵活性。
-
 ### 事务管理
-#### 事务管理
-**事务管理**：在 Spring 中，事务管理是通过声明式事务控制的，Spring 会自动处理事务的开始、提交和回滚。如果没有 Spring，你必须手动管理每个数据库操作的事务，确保每个操作在出现异常时正确回滚。
+#### 介绍
+**事务管理**：
+在 Spring 中，事务管理是通过声明式事务控制的，Spring 会自动处理事务的开始、提交和回滚。
+
+如果没有 Spring，你必须手动管理每个数据库操作的事务，确保每个操作在出现异常时正确回滚。
 ```java
 Connection conn = dataSource.getConnection();
 try {
@@ -850,7 +756,9 @@ public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
 
 #### 七种事务传播行为
 **介绍**：事务传播行为定义了当一个事务方法被另一个事务方法调用时，事务应该如何传播。例如：methodA事务方法调用methodB事务方法时，methodB是继续在调用者methodA的事务中运行呢，还是为自己开启一个新事务运行，这就是由methodB的事务传播行为决定的。
-**使用**：七种事务传播行为是 `org.springframework.transaction.annotation.Propagation` 枚举中定义的常量。通过设置 `propagation` 属性来指定传播行为，例如：
+**使用**：七种事务传播行为是 `org.springframework.transaction.annotation.Propagation` 枚举中定义的常量。
+
+通过设置 `propagation` 属性来指定传播行为，例如：
 ```java
 @Transactional(propagation = Propagation.REQUIRED)
 public void methodA() {
@@ -870,11 +778,8 @@ public void methodB() {
 - `Propagation.MANDATORY`：**含义**：如果当前存在事务，则加入该事务；如果当前没有事务，则抛出异常。**使用场景**：适用于必须要在事务中执行的方法，强制要求调用方提供事务上下文。
 - `Propagation.NEVER`：**含义**：以非事务方式执行，如果当前存在事务，则抛出异常。**使用场景**：适用于明确不希望方法在事务中执行的情况，强制要求调用方不能有事务。
 - `Propagation.NESTED`：**含义**：如果当前存在事务，则在嵌套事务内执行；如果当前没有事务，则新建一个事务（与 `REQUIRED` 类似）。嵌套事务是外部事务的一部分，它依赖于外部事务。如果外部事务回滚，嵌套事务也会回滚。但嵌套事务可以独立提交或回滚，不会直接影响外部事务。**使用场景**：适用于需要在一个事务中再进行细粒度控制的场景，比如部分操作成功、部分操作失败的情况。
-#### 事务失效
-- 异常捕获处理
-- 抛出检查异常
-- 非public方法
 
+#### 事务失效
 - 异常捕获处理，自己处理了异常，没有抛出，解决：手动抛出
 - 抛出检查异常，配置rollbackFor属性为Exception
 - 非public方法导致的事务失效，改为public
@@ -962,6 +867,111 @@ void update(Integer from, Integer to, Double money) throws FileNotFoundException
 ```
 
 
+### 常用注解
+@SpringBootApplication（主启动类）
+@RestController（定义REST控制器）、
+@RequestMapping（映射HTTP请求）、
+@Autowired（依赖注入）、
+@Configuration和@Bean（配置类及组件注册）。
+此外还有@Service、@Repository等分层标识注解。
+
+
+**声明Bean的注解**（标记类/方法为可被 IOC 管理的组件）：
+- @Component：通用组件标记（所有被 IOC 管理的类的基础注解）。
+- @Service：标记业务层（Service 层）组件（等价于@Component，语义更明确）。
+- @Controller：标记 Web 控制器组件（等价于@Component，语义更明确）。
+- @Repository：标记数据访问层（DAO 层）组件（等价于@Component，语义更明确，Spring 会自动处理数据访问异常）。
+- @Configuration：标记配置类（通常用于声明@Bean方法），等价于传统 Spring 的 XML 配置文件。
+- @Bean：声明一个 Bean（标注在方法上，方法返回值会被注册到 IOC 容器）。
+
+**注入 Bean 的注解**（从 IOC 容器中获取 Bean）：
+- @Autowired：Spring 原生注入注解（默认按类型注入，可配合@Qualifier按名称指定）；
+- @Resource： JSR-250 标准注解（默认按名称注入，无名称时按类型注入，来自javax.annotation）；
+- @Qualifier：配合@Autowired使用，指定注入的 Bean 名称（解决同类型多 Bean 的歧义问题）；
+- @Primary：标记同类型 Bean 中的“主选” Bean（当@Autowired遇到多 Bean 时优先选择它）；
+- @Lazy： 标记 Bean 为延迟加载（默认 IOC 启动时创建 Bean，@Lazy会在首次使用时创建）；
+- @Scope：指定 Bean 的作用域（如singleton（默认单例）、prototype（多例）、request（HTTP 请求作用域）等）；
+
+
+**配置管理注解**：
+- @Value：读取单个配置属性（支持 SpEL 表达式），如@Value("${server.port}")；
+- @ConfigurationProperties：批量绑定配置到 Java 对象（适用于复杂配置，如prefix="spring.datasource"绑定一组属性）；
+- @PropertySource：加载自定义配置文件（默认加载application.properties，可用此注解加载其他文件，如@PropertySource("classpath:my-config.properties")）；
+- @EnableConfigurationProperties：启用@ConfigurationProperties标记的类（通常配合@Configuration使用）
+
+**Web开发注解-控制器与请求映射**：
+@RestController：RESTful 控制器（等价于@Controller + @ResponseBody，返回数据直接序列化为 JSON/XML）；
+@Controller：传统 MVC 控制器（需配合@ResponseBody返回数据，或返回视图）；
+@RequestMapping：通用请求映射（可标记类或方法，指定 URL 路径、请求方法等，如@RequestMapping("/user")）；
+@GetMapping：@RequestMapping(method = RequestMethod.GET)的简写（处理 GET 请求）；
+@PostMapping： 处理 POST 请求（类似@GetMapping）；
+@PutMapping：处理 PUT 请求；
+@DeleteMapping：处理 DELETE 请求；
+
+**Web开发注解-请求参数与响应**：
+@RequestBody： 将请求体（如 JSON）反序列化为 Java 对象（用于 POST/PUT 等带请求体的请求）；
+@RequestParam：读取 URL 中的查询参数（如@RequestParam("username") String name）；
+@PathVariable：读取 URL 路径中的占位符（如@GetMapping("/user/{id}")配合@PathVariable("id") Long userId）；
+@ResponseBody：将返回值序列化为 JSON/XML（通常配合@Controller使用，@RestController已内置此注解）；
+@ResponseStatus 设置响应状态码（如@ResponseStatus(HttpStatus.CREATED)返回 201 状态码）；
+@CrossOrigin： 解决跨域问题（标记类或方法，指定允许的源、方法等）；
+
+**条件装配注解（自动配置核心）**：
+@Conditional： 通用条件装配（需自定义Condition接口实现，很少直接使用）；
+@ConditionalOnClass 当类路径中存在指定类时，才加载当前 Bean（如@ConditionalOnClass(DataSource.class)）；
+@ConditionalOnMissingClass：当类路径中不存在指定类时，才加载当前 Bean；
+@ConditionalOnBean：当 IOC 容器中存在指定 Bean 时，才加载当前 Bean；
+@ConditionalOnMissingBean：当 IOC 容器中不存在指定 Bean 时，才加载当前 Bean（用于提供默认实现）；
+@ConditionalOnProperty：当配置文件中存在指定属性且值符合条件时，才加载当前 Bean（如@ConditionalOnProperty(prefix="redis", name="enable", havingValue="true")）；
+@ConditionalOnResource：当类路径中存在指定资源（如文件）时，才加载当前 Bean；
+
+**拓展功能启用注解（@Enable 系列）**
+- @EnableAutoConfiguration： 开启自动配置（@SpringBootApplication已包含此注解）；
+- @EnableScheduling：开启任务调度（支持@Scheduled注解）；
+- @EnableAsync： 开启异步方法支持（配合@Async使用）；
+- @EnableCaching：开启缓存支持（配合@Cacheable、@CachePut等注解）；
+- @EnableTransactionManagement： 开启声明式事务支持（配合@Transactional使用）；
+- @EnableFeignClients 开启 Feign 客户端（用于微服务远程调用）；
+
+
+**其它常用注解**
+- @Transactional：声明事务（标记方法或类，支持事务隔离级别、传播行为等配置）；
+- @Valid/@Validated：开启参数校验（配合javax.validation约束注解，如@NotBlank、@Max）；
+- @Profile： 标记 Bean 仅在指定环境（如dev、prod）中生效（通过spring.profiles.active配置）；
+- @Import 手动导入其他配置类或 Bean（类似 XML 中的`<import>`）；
+- @Aspect 标记 AOP 切面类（配合@Pointcut、@Before等实现切面编程）；
+
+### 其它常用注解
+
+在类上用于实例化Bean：
+- @Component
+- @Controller
+- @Service
+- @Repository
+
+
+- @Autowired： 使用在字段上用于根据类型依赖注入
+- @Aspect、@Before、@After、@Around、@Pointcut： 用于切面编程（AOP）
+- @Bean： 使用在方法上，标注将该方法的返回值存储到Spring容器中
+- @Configuration： 指定当前类是一个 Spring 配置类，当创建容器时会从该类上加载注解
+- @ComponentScan： 用于指定 Spring   在初始化容器时要扫描的包
+- @Import： 使用@Import导入的类会被Spring加载到IOC容器中
+- @Qualifier： 结合@Autowired一起使用用于根据名称进行依赖注入
+- @Scope： 标注Bean的作用范围
+
+
+### Spring中⽤到的设计模式
+- **工厂模式**（Factory Pattern）用于创建对象实例。Spring的IOC容器就是一个工厂模式的实现。它通过配置文件或注解管理Bean的创建和依赖注入，使得开发者不必直接使用`new`关键字创建对象。
+- **单例模式**（Singleton Pattern）用于确保一个类只有一个实例。Spring的默认Bean作用域为单例模式，即在整个应用中共享同一个Bean实例。通过这种方式，Spring可以节省内存并提高性能。
+- **代理模式**（Proxy Pattern）用于增强或控制对目标对象的访问。Spring AOP（面向切面编程）就大量使用了代理模式。在Spring中，可以通过JDK动态代理或CGLIB代理来创建代理对象，以在不修改原始代码的情况下添加功能，如事务管理和日志记录。
+- **模板方法模式**（Template Method Pattern）用于定义算法骨架。Spring的`JdbcTemplate`、`RestTemplate`等模板类使用了模板方法模式，将通用的操作步骤封装起来，开发者只需实现自定义部分即可，这减少了重复代码，提高了代码复用性。
+- 装饰器模式（Decorator Pattern）用于动态地给对象添加额外的职责。Spring的`BeanWrapper`、`DataSource`和`Transaction`相关功能都使用了装饰器模式，允许在不改变原始对象的前提下扩展功能。
+- 观察者模式（Observer Pattern）用于对象间的消息通知机制。Spring的事件机制使用了观察者模式，例如，ApplicationContext可以发布事件，监听器可以监听并响应这些事件，实现组件之间的松耦合。
+- 适配器模式（Adapter Pattern）用于转换不同接口之间的兼容性。Spring MVC中的`HandlerAdapter`将不同类型的处理器（如`Controller`、`HttpRequestHandler`）统一到相同的调用接口上，以支持不同的控制器类型。
+- 策略模式（Strategy Pattern）用于动态选择算法。Spring中的`TaskExecutor`、`TransactionManager`等使用了策略模式，让开发者可以根据需求配置不同的执行策略或事务管理策略。
+- 责任链模式（Chain of Responsibility Pattern）用于处理请求的多个处理器。Spring Security的过滤器链、Spring MVC的拦截器链都使用了责任链模式，以便多个过滤器或拦截器可以依次处理请求。
+通过这些设计模式，Spring实现了高度的解耦和可扩展性，帮助开发者更方便地管理代码复杂性、提高代码的复用性和灵活性。
+
 ### 其它
 
 ### 学习资料
@@ -974,9 +984,12 @@ Spring微服务实战（第2版）
 https://weread.qq.com/web/reader/d293298072a35387d299103
 名师讲坛：Spring实战开发（Redis+SpringDataJPA+SpringMVC+SpringSecurity）
 https://weread.qq.com/web/reader/64532fc071c96a44645204f
+
 ## Spring Core
 
-- **Spring Core**是框架的核心，提供了依赖注入（DI）和控制反转（IoC）功能。这是Spring应用的基础，用于管理对象的生命周期和依赖关系。它通过轻量级的容器管理Bean的创建、配置和销毁，帮助开发者实现模块化设计。
+- **Spring Core**是框架的核心，提供了依赖注入（DI）和控制反转（IoC）功能。
+- 这是Spring应用的基础，用于管理对象的生命周期和依赖关系。
+- 它通过轻量级的容器管理Bean的创建、配置和销毁，帮助开发者实现模块化设计。
 
 
 ## SpringBoot
@@ -986,22 +999,31 @@ https://weread.qq.com/web/reader/64532fc071c96a44645204f
 是什么？
 是基于Spring的快速开发工具
 是Spring框架的子项目，
+**Spring Boot** 是 Spring 的一个子项目，
 
 做什么？
 通过 **约定优于配置** 的方式快速启动 Web 应用，而无需编写大量的配置文件。
+旨在简化 Spring 应用的配置和部署，消除复杂的 XML 配置，
+并且通过 **约定优于配置** 的原则让开发者能够快速启动应用程序。
+
 
 特点：
 快速启动和运行Spring应用，不需要复杂的XML配置，
-
-
+* **快速启动**：你只需要写一个 `@SpringBootApplication` 注解的主类，Spring Boot 会自动设置所有所需的基础设施，帮助你快速启动和运行应用。
+通过自动配置
 通过起步依赖（Starters）引入所需的模块，
 通过简单的注解（如 `@SpringBootApplication`）来快速构建并运行 Web 服务，而无需自己手动配置很多内容。
 减少了配置时间。
+Spring Boot集成了Spring的核心功能和Spring MVC
 
-通过自动配置、和
+* Spring Boot 使得创建和配置 Spring 项目变得非常容易，开发者只需要少量的配置就能开始工作，很多基础设置（如数据库连接、Web 配置）都已为你自动配置好。
 
-内置的服务器支持（如Tomcat）、提供了 **内嵌 Web 服务器**（如 Tomcat、Jetty），让你可以不依赖外部服务器，直接在应用中嵌入服务器。
+预设的依赖管理，简化了Spring应用的配置开发过程，
+Spring Boot让开发者无需繁琐的XML配置即可快速构建Spring应用
+
 **提供嵌入式 Web 服务器**
+内置的服务器支持（如Tomcat）、提供了 **内嵌 Web 服务器**（如 Tomcat、Jetty），让你可以不依赖外部服务器，直接在应用中嵌入服务器。
+
    Spring Boot 提供了 **嵌入式 Web 服务器**（如 Tomcat、Jetty、Undertow 等），意味着你可以轻松启动一个 Spring 应用而不需要安装和配置外部 Web 服务器。
    * **没有 Spring Boot 时**，你必须手动配置 Web 服务器（如 Tomcat 或 Jetty）。这通常意味着你需要下载和配置 Tomcat 服务器，然后将应用部署到其中。每次开发和测试时，你需要手动启动 Tomcat 并部署你的 Web 应用。
    * **示例**：没有 Spring Boot，你可能需要手动配置 Tomcat 服务器，像这样：
@@ -1009,20 +1031,11 @@ https://weread.qq.com/web/reader/64532fc071c96a44645204f
      * 在 `webapps` 目录中部署 WAR 文件。
      * 配置 `server.xml` 文件来设置端口和其他参数。
 
-部署
-预设的依赖管理，简化了Spring应用的配置开发过程，Spring Boot让开发者无需繁琐的XML配置即可快速构建Spring应用
-
-
-特点：
-Spring Boot集成了Spring的核心功能和Spring MVC
 
 用途：
 适合构建微服务架构、云原生应用等现代应用。
 
 
-**Spring Boot** 是 Spring 的一个子项目，旨在简化 Spring 应用的配置和部署，消除复杂的 XML 配置，并且通过 **约定优于配置** 的原则让开发者能够快速启动应用程序。
-* Spring Boot 使得创建和配置 Spring 项目变得非常容易，开发者只需要少量的配置就能开始工作，很多基础设置（如数据库连接、Web 配置）都已为你自动配置好。
-* **快速启动**：你只需要写一个 `@SpringBootApplication` 注解的主类，Spring Boot 会自动设置所有所需的基础设施，帮助你快速启动和运行应用。
 示例：一个简单的 Spring Boot 启动类：
 ```java
 @SpringBootApplication
@@ -1035,6 +1048,162 @@ public class MyApplication {
 
 
 
+
+### 自动装配
+（Auto Configuration）
+
+
+只要在主类上写一个 `@SpringBootApplication`注解，很多东西（Web 容器、数据源、事务、日志、MVC 配置……）就自动准备好了，就有了一堆默认配置
+
+
+- `@SpringBootApplication` 注解
+	`@SpringBootApplication` 是一个组合注解，包含了以下三个重要的注解：
+	- **`@SpringBootConfiguration`**：相当于 `@Configuration`，表明这是一个配置类。
+	- **`@EnableAutoConfiguration`**：启用了 Spring Boot 的自动配置，Spring Boot 会根据类路径下的依赖和配置文件自动创建 Bean 并进行配置。例如，Spring Boot 会自动创建 Spring MVC 所需的相关配置。
+	- **`@ComponentScan`**：启用了组件扫描，这意味着 Spring 会自动扫描当前包及其子包下的所有组件（例如带有 `@Component`、`@Service`、`@Controller`、`@RestController` 等注解的类），并将它们注册为 Spring 的 Bean。你的 `UserController` 类因为有 `@RestController` 注解，会被扫描到并自动注册。
+
+`@SpringBootApplication`这个注解对`@SpringBootConfiguration`、`@EnableAutoConfiguration`、`@ComponentScan`三个注解进行了封装
+
+
+- @SpringBootConfiguration：该注解与 @Configuration 注解作用相同，用来声明当前也是一个配置类。
+- @ComponentScan：组件扫描，默认扫描当前引导类所在包及其子包。
+- @EnableAutoConfiguration：
+	- 是SpringBoot实现自动化配置的核心注解，让“自动装配”生效。
+	- 该注解通过@Import注解导入对应的配置选择器。使应用根据类路径中的依赖和配置自动装配所需的Bean，大大简化了配置工作。
+	- 它结合`@SpringBootApplication`使用时，会扫描类路径中的所有`spring.factories`文件。
+	- `spring-boot-autoconfigure`包中定义了这个文件，列出了多个自动配置类，每个配置类负责特定的功能模块，比如Web、JPA、数据源等。
+
+SpringFactoriesLoader 机制：
+内部就是读取了该项目和该项目引用的Jar包的的classpath路径下META-INF/spring.factories文件中的所配置的类的全类名。
+Spring Boot 启动时会去 **`META-INF/spring.factories`** 里找配置。里面写着一大堆自动配置类（例如 `DataSourceAutoConfiguration`、`RedisAutoConfiguration`）
+
+
+当应用启动时，Spring Boot会在`SpringApplication.run()`过程中，利用`SpringFactoriesLoader`加载所有自动配置类，将它们作为候选配置类进行装配。
+
+然后，Spring Boot将根据条件注解（如`@ConditionalOnClass`、`@ConditionalOnMissingBean`等）检查当前环境，决定哪些Bean需要装配。
+这个机制允许应用在类路径中存在某些特定类时自动配置对应的组件，比如在类路径中存在`DataSource`时自动配置数据源。
+
+在加载自动配置类时，Spring Boot根据条件注解中的条件逐步判断。若某个Bean符合所有条件，它将被注册到Spring容器中；如果条件不符合（如缺少相关类或属性），Spring Boot会跳过该Bean的注册。这种条件装配机制使得Spring Boot在不同的场景下能够动态加载不同的配置。
+
+当所有符合条件的Bean加载完成后，Spring Boot还会在`ApplicationContext`中执行进一步的初始化工作，加载配置文件（如`application.properties`）中的属性，将其注入到Bean中，以确保Bean的配置符合实际环境需求。
+
+Spring Boot的自动装配过程利用了`@ConfigurationProperties`注解，可以自动将配置文件中的属性绑定到Bean上，使开发者能够通过配置文件来控制Bean的行为，而无需手动修改代码。
+
+总结而言，Spring Boot的自动装配过程通过`@EnableAutoConfiguration`加载自动配置类，使用条件注解筛选合适的Bean并进行装配，最终将符合条件的Bean注册到容器中并配置好它们的属性。整个过程实现了“按需装配”，使得应用能够灵活适应不同环境配置，实现快速开发和轻松扩展。
+
+
+
+
+
+
+在这些配置类中所定义的Bean会根据条件注解所指定的条件来决定是否需要将其导入到Spring容器中。
+ 条件判断会有像@ConditionalOnClass这样的注解，判断是否有对应的class文件，如果有则加载该类，把这个配置类的所有的Bean放入spring容器中使用。
+条件装配 (@Conditional)，自动配置类里不会强制生效，而是根据条件判断，这样可以做到有则用，无则自动帮你创建默认的 Bean。：
+- `@ConditionalOnClass`：类路径下是否有某个类（比如 JDBC 驱动）
+- `@ConditionalOnMissingBean`：容器里是否已经有你自定义的 Bean
+- `@ConditionalOnProperty`：配置文件里是否启用了某个开关
+
+
+
+绑定配置 (@ConfigurationProperties)，自动配置类还能把 `application.yml` 里的参数自动绑定到 Bean 上。
+
+
+举个例子：数据源自动配置
+- 你在 `pom.xml` 里引入了 `spring-boot-starter-jdbc`
+- Spring Boot 会加载 `DataSourceAutoConfiguration`
+- 检查：类路径下是否有 `DataSource` 相关类
+- 检查：你是否自己定义了 `DataSource` Bean
+- 如果没有 → 自动创建一个 HikariCP 连接池，并用 `application.yml` 里的参数初始化
+
+
+
+### 自动装配
+Springboot中最高频的一道面试题，也是框架最核心的思想
+
+```java
+@SpringBootApplication
+public class UserApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(UserApplication.class,args);
+    }
+}
+```
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223101145.png)
+
+
+
+EnableAutoConfiguration：
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223111811.png)
+
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223111817.png)
+
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223111824.png)
+
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223111829.png)
+是一个配置类
+判断是否有对应字节码
+判断环境中没有对应的bean
+
+
+
+
+
+
+
+
+
+### @SpringBootApplication
+
+**启动类核心注解**
+是以下三个注解的组合：  
+- @SpringBootConfiguration：声明当前类是配置类（等价于@Configuration）；  
+- @EnableAutoConfiguration：开启自动配置（关键功能，让 Spring Boot 自动加载符合条件的 Bean）；  
+- @ComponentScan：扫描当前包及子包下的@Component及其衍生注解（如@Service）标记的类，注册为 Bean。
+
+
+
+### Spring Boot Starter
+
+- Spring Boot Starter是Spring Boot是一个结合了众多配置和依赖的依赖包，
+
+- 只需添加一个Starter依赖，Spring Boot就会自动配置和加载相关组件，快速引入并配置各种常见的Spring组件。
+
+- 简化依赖管理，开发者无需手动调整大多数细节，从而能够专注于业务开发。
+
+
+主要内容（包括一些常用的Starters）：
+- spring-boot-starter-web
+	- 用于开发Web应用，包括MVC架构和RESTful接口。
+	- 它集成了Spring MVC、Tomcat、Jackson（用于JSON处理）等，
+	- 适合快速构建Web应用和API服务。
+- spring-boot-starter-data-jpa
+	- 它封装了Spring Data JPA和Hibernate等库，
+	- 用于JPA（Java持久化API）和数据库操作，提供数据库访问和ORM功能。
+	- 简化数据库交互的配置。
+- spring-boot-starter-security
+	- 用于引入Spring Security的安全功能，提供认证、授权、加密等一系列安全工具，
+	- 适合构建安全的Web应用。
+- spring-boot-starter-test
+	- 包含了JUnit、Mockito和Spring Test等测试框架和工具，
+	- 支持单元测试、集成测试和Mock测试，
+	- 使得测试配置和运行更加方便。
+- spring-boot-starter-thymeleaf
+	- 用于集成Thymeleaf模板引擎，
+	- 适合构建动态HTML页面的Web应用。
+	- 它让视图层能更直观地渲染动态数据。
+- spring-boot-starter-actuator
+	- 用于监控和管理Spring Boot应用。
+	- 它包含了健康检查、性能指标、日志查看等端点，
+	- 可以集成到运维和监控工具中。
+- spring-boot-starter-amqp
+	- 用于AMQP协议的消息传递（如RabbitMQ）。
+	- 它封装了Spring AMQP的相关依赖，
+	- 适合构建基于消息队列的应用。
+- spring-boot-starter-cache
+	- 用于引入缓存管理功能。
+	- 它支持多种缓存方案（如EhCache、Redis等），
+	- 通过缓存加速应用的数据访问。
 
 ### 示例
 这是一个Java SpringBoot程序简单示例，这是一个简单API，运行后，通过浏览器访问` http://localhost:8080/api/user`,则显示`Hello, World`，访问`http://localhost:8080/api/user?name=John`，则显示`Hello, John`。
@@ -1137,133 +1306,51 @@ public class UserController {
 - 运行后，通过浏览器访问` http://localhost:8080/api/user`,则显示`Hello, World`，访问`http://localhost:8080/api/user?name=John`，则显示`Hello, John`
 
 
-**示例代码中部分知识的讲解**
 - 为什么即使你没有在代码中显式调用 `UserController`，它仍然可以工作：
 	- Spring Boot 通过其自动配置（Auto Configuration）和组件扫描（Component Scan）功能，可以自动找到你定义的 `@RestController` 类并将它注册为一个可处理 HTTP 请求的 Spring MVC 控制器。
-- `@SpringBootApplication` 注解
-	`@SpringBootApplication` 是一个组合注解，包含了以下三个重要的注解：
-	- **`@SpringBootConfiguration`**：相当于 `@Configuration`，表明这是一个配置类。
-	- **`@EnableAutoConfiguration`**：启用了 Spring Boot 的自动配置，Spring Boot 会根据类路径下的依赖和配置文件自动创建 Bean 并进行配置。例如，Spring Boot 会自动创建 Spring MVC 所需的相关配置。
-	- **`@ComponentScan`**：启用了组件扫描，这意味着 Spring 会自动扫描当前包及其子包下的所有组件（例如带有 `@Component`、`@Service`、`@Controller`、`@RestController` 等注解的类），并将它们注册为 Spring 的 Bean。你的 `UserController` 类因为有 `@RestController` 注解，会被扫描到并自动注册。
-- `@RestController` 注解
-	- **`@RestController`** 是一个特殊的注解，等效于 `@Controller` + `@ResponseBody`，它标记了这个类是一个控制器，并且所有返回值将直接作为 HTTP 响应体返回（而不是视图模板）。
-	- 由于 `@RestController` 被扫描并注册为 Spring 的一个 Bean，Spring MVC 会将它与 HTTP 请求映射起来。
-	- 这里 `@GetMapping("/api/user")` 将 `/api/user` 这个路径的 GET 请求与 `getUser` 方法关联起来。
-
-
-
-### 自动装配
-（Auto Configuration）
-
-只要在主类上写一个 `@SpringBootApplication`注解，很多东西（Web 容器、数据源、事务、日志、MVC 配置……）就自动准备好了，就有了一堆默认配置
-
-
-`@SpringBootApplication`这个注解对`@SpringBootConfiguration`、`@EnableAutoConfiguration`、`@ComponentScan`三个注解进行了封装
-
-
-- @SpringBootConfiguration：该注解与 @Configuration 注解作用相同，用来声明当前也是一个配置类。
-- @ComponentScan：组件扫描，默认扫描当前引导类所在包及其子包。
-- @EnableAutoConfiguration：
-	- 是SpringBoot实现自动化配置的核心注解，让“自动装配”生效。
-	- 该注解通过@Import注解导入对应的配置选择器。使应用根据类路径中的依赖和配置自动装配所需的Bean，大大简化了配置工作。
-	- 它结合`@SpringBootApplication`使用时，会扫描类路径中的所有`spring.factories`文件。
-	- `spring-boot-autoconfigure`包中定义了这个文件，列出了多个自动配置类，每个配置类负责特定的功能模块，比如Web、JPA、数据源等。
-
-SpringFactoriesLoader 机制：
-内部就是读取了该项目和该项目引用的Jar包的的classpath路径下META-INF/spring.factories文件中的所配置的类的全类名。
-Spring Boot 启动时会去 **`META-INF/spring.factories`** 里找配置。里面写着一大堆自动配置类（例如 `DataSourceAutoConfiguration`、`RedisAutoConfiguration`）
-
-
-当应用启动时，Spring Boot会在`SpringApplication.run()`过程中，利用`SpringFactoriesLoader`加载所有自动配置类，将它们作为候选配置类进行装配。
-
-然后，Spring Boot将根据条件注解（如`@ConditionalOnClass`、`@ConditionalOnMissingBean`等）检查当前环境，决定哪些Bean需要装配。这个机制允许应用在类路径中存在某些特定类时自动配置对应的组件，比如在类路径中存在`DataSource`时自动配置数据源。
-
-在加载自动配置类时，Spring Boot根据条件注解中的条件逐步判断。若某个Bean符合所有条件，它将被注册到Spring容器中；如果条件不符合（如缺少相关类或属性），Spring Boot会跳过该Bean的注册。这种条件装配机制使得Spring Boot在不同的场景下能够动态加载不同的配置。
-
-当所有符合条件的Bean加载完成后，Spring Boot还会在`ApplicationContext`中执行进一步的初始化工作，加载配置文件（如`application.properties`）中的属性，将其注入到Bean中，以确保Bean的配置符合实际环境需求。
-
-Spring Boot的自动装配过程利用了`@ConfigurationProperties`注解，可以自动将配置文件中的属性绑定到Bean上，使开发者能够通过配置文件来控制Bean的行为，而无需手动修改代码。
-
-总结而言，Spring Boot的自动装配过程通过`@EnableAutoConfiguration`加载自动配置类，使用条件注解筛选合适的Bean并进行装配，最终将符合条件的Bean注册到容器中并配置好它们的属性。整个过程实现了“按需装配”，使得应用能够灵活适应不同环境配置，实现快速开发和轻松扩展。
 
 
 
 
 
+### 启动流程
+- Spring Boot的启动流程包含了一系列自动化的初始化步骤，以便迅速启动和配置应用。
 
-在这些配置类中所定义的Bean会根据条件注解所指定的条件来决定是否需要将其导入到Spring容器中。
- 条件判断会有像@ConditionalOnClass这样的注解，判断是否有对应的class文件，如果有则加载该类，把这个配置类的所有的Bean放入spring容器中使用。
-条件装配 (@Conditional)，自动配置类里不会强制生效，而是根据条件判断，这样可以做到有则用，无则自动帮你创建默认的 Bean。：
-- `@ConditionalOnClass`：类路径下是否有某个类（比如 JDBC 驱动）
-- `@ConditionalOnMissingBean`：容器里是否已经有你自定义的 Bean
-- `@ConditionalOnProperty`：配置文件里是否启用了某个开关
+- **`main` 方法启动**： 在 `DemoApplication` 中，`main` 方法调用了 `SpringApplication.run(DemoApplication.class, args)`，这会启动 Spring Boot 应用，并触发一系列初始化过程。
 
+- 入口触发：通过 @SpringBootApplication 主类的 main 方法调用 SpringApplication.run()。
+- 这一过程从`SpringApplication.run()`方法开始。
+- 首先，调用`SpringApplication.run()`方法，这是Spring Boot启动的入口。`SpringApplication`类负责初始化应用上下文并配置相关环境。
 
+- 环境准备：加载配置、激活 Profile，确定应用运行环境。
+- `SpringApplication`会准备启动环境，包括系统属性、环境变量、命令行参数和配置文件（如`application.properties`或`application.yml`）等。这个阶段会创建一个`Environment`对象，将各类属性添加到环境中，为后续Bean初始化提供配置数据。
 
-绑定配置 (@ConfigurationProperties)，自动配置类还能把 `application.yml` 里的参数自动绑定到 Bean 上。
+- 上下文创建：根据应用类型（Web/非 Web）实例化对应的 ApplicationContext。
+- 随后，`SpringApplication`加载并触发各种`SpringApplicationRunListener`事件，包括启动开始（`starting`）、环境准备（`environmentPrepared`）、上下文准备（`contextPrepared`）、上下文加载（`contextLoaded`）和运行完成（`started`）等阶段。Spring Boot中的一些事件监听器（Listeners）可以订阅这些事件，执行特定的初始化任务。
+- 接着，`SpringApplication`会通过`ApplicationContextInitializer`对应用上下文（ApplicationContext）进行进一步初始化操作，例如Bean定义的加载和注册等。然后，它会确定应用使用的具体ApplicationContext实现类型（如`AnnotationConfigApplicationContext`或`ServletWebServerApplicationContext`），并创建相应的实例。
 
-
-举个例子：数据源自动配置
-- 你在 `pom.xml` 里引入了 `spring-boot-starter-jdbc`
-- Spring Boot 会加载 `DataSourceAutoConfiguration`
-- 检查：类路径下是否有 `DataSource` 相关类
-- 检查：你是否自己定义了 `DataSource` Bean
-- 如果没有 → 自动创建一个 HikariCP 连接池，并用 `application.yml` 里的参数初始化
-
+- **自动配置与组件扫描**： Spring Boot 自动配置会根据类路径中的依赖（例如 `spring-boot-starter-web`），自动启用与 Web 相关的配置（如嵌入式的 Tomcat 服务器、Spring MVC 配置等）。同时，`@ComponentScan` 会扫描 `com.example.demo` 包下的所有类，包括 `UserController`。
+- **自动配置**：通过 @EnableAutoConfiguration 加载并过滤自动配置类，注册必要 Bean。
 
 
-#### 自动装配
-Springboot中最高频的一道面试题，也是框架最核心的思想
+- **控制器注册**： Spring Boot 发现了 `UserController` 类上的 `@RestController` 注解，自动将这个控制器注册到 Spring 的 Web 上下文中，并为其绑定对应的 URL 路径（在这个例子中就是 `/api/user`）。
+- **容器刷新**：完成 Bean 的注册、实例化和依赖注入，启动内置 Web 服务器（若为 Web 应用）。
+- 之后，Spring Boot会扫描、实例化和注册Bean，启动自动配置。通过`@EnableAutoConfiguration`注解，Spring Boot会自动加载类路径中的配置文件和组件。根据`@Conditional`注解的条件检查，Spring Boot将决定加载哪些自动配置类，从而完成应用所需的Bean初始化。
+- 启动完成后，Spring Boot会调用`ApplicationRunner`和`CommandLineRunner`接口中的`run`方法，适用于应用启动后需要立即执行的任务。
 
-```java
-@SpringBootApplication
-public class UserApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(UserApplication.class,args);
-    }
-}
-```
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223101145.png)
+- **启动嵌入式 Web 服务器**： Spring Boot 的自动配置会启动一个嵌入式的 Tomcat 服务器（默认情况下是 Tomcat，除非你配置了其他的服务器）。服务器会监听指定的端口（默认 8080）。
 
 
+- **应用就绪**：触发事件通知，执行启动后逻辑（如 CommandLineRunner），最终对外提供服务。
+- 在所有Bean加载和初始化完成后，`SpringApplication`触发`ApplicationStartedEvent`和`ApplicationReadyEvent`事件，标识应用已完全启动并可以接受请求。
 
-EnableAutoConfiguration：
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223111811.png)
+- **处理 HTTP 请求**： 当你访问 `http://localhost:8080/api/user` 时，嵌入式的 Tomcat 会接收请求，并将其交给 Spring MVC 来处理。Spring MVC 检查是否有控制器映射了该路径，发现 `UserController` 中的 `getUser` 方法对应于 `/api/user` 的 GET 请求，于是调用该方法并返回结果。
 
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223111817.png)
-
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223111824.png)
-
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251223111829.png)
-是一个配置类
-判断是否有对应字节码
-判断环境中没有对应的bean
+- 整个启动流程的目的是自动化和简化配置，使Spring Boot应用能够在几乎无需手动干预的情况下自动配置和运行。通过这一步步的自动化过程，Spring Boot将环境准备、Bean初始化、事件发布等功能串联起来，以便在最短时间内完成应用的启动并提供服务。
 
 
 
-
-
-
-
-
-
-### Spring Boot Starter
-- Spring Boot Starter是Spring Boot是一个结合了众多配置和依赖的依赖包，
-- 只需添加一个Starter依赖，Spring Boot就会自动配置和加载相关组件，快速引入并配置各种常见的Spring组件。
-- 简化依赖管理，开发者无需手动调整大多数细节，从而能够专注于业务开发。
-
-主要内容（包括一些常用的Starters）：
-- spring-boot-starter-web用于开发Web应用，包括MVC架构和RESTful接口。它集成了Spring MVC、Tomcat、Jackson（用于JSON处理）等，适合快速构建Web应用和API服务。
-- spring-boot-starter-data-jpa用于JPA（Java持久化API）和数据库操作。它封装了Spring Data JPA和Hibernate等库，提供数据库访问和ORM功能，简化数据库交互的配置。
-- spring-boot-starter-security用于引入Spring Security的安全功能，提供认证、授权、加密等一系列安全工具，适合构建安全的Web应用。
-- spring-boot-starter-test包含了JUnit、Mockito和Spring Test等测试框架和工具，支持单元测试、集成测试和Mock测试，使得测试配置和运行更加方便。
-- spring-boot-starter-thymeleaf用于集成Thymeleaf模板引擎，适合构建动态HTML页面的Web应用。它让视图层能更直观地渲染动态数据。
-- spring-boot-starter-actuator用于监控和管理Spring Boot应用。它包含了健康检查、性能指标、日志查看等端点，可以集成到运维和监控工具中。
-- spring-boot-starter-amqp用于AMQP协议的消息传递（如RabbitMQ）。它封装了Spring AMQP的相关依赖，适合构建基于消息队列的应用。
-- spring-boot-starter-cache用于引入缓存管理功能。它支持多种缓存方案（如EhCache、Redis等），通过缓存加速应用的数据访问。
-
-### 如果没有springboot
+### 如果没有SpringBoot
 
 1. **手动配置 Spring 项目**
    在没有 Spring Boot 时，使用 **Spring Framework** 开发 Web 应用或企业级应用时，开发者必须手动配置许多组件和设置。你需要配置 Web 服务器、数据源、事务管理、Spring MVC、Spring Security 等。
@@ -1312,35 +1399,6 @@ EnableAutoConfiguration：
 
 
 
-
-
-
-### 启动流程
-- Spring Boot的启动流程包含了一系列自动化的初始化步骤，以便迅速启动和配置应用。
-- 这一过程从`SpringApplication.run()`方法开始。
-- 首先，调用`SpringApplication.run()`方法，这是Spring Boot启动的入口。`SpringApplication`类负责初始化应用上下文并配置相关环境。
-- `SpringApplication`会准备启动环境，包括系统属性、环境变量、命令行参数和配置文件（如`application.properties`或`application.yml`）等。这个阶段会创建一个`Environment`对象，将各类属性添加到环境中，为后续Bean初始化提供配置数据。
-- 随后，`SpringApplication`加载并触发各种`SpringApplicationRunListener`事件，包括启动开始（`starting`）、环境准备（`environmentPrepared`）、上下文准备（`contextPrepared`）、上下文加载（`contextLoaded`）和运行完成（`started`）等阶段。Spring Boot中的一些事件监听器（Listeners）可以订阅这些事件，执行特定的初始化任务。
-- 接着，`SpringApplication`会通过`ApplicationContextInitializer`对应用上下文（ApplicationContext）进行进一步初始化操作，例如Bean定义的加载和注册等。然后，它会确定应用使用的具体ApplicationContext实现类型（如`AnnotationConfigApplicationContext`或`ServletWebServerApplicationContext`），并创建相应的实例。
-- 之后，Spring Boot会扫描、实例化和注册Bean，启动自动配置。通过`@EnableAutoConfiguration`注解，Spring Boot会自动加载类路径中的配置文件和组件。根据`@Conditional`注解的条件检查，Spring Boot将决定加载哪些自动配置类，从而完成应用所需的Bean初始化。
-- 启动完成后，Spring Boot会调用`ApplicationRunner`和`CommandLineRunner`接口中的`run`方法，适用于应用启动后需要立即执行的任务。
-- 在所有Bean加载和初始化完成后，`SpringApplication`触发`ApplicationStartedEvent`和`ApplicationReadyEvent`事件，标识应用已完全启动并可以接受请求。
-- 整个启动流程的目的是自动化和简化配置，使Spring Boot应用能够在几乎无需手动干预的情况下自动配置和运行。通过这一步步的自动化过程，Spring Boot将环境准备、Bean初始化、事件发布等功能串联起来，以便在最短时间内完成应用的启动并提供服务。
-
-### 执行流程
-- 入口触发：通过 @SpringBootApplication 主类的 main 方法调用 SpringApplication.run()。
-- 环境准备：加载配置、激活 Profile，确定应用运行环境。
-- 上下文创建：根据应用类型（Web/非 Web）实例化对应的 ApplicationContext。
-- 自动配置：通过 @EnableAutoConfiguration 加载并过滤自动配置类，注册必要 Bean。
-- 容器刷新：完成 Bean 的注册、实例化和依赖注入，启动内置 Web 服务器（若为 Web 应用）。
-- 应用就绪：触发事件通知，执行启动后逻辑（如 CommandLineRunner），最终对外提供服务。
-
-- **`main` 方法启动**： 在 `DemoApplication` 中，`main` 方法调用了 `SpringApplication.run(DemoApplication.class, args)`，这会启动 Spring Boot 应用，并触发一系列初始化过程。
-- **自动配置与组件扫描**： Spring Boot 自动配置会根据类路径中的依赖（例如 `spring-boot-starter-web`），自动启用与 Web 相关的配置（如嵌入式的 Tomcat 服务器、Spring MVC 配置等）。同时，`@ComponentScan` 会扫描 `com.example.demo` 包下的所有类，包括 `UserController`。
-- **控制器注册**： Spring Boot 发现了 `UserController` 类上的 `@RestController` 注解，自动将这个控制器注册到 Spring 的 Web 上下文中，并为其绑定对应的 URL 路径（在这个例子中就是 `/api/user`）。
-- **启动嵌入式 Web 服务器**： Spring Boot 的自动配置会启动一个嵌入式的 Tomcat 服务器（默认情况下是 Tomcat，除非你配置了其他的服务器）。服务器会监听指定的端口（默认 8080）。
-- **处理 HTTP 请求**： 当你访问 `http://localhost:8080/api/user` 时，嵌入式的 Tomcat 会接收请求，并将其交给 Spring MVC 来处理。Spring MVC 检查是否有控制器映射了该路径，发现 `UserController` 中的 `getUser` 方法对应于 `/api/user` 的 GET 请求，于是调用该方法并返回结果。
-
 ### SpringBoot的常⽤注解
 
 @SpringBootConfiguration： 组合了- @Configuration注解，实现配置文件的功能
@@ -1387,16 +1445,22 @@ public class MyDatabaseService {
     }
 }
 ```
-`@Configuration`用于定义配置类，标识该类包含Spring容器的配置Bean定义。`@Configuration`类通常包含若干`@Bean`方法，用于创建和初始化Bean。
-`@Bean`用于定义一个Bean，并将其添加到Spring应用上下文中。可以用于配置类中，通常返回某种类型的对象，Spring容器将管理该对象的生命周期。
-`@Conditional`用于在特定条件下加载Bean。它可以结合不同的条件注解（如`@ConditionalOnProperty`、`@ConditionalOnMissingBean`等）控制Bean的创建和加载，适合根据环境、属性或依赖配置Bean。
-`@Profile`用于在特定环境下启用或禁用Bean。它根据应用的`active profile`来选择性地加载配置，适合根据开发、测试、生产环境的不同设置不同的配置或组件。
-`@EnableScheduling`用于开启Spring的任务调度功能，结合`@Scheduled`注解可以执行定时任务。
-`@EnableAsync`用于开启异步处理功能，结合`@Async`注解可以异步执行方法，提高应用的响应速度和性能。
+- `@Configuration`用于定义配置类，标识该类包含Spring容器的配置Bean定义。`@Configuration`类通常包含若干`@Bean`方法，用于创建和初始化Bean。
+- `@Bean`用于定义一个Bean，并将其添加到Spring应用上下文中。可以用于配置类中，通常返回某种类型的对象，Spring容器将管理该对象的生命周期。
+- `@Conditional`用于在特定条件下加载Bean。它可以结合不同的条件注解（如`@ConditionalOnProperty`、`@ConditionalOnMissingBean`等）控制Bean的创建和加载，适合根据环境、属性或依赖配置Bean。
+- `@Profile`用于在特定环境下启用或禁用Bean。它根据应用的`active profile`来选择性地加载配置，适合根据开发、测试、生产环境的不同设置不同的配置或组件。
+- `@EnableScheduling`用于开启Spring的任务调度功能，结合`@Scheduled`注解可以执行定时任务。
+- `@EnableAsync`用于开启异步处理功能，结合`@Async`注解可以异步执行方法，提高应用的响应速度和性能。
 这些注解简化了开发流程，极大地减少了配置工作，使得Spring Boot开发更加简洁高效。
 
+### @RestController
+- `@RestController` 注解
+	- **`@RestController`** 是一个特殊的注解，等效于 `@Controller` + `@ResponseBody`，它标记了这个类是一个控制器，并且所有返回值将直接作为 HTTP 响应体返回（而不是视图模板）。
+	- 由于 `@RestController` 被扫描并注册为 Spring 的一个 Bean，Spring MVC 会将它与 HTTP 请求映射起来。
+	- 这里 `@GetMapping("/api/user")` 将 `/api/user` 这个路径的 GET 请求与 `getUser` 方法关联起来。
+
 ### 数据库
-#### 数据库初始化数据
+#### 初始化数据库数据
 - 在Spring Boot中，有几种方式可以在启动时设置初始化数据，这对于需要默认配置、基础数据或测试数据的应用非常有用。以下是常用的几种方法：
 - 使用`data.sql`和`schema.sql`文件。Spring Boot支持在类路径下的`data.sql`和`schema.sql`文件中定义SQL语句。`schema.sql`用于定义数据库结构（如表和约束），`data.sql`用于插入初始化数据。Spring Boot会在应用启动时自动执行这些SQL文件，确保数据库结构和数据被初始化。
 - 使用`CommandLineRunner`和`ApplicationRunner`接口。这两个接口提供了在应用启动后执行自定义代码的机制，可以实现初始化数据的逻辑。定义一个实现`CommandLineRunner`或`ApplicationRunner`接口的Bean，在其`run`方法中编写初始化代码。Spring Boot启动时会自动执行该方法。
@@ -1574,6 +1638,35 @@ Spring MVC 的核心组件包括：
 - `@SessionAttributes`用于声明需要存储在HTTP会话（Session）中的模型属性。Spring会将指定的属性添加到Session中，适合跨请求保存用户会话数据。
 - `@ExceptionHandler`用于定义异常处理方法，捕获并处理控制器中的异常。可以在类或方法上使用，通常配合`@ControllerAdvice`全局异常处理器进行使用。
 - `@ControllerAdvice`用于定义全局控制器增强功能，通常用于全局异常处理、数据绑定配置等。带有`@ControllerAdvice`的类可以包含多种增强功能，应用于整个应用的控制器。
+
+### `@RestController`
+- **`@RestController`** 是用于暴露本地 API，处理来自客户端的请求。
+- **用途**：用于标记一个类为 Spring MVC 的控制器，处理 HTTP 请求并返回数据。
+- **典型用法**：定义本地的 RESTful API 服务。
+- **特性**：结合 `@RequestMapping`，可以指定 URL 路径和请求方法（GET、POST 等）。
+- **示例**：
+    
+    JAVA
+    
+    `@RestController @RequestMapping("/customer/info") public class CustomerInfoController {          @GetMapping("/{id}")     public Customer getCustomerById(@PathVariable Long id) {         // 处理逻辑         return customerService.findById(id);     } }`
+    
+- **功能**：接受 HTTP 请求、处理业务逻辑、返回 JSON/XML 等格式的数据。
+
+### `@FeignClient`
+- **`@FeignClient`** 是用于调用其他服务的远程 API，通常在微服务架构中用于服务间通信。
+- **用途**：用于创建一个声明式的 HTTP 客户端，通过接口与远程服务通信。
+- **典型用法**：调用远程 RESTful 服务（通常是微服务架构中的其他服务）。
+- **特性**：通过接口方法定义 HTTP 请求，Feign 自动实现这些接口，并发送请求。
+- **示例**：
+    
+    JAVA
+    
+    `@FeignClient(name = "customer-service", url = "http://customerservice") public interface CustomerClient {     @GetMapping("/customer/info/{id}")     Customer getCustomerById(@PathVariable("id") Long id); }`
+    
+- **功能**：简化 HTTP 请求的调用，易于集成负载均衡和熔断器等机制。
+
+
+
 ### Interceptor（拦截器）
 Spring MVC拦截器（Interceptor）用于在请求进入控制器之前、处理请求之后以及视图渲染之前，插入自定义逻辑。它类似于过滤器，但比过滤器更灵活和精确，能够针对控制器的执行环节提供切入点。拦截器通常用于实现日志记录、权限验证、性能监控等功能，从而提高应用的可扩展性和可维护性。
 Spring MVC拦截器通过实现`HandlerInterceptor`接口来定义，并通过重写接口中的三个方法实现不同阶段的逻辑：
@@ -1620,18 +1713,32 @@ public class MyServiceApplication {
 - 服务网关 Gateway
 
 ### Spring Cloud Eureka
-Spring Cloud Eureka 是一个基于 Netflix Eureka 的服务发现和注册机制，是 Spring Cloud 生态系统中的重要组件之一，用于帮助微服务架构下的应用实现服务发现和自动化注册，从而实现各个服务之间的动态连接。
+Spring Cloud Eureka 是一个基于 Netflix Eureka 的服务发现和注册机制，
+是 Spring Cloud 生态系统中的重要组件之一，
+
+用于帮助微服务架构下的应用实现服务发现和自动化注册，从而实现各个服务之间的动态连接。
+
 **Eureka 的基本概念**：
 - **Eureka Server**：作为服务注册中心，所有的服务（微服务实例）向它注册并定期上报自己的状态。Eureka Server 维护一个注册表，包含了所有注册的微服务实例信息。
 - **Eureka Client**：作为微服务实例，Eureka Client 启动时会向 Eureka Server 注册自己，并定期发送心跳来表明其可用性。同时，它也可以从 Eureka Server 获取其他服务的信息，以便调用其他服务的 API。
+
 **服务注册**：
-当一个微服务启动时，Eureka Client 会将自己的信息（如服务名、IP 地址、端口等）注册到 Eureka Server 中。Eureka Server 会将这些信息存储在注册表中，以供其他服务查询和使用。
+当一个微服务启动时，Eureka Client 会将自己的信息（如服务名、IP 地址、端口等）注册到 Eureka Server 中。
+Eureka Server 会将这些信息存储在注册表中，以供其他服务查询和使用。
+
 **服务发现**：
-当一个微服务需要调用另一个服务时，它不是直接访问硬编码的 URL 地址，而是通过 Eureka Server 获取目标服务的实例信息。这样，每个微服务都可以通过服务名查找到对应的服务地址，从而实现动态服务发现。
+当一个微服务需要调用另一个服务时，它不是直接访问硬编码的 URL 地址，而是通过 Eureka Server 获取目标服务的实例信息。
+这样，每个微服务都可以通过服务名查找到对应的服务地址，从而实现动态服务发现。
+
 **Eureka 的高可用性**：
-Eureka 支持集群模式，多个 Eureka Server 实例可以互相同步注册表信息，形成一个高可用的 Eureka 集群。这种设计确保即使部分服务器出现故障，服务注册和发现仍然可以正常运行。
+Eureka 支持集群模式，多个 Eureka Server 实例可以互相同步注册表信息，形成一个高可用的 Eureka 集群。
+这种设计确保即使部分服务器出现故障，服务注册和发现仍然可以正常运行。
+
 **客户端负载均衡**：
-Eureka 集成了 Spring Cloud Ribbon，可以在客户端进行负载均衡。当服务调用时，Eureka Client 会从 Eureka Server 获取目标服务的所有实例列表，并通过 Ribbon 选择一个合适的实例进行调用。这样可以减少单点故障的风险，同时提高系统的响应效率。
+Eureka 集成了 Spring Cloud Ribbon，可以在客户端进行负载均衡。
+当服务调用时，Eureka Client 会从 Eureka Server 获取目标服务的所有实例列表，并通过 Ribbon 选择一个合适的实例进行调用。
+这样可以减少单点故障的风险，同时提高系统的响应效率。
+
 **示例**：
 1. **Eureka Server 配置**：如何快速搭建一个 Eureka Server 作为服务注册中心
    在一个 Spring Boot 应用中配置 Eureka Server：
@@ -1677,6 +1784,7 @@ Eureka 集成了 Spring Cloud Ribbon，可以在客户端进行负载均衡。�
    ```
    通过这种方式，当微服务启动时，它会自动向 Eureka Server 注册，并可以通过服务名来发现其他微服务。
 这里有几个关于 Spring Cloud Eureka 的示例，每个示例展示了不同的功能和配置方式，帮助你更好地理解 Eureka 的应用和服务注册发现的工作原理。
+
 **示例 3：Eureka Client 使用 RestTemplate 进行服务间调用**
 这个示例展示了如何使用 `RestTemplate` 和 `Eureka Client` 从其他微服务获取数据。
 3. 配置一个 Eureka Client，并在 `application.yml` 中设置 Eureka 服务器地址。
@@ -1696,18 +1804,19 @@ Eureka 集成了 Spring Cloud Ribbon，可以在客户端进行负载均衡。�
      }
      ```
 5. 使用 `RestTemplate` 调用其他服务：
-     ```java
-     @RestController
-     public class ServiceController {
-         @Autowired
-         private RestTemplate restTemplate;
-         @GetMapping("/get-info")
-         public String getInfo() {
-             return restTemplate.getForObject("http://other-service/api/info", String.class);
-         }
-     }
-     ```
-  这里使用了 `@LoadBalanced` 注解来启用 Ribbon 负载均衡，使 RestTemplate 能够通过服务名调用其他注册在 Eureka 上的服务。
+ ```java
+ @RestController
+ public class ServiceController {
+	 @Autowired
+	 private RestTemplate restTemplate;
+	 @GetMapping("/get-info")
+	 public String getInfo() {
+		 return restTemplate.getForObject("http://other-service/api/info", String.class);
+	 }
+ }
+ ```
+这里使用了 `@LoadBalanced` 注解来启用 Ribbon 负载均衡，使 RestTemplate 能够通过服务名调用其他注册在 Eureka 上的服务。
+
 **示例 4：高可用 Eureka Server 集群**
 在微服务系统中，为了保证服务注册中心的高可用性，通常会搭建一个 Eureka 集群。
 - **步骤**：
@@ -1720,8 +1829,9 @@ Eureka 集成了 Spring Cloud Ribbon，可以在客户端进行负载均衡。�
          service-url:
            defaultZone: http://eureka2:8761/eureka/,http://eureka3:8761/eureka/
      ```
-  2. 其他 Eureka 实例的配置也相似，只需修改 `hostname` 和指向不同的实例地址。
-  3. 启动多个 Eureka Server 实例，这些实例会互相同步注册表信息，形成一个高可用的 Eureka 集群。
+其他 Eureka 实例的配置也相似，只需修改 `hostname` 和指向不同的实例地址。
+启动多个 Eureka Server 实例，这些实例会互相同步注册表信息，形成一个高可用的 Eureka 集群。
+
 **示例 5：Feign 客户端集成 Eureka**
 这个示例展示了如何结合 Feign 和 Eureka 实现服务间的轻量级 HTTP 调用。
 - **步骤**：
@@ -1747,6 +1857,7 @@ Eureka 集成了 Spring Cloud Ribbon，可以在客户端进行负载均衡。�
      }
      ```
 这些示例展示了 Spring Cloud Eureka 的基础和一些常见的应用方式。通过这些示例，你可以实现基本的服务注册、服务发现，以及服务间的动态调用，从而构建一个可靠的微服务架构系统。
+
 **总结**：
 Spring Cloud Eureka 的服务发现机制简化了微服务之间的通信。它不仅使服务能够自动发现彼此，还支持客户端负载均衡和高可用性，使得微服务架构下的系统更加弹性和可靠。通过 Eureka，微服务架构可以实现自动化和动态的服务注册与发现，减少系统配置和维护的复杂性。
 
@@ -1798,6 +1909,7 @@ Nacos的工作流程
 
 
 
+### 为什么不直接用spring cloud的注册中心，还去用Nacos呢？
 
 
 ### 资料
@@ -1873,6 +1985,13 @@ public class AuthenticationService {
 
 ## Spring Data
 - **Spring Data**模块提供了简化的数据访问层方法，支持多种数据库，如关系型数据库（JPA、JDBC）、非关系型数据库（MongoDB、Redis）等。通过Spring Data，开发者可以方便地创建CRUD操作，减少手动编写SQL的工作量。
+
+## 其它
+
+- JDK 动态代理的实现原理是基于接口的，要求目标类必须实现接口
+- CGLIB 是通过继承目标类来实现代理的，而`final`类是不能被继承的，因此 CGLIB**无法代理 final 类**
+- Spring 中的`@Autowired`注解，底层是通过反射机制来扫描和注入依赖对象的
+- Spring AOP 的实现方式包含 JDK 动态代理（针对实现接口的类）和 CGLIB（针对未实现接口的类），以此来实现方法拦截
 
 
 ## END

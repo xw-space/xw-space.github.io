@@ -21,6 +21,63 @@ Mac 的用户名千万 一定不要更改！！！ 改了会破坏账户 需要�
 
 可以 新建一个管理员 (点左边的链接按住 control 键 可以打开)
 
+
+
+
+用以下命令查看当前 Python3 的路径：
+```bash
+which python3
+```
+输出可能是：
+```
+/usr/local/bin/python3
+```
+编辑 shell 的启动文件，将python的安装路径添加到系统PATH中：
+
+- 如果你用的是 `zsh`（默认的 macOS shell）：
+```bash
+nano ~/.zshrc
+```
+- 如果你用的是 `bash`：
+```bash
+nano ~/.bash_profile
+```
+- 然后在文件末尾加上这一行：
+```bash
+export PATH="/usr/local/bin:$PATH"
+```
+保存后关闭编辑器，然后运行下面命令，刷新配置：
+```bash
+source ~/.zshrc     # zsh 用户
+# 或
+source ~/.bash_profile  # bash 用户
+```
+在终端输入下面命令测试是否生效，如果显示版本号，说明已经生效。：
+```bash
+python3 --version
+```
+如果你希望用 `python` 直接指代 `python3`，可以在 `~/.zshrc` 或 `~/.bash_profile` 添加：
+```bash
+alias python=python3
+```
+然后执行：
+```bash
+source ~/.zshrc    # 或 ~/.bash_profile
+```
+这样以后只需要敲即可：
+```bash
+python my_script.py
+```
+
+运行程序可能还得这样：
+```
+python -m pip install xxx
+python -m pip --version
+python -m uvicorn myapi:app --reload
+```
+
+
+
 触摸板 手势
 
 Mac 卸载不要的软件

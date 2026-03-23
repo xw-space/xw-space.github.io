@@ -64,6 +64,8 @@ JAR 文件
 ## IDEA
 
 ### **介绍**
+IDEA官方文档 https://www.jetbrains.com.cn/help/idea/getting-started.html
+
 【intellij idea】Project Structure 讲解 - hellozay - 博客园： https://www.cnblogs.com/zadomn0920/p/6196962.html
 IntelliJ IDEA（七） ：Project Structure - JaJian - 博客园： https://www.cnblogs.com/jajian/p/8081640.html
 IntelliJ IDEA 学习笔记 - 常见图标介绍-CSDN博客： https://blog.csdn.net/cgl125167016/article/details/78671232
@@ -878,6 +880,19 @@ public class Main {
 - 编译时多态是通过方法的重载在编译阶段确定调用的方法。
 - 运行时多态是通过方法的重写在程序运行时确定调用的方法，实现动态绑定。
 
+#### 重载和重写
+
+| 区别维度  | 重载（overloading）                    | 重写（overriding）                             |
+| ----- | ---------------------------------- | ------------------------------------------ |
+| 定义    | 同一作用域内，**同名函数**的参数列表（参数个数、类型、顺序）不同 | 子类对父类中 ** 同名、同参数列表、同返回值（或协变返回）** 的虚函数，重新实现 |
+| 作用域   | 同一类（或同一作用域）                        | 父类与子类之间                                    |
+| 函数关系  | 多个独立的函数（只是名字相同）                    | 子类函数覆盖父类的虚函数                               |
+| 关键字要求 | 无（不需要`virtual`）                    | 父类函数需加`virtual`，子类函数可加`override`（C++11 后）  |
+| 调用规则  | 编译期根据参数列表匹配函数（静态多态）                | 运行期根据对象实际类型匹配函数（动态多态）                      |
+
+
+
+
 ### 接口
 （Interface）
 
@@ -1077,6 +1092,14 @@ public class OrderServiceTest {
 }
 ```
 
+可以设置默认接口方法：
+```java
+interface Flyable{
+	default void flyo ()
+		System.out.print("Flyable");
+	}
+}
+```
 
 
 

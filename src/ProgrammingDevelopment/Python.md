@@ -1231,6 +1231,22 @@ asyncio.run(main())
 ## Appium——手机自动化
 【Appium + Python 手机自动化】 https://www.bilibili.com/video/BV1Fj42197Bc/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
 
+
+## copy
+
+
+```python
+import copy
+a = [[1, 2], [3, 4]]
+b = copy.copy(a)  # 浅拷贝：只拷贝外层列表，内层子列表还是引用
+c = copy.deepcopy(a)  # 深拷贝：所有层级的列表都被独立拷贝
+
+a[0].append(5)  # 修改a的第一个子列表
+a.append([6, 7])  # 给a添加一个新的子列表
+
+print(len(b[0]), len(c[0]), len(b))# 3 2 2
+```
+
 ## Django
 
 教程：

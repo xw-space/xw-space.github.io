@@ -32,8 +32,25 @@ GO的优势：
 容器：Docker、Kubernetes
 微服务：etcd、Prometheus
 DevOps 工具
-## 知识点
-### 核心语法与变量声明
+
+## 使用
+- Go Playground - The Go Programming Language，简单快捷运行： https://go.dev/play/
+
+因为网络问题无法下载Go 的模块：
+- 使用国内代理镜像
+```bash
+go env -w GOPROXY=https://goproxy.cn,direct
+go env -w GOSUMDB=sum.golang.org
+```
+- 临时直连（走 GitHub，不用 Google 代理）
+```bash
+go env -w GOPROXY=direct
+go env -w GOSUMDB=sum.golang.org
+```
+
+
+
+## 变量声明
 
 Go是静态强类型语言，但语法倾向于简洁。
 
@@ -51,7 +68,8 @@ Go是静态强类型语言，但语法倾向于简洁。
 
 
 
-### 控制流：极简主义
+## 控制流
+极简主义
 
 Go只有很少的关键字，砍掉了许多传统语言的语法糖。
 
@@ -73,7 +91,7 @@ Go只有很少的关键字，砍掉了许多传统语言的语法糖。
 
 
 
-### 数据结构
+## 数据结构
 
 * **数组 (Array) vs 切片 (Slice)**
 * **Array：** 值类型，长度固定。`[5]int`。在Go中很少直接使用。
@@ -92,13 +110,13 @@ Go只有很少的关键字，砍掉了许多传统语言的语法糖。
 
 
 
-### 指针 (Pointers)
+## 指针 (Pointers)
 
 * **回归C语言：** Go有指针 `*T` 和取地址 `&`。
 * **区别：** Go的指针主要用于**共享内存**（避免值拷贝），但**不支持指针运算**（不能 `p++`），所以是安全的。
 * **方法接收者：** 定义对象方法时，用指针接收者 `(p *User)` 可以修改对象状态，用值接收者 `(u User)` 则无法修改。
 
-### 函数
+## 函数
 
 * **多返回值：** 类似Python，Go函数可以返回多个值。
 ```go
@@ -111,7 +129,8 @@ func swap(x, y string) (string, string) {
 
 * **一等公民：** 函数可以赋值给变量，可以作为参数传递。
 
-### 面向对象 (OOP) - Go的独特之处
+## 面向对象 (OOP) 
+- Go的独特之处
 
 Go没有 `class`，没有 `extends`。
 
@@ -139,7 +158,7 @@ func (u *User) SayHello() { ..}
 
 
 
-### 错误处理 (Error Handling)
+## 错误处理 (Error Handling)
 
 * **没有 Exception：** Go没有 `try-catch`。
 * **显式检查：** 错误被视为一种值，通常作为函数的最后一个返回值。
@@ -154,7 +173,8 @@ if err != nil {
 
 * 这经常被吐槽代码冗长，但能保证逻辑清晰，强制开发者处理每个错误。
 
-### 并发 (Concurrency) - Go的杀手锏
+## 并发 (Concurrency) 
+- Go的杀手锏
 
 这是Go最强大的地方，也是区别于Java/Python线程模型的关键。
 
@@ -171,7 +191,7 @@ if err != nil {
 
 
 
-### 资源管理 (Defer)
+## 资源管理 (Defer)
 
 * 类似Java的 `finally` 或 Python的 context manager。
 * `defer` 后的函数会在当前函数**返回前**执行。
@@ -185,30 +205,13 @@ defer f.Close() // 即使下面代码panic，close也会执行
 
 
 
-### 工具链
+## 工具链
 
 Go不仅是语言，还自带了一套强大的现代化工具链：
 
 * `go mod`：依赖管理（不需要Maven/Gradle/pip）。
 * `go fmt`：强制代码格式化（彻底终结大括号换行之争）。
 * `go test`：内置单元测试框架。
-## 使用
-- Go Playground - The Go Programming Language，简单快捷运行： https://go.dev/play/
-
-因为网络问题无法下载Go 的模块：
-- 使用国内代理镜像
-```bash
-go env -w GOPROXY=https://goproxy.cn,direct
-go env -w GOSUMDB=sum.golang.org
-```
-- 临时直连（走 GitHub，不用 Google 代理）
-```bash
-go env -w GOPROXY=direct
-go env -w GOSUMDB=sum.golang.org
-```
-
-
-
 ## go.mod
 作用：定义当前项目是一个 Go 模块（module path）。声明依赖（直接/间接）及其**期望版本**。记录 Go 版本、工具链、替换规则等，用于**可复现构建**。
 
