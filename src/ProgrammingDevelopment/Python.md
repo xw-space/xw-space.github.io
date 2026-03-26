@@ -159,12 +159,19 @@ for idx, (key, value) in enumerate(my_dict.items()):
 
 ## 方法3. 将字典转换为列表，并获取前两个键值对
 print(list(my_dict.items())[:2])  ## 输出: [('a', 1), ('b', 2)]
+
+
+
+# 字典推导式
+data = {'a': 1, 'b': 2, 'c': 3}
+result = {v: k for k, v in data.items() if v > 1}
+print(len(result)) # 2
 ```
 
 
-			   
-			   
-			   ## filter()
+
+
+## filter()
 `filter(function, iterable)`：
 `function`是一个返回布尔值的函数，用于判断每个元素是否满足某种条件。
 适用于需要**根据某种条件筛选元素**的场景.
