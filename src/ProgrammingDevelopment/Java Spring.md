@@ -661,6 +661,21 @@ public class MyAspect {
 **资料**：
 史上最完整的AOP底层原理 https://www.bilibili.com/video/BV1SY41117zq
 
+
+
+### 底层代理机制
+Spring AOP 的底层代理机制（JDK 动态代理与 CGLIB 的区别和选用策略
+- **JDK 动态代理：** 基于反射机制。要求目标类必须实现至少一个接口。AOP 在运行期在内存中动态生成一个实现了与目标类相同接口的代理类，在代理类的方法中调用 `InvocationHandler` 的 `invoke` 方法，从而织入切面逻辑。
+- **CGLIB 代理：** 基于 ASM 字节码生成技术。不要求目标类实现接口。它在运行期在内存中动态生成目标类的一个子类，并重写目标类的方法，在重写的方法中织入切面逻辑。
+- **选用策略：** Spring Boot 2.x 之后，AOP 默认强制优先使用 CGLIB 代理（`proxyTargetClass=true`），以避免因为开发者没有面向接口编程而导致代理失败的问题。
+
+### 嵌套调用
+如果同一个类中有两个方法嵌套调用，内部方法的 AOP 切面会生效吗？为什么？
+**嵌套调用的切面失效问题：**
+- **现象：** 同一个类中，方法 A 调用方法 B，如果 B 上加了 AOP 注解，内部调用时 B 的切面**不会生效**。
+- **原因：** 内部嵌套调用是对象内部通过 `this.B()` 进行的直接调用，没有经过 Spring 容器生成的代理对象，自然无法触发代理对象中的增强逻辑。
+- **解决：** 可以通过 `AopContext.currentProxy()` 获取当前的代理对象再调用 B 方法；或者将方法 B 抽离到另一个 Service 类中；或者在当前类中自己注入自己（Spring 支持循环依赖即可）。
+
 ### 配置
 **统一的应用配置**：
 Spring 提供了统一的 **应用配置**（如 `application.properties` 或 `application.yml`），可以集中管理应用的配置。
@@ -1958,6 +1973,28 @@ public class AuthenticationService {
   }
 }
 ```
+
+
+
+## Spring Cloud Gateway
+### Reactor 模型
+
+底层的 Reactor 模型是如何提升网关吞吐量的？
+- 底层基于 Netty 框架，采用非阻塞 I/O（NIO）和 Reactor 响应式编程模型。
+- **BossGroup / WorkerGroup 机制：** 少量的 Boss 线程（EventLoop）负责接收客户端的连接请求，建立连接后将其注册到 Worker 线程的 Selector 上。
+- **非阻塞多路复用：** Worker 线程负责处理已就绪的 I/O 事件（读写）。线程不需要阻塞等待 I/O 操作完成，而是当网关向后端微服务发起 HTTP 请求时，当前线程被释放去处理其他请求。后端微服务响应返回后，触发回调事件，再由 EventLoop 线程继续处理并返回给客户端。这种设计用极少的线程支撑了海量的并发连接，极大提升了吞吐量。
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Spring WebFlux
 **Spring WebFlux（响应式编程** 是 Spring 5 引入的响应式编程框架，主要用于处理异步的、非阻塞的 HTTP 请求。它适用于高并发场景，能够处理大量并发请求而不阻塞线程。
