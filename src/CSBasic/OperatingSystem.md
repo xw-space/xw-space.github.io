@@ -13,6 +13,7 @@ tag:
 
 <!-- more -->
 # 操作系统
+## START
 ## 操作系统的定义、功能和分类
 
 操作系统（Operating System, OS）是计算机系统中的核心软件，

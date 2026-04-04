@@ -1,12 +1,17 @@
 ---
 icon: circle-info
 cover: /assets/images/cover3.jpg
+date: 2025-01-01
 ---
 
 个人介绍
 <!-- more -->
 
-# 介绍页
+# 个人介绍
+
+## 个人介绍
+
+一个普通的学校
 
 ## 博客初衷以及内容说明
 我为什么要弄这么一个播客
