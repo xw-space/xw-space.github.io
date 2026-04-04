@@ -12,6 +12,7 @@ tags:
 <!-- more -->
 
 # Java并发
+java.util.concurrent，JUC
 
 ## Java 并发
 
@@ -272,82 +273,9 @@ notify()和 notifyAll()
 	- 打断阻塞的线程（ sleep，wait，join ）的线程，线程会抛出InterruptedException异常
 	- 打断正常的线程，可以根据打断状态来标记是否退出线程
 
-## Java内存模型
-
-### 介绍
-- JMM把内存分为两块，一块是私有线程的工作区域（工作内存），一块是所有线程的共享区域（主内存）
-- **主内存与工作内存：** 线程对变量的操作必须在工作内存中进行，不能直接读写主内存。
-* **主内存**：是 Java 虚拟机（JVM）中所有线程共享的内存区域，存储所有变量的值。
-* **工作内存**：每个线程有自己的工作内存，线程的操作是通过工作内存进行的。工作内存保存了该线程使用的变量的副本。
-
-- 线程跟线程之间是相互隔离，线程跟线程交互需要通过主内存
-- Java内存模型(Java Memory Model，JMM)，定义了共享内存中多线程程序读写操作的行为规范，通过这些规则来规范对内存的读写操作从而保证指令的正确性
-Java 内存模型（Java Memory Model，简称 JMM）是 Java 并发编程的核心部分之一，它定义了 **线程如何共享内存** 和 **并发访问时如何同步**。
-JMM 是定义程序中各种变量的访问规则，围绕并发过程中的**可见性**、**原子性**和**有序性**展开。
-JMM 的目的是保证在多线程环境下，即使不同线程对共享变量的读写，程序也能按照正确的顺序执行。
-> **JMM 的关键问题** 就是：如何保证 **线程间对主内存的可见性** 和 **指令的有序性**。
-
-
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251224174138.png)
-
-
-### JMM 主要特性
-**可见性（Visibility）**：指当一个线程修改了某个变量的值，其他线程能立刻看到该变量的最新值。Java 内存模型通过以下机制来保证可见性：
-- **主内存和工作内存之间的同步**：每个线程对共享变量的修改都会刷新到主内存，其他线程也可以读取到这个修改。
-- **`volatile` 关键字**：声明变量为 `volatile` 后，JMM 保证对该变量的写入操作 **立即更新主内存**，且所有线程对该变量的读取都会从主内存中读取。
-
-```java
-// 使用 `volatile` 可以确保 `flag` 的修改对所有线程可见。
-private volatile boolean flag = false;
-```
-
-
-**原子性（Atomicity）**：指某个操作要么全部执行完毕，要么完全不执行。在 Java 中，**基本数据类型的读写**（如 `int`, `boolean`）是原子操作。对于 **复合操作**（如 `i++`，`x = y + z`），它们不是原子操作，会被拆成多个步骤，可能会受到线程的干扰。
-
-解决原子性问题：
-* 使用 `synchronized` 或 `Lock` 来保证 **互斥**，即同一时刻只能有一个线程执行相关代码。
-* 使用 `AtomicInteger` 等原子类来进行 **无锁的原子操作**。
-
-```java
-AtomicInteger count = new AtomicInteger(0);
-count.incrementAndGet();  // 原子操作，线程安全
-```
-
-
-**有序性（Ordering）**：指程序中语句执行的顺序是否与代码中写的顺序一致。在 Java 中，由于编译器优化、JIT 编译、CPU 优化等原因，指令的执行顺序可能会发生变化。
-
-解决有序性问题：
-* 使用 `synchronized` 保证方法或代码块的 **执行顺序**。
-* 使用 `volatile` 变量确保对该变量的写操作在多个线程之间的有序性。
-
-```java
-// `volatile` 保证了 **写操作** 和 **读操作** 的顺序性。
-private volatile boolean flag = false;
-```
-
-
-### **Happens-Before**
-判断数据是否存在竞争、线程是否安全的主要依据。
-
-是 JMM 的核心，保证了多线程之间的操作顺序。
-
-Happens-Before（发生在之前）是 JMM 中最重要的原则之一，它用来描述两个操作的顺序关系。两个操作如果满足 **Happens-Before** 关系，那么第一个操作的结果对第二个操作是可见的。常见的 Happens-Before 关系有：
-
-- **程序顺序规则**：一个线程内，前面的操作总是 Happens-Before 后面的操作。
-- **锁定规则**：对一个 `lock` 的解锁操作 Happens-Before 同一个锁的加锁操作。
-- **volatile 变量规则**：对 `volatile` 变量的写操作 Happens-Before 对同一个 `volatile` 变量的读操作。
-
-```java
-private volatile boolean flag = false;
-
-flag = true;  // 写操作
-if (flag) {   // 读操作
-    // flag 的修改对其他线程可见
-}
-```
-
-
 ## 线程安全与同步
+
+
 ### 概念
 
 **线程安全** 是指一个类在多线程环境中能正常工作，无论多个线程如何 **并发地访问** 和 **修改** 对象的状态，都能保证对象处于一致的状态，并且不会出现异常或数据错误。
@@ -618,6 +546,20 @@ volatile
 
 ### CAS
 （Compare And Swap），比较再交换
+
+说说你对CAS机制的理解，它存在什么缺陷（如ABA问题）？如何解决？
+
+
+CAS（Compare And Swap）是一种基于硬件指令实现的乐观锁机制。它包含三个操作数：内存位置、预期原值和新值。执行时，仅当内存位置的值等于预期原值时，才会将其更新为新值，整个过程具备原子性。
+
+
+**缺陷**：
+- **ABA问题**：若变量值经历了A -> B -> A的过程，CAS会误判为值未被修改。
+- **自旋开销大**：在高并发下，若CAS长时间尝试失败，会产生极大的CPU开销。
+- **单变量限制**：只能保证一个共享变量的原子操作。**解决ABA问题**：通过引入版本号或时间戳机制，每次修改变量时将版本号加1（即A1 -> B2 -> A3）。Java中可使用 `AtomicStampedReference` 或 `AtomicMarkableReference` 来解决。
+
+
+
 是一种无锁并发控制技术，常用于优化性能。
 
 一种乐观锁的思想，在无锁情况下保证线程操作共享数据的原子性。
@@ -690,6 +632,16 @@ protected final boolean compareAndSetState(int expect, int update) {
 
 ### AQS
 Abstract Queued Synchronizer，抽象队列同步器。
+
+AQS的底层数据结构和核心工作机制是什么？它是如何支持独占和共享模式的？
+**数据结构**：AQS（AbstractQueuedSynchronizer）核心由一个被 `volatile` 修饰的 `int state`（代表同步状态）和一个FIFO的双向链表（变种CLH队列，用于存储排队的线程节点）组成。
+
+**工作机制**：线程尝试通过CAS修改 `state` 来获取锁。若获取成功，则直接执行；若失败，AQS会将该线程封装成Node节点加入队列尾部，并通过 `LockSupport.park()` 阻塞线程。当锁释放时，头节点会唤醒其后继节点。
+
+**模式支持**：AQS采用模板方法设计模式。
+**独占模式**（如ReentrantLock）：子类实现 `tryAcquire` 和 `tryRelease`，保证同一时刻只有一个线程能成功修改 `state` 并持有锁。
+**共享模式**（如Semaphore、CountDownLatch）：子类实现 `tryAcquireShared` 和 `tryReleaseShared`，允许多个线程同时修改 `state` 并获取资源，且唤醒机制具有传播性（一个节点获取后会继续唤醒后续的共享节点）。
+
 - 是多线程中的队列同步器。
 - 是一种锁机制，
 **AQS（AbstractQueuedSynchronizer）** 是 Java 并发包中的一个抽象类，
@@ -1006,7 +958,8 @@ Java中的synchronized有偏向锁、轻量级锁、重量级锁三种形式，�
 
 * `Synchronized` 锁升级过程： 无锁 -> 偏向锁（记录线程ID） -> 轻量级锁（CAS自旋） -> 重量级锁（操作系统 Mutex Lock）。
 
-
+请详细描述Synchronized的锁升级过程（偏向锁、轻量级锁、重量级锁）。
+**锁升级过程**（JDK 1.6+引入）：1. **无锁状态**：对象刚创建。2. **偏向锁**：当首个线程访问同步块时，利用CAS在对象头（Mark Word）记录线程ID，后续该线程进入无需同步。假设锁绝大部分时间只有一个线程在使用。3. **轻量级锁**：当出现另一个线程竞争锁时，偏向锁撤销，升级为轻量级锁。未获取锁的线程通过自旋（循环CAS操作）尝试获取锁，避免直接挂起进入内核态。4. **重量级锁**：若自旋超过一定次数（或自适应自旋失败），或者有第三个线程加入竞争，轻量级锁会膨胀为重量级锁。此时底层调用操作系统的Mutex Lock，未获取锁的线程将被真正挂起阻塞。锁只能升级，不能降级。
 
 
 ### `Lock`
@@ -1149,6 +1102,10 @@ ReentrantLock的实现原理
 
 ### sychronzied和reentranlock对比
 的区别
+Synchronized和ReentrantLock有什么区别？
+
+`Synchronized` 是JVM层面的隐式锁关键字，自动加解锁，非公平锁，不可中断；`ReentrantLock` 是JUC包下的API层面的锁，需手动 `lock()` 和 `unlock()`，支持公平/非公平锁，支持可响应中断和超时获取，且可绑定多个Condition条件变量。
+
 
 `Synchronized` 和 `ReentrantLock` 都是 Java 中用于实现线程同步的工具，它们的功能类似，都用于控制多线程访问共享资源时的同步性。然而，它们有一些关键的区别：
 
@@ -1200,250 +1157,6 @@ ReentrantLock的实现原理
 | 性能   | 优化后表现良好                              | 在高竞争环境下通常更高效                 |
 
 选择使用 `Synchronized` 还是 `ReentrantLock` 取决于具体的需求。如果需要较为简单的同步控制，`synchronized` 足够用。如果需要更精细的锁控制、更高效的资源利用、或者支持中断和条件变量等高级功能，那么 `ReentrantLock` 更加合适。
-
-
-### **`volatile`**
-**volatile 关键字：** 
-- 是一种轻量级的同步机制
-- 修饰要共享的变量，比如类的成员变量、类的静态成员变量
-- 保证可见性：防止编译器等优化发生，每次读取前必须从主内存刷新，写入后必须同步回主内存，能够让一个线程对共享变量的修改对另一个线程可见
-- 保证有序性：变量在读、写共享变量时加入不同的内存屏障 Memory Barrier，阻止其他读写操作越过屏障，从而达到阻止指令重排序的效果
-- 不保证复合操作的原子性：对于复合操作仍然需要使用其他同步机制，如 `synchronized` 或 `Atomic`。
-
-volatile使用技巧：
-- 写变量让volatile修饰的变量的在代码最后位置
-- 读变量让volatile修饰的变量的在代码最开始位置
-
-使用示例：
-```java
-private volatile boolean flag = false;  // 保证所有线程对 flag 变量的修改立即可见
-```
-
-
-
-
-
-
-### volatile关键字
-#### 基本介绍
-在多线程环境下，每个线程都会有自己的工作内存（如 CPU 寄存器、缓存等），线程对变量的修改并不一定会立刻反映到其他线程的工作内存中，这就导致了线程之间的**不一致性**。
-
-**`volatile` 的作用就是解决这个问题：** 
-它确保了对变量的写操作能立即更新到主内存，**其他线程能看到最新的值**。
-
-`volatile` 是一种轻量级的同步机制，它的作用主要有两个：**可见性** 和 **有序性**
-`volatile` 并没有解决线程安全问题，它仅仅保证了变量在多线程间的**可见性**。
-
-一个线程修改了 `volatile` 变量，其他线程可以立即看到这个改动。
-
-第二，禁止指令重排序。
-Java 内存模型（JMM）允许编译器、处理器重排指令，以提高程序执行效率。这样虽然代码是按顺序写的，但执行时可能会出现 **指令重排**，导致程序行为不可预期。
-它能保证写入操作发生在读操作之前，维护操作顺序。
-
-**`volatile`** 可以 **防止指令重排**，尤其是在赋值操作和读取操作之间的重排序。
-
-
-
-
-#### 局限性
-
-`volatile` 的
-**不保证原子性**
-`volatile` 仅保证变量的**可见性**，并不能保证操作的**原子性**。例如对于复合操作（如 `i++`、`x = y + z`），`volatile` 无法保证操作是原子性的。
-需要注意的是，`volatile` 不能保证原子性，例如 `count++` 就不是线程安全的。
-```java
-private volatile int count = 0;  
-public void increment() {     
-	count++;  // 不是原子操作 
-}
-```
-- `count++` 实际上分为 **读取、增加、写入** 3步，这3步操作并不是原子性的，因此如果多个线程同时执行该操作，可能会发生竞争条件（race condition），导致结果错误。
-- 为了确保 **原子性**，可以使用 `synchronized` 或 `Lock` 来同步代码块，或者使用 Java 提供的 **原子类**（如 `AtomicInteger`）。
-
-
-**不适用于所有场景**
-- `volatile` 适合用于标志位、状态变量等情况。它非常适合用于 **单一变量的控制**，但是对于复杂操作的协调，它并不是最好的选择。
-- 对于需要保证 **多个线程访问共享资源时的完整性**（如计数、累加等），需要使用 **锁** 或 **原子操作**（如 `AtomicInteger`）。
-
-#### 工作原理
-
-“可见性”示例：
-```java
-private volatile boolean flag = false;
-
-public void method() {
-    while (!flag) {
-        // 其他操作
-    }
-}
-
-```
-- 在上面的例子中，当 `flag` 变量被某个线程修改为 `true` 后，其他线程能立即看到该变化。
-- 如果没有 `volatile`，有可能 `flag` 变量的修改在主内存中未同步，导致其他线程一直认为它是 `false`，导致死循环。
-
-“有序性”示例
-```java
-private volatile int x = 0;
-private volatile int y = 0;
-
-public void write() {
-    x = 1;  // 写操作
-    y = 2;  // 写操作
-}
-
-public void read() {
-    if (y == 2) {  // 读操作
-        System.out.println(x);  // 读操作
-    }
-}
-
-```
-- 在没有 `volatile` 的情况下，编译器可能会对 `x` 和 `y` 的赋值进行重排序，可能先读取到 `x = 1` 后，再读取到 `y = 2`，导致不符合预期的行为。
-- 但有了 `volatile` 后，**JVM 保证 `x = 1` 的赋值先于 `y = 2`**，并且在读取时也确保变量的可见性和顺序。
-
-
-
-**保证可见性**：
-问题分析：主要是因为在JVM虚拟机中有一个JIT（即时编译器）给代码做了优化。
-```Java
-while (!stop) {
-    i++;
-}
-// 优化👇↓
-while (true) {
-    i++;
-}
-```
-
-解决方案一：在程序运行的时候加入vm参数-Xint表示禁用即时编译器，不推荐，得不偿失（其他程序还要使用）
-解决方案二：在修饰stop变量的时候加上volatile,当前告诉 jit，不要对 volatile 修饰的变量做优化
-
-
-
-**保证有序性**：
-
-`volatile` 工作的本质是通过内存屏障（memory barrier）来确保 **主内存和工作内存** 之间的同步。
-内存屏障的作用是防止指令重排，并且强制刷新缓存中的数据。
-
-
-- **写入屏障（Store Barrier）**：写入屏障强制将工作内存中的值刷新到主内存，确保其他线程可以读取到最新的值。
-- **读取屏障（Load Barrier）**：读取屏障确保从主内存读取最新的值，避免缓存中的旧数据。
-`volatile` 通过这两个屏障来保证变量在不同线程间的正确同步。
-
-```Java
-int x;
-int y;
-
-@Actor
-public void actor1() {
-    x = 1;
-    y = 1;
-}
-
-@Actor
-public void actor2(II_Result r) {
-    r.r1 = y;
-    r.r2 = x;
-}
-```
-（注解@Actor保证方法内的代码在同一个线程下执行）
-
-情况一：先执行actor2获取结果→0,0
-情况二：先执行actor1中的第一行代码，然后执行actor2获取结果→0,1
-情况三：先执行actor1中所有代码，然后执行actor2获取结果→1,1
-情况四：先执行actor1中第二行代码，然后执行actor2获取结果（已经发生了指令重排序）→1,0
-
-在变量上添加volatile，禁止指令重排序，则可以解决问题
-```Java
-int x;
-volatile int y;
-
-@Actor
-public void actor1() {
-    x = 1;
-    y = 1;
-}
-
-@Actor
-public void actor2(II_Result r) {
-    r.r1 = y;
-    r.r2 = x;
-}
-```
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251224174726.png)
-
-```Java
-volatile int x;
-int y;
-
-@Actor
-public void actor1() {
-    x = 1;
-    y = 1;
-}
-
-@Actor
-public void actor2(II_Result r) {
-    r.r1 = y;
-    r.r2 = x;
-}
-
-```
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251224174755.png)
-
-
-
-#### **使用场景**
-
-**基本使用案例**：用 volatile 修饰共享变量
-```java
-
-static boolean stop = false;
-public static void main(String[] args) {
-    new Thread(() -> {
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        stop = true;
-        System.out.println(Thread.currentThread().getName()+"：modify stop to true...");
-    },"t1").start();
-
-    new Thread(() -> {
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println(Thread.currentThread().getName()+"："+stop);
-    },"t2").start();
-
-    new Thread(() -> {
-        int i = 0;
-        while (!stop) {
-            i++;
-        }
-        System.out.println("stopped... c:"+ i);
-    },"t3").start();
-}
-
-```
-
-**双重检查锁定（Double-Checked Locking）**
-`volatile` 在双重检查锁定模式下用于保证 **延迟初始化的线程安全**。常见于懒汉式单例模式的实现中。
-- 通过 `volatile` 确保了 **instance** 的可见性，防止线程重排。
-`public class Singleton {     private static volatile Singleton instance;      private Singleton() {}      public static Singleton getInstance() {         if (instance == null) {             synchronized (Singleton.class) {                 if (instance == null) {                     instance = new Singleton();                 }             }         }         return instance;     } }`
-
-    
-
-
-**标志位**
-通常用于控制线程之间的通信或状态标志，确保一个线程对标志的更新能及时反映到其他线程。
-- 这里 `flag` 使用 `volatile` 保证了更新后的状态能够立即被其他线程看到。
-`private volatile boolean flag = false;  public void setFlag() {     flag = true; }  public void checkFlag() {     while (!flag) {         // 做一些操作     } }`
-
-
 
 
 ### java的死锁
@@ -1524,58 +1237,79 @@ t2.start();
 
 ## ThreadLocal
 ### 介绍
-`ThreadLocal` 是 Java 提供的一种用于 **线程隔离的变量存储机制**。它的作用是让每个线程都拥有自己的变量副本，互不影响。
-`ThreadLocal`是Java中的一个用于实现线程本地存储的类，它为每个线程提供独立的变量副本，使变量在不同线程之间相互隔离。
-ThreadLocal是多线程中对于解决线程安全的一个操作类，它会为每个线程都分配一个独立的线程副本从而解决了变量并发访问冲突的问题。ThreadLocal 同时实现了线程内的资源共享
-ThreadLocal本质来说就是一个线程内部存储类，从而让多个线程只操作自己内部的值，从而实现线程数据隔离
+ThreadLocal的底层数据结构是什么？
+为什么容易导致内存泄露？
+实际开发中的最佳实践是什么？
+
+`ThreadLocal` 
+- ThreadLocal 可以实现【资源对象】的线程隔离，让每个线程各用各的【资源对象】，避免争用引发的线程安全问题
+- ThreadLocal 同时实现了线程内的资源共享
+本质来说就是一个线程内部存储类
+
+是多线程中对于解决线程安全的一个操作类，
+是 Java 提供的一种用于 **线程隔离的变量存储机制**。
+是Java中的一个用于实现线程本地存储的类
 
 
-`ThreadLocal`非常适合用于在多线程环境中共享的变量且不希望在线程之间相互干扰的场景，例如在每个线程中存储用户会话信息、事务上下文、数据库连接等。
-使用场景包括：
-* 每个线程需要独立保存用户信息、数据库连接、日期格式化器等。
-* 避免使用全局变量或同步锁带来的线程安全问题。
+解决变量并发访问冲突的问题
+为每个线程都生成一个独立的线程副本
+让多个线程只操作自己内部的值，从而实现变量在不同线程之间的数据隔离
 
 
-工作机制是：每个线程内部维护一个 ThreadLocalMap，`ThreadLocal.set()` 和 `get()` 实际是操作这个 map，从而实现线程私有变量。
+实现了线程内的资源共享
+
+
+
+
+**工作原理**：
+
+**数据结构**：每个 `Thread` 内部都维护了一个 `ThreadLocalMap`。该Map的Entry中，Key是 `ThreadLocal` 对象的弱引用（WeakReference），Value是实际存储的线程局部变量，为强引用。
+
+工作机制是：
+每个线程内部维护一个 ThreadLocalMap，
+`ThreadLocal.set()` 和 `get()` 实际是操作这个 map，从而实现线程私有变量。
 `ThreadLocal`的核心机制是为每个线程创建一个独立的变量副本，这个变量仅对当前线程可见。Java中的`ThreadLocal`变量在每个线程中都会有一个独立的值，确保了变量的线程安全性而无需使用锁来同步访问。
 
-**主要方法和工作原理**：
-`set(T value)`方法用于将变量的值存储到当前线程的`ThreadLocal`副本中。每个线程对`ThreadLocal`调用`set()`方法时都会在自己的线程上下文中存储独立的值。
-`get()`方法用于获取当前线程中`ThreadLocal`变量的值。如果当前线程没有设置过该值，`get()`方法会返回默认值（通过重写`initialValue()`方法来设置），或者返回`null`。
-`initialValue()`方法用于设置`ThreadLocal`变量的初始值。默认实现返回`null`，可以通过重写此方法为每个线程设置初始值。调用`get()`时，如果当前线程的`ThreadLocal`变量未设置值，则自动调用`initialValue()`初始化。
-`remove()`方法用于删除当前线程的`ThreadLocal`变量，以防止内存泄漏。当线程执行完任务后，建议手动调用`remove()`来清理`ThreadLocal`变量，尤其是在使用线程池时。
-在每个线程内部，`ThreadLocal`变量的副本存储在一个`ThreadLocalMap`结构中，该结构是每个线程特有的。`ThreadLocalMap`将`ThreadLocal`实例作为键，线程局部变量的值作为值，保证了每个线程拥有自己的变量副本，这种隔离特性避免了并发访问冲突。
+- 每个线程内有一个 ThreadLocalMap 类型的成员变量，用来存储资源对象
+	- a)调用 set 方法，就是以 ThreadLocal 自己作为 key，资源对象作为 value，放入当前线
+	- 程的 ThreadLocalMap 集合中
+	- b)调用 get 方法，就是以 ThreadLocal 自己作为 key，到当前线程中查找关联的资源值
+	- c)调用 remove 方法，就是以 ThreadLocal 自己作为 key，移除当前线程关联的资源值
+在每个线程内部，`ThreadLocal`变量的副本存储在一个`ThreadLocalMap`结构中。`ThreadLocalMap`将`ThreadLocal`实例作为键，线程局部变量的值作为值，保证了每个线程拥有自己的变量副本，这种隔离特性避免了并发访问冲突。
 
-**使用场景**
-- **用户会话信息**。在Web应用中，每个请求的线程可以使用`ThreadLocal`来存储用户会话信息，以避免在线程间传递参数。
-- **数据库连接管理**。每个线程可以持有一个数据库连接，通过`ThreadLocal`确保每个线程在操作时使用自己的连接而不会被其他线程干扰。
-- **事务管理**。在多线程环境中，通过`ThreadLocal`存储事务对象，以确保事务的隔离性和一致性。
-- **对象缓冲**。一些临时对象或缓存对象可以通过`ThreadLocal`在每个线程中独立存储，以减少创建对象的开销和减少内存占用。
+
+
 
 **注意事项**
 `ThreadLocal`虽然提供了简便的线程本地存储，但在使用时要注意内存泄漏问题。尤其是在线程池环境中，线程复用可能导致`ThreadLocal`变量无法被及时清理，最终可能会引发内存泄漏。为避免这种问题，建议在线程任务完成后，显式调用`ThreadLocal`的`remove()`方法，清除当前线程中的变量。
 `ThreadLocal`通过为每个线程维护独立的副本，实现了高效的线程安全，是Java中重要的线程本地存储工具，在多线程应用场景下非常实用。
 
 
-谈谈你对ThreadLocal的理解
-- ThreadLocal 可以实现【资源对象】的线程隔离，让每个线程各用各的【资源对象】，避免争用引发的线程安全问题
-- ThreadLocal 同时实现了线程内的资源共享
-- 每个线程内有一个 ThreadLocalMap 类型的成员变量，用来存储资源对象
-	- a)调用 set 方法，就是以 ThreadLocal 自己作为 key，资源对象作为 value，放入当前线
-	- 程的 ThreadLocalMap 集合中
-	- b)调用 get 方法，就是以 ThreadLocal 自己作为 key，到当前线程中查找关联的资源值
-	- c)调用 remove 方法，就是以 ThreadLocal 自己作为 key，移除当前线程关联的资源值
-- ThreadLocal内存泄漏问题
-	- ThreadLocalMap 中的 key 是弱引用，值为强引用； key 会被GC 释放内存，关联 value 的内存并不会释放。建议主动 remove 释放 key，value
 
-案例：使用JDBC操作数据库时，会将每一个线程的Connection放入各自的ThreadLocal中，从而保证每个线程都在各自的 Connection 上进行数据库的操作，避免A线程关闭了B线程的连接。
+
+**使用场景**
+- **用户会话信息**。在Web应用中，每个请求的线程可以使用`ThreadLocal`来存储用户会话信息，以避免在线程间传递参数。
+- **数据库连接管理**。每个线程可以持有一个数据库连接，通过`ThreadLocal`确保每个线程在操作时使用自己的连接而不会被其他线程干扰。
+- **事务管理**。在多线程环境中，通过`ThreadLocal`存储事务对象，以确保事务的隔离性和一致性。
+- **对象缓冲**。一些临时对象或缓存对象可以通过`ThreadLocal`在每个线程中独立存储，以减少创建对象的开销和减少内存占用。
+- 案例：使用JDBC操作数据库时，会将每一个线程的Connection放入各自的ThreadLocal中，从而保证每个线程都在各自的 Connection 上进行数据库的操作，避免A线程关闭了B线程的连接。
+- com.atguigu.daijia.common.util的AuthContextHolder类中有用
+- 用于在多线程环境中共享的变量且不希望在线程之间相互干扰的场景
+- 例如在每个线程中存储用户会话信息、事务上下文、数据库连接等。
+
+使用场景包括：
+* 每个线程需要独立保存用户信息、数据库连接、日期格式化器等。
+* 避免使用全局变量或同步锁带来的线程安全问题。
+
+**最佳实践**：在使用完 `ThreadLocal` 变量后，必须在 `finally` 代码块中显式调用其 `remove()` 方法清理数据。
 
 
 ### 基本使用
 
-
-
-
+`set(T value)`方法用于将变量的值存储到当前线程的`ThreadLocal`副本中。每个线程对`ThreadLocal`调用`set()`方法时都会在自己的线程上下文中存储独立的值。
+`get()`方法用于获取当前线程中`ThreadLocal`变量的值。如果当前线程没有设置过该值，`get()`方法会返回默认值（通过重写`initialValue()`方法来设置），或者返回`null`。
+`initialValue()`方法用于设置`ThreadLocal`变量的初始值。默认实现返回`null`，可以通过重写此方法为每个线程设置初始值。调用`get()`时，如果当前线程的`ThreadLocal`变量未设置值，则自动调用`initialValue()`初始化。
+`remove()`方法用于删除当前线程的`ThreadLocal`变量，以防止内存泄漏。当线程执行完任务后，建议手动调用`remove()`来清理`ThreadLocal`变量，尤其是在使用线程池时。
 
 **ThreadLocal基本使用**
 - set(value) 设置值
@@ -1680,6 +1414,12 @@ private Entry getEntry(ThreadLocal<?> key) {
 ```
 
 ### 内存泄漏
+
+**内存泄露原因**：当外部没有强引用指向 `ThreadLocal` 对象时，发生GC时Key会被回收（变成null），但Value因为被当前线程通过强引用链（Thread -> ThreadLocalMap -> Entry -> Value）持有，无法被回收。在线程池场景下，核心线程生命周期长，这些Key为null的脏Entry会不断堆积，导致内存泄露。
+
+
+- ThreadLocal内存泄漏问题
+	- ThreadLocalMap 中的 key 是弱引用，值为强引用； key 会被GC 释放内存，关联 value 的内存并不会释放。建议主动 remove 释放 key，value
 
 面试官：你对ThreadLocal理解的挺深的，你知道ThreadLocal的内存泄露问题吗？
 ThreadLocal-内存泄露问题
@@ -1884,6 +1624,9 @@ newScheduledThreadPool：可以执行延迟任务的线程池，支持定时及�
 
 
 ### 说一下线程池的核心参数
+ThreadPoolExecutor的核心参数有哪些？
+**核心参数**共7个：`corePoolSize`（核心线程数）、`maximumPoolSize`（最大线程数）、`keepAliveTime`（非核心线程空闲存活时间）、`unit`（时间单位）、`workQueue`（任务阻塞队列）、`threadFactory`（线程工厂，用于设置线程名称等）、`handler`（拒绝策略）。
+
 
 * 七大核心参数： `corePoolSize` (核心线程数), `maximumPoolSize` (最大线程数), `keepAliveTime` (空闲存活时间), `unit` (时间单位), `workQueue` (任务队列), `threadFactory` (线程工厂), `handler` (拒绝策略)。
 
@@ -1949,7 +1692,26 @@ IO密集型的任务 → (CPU核数 * 2 + 1)
 ### 执行流程
 （线程池的执行原理知道嘛）
 
+提交一个新任务后，线程池的完整处理流程是怎样的？
+**处理流程**：
+- 当提交新任务时，若当前运行的线程数小于 `corePoolSize`，即使有空闲线程，也会创建新线程执行该任务。
+- 若当前运行的线程数大于等于 `corePoolSize`，则尝试将任务加入 `workQueue` 阻塞队列。
+- 若队列已满，且当前运行的线程数小于 `maximumPoolSize`，则创建非核心线程执行任务。
+- 若队列已满，且当前运行线程数大于等于 `maximumPoolSize`，则触发 `handler` 执行拒绝策略。
+
 * 执行流程： 提交任务 -> 若核心线程未满则创建新线程 -> 若满则放入队列 -> 若队列满且未达最大线程数则创建非核心线程 -> 若都满则执行拒绝策略（如 `AbortPolicy`, `CallerRunsPolicy` 等）。
+
+### 拒绝策略
+
+线程池有哪些内置的拒绝策略？在你的实际业务场景中是如何进行参数和策略配置的？
+
+**内置拒绝策略**：
+- `AbortPolicy`（默认，直接抛出 `RejectedExecutionException` 异常）。
+- `CallerRunsPolicy`（由提交任务的调用者线程直接执行该任务）。
+- `DiscardPolicy`（静默丢弃任务，不抛异常）。
+- `DiscardOldestPolicy`（丢弃队列中最老的任务，并尝试重新提交当前任务）。
+
+**实际业务配置场景**：对于IO密集型业务（如大量远程RPC调用、数据库查询），通常将核心线程数配置为 `2N + 1`（N为CPU核心数）或更高；对于CPU密集型业务，配置为 `N + 1`。在核心交易或数据同步链路中，极少使用默认的 `AbortPolicy` 或静默丢弃策略，通常会实现**自定义拒绝策略**：在拒绝任务时记录Error日志、触发监控告警，并将任务参数序列化后写入MQ死信队列或数据库表中，由定时任务进行后续补偿重试；对于对响应时间要求不高且允许反压的后台批处理任务，常使用 `CallerRunsPolicy`，通过阻塞提交者线程来达到天然的限流降级效果。
 
 
 
@@ -2062,6 +1824,13 @@ for (int i = 0; i < 10; i++) {
 }
 
 ```
+
+### 多线程并发控制使用工具
+CountDownLatch和CyclicBarrier有什么区别？请举例说明它们各自的适用场景。
+
+**本质区别**：`CountDownLatch`（倒计时器）是基于AQS共享模式实现的，表示一个或多个线程等待其他线程执行完毕后再向下执行，其计数器只能使用一次，无法重置；`CyclicBarrier`（循环栅栏）是基于 `ReentrantLock` 和 `Condition` 实现的，表示一组线程互相等待，直到所有线程都到达某个屏障点（Barrier）后才统一放行，其计数器可以通过 `reset()` 方法重置并循环使用。
+
+**适用场景**：`CountDownLatch` 适用于“主线程等待多个子线程”的聚合场景。例如：电商APP首页需同时并发调用商品、促销、用户接口，主线程使用 `await()` 等待，三个子线程执行完毕后分别 `countDown()`，主线程再合并数据返回。`CyclicBarrier` 适用于“多个线程互相等待，分阶段执行”的场景。例如：多线程并发处理海量Excel数据，每个线程处理一部分，所有线程都解析完毕（到达屏障点）后，再由指定的屏障动作线程（BarrierAction）统一将结果写入数据库，随后进入下一批次的循环处理。
 
 
 

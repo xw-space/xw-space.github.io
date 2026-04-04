@@ -8,13 +8,10 @@ tag:
   - default
 ---
 
-
-
 学习Linux如何使用
 <!-- more -->
 
-
-# Linux
+# OSGuide-Linux
 
 ### 一些命令题
 为vsftpd服务的服名用户创建主目录/var/ftp.然后复制/etc目录下所有扩展名为.conf的文件

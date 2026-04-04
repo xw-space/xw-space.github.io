@@ -51,12 +51,6 @@ Java 集合框架主要分为 **`Collection`** (单列集合) 和 **`Map`** (双
 ## List列表
 
 
-
-
-
-
-
-
 **简介**：有序的集合。集合中的元素有对应的索引，能够依据索引对元素进行访问、插入和删除操作。允许存在重复元素。
 
 ArrayList底层的实现原理是什么
@@ -586,25 +580,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 List<String> copyOnWriteList = new CopyOnWriteArrayList<>();
 ```
 
-## 二叉树
-Java中有两个方式实现二叉树：数组存储，链式存储。
-基于链式存储的树的节点可定义如下：
-```java
-public class TreeNode {
-    int val;
-    TreeNode left;
-    TreeNode right;
-    
-    TreeNode() {}
-    TreeNode(int val) { this.val = val; }
-    TreeNode(int val, TreeNode left, TreeNode right) {
-        this.val = val;
-        this.left = left;
-        this.right = right;
-    }
-}
 
-```
 
 
 
@@ -776,6 +752,34 @@ System.out.println("大写水果名称: " + upperCaseFruits);
 
 
 
+## Queue队列
+**Queue 接口的实现类**
+- PriorityQueue
+    - 基于优先级的队列，基于最小堆实现，元素按照自然顺序或指定的比较器排序。
+    - 插入和删除的时间复杂度为 `O(log n)`
+	- 默认是最小元素（根据排序规则）位于队列头部，可以使用逆序比较器（`Collections.reverseOrder()` 或 `Comparator.reverseOrder()`）实现最大堆
+	- 适用于需要按优先级处理元素的场景，比如Top K、最值问题、调度系统、贪心算法。
+- ArrayDeque
+    - 基于动态数组实现，支持在两端高效的插入和删除操作。
+	- 无容量限制，具有自动扩容机制。
+	- 适合作为栈或队列使用，性能优于`Stack`类。
+- LinkedList
+    - 也可以作为`Queue`使用，基于链表实现，实现先进先出（FIFO）队列。
+	- 支持队列操作如`offer`、`poll`、`peek`。
+	- 适合需要双端操作的场景（也可作为`Deque`使用）。
+- PriorityBlockingQueue
+    - 线程安全的优先级队列，适用于并发环境。
+	- 元素按优先级排序。
+	- 支持阻塞操作，适用于生产者-消费者模型。
+
+`Deque`
+**Double-Ended Queue**（双端队列），支持在两端进行插入和删除操作。
+- 所在位置：`java.util.Deque`
+- 继承关系：`Deque` extends `Queue` extends `Collection`，扩展了`Queue`接口，所以 `Deque` **是 Collection 家族成员**。
+- 常见实现类：
+    - `ArrayDeque`：基于动态数组实现的高效双端队列。
+    - `LinkedList`：也可以作为`Deque`使用。
+
 ## Map映射
 Map是键值对（key-value pairs）的集合，键不允许重复。
 
@@ -815,39 +819,7 @@ Map是键值对（key-value pairs）的集合，键不允许重复。
 - **SortedMap**：扩展了`Map`接口，键按自然顺序或指定的比较器排序。
     - **主要实现类**：`TreeMap`
 
-**HashMap的底层实现原理**：
-* `HashMap` 底层由 **数组 + 链表/红黑树** 构成。
-* 每个数组槽位是一个桶（bucket），桶中存储一个链表或红黑树。
-* 每次插入数据时，通过哈希函数定位到某个 bucket，如果存在哈希冲突，则挂链表或红黑树。
-**HashMap的扩容机制**：
-* 默认容量为 16，负载因子为 0.75。
-* 当元素个数超过 `容量 × 负载因子` 时触发扩容。
-* 扩容时，数组大小变为原来的 2 倍，并重新计算每个键的位置（rehash）。
-* JDK 1.8 中，扩容过程优化为“新旧节点交叉复制”，避免死链问题。
-**HashMap如何解决哈希冲突**：使用链地址法解决。JDK 1.8 起优化了冲突处理：当链表长度超过 8 且数组长度 ≥ 64 时，链表会转换成红黑树，提高查找效率（从 O(n) 提高到 O(log n)）。
-**HashMap为什么线程不安全？**
-因为它没有对读写操作加锁，多个线程同时进行 put 或 resize 操作时可能导致：
-* **数据覆盖**（put 时覆盖未提交的数据）
-* **数据丢失**（多线程 put 导致链表被重写）
-* **死循环**（多线程扩容时导致链表形成环）
-**HashMap如何实现线程安全**：
-* 使用 `Collections.synchronizedMap(map)` 包装。
-* 使用 `ConcurrentHashMap` 替代。
-* 在方法外手动加锁，如使用 `synchronized` 或 `ReentrantLock`。
-**HashMap中的循环链表是如何产⽣的**
-这个是 JDK 1.7 的经典并发 bug，在 **JDK 1.8** 中被重写的扩容逻辑解决了。在多线程并发扩容过程中：
-* 假设两个线程同时触发 `resize`；
-* 链表在 rehash 时被拆开并重新链接；
-* 如果线程之间顺序不一致，就可能把链表头指向了自己，形成循环；
-* 后续访问会导致 `get()` 死循环，CPU 飙升。
-**ConcurrentHashMap的底层实现**
-- JDK 1.7：使用 **分段锁**（Segment + ReentrantLock），每个 Segment 类似一个小 HashMap，默认分成 16 段，线程只锁一个段，提高并发度。
-- JDK 1.8（核心）：
-	- 去除了 Segment，改为使用 **CAS + synchronized + Node数组 + 链表/红黑树**。
-	* `CAS` 操作保障写入原子性（无锁并发 put）。
-	* `synchronized` 控制桶节点的同步。
-	* 红黑树用于高冲突 bucket 的优化。
-	* 支持并发扩容，多个线程可协作迁移数据，提升性能。
+
 **Map的遍历方式**
 - 遍历 `entrySet`（推荐）。特点：一次取出键值对，性能最优。
 ```java
@@ -875,18 +847,45 @@ map.forEach((k, v) -> {
 });
 ```
 
-## Map映射-代码
+### HashMap
 
-```java
+**HashMap的底层实现原理**：
+* `HashMap` 底层由 **数组 + 链表/红黑树** 构成。JDK1.8中底层数据结构为数组+链表+红黑树。
+* 每个数组槽位是一个桶（bucket），桶中存储一个链表或红黑树。
+* 每次插入数据时，通过哈希函数定位到某个 bucket，
 
-Map<Integer, Integer> freqMap = new HashMap<>();
-for (int num : nums) {
-	freqMap.put(num, freqMap.getOrDefault(num, 0) + 1);
-}
+**HashMap如何解决哈希冲突**：使用链地址法解决。JDK 1.8 起优化了冲突处理：当链表长度超过 8 且数组长度 ≥ 64 时，链表会转换成红黑树，提高查找效率（从 O(n) 提高到 O(log n)）。
+如果存在哈希冲突，则挂链表或红黑树。解决冲突采用链地址法，发生哈希冲突时将元素插入链表尾部；当链表长度大于8且数组总容量大于等于64时，链表转化为红黑树以优化查询。
 
-```
+**HashMap的扩容机制**：
+* 默认容量为 16，负载因子为 0.75。
+* 当元素个数超过 `容量 × 负载因子` 时触发扩容。
+* 扩容时，数组大小变为原来的 2 倍，并重新计算每个键的位置（rehash）。
+* JDK 1.8 中，扩容过程优化为“新旧节点交叉复制”，避免死链问题。
+* JDK1.8优化了数据迁移过程，通过检查节点hash值参与运算的最高位是0还是1，直接决定元素保留在原索引处还是移动到“原索引 + 旧数组容量”的新位置，避免了重新计算哈希。
 
-## HashMap
+
+**HashMap为什么线程不安全？**
+因为它没有对读写操作加锁，
+多个线程同时进行 put 或 resize 操作时可能导致：
+* **数据覆盖**（put 时覆盖未提交的数据）
+* **数据丢失**（多线程 put 导致链表被重写）
+* **死循环**（多线程扩容时导致链表形成环）
+
+**HashMap如何实现线程安全**：
+* 使用 `Collections.synchronizedMap(map)` 包装。
+* 使用 `ConcurrentHashMap` 替代。
+* 在方法外手动加锁，如使用 `synchronized` 或 `ReentrantLock`。
+
+**HashMap中的循环链表是如何产⽣的**
+这个是 JDK 1.7 的经典并发 bug，在 **JDK 1.8** 中被重写的扩容逻辑解决了。在多线程并发扩容过程中：
+* 假设两个线程同时触发 `resize`；
+* 链表在 rehash 时被拆开并重新链接；
+* 如果线程之间顺序不一致，就可能把链表头指向了自己，形成循环；
+* 后续访问会导致 `get()` 死循环，CPU 飙升。
+
+
+
 说一下HashMap的实现原理？
 HashMap的数据结构： 底层使用hash表数据结构，即数组和链表或红黑树
 1. 当我们往HashMap中put元素时，利用key的hashCode重新hash计算出当前对象的元素在数组中的下标 
@@ -1026,32 +1025,30 @@ void transfer(Entry[] newTable, boolean rehash) {
 
 
 
-## Queue队列
-**Queue 接口的实现类**
-- PriorityQueue
-    - 基于优先级的队列，基于最小堆实现，元素按照自然顺序或指定的比较器排序。
-    - 插入和删除的时间复杂度为 `O(log n)`
-	- 默认是最小元素（根据排序规则）位于队列头部，可以使用逆序比较器（`Collections.reverseOrder()` 或 `Comparator.reverseOrder()`）实现最大堆
-	- 适用于需要按优先级处理元素的场景，比如Top K、最值问题、调度系统、贪心算法。
-- ArrayDeque
-    - 基于动态数组实现，支持在两端高效的插入和删除操作。
-	- 无容量限制，具有自动扩容机制。
-	- 适合作为栈或队列使用，性能优于`Stack`类。
-- LinkedList
-    - 也可以作为`Queue`使用，基于链表实现，实现先进先出（FIFO）队列。
-	- 支持队列操作如`offer`、`poll`、`peek`。
-	- 适合需要双端操作的场景（也可作为`Deque`使用）。
-- PriorityBlockingQueue
-    - 线程安全的优先级队列，适用于并发环境。
-	- 元素按优先级排序。
-	- 支持阻塞操作，适用于生产者-消费者模型。
+### ConcurrentHashMap
+ConcurrentHashMap在JDK1.7和1.8中有哪些结构设计上的区别？
+**ConcurrentHashMap的底层实现**
+- JDK 1.7：使用 **分段锁**（Segment + ReentrantLock），每个 Segment 类似一个小 HashMap，默认分成 16 段，线程只锁一个段，提高并发度。
+JDK1.7采用基于ReentrantLock的Segment分段锁+HashEntry数组+链表结构，并发粒度为Segment（默认16段），存在并发瓶颈；
 
-`Deque`
-**Double-Ended Queue**（双端队列），支持在两端进行插入和删除操作。
-- 所在位置：`java.util.Deque`
-- 继承关系：`Deque` extends `Queue` extends `Collection`，扩展了`Queue`接口，所以 `Deque` **是 Collection 家族成员**。
-- 常见实现类：
-    - `ArrayDeque`：基于动态数组实现的高效双端队列。
-    - `LinkedList`：也可以作为`Deque`使用。
+
+- JDK 1.8（核心）：
+	- 去除了 Segment，改为使用 **CAS + synchronized + Node数组 + 链表/红黑树**。
+	* `CAS` 操作保障写入原子性（无锁并发 put）。
+	* `synchronized` 控制桶节点的同步。
+	* 红黑树用于高冲突 bucket 的优化。
+	* 支持并发扩容，多个线程可协作迁移数据，提升性能。
+JDK1.8彻底抛弃Segment，采用与HashMap相同的Node数组+链表+红黑树结构，将锁粒度细化至每个哈希桶的首节点，通过CAS操作 + `synchronized` 保证并发安全，大大降低了锁冲突概率，并在高冲突场景下利用红黑树提升了查询效率。
+
+## Map映射-代码
+
+```java
+
+Map<Integer, Integer> freqMap = new HashMap<>();
+for (int num : nums) {
+	freqMap.put(num, freqMap.getOrDefault(num, 0) + 1);
+}
+
+```
 
 ## END

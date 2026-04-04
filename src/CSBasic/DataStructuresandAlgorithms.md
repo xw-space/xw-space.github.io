@@ -318,7 +318,7 @@ LeetCode：707.设计链表
 LeetCode：206.翻转链表
 LeetCode：142.环形链表
 
-## 链表-java代码
+## 链表-java实现
 
 
 ```Java
@@ -572,7 +572,7 @@ LeetCode：
 - 如果插入或删除操作导致平衡因子超出这个范围，AVL树会通过旋转操作来恢复平衡，旋转操作有：单旋转（包括左旋转和右旋转）、双旋转（左右旋转、右左旋转）
 - 动态演示AVL树变化的网站： https://www.cs.usfca.edu/~galles/visualization/RedBlack.html
 
-
+【AVL树的插入操作(上)】 https://www.bilibili.com/video/BV1FMcEe5E3i/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
 
 ## 红黑树
 红黑树（Red Black Tree）
@@ -607,8 +607,9 @@ LeetCode：
 - 红黑树的时间复杂度：查找、添加、删除都是O(logn)
 
 
+【红黑树的旋转操作】 https://www.bilibili.com/video/BV1ufNqeoE9b/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
 
-## 树-java代码
+## 树-java实现
 
 ```Java
 // 定义二叉树节点
@@ -694,6 +695,26 @@ while (!queue.isEmpty()) {
 ```
 
 
+
+## 二叉树-java实现
+Java中有两个方式实现二叉树：数组存储，链式存储。
+基于链式存储的树的节点可定义如下：
+```java
+public class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    
+    TreeNode() {}
+    TreeNode(int val) { this.val = val; }
+    TreeNode(int val, TreeNode left, TreeNode right) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
+    }
+}
+
+```
 
 ## 堆
 **堆的定义**：

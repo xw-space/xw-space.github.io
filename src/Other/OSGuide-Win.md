@@ -10,7 +10,10 @@ tag:
 
 Windows常用快捷键
 <!-- more -->
-# Windows常用快捷键
+
+# OSGuide-Win
+## Windows常用快捷键
+WinShortcutKey
 
 ## 办公
 

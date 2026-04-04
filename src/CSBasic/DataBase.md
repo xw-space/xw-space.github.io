@@ -2483,6 +2483,27 @@ Redis 在6.0及以后的版本中引入了多线程，主要用于优化网络I/
 
 
 ### redis GEO
+
+**Redis Geo** 底层原理：
+1. **数据结构**：Redis Geo 使用 **Geohash** 来存储地理位置数据。每个地理坐标（经纬度）被编码成一个 Geohash，并通过 **Sorted Set**（有序集合） 存储，Geohash 作为排序的分值（score）。
+2. **Geohash 编码**：
+- 将经纬度编码为一个字符串，表示地理位置的“空间”。
+- Geohash 是一个基于二进制的空间编码，通过分辨率不同的 Geohash 长度来表示精度。
+3. **存储方式**：
+- Redis Geo 将每个位置点（经纬度）与 **唯一的成员标识（如司机ID）** 关联，存储在一个 **Sorted Set** 中，成员的分值是 Geohash 编码后的经纬度。
+4. **查询**：
+- Redis Geo 提供 **GEOSEARCH** 和 **GEORADIUS** 命令来进行地理位置查询，通过计算 Geohash 范围查找附近的成员。
+- 查询基于哈希编码的距离计算，快速找到地理位置附近的其他成员。
+5. **空间计算**：
+- 查询时，Redis 会计算两点间的距离，基于地理坐标和 Geohash 算法。
+- 支持 **大圆距离**（Haversine Formula），可以精确计算地球表面两点间的最短距离。
+
+核心命令：
+- `GEOADD`：将地理位置数据（经纬度）添加到 Sorted Set。
+- `GEORADIUS`：根据给定经纬度和半径，查询附近的成员。
+- `GEOHASH`：获取某个地理位置的 Geohash 值。
+- `GEOSEARCH`：按半径范围查询附近的成员。
+
 Redis Geo 底层使用什么数据结构存储地理位置信息？（Geohash 原理）。
 - 底层使用了 **ZSet（有序集合）**。
 - **Geohash 原理：** 将地球表面划分成一个个网格，通过经纬度二分法不断逼近目标位置，生成一个二进制串。然后将这个二进制串编码为 Base32 字符串或 52 位的整数。在 Redis 中，计算出的 52 位长整型数值作为 ZSet 中的 `score`，成员的 ID 作为 `member` 存储。
@@ -2515,8 +2536,6 @@ Redis Geo 底层使用什么数据结构存储地理位置信息？（Geohash �
 
 ### 生产级高并发解决方案：Redisson 核心机制
 
-
-
 手写 Redis 锁难以完美解决锁自动续期和可重入问题。生产环境中通常直接采用 Redisson 客户端，其底层架构专门针对高并发和复杂业务链路进行了设计。
 
 * 可重入性设计
@@ -2546,11 +2565,72 @@ Redis Geo 底层使用什么数据结构存储地理位置信息？（Geohash �
 
 
 
+### 对比 RabbitMQ DLX
 **对比 RabbitMQ DLX 延迟：**
 相比于使用 RabbitMQ 的死信队列（DLX）或延迟插件，使用 Redisson 的优势和劣势分别是什么？
 - **Redisson 优势：** 架构轻量，如果项目中已经有 Redis，无需引入新的中间件；没有 RabbitMQ 队列先进先出导致的“消息堆积阻塞后面已到期消息”的问题（按 score 精准触发）。
 - **Redisson 劣势：** 消息存储在内存中，Redis 宕机可能丢失延迟任务（取决于持久化策略 AOF/RDB）；缺乏完善的消费者 ACK 和重试机制。
+## Redisson
+### 死锁问题
+如何避免锁的死锁问题？
+避免 **锁的死锁** 可以通过以下几种方式：
+- **锁的顺序**：保证多个线程获取锁时，始终按相同的顺序获取锁，避免形成环形依赖。
+- **锁超时**：为每个锁设置超时机制，如果线程在超时时间内未能获取到锁，则放弃锁请求，避免长时间等待。
+```java
+boolean locked = redissonLock.tryLock(100, 10, TimeUnit.SECONDS);
+if (!locked) {
+// 放弃操作
+}
+```
+- **避免嵌套锁**：避免在持有一个锁的同时请求其他锁，减少锁嵌套的情况。
+- **使用更细粒度的锁**：将大范围的锁分解为多个小范围的锁，避免一个锁控制太多资源。
+- **死锁检测**：定期检查系统中锁的状态，检测是否存在死锁并进行处理。
 
+
+### 底层机制
+
+**Redisson** 底层依赖 **Redis** 实现分布式锁。具体机制如下：
+- **Redis 键值存储**：Redisson 利用 Redis 的键值存储来模拟分布式锁。
+- **SETNX 命令**：Redisson 使用 Redis 的 `SETNX`（SET if Not Exists）命令来确保只有一个客户端能成功设置锁键，防止多个客户端同时获取锁。
+	- 如果锁不存在，`SETNX` 命令会设置锁并返回成功。
+	- 如果锁已存在，`SETNX` 命令会失败，表示锁被占用。
+- **锁过期时间**：为了防止死锁，Redisson 在加锁时会设置一个超时时间（`TTL`），即锁在一定时间后自动释放。如果线程未及时释放锁，Redis 会自动释放锁，避免死锁。
+	- Redisson 会使用 **Redis 的 `SET` 命令**，结合 `NX`（确保只有锁为空时设置）和 `PX`（设置超时时间）来实现加锁。
+- **Redisson 独占性**：通过设置唯一的锁标识（如 UUID），即使客户端崩溃，其他客户端也无法获取锁，确保锁的独占性。
+总结：Redisson 利用 Redis 的 `SETNX` 命令和超时机制来实现分布式锁，确保在分布式环境中，多个客户端之间不会发生锁的竞争和死锁。
+
+
+### 使用
+**使用 Redisson 解决并发问题：**
+- **引入 Redisson 依赖**：
+```xml
+<dependency>
+<groupId>org.redisson</groupId>
+<artifactId>redisson</artifactId>
+<version>3.16.1</version>
+</dependency>
+```
+- **配置 Redisson**：
+```yaml
+spring.redis.host=localhost
+spring.redis.port=6379
+```
+- **司机抢单**：  
+使用分布式锁确保同一时间只有一个司机抢到订单。
+```java
+RLock lock = redissonClient.getLock("orderLock:" + orderId);
+lock.lock();
+// 业务逻辑
+lock.unlock();
+```
+- **优惠券领取**：  
+使用分布式锁确保每个用户只能领取一次。
+```java
+RLock lock = redissonClient.getLock("couponLock:" + couponId + ":" + userId);
+lock.lock();
+// 领取逻辑
+lock.unlock();
+```
 
 ## Redis的使用
 ### windows安装
