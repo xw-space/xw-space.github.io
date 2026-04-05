@@ -1,4 +1,6 @@
 ---
+# 设置主页（进网站的第一个页面）
+
 home: true
 layout: Blog
 icon: house

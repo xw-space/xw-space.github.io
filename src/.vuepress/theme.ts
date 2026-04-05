@@ -25,8 +25,8 @@ export default hopeTheme({
 
   // 侧边栏,直接使用import导入的
   sidebar,
-  // sidebar: [],
   // sidebar也可自己配置
+  // sidebar: [],
   // sidebar: {
   //   "/AIDevelopment/":"structure",
   //   "/CSBasic/":"structure",
@@ -81,7 +81,6 @@ export default hopeTheme({
       VuePressThemeHope: {
         icon: "https://theme-hope-assets.vuejs.press/logo.svg",
         link: "https://theme-hope.vuejs.press",
-
       },
     },
   },
