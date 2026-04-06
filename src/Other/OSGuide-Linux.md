@@ -41,112 +41,170 @@ tag:
 - 立刻重启系统：sudo reboot
 - 重启系统：sudo shutdown -r now，`-r` 选项表示重启，`now` 表示立即重启
 
-## 文件夹说明
+## 软件安装
+### 如何安装软件
 
-- `/`：`/` 是文件系统的根目录，所有文件和目录都位于此目录下。它是整个文件系统的起点，包含其他系统目录，比如 `/bin`, `/home`, `/etc`, `/usr` 等。
-- `~`：`~` 代表当前用户的主目录。对于普通用户来说，`~` 通常表示 `/home/username`。例如，如果你的用户名是 `ff`，`~` 就指代 `/home/ff`。而对于 root 用户，`~` 表示 `/root`。
-- `/etc`
-	- `/etc` 目录中的大部分文件都是用于控制系统和各种服务的运行的配置文件和脚本，比如启动过程、网络配置、安全设置、用户权限等。例如，Apache Web服务器的配置文件通常位于 `/etc/apache2/`，SSH服务器的配置文件位于 `/etc/ssh/`。
-	- `/etc` 目录中的文件通常是系统管理员使用 `root` 权限才能修改的，一般用户只有读取这些文件的权限，而没有写入权限。
-	- `/etc` 在Linux和Unix系统中并不是某个单词的缩写，最初在Unix早期，`/etc` 目录的确是用来存放系统中那些"其他"（etcetera）文件的，但随着系统的发展，`/etc` 逐渐演变为专门存放配置文件的目录。
-	- 重要的子目录和文件：
-		- `/etc/passwd`：存储系统的用户信息，包括用户名、用户ID等。
-		- `/etc/shadow`：存储加密的用户密码信息，配合 `/etc/passwd` 使用。
-		- `/etc/fstab`：定义系统启动时自动挂载的文件系统（如硬盘分区、网络文件系统等）。
-		- `/etc/hosts`：定义主机名和IP地址的映射，用于域名解析。
-		- `/etc/network/interfaces`（在某些发行版中）：存储网络接口配置。
-		- `/etc/apt/`：存储APT包管理器的配置文件（如软件源列表 `/etc/apt/sources.list`）。
-		- `/etc/ssh/`：存储SSH服务的配置文件（如 `/etc/ssh/sshd_config`，配置SSH服务器行为）。
-		- `/etc/fstab` 是一个配置文件，它定义了系统启动时需要自动挂载的文件系统
-		- `/etc/passwd` 文件包含所有用户的账户信息
+- 通过本地deb安装包安装软件：`sudo dpkg -i filename.deb`
+- 查找已安装的软件包名称：`dpkg -l | grep 部分包名`
+- 卸载软件包：`sudo dpkg -r 包名`
 
-## 查看系统资源
-* 资源瓶颈排查： 熟练使用 `top` 查看 CPU 和内存负载，`free -h` 检查可用物理内存，`df -h` 检查磁盘使用率。
-* Java 进程深度定位： 遇到 CPU 飙升，通过 `top` 找到进程，再用 `top -Hp <pid>` 找到具体的消耗线程，将线程 ID 转为 16 进制后，配合 `jstack` 定位到具体的 Java 代码行。
 
-- **查看资源使用情况**
+- **`apt-get update`**：用于更新系统中已知软件包的列表。系统会从配置文件中定义的软件源（通常位于 `/etc/apt/sources.list`）中获取最新的软件包信息。这不会真正安装或升级任何软件包，只是刷新本地的包列表，使系统知道有哪些软件包可以更新，以及最新版本是什么。在安装新软件或更新现有软件之前，通常需要先运行 `apt-get update` 来确保你拥有最新的包列表。
+- **`apt-get upgrade -f`**：这个命令用于将系统中已安装的软件包升级到最新版本，`-f` 代表 `--fix-broken`，表示修复可能存在的损坏依赖。这个命令会根据 `apt-get update` 下载的最新包列表，将系统中已经安装的软件包升级到它们的最新版本。`-f` 参数的作用是解决因包的依赖性问题导致的升级或安装中断。如果系统检测到某些软件包安装或升级失败，它会尝试自动修复这些损坏的包依赖问题。
+
+
+Linux下RPM软件包的安装及卸载 - 51CTO.COM： https://os.51cto.com/art/201001/177866.htm
+
+
+rpm安装缺少一堆依赖包怎么办？
+- 一个一个去找依赖包然后安装好
+- yum install \*.rpm
+
+
+
+### QQ
+- **QQ** https://im.qq.com/linuxqq/index.shtml
+
+### nano
+**安装**：
+```
+sudo apt update
+sudo apt install nano
+nano --version
+nano filename.txt
+
+```
+
+nano的M-U中的M在Windows上指的是Alt键
+
+常用 `nano` 快捷键
+- `Ctrl + X`：退出编辑器。如果你有未保存的更改，它会提示你保存。
+- `Ctrl + O`：保存文件（会要求确认文件名）。
+- `Ctrl + W`：查找文本。
+- `Ctrl + K`：剪切文本。
+- `Ctrl + U`：粘贴文本。
+
+
+
+### docker
+- Ubuntu安装docker并运行测试 https://www.bilibili.com/video/BV1EA4m1A7J5
+
+### rsync-同步软件
+- **rsync**：`rsync` 是一个强大且灵活的文件同步工具，广泛用于本地和远程的文件或目录的同步、备份和传输。它通过增量传输的方式，只复制发生更改的部分，极大地提高了效率，尤其在处理大量文件或进行远程备份时。
+**1. `rsync` 的主要功能
+- **文件和目录的同步**：`rsync` 可以同步文件或目录，确保源和目标之间的内容一致。
+- **本地和远程传输**：支持在本地机器或通过 SSH/rsync 协议在远程机器之间传输文件。
+- **增量传输**：只传输文件中发生变化的部分（增量），减少网络带宽的占用和传输时间。
+- **保持文件属性**：支持复制文件的权限、时间戳、符号链接和其它元数据。
+- **支持压缩**：在传输文件时可以使用压缩，从而减少数据量，进一步加快传输速度。
+- **删除目标多余文件**：可以删除目标目录中源目录中不存在的文件，保持两个目录完全同步。
+**2. `rsync` 的基本语法
+`rsync` 的基本使用语法如下：
 ```bash
-top
-将看到系统实时的资源使用情况，包括：
-- **CPU 使用**：显示每个处理器的使用情况。
-- **内存使用**：显示物理内存和交换空间的使用情况。
-- **进程列表**：显示系统中运行的进程，按资源使用排序。
-
-htop
-`htop` 是 `top` 的增强版本，界面更加友好，并且支持更多操作，`htop` 的界面比 `top` 更加直观，支持使用箭头键选择进程并执行操作（如结束进程）。。
-安装 `htop`：
-sudo apt install htop
-运行：
-htop
-
-
-`df` 命令用来查看磁盘空间的使用情况。
-df -h
-- `-h` 参数表示以人类可读的格式显示（GB、MB）。
-- 输出会显示每个挂载的磁盘分区的总空间、已用空间和可用空间。：
-
-
-`du` 命令可以显示指定目录或文件的磁盘空间使用情况
-查看某个目录的大小（例如 `/home` 目录）：
-du -h /home
-`-h` 参数同样表示以人类可读的格式显示
-
-`ifconfig` 是一个查看和配置网络接口的命令，可以显示网络接口的 IP 地址、子网掩码、流量统计等。
-运行以下命令查看网络接口的详细信息：
-ifconfig
-
-`nload` 是一个终端工具，可以实时显示网络上传和下载速度,实时监控网络流量。
-安装 `nload`：`sudo apt install nload`
-运行 `nload`：`nload`
-将看到实时的网络上传和下载流量信息。
-
-`lm-sensors` 是一个监控硬件传感器（如 CPU 温度、风扇速度等）的工具。
-
-安装 `lm-sensors`：`sudo apt install lm-sensors`
-运行以下命令检测系统中的传感器：`sudo sensors-detect`
-然后运行 `sensors` 命令查看实时的传感器数据：`sensors`
-
+rsync [options] source destination
 ```
-
-
-
-
-- **系统修复**
-
-恢复菜单（文件系统状态：读/写）
-- **`resume`**: 恢复正常启动。恢复正常的系统启动。这将尝试从当前的恢复模式退出，并继续启动系统。
-- **`clean`**: 尝试释放空间。尝试释放磁盘空间。通常用来清理缓存或临时文件，以确保系统有足够的磁盘空间。
-- **`dpkg`**: 修复损坏的软件包。修复损坏的软件包。这个选项会运行 `dpkg` 来修复未完全安装或损坏的软件包，通常用在系统因为软件包问题无法正常启动时。
-- **`fsck`**: 检查所有文件系统。检查文件系统。`fsck`（文件系统检查工具）会检查并修复文件系统中的错误，以确保文件系统的一致性和稳定性。
-- **`grub`**: 更新GRUB引导程序。更新GRUB引导程序。如果GRUB引导程序有问题（如无法正确引导操作系统），可以选择这个选项来重新安装或更新GRUB。
-- **`Enable networking`**:启用网络连接 。启用网络连接。在恢复模式中，网络通常是禁用的，选择此选项可以启用网络，以便进行网络修复或下载软件包。
-- **`Drop to root shell prompt`**: 进入根shell提示符。进入根用户的命令行提示符。这允许你作为超级用户（root）直接输入命令来修复系统问题。
-- **`System summary`**: 系统摘要。显示系统摘要，提供有关系统硬件和软件的基本信息。
-
-## 网络管理
-使用 `hostname -I` 命令会返回所有分配给该主机的IP地址。
-使用 `ip addr` 命令会显示所有网络接口的信息，包括IP地址。通常你会看到类似 `inet` 开头的行，后面跟着的就是IP地址。
-
-* 网络状态诊断： `netstat -tunlp` 或 `ss -tunlp` 查看端口占用情况，`ping` 和 `telnet` 测试网络连通性，`curl` 模拟 HTTP 请求测试接口响应。
-
-## 设备管理
-```shell
-设备管理：
-显示器
-输入以下命令查看当前检测到的显示器，将显示已连接的显示器及其分辨率
-xrander
-手动检测
-xrandr --auto
-手动启用显示器：
-xrandr --output 显示器名 --auto
-
-`arandr` 工具，这是 `xrandr` 的图形前端，允许你更直观地管理显示器
-安装 `arandr`：
-sudo apt install arandr
+- `source`：源文件或目录。
+- `destination`：目标文件或目录。
+示例：
+1. **本地文件复制**
+   ```bash
+   rsync -av /path/to/source/ /path/to/destination/
+   ```
+   这会把 `/path/to/source/` 目录中的内容同步到 `/path/to/destination/` 目录。`-a` 选项表示“归档模式”（会递归复制，并保持文件属性）。`-v` 表示详细模式（显示传输过程）。
+2. **远程文件复制**
+   ```bash
+   rsync -avz /path/to/source/ user@remote:/path/to/destination/
+   ```
+   这会把本地的 `/path/to/source/` 同步到远程服务器 `remote` 的 `/path/to/destination/`，其中 `-z` 表示传输时压缩数据。
+   反向传输（从远程服务器到本地）：
+   ```bash
+   rsync -avz user@remote:/path/to/source/ /path/to/destination/
+   ```
+**3. 常用选项
+`rsync` 提供了大量选项，用于控制其行为。常用选项包括：
+- `-a, --archive`：归档模式，表示递归传输文件并保持文件的各种属性（如时间戳、权限、符号链接等）。这个选项通常是最常用的，它相当于 `-rlptgoD`。
+- `-v, --verbose`：显示详细信息，通常与其他选项结合使用，以便了解进度。
+- `-z, --compress`：在传输文件时对文件进行压缩，适用于网络传输以减少带宽使用。
+- `-r, --recursive`：递归传输目录中的所有文件和子目录。
+- `-P`：显示传输进度，并在传输中断时可以断点续传。相当于 `--partial --progress` 的组合。
+- `--delete`：删除目标目录中源目录中不存在的文件，保持两个目录完全同步。
+- `-u, --update`：只更新目标目录中比源目录旧的文件，不会覆盖目标中新文件。
+- `-e`：指定使用的远程 shell 程序，通常用于指定 `ssh` 作为远程登录工具。例如：
+  ```bash
+  rsync -avz -e ssh /path/to/source/ user@remote:/path/to/destination/
+  ```
+- `--dry-run`：模拟执行 `rsync`，但不实际传输文件，主要用于测试。
+示例：使用 `--delete` 保持目录完全同步
+```bash
+rsync -av --delete /path/to/source/ /path/to/destination/
 ```
+这会将源目录同步到目标目录，并删除目标目录中不存在于源目录中的文件。
+**4. 增量传输机制
+`rsync` 的一个核心功能是增量传输。它不会重新传输整个文件，而是通过对比文件的差异（基于文件的内容和元数据）来只传输那些发生了变化的部分，从而极大地提高了效率，特别是对于大文件。
+增量传输适用于：
+- 大量小文件。
+- 大文件的局部更新。
+- 网络不稳定的环境。
+**5. `rsync` 使用场景
+5.1 本地备份
+你可以使用 `rsync` 将重要的文件从一个目录备份到另一个目录，同时保持文件属性和目录结构。它支持增量备份，速度快且占用资源少。
+```bash
+rsync -av /home/user/documents/ /mnt/backup/documents/
+```
+5.2 远程备份
+你可以将本地数据同步到远程服务器进行备份，或者将远程服务器的数据同步到本地。
+```bash
+rsync -avz /var/www/ user@remote:/backup/www/
+```
+5.3 文件同步
+在两台计算机之间保持文件和目录同步，使用 `--delete` 选项确保两边保持完全一致。
+```bash
+rsync -avz --delete /home/user/projects/ user@remote:/home/user/projects/
+```
+5.4 网站部署
+你可以通过 `rsync` 来部署网站文件，自动同步本地代码到远程服务器。
+```bash
+rsync -avz --exclude 'node_modules/' /path/to/website/ user@server:/var/www/html/
+```
+使用 `--exclude` 可以排除某些文件或目录（如 `node_modules`）。
+**6. 断点续传
+`rsync` 具备断点续传功能。你可以使用 `-P` 或 `--partial` 和 `--progress` 来显示进度并支持在中断后重新开始传输。
+```bash
+rsync -avP /path/to/largefile user@remote:/path/to/destination/
+```
+**7. `rsync` 的局限性
+尽管 `rsync` 非常强大，但在以下情况下可能不适用：
+- 文件或目录数量极大时（数百万级别以上），由于 `rsync` 需要生成文件列表，可能会导致内存占用过高。
+- 远程同步时，如果网络条件非常差，虽然 `rsync` 能进行增量传输，但可能仍会因为连接中断频繁而导致失败。
+**8. 安装 `rsync`
+大多数 Linux 系统默认已经安装了 `rsync`，但如果没有，可以通过以下命令安装：
+- **Debian/Ubuntu**：
+  ```bash
+  sudo apt-get install rsync
+  ```
+- **CentOS/Fedora**：
+  ```bash
+  sudo yum install rsync
+  ```
+- **macOS**：
+  macOS 通常预装了 `rsync`，如果需要，可以通过 Homebrew 更新或重新安装：
+  ```bash
+  brew install rsync
+  ```
+- **Windows**：
+  可以通过使用 **Cygwin** 或 **WSL (Windows Subsystem for Linux)** 来安装 `rsync`。
+---
+**总结
+`rsync` 是一个功能强大的文件同步和备份工具，能够有效地在本地或远程传输文件和目录。其增量传输、压缩和断点续传等特性，使其在处理大量数据、网络不稳定的情况下尤其有用。无论是用于定期备份、网站部署，还是文件同步，`rsync` 都是一个极具效率和灵活性的选择。
 
 
 
+
+
+
+### GUI文件管理工具
+【Yazi: 比任何GUI文件管理器更快的终端文件管理神器】 https://www.bilibili.com/video/BV1DzANeaEX4/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
+【🗂️ superfile、Yazi、Ranger、Broot、nnn、lf - 六款文件管理器全景指南，覆盖从新手到极客，找到最适合你的那一款】 https://www.bilibili.com/video/BV1DGG4zGEir/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
 
 ## 终端使用
 
@@ -310,6 +368,113 @@ source ~/.bashrc
 **zsh，fzf**：【10分钟带你从0配置最强命令行】 https://www.bilibili.com/video/BV1fdTfzeE8X/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
 
 
+## 文件夹说明
+
+- `/`：`/` 是文件系统的根目录，所有文件和目录都位于此目录下。它是整个文件系统的起点，包含其他系统目录，比如 `/bin`, `/home`, `/etc`, `/usr` 等。
+- `~`：`~` 代表当前用户的主目录。对于普通用户来说，`~` 通常表示 `/home/username`。例如，如果你的用户名是 `ff`，`~` 就指代 `/home/ff`。而对于 root 用户，`~` 表示 `/root`。
+- `/etc`
+	- `/etc` 目录中的大部分文件都是用于控制系统和各种服务的运行的配置文件和脚本，比如启动过程、网络配置、安全设置、用户权限等。例如，Apache Web服务器的配置文件通常位于 `/etc/apache2/`，SSH服务器的配置文件位于 `/etc/ssh/`。
+	- `/etc` 目录中的文件通常是系统管理员使用 `root` 权限才能修改的，一般用户只有读取这些文件的权限，而没有写入权限。
+	- `/etc` 在Linux和Unix系统中并不是某个单词的缩写，最初在Unix早期，`/etc` 目录的确是用来存放系统中那些"其他"（etcetera）文件的，但随着系统的发展，`/etc` 逐渐演变为专门存放配置文件的目录。
+	- 重要的子目录和文件：
+		- `/etc/passwd`：存储系统的用户信息，包括用户名、用户ID等。
+		- `/etc/shadow`：存储加密的用户密码信息，配合 `/etc/passwd` 使用。
+		- `/etc/fstab`：定义系统启动时自动挂载的文件系统（如硬盘分区、网络文件系统等）。
+		- `/etc/hosts`：定义主机名和IP地址的映射，用于域名解析。
+		- `/etc/network/interfaces`（在某些发行版中）：存储网络接口配置。
+		- `/etc/apt/`：存储APT包管理器的配置文件（如软件源列表 `/etc/apt/sources.list`）。
+		- `/etc/ssh/`：存储SSH服务的配置文件（如 `/etc/ssh/sshd_config`，配置SSH服务器行为）。
+		- `/etc/fstab` 是一个配置文件，它定义了系统启动时需要自动挂载的文件系统
+		- `/etc/passwd` 文件包含所有用户的账户信息
+
+## 查看系统资源
+* 资源瓶颈排查： 熟练使用 `top` 查看 CPU 和内存负载，`free -h` 检查可用物理内存，`df -h` 检查磁盘使用率。
+* Java 进程深度定位： 遇到 CPU 飙升，通过 `top` 找到进程，再用 `top -Hp <pid>` 找到具体的消耗线程，将线程 ID 转为 16 进制后，配合 `jstack` 定位到具体的 Java 代码行。
+
+- **查看资源使用情况**
+```bash
+top
+将看到系统实时的资源使用情况，包括：
+- **CPU 使用**：显示每个处理器的使用情况。
+- **内存使用**：显示物理内存和交换空间的使用情况。
+- **进程列表**：显示系统中运行的进程，按资源使用排序。
+
+htop
+`htop` 是 `top` 的增强版本，界面更加友好，并且支持更多操作，`htop` 的界面比 `top` 更加直观，支持使用箭头键选择进程并执行操作（如结束进程）。。
+安装 `htop`：
+sudo apt install htop
+运行：
+htop
+
+
+`df` 命令用来查看磁盘空间的使用情况。
+df -h
+- `-h` 参数表示以人类可读的格式显示（GB、MB）。
+- 输出会显示每个挂载的磁盘分区的总空间、已用空间和可用空间。：
+
+
+`du` 命令可以显示指定目录或文件的磁盘空间使用情况
+查看某个目录的大小（例如 `/home` 目录）：
+du -h /home
+`-h` 参数同样表示以人类可读的格式显示
+
+`ifconfig` 是一个查看和配置网络接口的命令，可以显示网络接口的 IP 地址、子网掩码、流量统计等。
+运行以下命令查看网络接口的详细信息：
+ifconfig
+
+`nload` 是一个终端工具，可以实时显示网络上传和下载速度,实时监控网络流量。
+安装 `nload`：`sudo apt install nload`
+运行 `nload`：`nload`
+将看到实时的网络上传和下载流量信息。
+
+`lm-sensors` 是一个监控硬件传感器（如 CPU 温度、风扇速度等）的工具。
+
+安装 `lm-sensors`：`sudo apt install lm-sensors`
+运行以下命令检测系统中的传感器：`sudo sensors-detect`
+然后运行 `sensors` 命令查看实时的传感器数据：`sensors`
+
+```
+
+
+
+
+- **系统修复**
+
+恢复菜单（文件系统状态：读/写）
+- **`resume`**: 恢复正常启动。恢复正常的系统启动。这将尝试从当前的恢复模式退出，并继续启动系统。
+- **`clean`**: 尝试释放空间。尝试释放磁盘空间。通常用来清理缓存或临时文件，以确保系统有足够的磁盘空间。
+- **`dpkg`**: 修复损坏的软件包。修复损坏的软件包。这个选项会运行 `dpkg` 来修复未完全安装或损坏的软件包，通常用在系统因为软件包问题无法正常启动时。
+- **`fsck`**: 检查所有文件系统。检查文件系统。`fsck`（文件系统检查工具）会检查并修复文件系统中的错误，以确保文件系统的一致性和稳定性。
+- **`grub`**: 更新GRUB引导程序。更新GRUB引导程序。如果GRUB引导程序有问题（如无法正确引导操作系统），可以选择这个选项来重新安装或更新GRUB。
+- **`Enable networking`**:启用网络连接 。启用网络连接。在恢复模式中，网络通常是禁用的，选择此选项可以启用网络，以便进行网络修复或下载软件包。
+- **`Drop to root shell prompt`**: 进入根shell提示符。进入根用户的命令行提示符。这允许你作为超级用户（root）直接输入命令来修复系统问题。
+- **`System summary`**: 系统摘要。显示系统摘要，提供有关系统硬件和软件的基本信息。
+
+## 网络管理
+使用 `hostname -I` 命令会返回所有分配给该主机的IP地址。
+使用 `ip addr` 命令会显示所有网络接口的信息，包括IP地址。通常你会看到类似 `inet` 开头的行，后面跟着的就是IP地址。
+
+* 网络状态诊断： `netstat -tunlp` 或 `ss -tunlp` 查看端口占用情况，`ping` 和 `telnet` 测试网络连通性，`curl` 模拟 HTTP 请求测试接口响应。
+
+## 设备管理
+```shell
+设备管理：
+显示器
+输入以下命令查看当前检测到的显示器，将显示已连接的显示器及其分辨率
+xrander
+手动检测
+xrandr --auto
+手动启用显示器：
+xrandr --output 显示器名 --auto
+
+`arandr` 工具，这是 `xrandr` 的图形前端，允许你更直观地管理显示器
+安装 `arandr`：
+sudo apt install arandr
+```
+
+
+
+
 ## 文件操作
 
 ### 文件权限
@@ -324,8 +489,12 @@ source ~/.bashrc
 组外成员：拥有只读权限（读），权限数值为 4
 Linux 文件权限用三位数字表示，依次对应文件所有者、组内成员、组外成员的权限数值
 
+Linux文件权限中的 chmod 755 代表什么具体含义？
+**chmod 755 含义**：Linux权限用数字表示为读(4)、写(2)、执行(1)。`755` 分为三段：第一位 `7` (4+2+1) 代表文件所有者（Owner）拥有读、写、执行全部权限；第二位 `5` (4+1) 代表同组用户（Group）拥有读和执行权限；第三位 `5` (4+1) 代表其他用户（Others）拥有读和执行权限。这通常是目录和可执行脚本的标准安全权限。
 
-
+### 软链接
+在什么场景下你会使用软链接（ln -s）？
+**软链接（ln -s）使用场景**：类似于Windows的快捷方式。1. **平滑发布与版本切换**：部署目录中维护多个版本（如 `app-v1.0`，`app-v2.0`），对外统一提供一个 `current` 软链接指向当前运行版本。发布或回滚时，只需修改软链接的指向，无需更改任何Nginx配置或启动脚本。2. **磁盘扩容转移**：当日志目录（如 `/var/log/app`）所在磁盘分区空间爆满时，可将历史日志物理移动到新挂载的大容量磁盘（如 `/data/log/app`），并在原位置建立同名的软链接指向新路径，实现对上层应用的完全透明。
 
 
 ### 常用命令
@@ -519,171 +688,25 @@ Radeon™ Software for Linux® Installation文档 https://amdgpu-install.readthe
 安装：sudo apt install diodon
 安装后，`Diodon` 会在系统托盘中运行，右键单击托盘图标即可访问剪切板历史。你还可以通过全局快捷键快速粘贴历史记录
 
-## 软件安装
-### 如何安装软件
-
-- 通过本地deb安装包安装软件：`sudo dpkg -i filename.deb`
-- 查找已安装的软件包名称：`dpkg -l | grep 部分包名`
-- 卸载软件包：`sudo dpkg -r 包名`
+## 日志排查
+面对一个几十GB大小的生产日志文件，如何使用 grep、awk 或 sed 快速定位包含特定订单号的异常堆栈，并截取其前后20行上下文？
+针对几十GB的超大日志文件，最常用且高效的命令是 `grep`。执行命令：`grep -C 20 "目标订单号" server.log > result.log`。其中 `-C 20` 表示同时截取匹配行的前后各20行（等同于 `-A 20 -B 20`，`-A` 代表After，`-B` 代表Before）。将结果重定向到 `result.log` 中可以避免大屏滚动死机，方便后续下载或使用 `less result.log` 慢慢分析。如果只想实时查看，可以配合管道符：`grep -C 20 "订单号" server.log | less`。
 
 
-- **`apt-get update`**：用于更新系统中已知软件包的列表。系统会从配置文件中定义的软件源（通常位于 `/etc/apt/sources.list`）中获取最新的软件包信息。这不会真正安装或升级任何软件包，只是刷新本地的包列表，使系统知道有哪些软件包可以更新，以及最新版本是什么。在安装新软件或更新现有软件之前，通常需要先运行 `apt-get update` 来确保你拥有最新的包列表。
-- **`apt-get upgrade -f`**：这个命令用于将系统中已安装的软件包升级到最新版本，`-f` 代表 `--fix-broken`，表示修复可能存在的损坏依赖。这个命令会根据 `apt-get update` 下载的最新包列表，将系统中已经安装的软件包升级到它们的最新版本。`-f` 参数的作用是解决因包的依赖性问题导致的升级或安装中断。如果系统检测到某些软件包安装或升级失败，它会尝试自动修复这些损坏的包依赖问题。
+## 问题
+### CPU占用飙升
+
+线上Java服务突然CPU占用飙升到100%，请给出你完整的排查命令和定位到具体代码行的全流程。
+- 使用 `top -c` 或 `top` 命令找到占用CPU最高的Java进程，记录其PID。
+- 使用 `top -Hp <PID>` 命令查看该进程下的所有线程，找到占用CPU最高的线程，记录其十进制的TID。
+- 执行 `printf "%x\n" <TID>` 将该线程ID转换为十六进制格式。
+- 结合JDK自带工具，执行 `jstack <PID> | grep -A 20 -i <十六进制TID>` 提取该线程的即时运行堆栈。通过堆栈输出中的 `at com.xxx.Service.method(Service.java:行号)`，即可精准定位到引发高CPU的具体业务代码行（如死循环、复杂的正则表达式解析等）。
 
 
-Linux下RPM软件包的安装及卸载 - 51CTO.COM： https://os.51cto.com/art/201001/177866.htm
+### Too many open files
 
-
-rpm安装缺少一堆依赖包怎么办？
-- 一个一个去找依赖包然后安装好
-- yum install \*.rpm
-
-
-
-### QQ
-- **QQ** https://im.qq.com/linuxqq/index.shtml
-
-### nano
-**安装**：
-```
-sudo apt update
-sudo apt install nano
-nano --version
-nano filename.txt
-
-```
-
-nano的M-U中的M在Windows上指的是Alt键
-
-常用 `nano` 快捷键
-- `Ctrl + X`：退出编辑器。如果你有未保存的更改，它会提示你保存。
-- `Ctrl + O`：保存文件（会要求确认文件名）。
-- `Ctrl + W`：查找文本。
-- `Ctrl + K`：剪切文本。
-- `Ctrl + U`：粘贴文本。
-
-
-
-### docker
-- Ubuntu安装docker并运行测试 https://www.bilibili.com/video/BV1EA4m1A7J5
-
-### rsync-同步软件
-- **rsync**：`rsync` 是一个强大且灵活的文件同步工具，广泛用于本地和远程的文件或目录的同步、备份和传输。它通过增量传输的方式，只复制发生更改的部分，极大地提高了效率，尤其在处理大量文件或进行远程备份时。
-**1. `rsync` 的主要功能
-- **文件和目录的同步**：`rsync` 可以同步文件或目录，确保源和目标之间的内容一致。
-- **本地和远程传输**：支持在本地机器或通过 SSH/rsync 协议在远程机器之间传输文件。
-- **增量传输**：只传输文件中发生变化的部分（增量），减少网络带宽的占用和传输时间。
-- **保持文件属性**：支持复制文件的权限、时间戳、符号链接和其它元数据。
-- **支持压缩**：在传输文件时可以使用压缩，从而减少数据量，进一步加快传输速度。
-- **删除目标多余文件**：可以删除目标目录中源目录中不存在的文件，保持两个目录完全同步。
-**2. `rsync` 的基本语法
-`rsync` 的基本使用语法如下：
-```bash
-rsync [options] source destination
-```
-- `source`：源文件或目录。
-- `destination`：目标文件或目录。
-示例：
-1. **本地文件复制**
-   ```bash
-   rsync -av /path/to/source/ /path/to/destination/
-   ```
-   这会把 `/path/to/source/` 目录中的内容同步到 `/path/to/destination/` 目录。`-a` 选项表示“归档模式”（会递归复制，并保持文件属性）。`-v` 表示详细模式（显示传输过程）。
-2. **远程文件复制**
-   ```bash
-   rsync -avz /path/to/source/ user@remote:/path/to/destination/
-   ```
-   这会把本地的 `/path/to/source/` 同步到远程服务器 `remote` 的 `/path/to/destination/`，其中 `-z` 表示传输时压缩数据。
-   反向传输（从远程服务器到本地）：
-   ```bash
-   rsync -avz user@remote:/path/to/source/ /path/to/destination/
-   ```
-**3. 常用选项
-`rsync` 提供了大量选项，用于控制其行为。常用选项包括：
-- `-a, --archive`：归档模式，表示递归传输文件并保持文件的各种属性（如时间戳、权限、符号链接等）。这个选项通常是最常用的，它相当于 `-rlptgoD`。
-- `-v, --verbose`：显示详细信息，通常与其他选项结合使用，以便了解进度。
-- `-z, --compress`：在传输文件时对文件进行压缩，适用于网络传输以减少带宽使用。
-- `-r, --recursive`：递归传输目录中的所有文件和子目录。
-- `-P`：显示传输进度，并在传输中断时可以断点续传。相当于 `--partial --progress` 的组合。
-- `--delete`：删除目标目录中源目录中不存在的文件，保持两个目录完全同步。
-- `-u, --update`：只更新目标目录中比源目录旧的文件，不会覆盖目标中新文件。
-- `-e`：指定使用的远程 shell 程序，通常用于指定 `ssh` 作为远程登录工具。例如：
-  ```bash
-  rsync -avz -e ssh /path/to/source/ user@remote:/path/to/destination/
-  ```
-- `--dry-run`：模拟执行 `rsync`，但不实际传输文件，主要用于测试。
-示例：使用 `--delete` 保持目录完全同步
-```bash
-rsync -av --delete /path/to/source/ /path/to/destination/
-```
-这会将源目录同步到目标目录，并删除目标目录中不存在于源目录中的文件。
-**4. 增量传输机制
-`rsync` 的一个核心功能是增量传输。它不会重新传输整个文件，而是通过对比文件的差异（基于文件的内容和元数据）来只传输那些发生了变化的部分，从而极大地提高了效率，特别是对于大文件。
-增量传输适用于：
-- 大量小文件。
-- 大文件的局部更新。
-- 网络不稳定的环境。
-**5. `rsync` 使用场景
-5.1 本地备份
-你可以使用 `rsync` 将重要的文件从一个目录备份到另一个目录，同时保持文件属性和目录结构。它支持增量备份，速度快且占用资源少。
-```bash
-rsync -av /home/user/documents/ /mnt/backup/documents/
-```
-5.2 远程备份
-你可以将本地数据同步到远程服务器进行备份，或者将远程服务器的数据同步到本地。
-```bash
-rsync -avz /var/www/ user@remote:/backup/www/
-```
-5.3 文件同步
-在两台计算机之间保持文件和目录同步，使用 `--delete` 选项确保两边保持完全一致。
-```bash
-rsync -avz --delete /home/user/projects/ user@remote:/home/user/projects/
-```
-5.4 网站部署
-你可以通过 `rsync` 来部署网站文件，自动同步本地代码到远程服务器。
-```bash
-rsync -avz --exclude 'node_modules/' /path/to/website/ user@server:/var/www/html/
-```
-使用 `--exclude` 可以排除某些文件或目录（如 `node_modules`）。
-**6. 断点续传
-`rsync` 具备断点续传功能。你可以使用 `-P` 或 `--partial` 和 `--progress` 来显示进度并支持在中断后重新开始传输。
-```bash
-rsync -avP /path/to/largefile user@remote:/path/to/destination/
-```
-**7. `rsync` 的局限性
-尽管 `rsync` 非常强大，但在以下情况下可能不适用：
-- 文件或目录数量极大时（数百万级别以上），由于 `rsync` 需要生成文件列表，可能会导致内存占用过高。
-- 远程同步时，如果网络条件非常差，虽然 `rsync` 能进行增量传输，但可能仍会因为连接中断频繁而导致失败。
-**8. 安装 `rsync`
-大多数 Linux 系统默认已经安装了 `rsync`，但如果没有，可以通过以下命令安装：
-- **Debian/Ubuntu**：
-  ```bash
-  sudo apt-get install rsync
-  ```
-- **CentOS/Fedora**：
-  ```bash
-  sudo yum install rsync
-  ```
-- **macOS**：
-  macOS 通常预装了 `rsync`，如果需要，可以通过 Homebrew 更新或重新安装：
-  ```bash
-  brew install rsync
-  ```
-- **Windows**：
-  可以通过使用 **Cygwin** 或 **WSL (Windows Subsystem for Linux)** 来安装 `rsync`。
----
-**总结
-`rsync` 是一个功能强大的文件同步和备份工具，能够有效地在本地或远程传输文件和目录。其增量传输、压缩和断点续传等特性，使其在处理大量数据、网络不稳定的情况下尤其有用。无论是用于定期备份、网站部署，还是文件同步，`rsync` 都是一个极具效率和灵活性的选择。
-
-
-
-
-
-
-### GUI文件管理工具
-【Yazi: 比任何GUI文件管理器更快的终端文件管理神器】 https://www.bilibili.com/video/BV1DzANeaEX4/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
-【🗂️ superfile、Yazi、Ranger、Broot、nnn、lf - 六款文件管理器全景指南，覆盖从新手到极客，找到最适合你的那一款】 https://www.bilibili.com/video/BV1DGG4zGEir/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
-
+生产环境报出 Too many open files 错误，你会用什么命令排查？如何排查特定端口被哪个进程占用？
+**Too many open files 排查**：此错误代表进程打开的文件描述符（句柄）数量超过了系统或用户的限制。1. 使用 `ulimit -n` 查看当前用户级别允许的最大文件句柄数。2. 使用 `lsof -p <PID> | wc -l` 或 `ls -l /proc/<PID>/fd | wc -l` 统计疑似泄漏进程当前实际打开的句柄总数。3. 进一步使用 `lsof -p <PID>` 详细查看它到底打开了哪些类型的文件（通常是未关闭的网络Socket连接或文件流）。**排查特定端口占用**：1. 最常用命令：`netstat -tunlp | grep <端口号>`（`t`表TCP，`u`表UDP，`n`表不解析域名，`l`表监听状态，`p`表显示进程PID和名称）。2. 替代命令：`lsof -i:<端口号>`，同样可以直接列出占用该端口的进程信息。
 
 ## 脚本
 **注释**：

@@ -99,9 +99,15 @@ Icon reference | IntelliJIDEA Documentation： https://www.jetbrains.com/help/id
 - **编辑多行**：按住 `Ctrl`（Windows/Linux）或 `Cmd`（macOS），然后点击多行，IDEA会在多个行上添加光标，可以同时编辑多个位置的内容。
 - **使用Live Templates**：IDEA支持代码模板，通过输入快捷缩写并按 `Tab` 键，IDEA会自动扩展为完整的代码块。你可以自定义模板。
 
-### 高级断点
+### 断点调试
 掌握条件断点（Condition Breakpoints，只在特定变量值时停下）、异常断点（Exception Breakpoints，抛出特定异常时自动拦截）。
 
+
+IDEA的高阶断点：什么是条件断点（Condition Breakpoint）和异常断点？如何利用Evaluate Expression在调试期动态改变变量状态？
+    
+**条件断点**：右键点击代码行左侧的红点，在弹出的 "Condition" 输入框中编写Java布尔表达式（如 `user.getId() == 1001`）。只有当条件计算结果为true时，断点才会挂起线程。这在排查 `for` 循环或高并发接口中特定用户的脏数据时效率极高。
+**异常断点**：按 `Ctrl+Shift+F8` 打开断点管理，点击左上角加号添加 "Java Exception Breakpoints"，指定一个具体的异常类（如 `NullPointerException`）。当程序任何地方抛出该异常时，调试器会自动停在抛出点，无需手动一层层追溯。**Evaluate Expression（计算表达式）**：在调试挂起时按 `Alt+F8` 打开。它不仅能查看复杂变量的深层值，更强大的是可以在运行期**动态执行方法或重新赋值**（例如直接输入 `user.setStatus("ADMIN")` 并执行）。这允许你在不修改代码、不重启服务的情况下，直接伪造出想要的上下文状态，验证后续代码的分支走向。
+- 
 ### 动态执行
 熟练使用 Evaluate Expression (Alt+F8) 在调试期动态修改变量值或执行方法，以验证逻辑分支。
 ### 依赖管理
@@ -214,6 +220,14 @@ maven
 
 `inspectionProfiles/`：代码检查（Lint）规则。定义哪些警告是 Error，哪些是 Warning，哪些忽略（例如：拼写检查是否开启，是否允许魔法值）。
 
+### 远程调试
+
+在IDEA中，如何配置并使用远程调试（Remote Debug）来排查部署在Linux服务器上的Java服务？
+    
+1. **服务端配置**：启动Java应用时加上JVM调试参数。JDK 5-8使用 `-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005`；JDK 9+使用 `-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005`。
+2. **防火墙配置**：确保Linux服务器的安全组或防火墙开放了该调试端口（如5005）。
+3. **IDEA配置**：在顶部的 Run/Debug Configurations 中新建一个 `Remote JVM Debug` 配置，填入服务器IP和对应端口，选择与线上代码完全一致的本地模块。
+4. **开始调试**：启动该配置，IDEA控制台打印 `Connected to the target VM` 即表示连接成功，随后在本地代码打断点即可实时拦截并调试线上请求。
 
 
 
@@ -234,6 +248,8 @@ maven
 * Maven 核心机制与依赖原则：
     * 生命周期： 清晰理解 Clean、Compile、Test、Package、Install、Deploy 阶段，执行后续阶段会自动触发前面的阶段。
     * 依赖冲突解决： 理解 Maven 的“最短路径优先”和“第一声明优先”原则。熟练在 `<dependency>` 中使用 `<exclusions>` 标签解决常见的日志框架冲突（如 slf4j 冲突）或版本不一致问题。
+深入解释Maven依赖调解的“最短路径优先”和“第一声明优先”原则。这是Maven在面对传递性依赖冲突时的自动仲裁机制。
+
 
 Download Apache Maven – Maven
 https://maven.apache.org/download.cgi
@@ -265,6 +281,16 @@ Maven 是 Java 项目的 构建工具，也是最常用的依赖管理工具。
 - **install**：将打包好的文件安装到本地 Maven 仓库。
 - **deploy**：将构建结果部署到远程仓库。
 
+Maven的构建生命周期（Lifecycle）包含哪些核心阶段？
+Maven包含三大内置生命周期：Clean、Default（核心构建阶段包含 `validate`, `compile`, `test`, `package`, `verify`, `install`, `deploy`）和 Site。
+
+mvn clean install 和 mvn clean deploy 的本质区别是什么？
+**本质区别**：
+- `mvn clean install` 会将打包后的产物（如Jar包）安装到**本地开发者机器的Maven仓库**（`~/.m2/repository`），仅供本地其他项目依赖使用；
+- `mvn clean deploy` 在完成 `install` 的所有动作后，还会将构建产物上传推送到**远程私服仓库**（如Nexus、Artifactory），供团队其他成员或线上CI/CD流水线拉取部署使用。
+
+**最短路径优先**：当依赖树中出现同一构件的不同版本时，距离当前项目路径最短的版本生效。例如 `A -> B -> C -> X(1.0)`（路径长为3）和 `A -> D -> X(2.0)`（路径长为2），最终将解析并使用 `X(2.0)`。
+**第一声明优先**：当路径长度完全相同时，按照 `pom.xml` 中依赖声明的先后顺序，排在前面的依赖分支上的版本优先生效。例如 `A -> B -> X(1.0)` 和 `A -> C -> X(2.0)`，若在POM中先声明引入B，则最终生效的是 `X(1.0)`。
 
 
 使用参数：
@@ -272,11 +298,25 @@ Maven 是 Java 项目的 构建工具，也是最常用的依赖管理工具。
 -Dmaven.test.skip=true：不编译测试代码，也不执行测试代码
 
 
-pom.xml：
+
+
+
+BOM（Bill of Materials）
+什么是BOM（Bill of Materials）？
+BOM（物料清单）是一个特殊的POM文件，其 `<packaging>` 为 `pom`，内部仅包含 `<dependencyManagement>` 节点。它的唯一作用是集中统一定义和维护一组互相兼容的依赖包版本池（例如 `spring-cloud-dependencies`）。
+
+在微服务多模块架构中，如何优雅地进行全局统一的版本控制？
+**全局控制方案**：在微服务顶层父工程的 `pom.xml` 的 `<dependencyManagement>` 中，通过 `<type>pom</type>` 和 `<scope>import</scope>` 引入第三方BOM包，同时统一定义内部各子模块的版本号。所有业务子模块的POM文件中，只需声明所需依赖的 `groupId` 和 `artifactId`，**坚决不写 `<version>`**，将版本仲裁权全部向上收拢至父工程，实现版本的绝对统一和一处修改全局生效。
+
+**NoSuchMethodError**
+遇到线上偶发的 NoSuchMethodError，通常是由什么原因引起的？你会如何使用Maven排查并彻底解决这种依赖冲突？
+原因：通常由依赖冲突（Jar包冲突）引起。JVM在类加载时（通常由双亲委派机制和类路径顺序决定）加载了含有该类的低版本Jar包，而业务代码期望调用的是高版本中新增的方法，导致运行时找不到方法。排查与解决：1. 使用 `mvn dependency:tree -Dverbose -Dincludes=冲突的groupId:artifactId` 定位完整的依赖树路径，找出引入多个版本的源头。2. 使用IDEA插件（如Maven Helper）可视化排查冲突项。3. 彻底解决：在不需要该版本或引入低版本的依赖项中使用 `<exclusions>` 标签将冲突包排除；更推荐的最佳实践是在父POM的 `<dependencyManagement>` 中显式声明该包的确切版本，进行全局强制锁定。
+
+### pom.xml
 `<scope>` 是**依赖作用范围**，决定了：
-- **依赖在编译、测试、运行等阶段是否可用**
-- **依赖会不会打进最终的包（jar/war）里**
-- **子模块是否会继承**
+- 依赖在编译、测试、运行等阶段是否可用
+- 依赖会不会打进最终的包（jar/war）里
+- 子模块是否会继承
 
 - `compile`（默认）：如果不写 `<scope>`，就是 `compile`。编译 / 测试 / 运行 都可用。会被打进最终 jar/war。
 - `provided`：编译 / 测试可用，运行时不打包。
@@ -290,6 +330,7 @@ pom.xml：
 `<type>pom</type>`因为 `spring-boot-dependencies` 本质上不是一个 jar 包，而是一个 **POM 文件**。它里面只有 `<dependencyManagement>`，没有源码/字节码。所以这里要指定 `<type>pom`，告诉 Maven 这是一个 POM 类型的 artifact。
 
 - 因为 Spring Boot BOM 已经帮你管好了版本。`spring-boot-starter`、`spring-boot-starter-web`、`spring-boot-starter-test` 不需要出现在父 POM 的 dependencyManagement。子模块需要用时直接 `<dependency>` 声明，不用版本号
+
 
 
 ## Gradle
