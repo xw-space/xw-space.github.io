@@ -7,7 +7,15 @@ icon: house
 title: 主页
 heroText: 范同学的博客
 tagline: 保持希望，满怀好奇
-heroImage: https://theme-hope-assets.vuejs.press/logo.svg
+
+# 相关教程：https://theme-hope.vuejs.press/zh/guide/blog/home.html#%E5%8D%9A%E5%AE%A2%E7%B1%BB%E5%9E%8B%E4%B8%BB%E9%A1%B5
+# 主页中间大圆图 / Hero 主图
+# heroImage: https://theme-hope-assets.vuejs.press/logo.svg
+heroImage: /assets/icon/logo.png
+
+# 主页 Hero 区域的背景图
+bgImage: /assets/icon/background.png
+# bgImageDark: 
 
 # 背景图的style
 # bgImageStyle:  {

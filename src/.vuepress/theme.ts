@@ -14,7 +14,10 @@ export default hopeTheme({
     url: "https://mister-hope.com",
   },
 
-  logo: "https://theme-hope-assets.vuejs.press/logo.svg",
+  // 导航栏左上角的站点 logo
+  // logo: "https://theme-hope-assets.vuejs.press/logo.svg",
+  logo: "/assets/icon/logo.png",
+
 
   repo: "vuepress-theme-hope/vuepress-theme-hope",
 
@@ -46,6 +49,8 @@ export default hopeTheme({
   blog: {
     description: "一个开发者",
     intro: "/intro",
+    // 侧边栏博主信息卡的头像
+    avatar: "/assets/icon/logo.png",
     medias: {
       Email: "fxw0601@example.com",
       GitHub: "https://github.com/xw-space",
@@ -79,7 +84,8 @@ export default hopeTheme({
       // Youtube: "https://example.com",
       // Zhihu: "https://example.com",
       VuePressThemeHope: {
-        icon: "https://theme-hope-assets.vuejs.press/logo.svg",
+        // icon: "https://theme-hope-assets.vuejs.press/logo.svg",
+        icon: "/assets/icon/logo.png",
         link: "https://theme-hope.vuejs.press",
       },
     },

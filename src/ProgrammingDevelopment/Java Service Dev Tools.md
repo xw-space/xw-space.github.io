@@ -17,49 +17,35 @@ tag:
 **是什么**：
 Feign 是 Spring Cloud 中用于简化 HTTP 客户端调用的一个声明式 HTTP 客户端库。
 
-**作用**：
-它提供了一种非常简便的方式来调用远程服务的 API，而无需手动编写大量的代码来发出 HTTP 请求和处理响应。
-Feign 接口通过注解的方式来定义远程调用接口，使用者只需像调用本地接口一样调用远程 API。
+**作用**：让使用者只需像调用本地接口一样调用远程 API。
 
-
-**主要特点**
-- **声明式 HTTP 客户端**：Feign 允许你通过简单的 Java 接口和注解来定义 HTTP 请求方式，隐藏了底层复杂的网络请求逻辑。
-- **与 Spring 集成良好**：Feign 可以与 Spring Boot 和 Spring Cloud 无缝集成。通过与 Eureka、Ribbon、Hystrix 等其他 Spring Cloud 组件结合，Feign 可以支持服务发现、负载均衡和容错。
-- **自动序列化和反序列化**：Feign 可以自动将请求和响应数据序列化为 JSON、XML 或其他格式，并将响应反序列化为 Java 对象。
+**原理**：Feign 允许你通过在简单的接口上加注解的方式来定义 HTTP 请求方式
 
 **优点**
-- 简洁性：大大简化了编写 HTTP 客户端的工作，代码清晰明了。
-- 与 Spring Cloud 生态系统无缝集成：结合 Ribbon、Hystrix 等组件，支持负载均衡和容错。
+- 简洁性：无需手动编写大量的代码来发出 HTTP 请求和处理响应，隐藏了底层复杂的网络请求逻辑。
+- **自动序列化和反序列化**：Feign 可以自动将请求和响应数据序列化为 JSON、XML 或其他格式，并将响应反序列化为 Java 对象。
+- **与 Spring 集成良好**：与 Spring Boot 和 Spring Cloud 无缝集成。通过与 Eureka、Ribbon、Hystrix 等其他 Spring Cloud 组件结合，Feign 可以支持服务发现、负载均衡和容错。
 - 强大的扩展能力：支持自定义的序列化、反序列化逻辑和请求拦截器。
-- 通过 Feign，开发者可以更轻松地实现微服务间的通信，减少了手动编写网络请求的代码，提升了开发效率。
 
 **常见用途**
-- **微服务之间的通信**：在微服务架构中，服务之间的通信通常通过 HTTP 请求进行。Feign 简化了这个过程，使得开发人员可以像调用本地方法一样去调用远程服务的 API。
+- **微服务之间的通信**
 - **服务发现**：与 Eureka 等服务发现工具结合，Feign 可以通过服务名称自动找到服务的实例，实现负载均衡和自动故障转移。
 - **简化 API 网关开发**：在 API 网关中，可以通过 Feign 来代理内部服务的接口，方便地转发请求。
 
 
-
-
-**作用原理**：
-当你在 Spring Boot 项目中使用`@EnableFeignClients` 注解时，Spring 会自动扫描指定包路径（如果未指定路径，则扫描当前包及其子包）下所有带有`@FeignClient` 注解的接口，将这些接口代理为 Spring 容器中的 Bean，这样就可以在其他地方通过依赖注入来使用它们。
-Spring 会为每个 `@FeignClient` 注解的接口创建一个动态代理类，并将其注册到 Spring 的上下文中。当你调用这个接口的方法时，实际调用的是由 Feign 生成的代理对象，而这个对象会根据你定义的注解和配置来执行相应的 HTTP 请求。
-```java
-@EnableFeignClients(basePackages = "com.example.demo.clients")
-```
-
-
-
 ### **用法**
-- **引入依赖**：在 Spring Boot 项目中，首先要引入 Feign 的依赖：
+- **引入Feign依赖**
 ```xml
 <dependency>
    <groupId>org.springframework.cloud</groupId>
-   <artifactId>spring-cloud-starter-openfeign</artifactId>
+   <artifactId>spring-cloud-starter-openFeign</artifactId>
 </dependency>
 ```
-
-- **定义 Feign 接口**：Feign 接口就像是服务的代理，主要通过注解定义。可以使用 `@FeignClient` 注解来声明一个 Feign 客户端，并通过方法上的注解来定义 HTTP 请求。
+- **定义 Feign 接口**
+- Feign 接口就像是服务的代理，主要通过注解定义。可以使用 `@FeignClient` 注解来声明一个 Feign 客户端，并通过方法上的注解来定义 HTTP 请求。
+- Spring 会为每个 `@FeignClient` 注解的接口创建一个动态代理类，并将其注册到 Spring 的上下文中。
+- 当你调用这个接口的方法时，实际调用的是由 Feign 生成的代理对象，而这个对象会根据你定义的注解和配置来执行相应的 HTTP 请求。
+- 下面这个例子中，`@FeignClient(name = "user-service")` 表示这个 Feign 客户端将调用名为 `user-service` 的服务，而 `@GetMapping` 注解指定了它将进行一个 `GET` 请求来获取用户信息。
 ```java
 @FeignClient(name = "user-service")
 public interface UserClient {
@@ -67,40 +53,60 @@ public interface UserClient {
    User getUserById(@PathVariable("id") Long id);
 }
 ```
-   在这个例子中，`@FeignClient(name = "user-service")` 表示这个 Feign 客户端将调用名为 `user-service` 的服务，而 `@GetMapping` 注解指定了它将进行一个 `GET` 请求来获取用户信息。
-   
-- **启用 Feign**：在主启动类中，使用 `@EnableFeignClients` 注解启用 Feign 客户端。
+- **启用 Feign**
+- 在主启动类中，使用 `@EnableFeignClients` 注解启用 Feign 客户端。
+- 在 Spring Boot 项目中使用`@EnableFeignClients` 注解时，Spring 自动扫描指定包路径（如果未指定路径，则扫描当前包及其子包）下所有带有`@FeignClient` 注解的接口，将这些接口代理为 Spring 容器中的 Bean，这样就可以在其他地方通过依赖注入来使用它们。
 ```java
 @SpringBootApplication
-@EnableFeignClients
+@EnableFeignClients(basePackages = "com.example.demo.clients")
 public class FeignApplication {
    public static void main(String[] args) {
 	   SpringApplication.run(FeignApplication.class, args);
    }
 }
 ```
-当 Spring Boot 启动时，它会扫描带有 `@FeignClient` 注解的接口，并为每个接口生成一个动态代理类。这个代理类实现了接口中的方法，并将这些方法与 HTTP 请求关联起来。
-
+- **请求参数和头信息**：Feign 支持通过注解传递请求参数和头信息。例如，你可以通过 `@RequestParam` 传递查询参数，通过 `@RequestHeader` 设置请求头。
+```java
+@FeignClient(name = "user-service")
+public interface UserClient {
+   @GetMapping("/api/user")
+   User getUser(@RequestParam("name") String name, @RequestHeader("Authorization") String token);
+}
+```
 - **请求构建**：
 	- 当我们调用 Feign 接口的方法时，例如`userService.getUserById(1L)` ，Feign 的代理对象会捕获这个方法调用。
 	- Feign 根据接口方法上的注解（如 `@GetMapping`、`@PostMapping` 等）来构建一个 HTTP 请求。它会替换路径中的参数，设置请求方法（GET、POST 等）、请求头和请求体等。
-
 - **HTTP 请求执行**：
-    - Feign 使用 HTTP 客户端（如 Apache HttpClient 或 OkHttp）执行构建好的 HTTP 请求。Feign 默认使用 `JDK HttpURLConnection`，但可以通过配置切换到其他 HTTP 客户端。
+    - Feign 使用 HTTP 客户端（如 Apache HttpClient 或 OkHttp）执行构建好的 HTTP 请求。
+    - Feign 默认使用 `JDK HttpURLConnection`，但可以通过配置切换到其他 HTTP 客户端。
     - Feign 将请求发送到指定的服务地址（如 `http://localhost:8080`），并等待服务的响应。
-
 - **响应处理**：
     - 收到远程服务的响应后，Feign 会根据接口方法的返回类型解析响应数据。比如，如果返回类型是 `User`，Feign 会自动将响应体解析为 `User` 对象（假设返回的是 JSON 数据）。
     - Feign 使用 Jackson 或其他 JSON 解析库将响应体转化为 Java 对象，并返回给调用方。
-
 - **错误处理与重试机制**：
     - 如果请求失败，Feign 可以通过配置重试策略或错误处理器（`ErrorDecoder`）来处理错误。例如，可以设置在请求失败时重试多次，或者捕获特定的 HTTP 错误代码并执行相应的逻辑。
+- **容错机制**：Feign 可以与 Hystrix 集成，提供服务降级功能，当远程服务不可用时，自动调用备用逻辑。
+```java
+@FeignClient(name = "user-service", fallback = UserClientFallback.class)
+public interface UserClient {
+   @GetMapping("/api/user/{id}")
+   User getUserById(@PathVariable("id") Long id);
+}
 
-### **如果没有fegin**
-- 老方法：RestTemplate（经典手写调用）
-	- 需要手动拼接 URL。
-	- 需要自己处理返回值类型转换（泛型还要用 `ParameterizedTypeReference`，代码更啰嗦）。
-	- 虽然也能配合 Ribbon/LoadBalancer 做服务发现，但写法更麻烦。
+@Component
+public class UserClientFallback implements UserClient {
+   @Override
+   public User getUserById(Long id) {
+	   return new User(); // 返回一个默认用户对象
+   }
+}
+```
+### **如果没有Feign**
+
+- 经典手写调用-老方法：RestTemplate
+- 需要手动拼接 URL。
+- 需要自己处理返回值类型转换（泛型还要用 `ParameterizedTypeReference`，代码更啰嗦）。
+- 虽然也能配合 Ribbon/LoadBalancer 做服务发现，但写法更麻烦。
 ```java
 @Autowired
 private RestTemplate restTemplate;
@@ -112,10 +118,11 @@ public Long doLogin(String code) {
     return result.getData();
 }
 ```
-- **使用feign**：
-	- 调用远程方法就像调用本地方法一样。
-	- Feign 自动处理请求路径、参数拼装、返回值反序列化。
-	- 可直接集成负载均衡（Ribbon 或 Spring Cloud LoadBalancer）+ 熔断降级（Sentinel / Resilience4j）。
+
+- **使用Feign**
+- 调用远程方法就像调用本地方法一样。
+- Feign 自动处理请求路径、参数拼装、返回值反序列化。
+- 可直接集成负载均衡（Ribbon 或 Spring Cloud LoadBalancer）+ 熔断降级（Sentinel / Resilience4j）。
 ```java
 // 声明接口
 @FeignClient(value = "service-customer")
@@ -133,36 +140,6 @@ public Long doLogin(String code) {
 }
 ```
 
-
-
-
-
-### **进阶功能**
-- **请求参数和头信息**：Feign 支持通过注解传递请求参数和头信息。例如，你可以通过 `@RequestParam` 传递查询参数，通过 `@RequestHeader` 设置请求头。
-```java
-@FeignClient(name = "user-service")
-public interface UserClient {
-   @GetMapping("/api/user")
-   User getUser(@RequestParam("name") String name, @RequestHeader("Authorization") String token);
-}
-```
-
-- **容错机制**：Feign 可以与 Hystrix 集成，提供服务降级功能，当远程服务不可用时，自动调用备用逻辑。
-```java
-@FeignClient(name = "user-service", fallback = UserClientFallback.class)
-public interface UserClient {
-   @GetMapping("/api/user/{id}")
-   User getUserById(@PathVariable("id") Long id);
-}
-
-@Component
-public class UserClientFallback implements UserClient {
-   @Override
-   public User getUserById(Long id) {
-	   return new User(); // 返回一个默认用户对象
-   }
-}
-```
 
 
 ## MyBatis—ORM框架
@@ -251,6 +228,7 @@ JDBC 原始写法的问题主要有以下几点：
 
 
 3. **Mapper接口**：MyBatis支持将SQL映射到接口方法上，即Mapper接口。Mapper接口是数据库操作的抽象，通过定义接口方法，MyBatis可以自动找到对应的SQL语句并执行。每个Mapper接口的方法与一条SQL语句绑定，便于管理和复用。
+
 实体类
 ```java
 public class User {
@@ -1221,6 +1199,7 @@ RabbitMQ的高可用机制有了解过嘛
 https://zookeeper.apache.org
 ### 介绍
 Zookeeper是一个分布式协调应用，可用作注册中心和配置中心，
+- **Zookeeper** 适合高可靠、高一致性的场景。
 
 结构：
 比如你有一个服务名叫 `order-service`，它的注册结构如下：
@@ -1232,8 +1211,41 @@ Zookeeper是一个分布式协调应用，可用作注册中心和配置中心�
         └── ...
 ```
 
+
+**为什么选择 Zookeeper 作为注册中心，而不是 Etcd 或 Nacos？**
+- **高可靠性和一致性**：Zookeeper 基于 ZAB 协议（Zookeeper Atomic Broadcast），提供强一致性，适合高可靠性要求的场景。
+- **成熟度**：Zookeeper 已经在许多大规模分布式系统中得到了广泛应用，成熟稳定。
+- **分布式协调能力**：Zookeeper 提供了丰富的分布式协调功能，除了服务注册与发现，还能用于分布式锁、选举等功能。
+- **Etcd/Nacos** 主要在 Kubernetes 和微服务场景中广泛使用，相对 Zookeeper 可能在高并发和大规模场景下性能不如 Zookeeper。
+
+**服务注册和发现的流程是怎样的？客户端如何从注册中心获取可用服务？**
+- **服务注册**：
+	- 服务启动时，将服务信息（如地址、端口、权重等）注册到 Zookeeper 的某个特定节点（如 `/services/service-name`）。
+	- 服务健康检查：服务在注册后定期更新其在 Zookeeper 中的状态，保证注册信息的有效性。
+- **服务发现**：
+	- 客户端通过查询 Zookeeper 中的服务节点（如 `/services/service-name`）来获取可用服务列表。
+	- 客户端可设置 **Watcher** 来监听服务节点的变化，一旦有新服务注册或旧服务下线，客户端会被通知。
+
+
+**如何避免频繁访问 Zookeeper 带来的性能压力？**
+- **客户端缓存**：客户端可以缓存服务节点信息，定期更新而非每次都查询 Zookeeper。
+- **Watchers 使用**：使用 Watchers 监听节点变化，避免频繁的查询。
+- **合理的 TTL**：为服务节点设置适当的 TTL（过期时间），减少 Zookeeper 的查询负担。
+- **批量查询**：通过一次性查询多个服务节点的信息，减少请求次数。
+
+
 本地缓存：
 客户端通过建立**本地缓存**避免频繁访问 ZK，并使用 **Watcher 监听节点变化（增、删、改）**，实时同步服务列表，当有新增/下线时及时触发事件更新本地数据，在**高并发、海量节点**场景下实现稳定可靠的服务发现机制。
+
+
+有哪些容灾设计？
+- **高可用部署**：Zookeeper 通常部署为一个 **集群**，以保证服务可用性。如果一个节点宕机，集群中的其他节点会接管请求，保证高可用性。
+- **客户端重试机制**：客户端应实现重试机制，当无法连接到 Zookeeper 时，客户端可以尝试连接集群中的其他节点。
+- **备份机制**：可以通过 **多注册中心** 配置，将服务注册信息同步到多个注册中心（如 Nacos、Consul 等）以保证服务发现的容灾能力。
+
+
+
+
 
 
 ### **使用**
@@ -1281,21 +1293,11 @@ ZAB协议是专为ZooKeeper设计的崩溃恢复与原子广播协议。**数据
 **ZooKeeper（CP系统）表现**：由于强依赖半数以上节点（Quorum）存活，处于**少数派**那一侧的机房ZK节点将无法进行Leader选举，整个少数派集群直接瘫痪，**拒绝提供任何读写服务**；多数派一侧正常工作。**业务影响**：少数派机房的微服务将彻底丧失注册中心，新实例无法注册，旧实例无法发现，导致该机房内部的业务链路中断，哪怕服务本身是存活的。
 
 
-## Nacos—服务发现/注册
-### 使用
-
-
-**安装Nacos**：
-- 下载，解压，安装安装包
-- 或者直接下载docker，默认未8848端口，在 localhost:8848/nacos 运行，用户名和密码都是nacos
-
-**二进制包单机模式启动指令：**
-* **Linux / macOS:** 运行 `sh startup.sh -m standalone`
-* **Windows:** 运行 `cmd startup.cmd -m standalone`
-* 
+## Nacos
 
 ### 介绍
 **简介**：**Nacos** 是阿里巴巴开源的一个动态服务发现、配置管理和服务管理平台，适用于构建微服务架构。
+
 
 
 **功能**：
@@ -1309,7 +1311,7 @@ ZAB协议是专为ZooKeeper设计的崩溃恢复与原子广播协议。**数据
 - **灰度发布**：允许你将新配置逐步推送给部分应用实例，观察效果后再全面发布。
 - **集群模式**：Nacos 默认是单机模式，但支持集群模式。通过此实现负载均衡和自动故障转移，高可用；原理是Nacos 集群通过 一致性哈希 来分配服务注册和配置的存储。
 
-如何实现热更新？
+
 
 
 **优点**
@@ -1321,26 +1323,29 @@ ZAB协议是专为ZooKeeper设计的崩溃恢复与原子广播协议。**数据
 - **易用性强**，支持多种配置格式和实时更新。
 - 可以热更新计费参数
 
-
+**组件**
+- **Nacos Server**：提供服务注册、配置管理和服务监控的功能。
+- **Nacos Client**：用于与 Nacos Server 通信的客户端库，一般集成到各个服务中。
 
 与 **Apollo**、**Consul** 比较：
 - **Nacos** 支持配置管理和服务发现，Apollo 仅做配置管理，Consul 更侧重服务发现。
 - **Nacos** 更易与 Spring Cloud 集成。
 
 
-**常用组件**
-- **Nacos Server**：提供服务注册、配置管理和服务监控的功能。
-- **Nacos Client**：用于与 Nacos Server 通信的客户端库，一般集成到各个服务中。
 
 
-### 服务注册与发现
-(Registry)
-微服务架构中，各服务实例的网络坐标（IP 和端口）会动态变化。Nacos 提供了基于 DNS 和基于 RPC 的服务发现机制，解决“服务提供者在哪里”的问题。
 
-**技术实现机制：**
-- **服务注册 (Register)：** 服务提供者 (Provider) 启动时，通过 Nacos Client SDK 向 Nacos Server 发送 REST 请求，注册自身的元数据信息（如 IP、端口、权重、健康状态等）。
-- **健康检查 (Heartbeat)：** 对于临时实例，客户端默认每 5 秒向服务端发送一次心跳包。若 Nacos Server 在 15 秒内未收到心跳，会将实例标记为不健康；若 30 秒未收到，则直接将该实例从可用服务列表中剔除。
-- **服务发现 (Discovery)：** 服务消费者 (Consumer) 定期（默认 10 秒）从 Nacos Server 拉取最新的服务实例列表，并缓存在本地内存中。发起远程调用时，结合本地负载均衡组件（如 Spring Cloud LoadBalancer）从缓存列表中选择一个健康实例发起请求。
+### 安装
+
+
+**安装Nacos**：
+- 下载，解压，安装安装包
+- 或者直接下载docker，默认未8848端口，在 localhost:8848/nacos 运行，用户名和密码都是nacos
+
+**二进制包单机模式启动指令：**
+* **Linux / macOS:** 运行 `sh startup.sh -m standalone`
+* **Windows:** 运行 `cmd startup.cmd -m standalone`
+* 
 
 **客户端配置示例：** 引入 `spring-cloud-starter-alibaba-nacos-discovery` 依赖后，在 `application.yml` 中声明：
 ```YAML
@@ -1353,10 +1358,25 @@ spring:
         server-addr: 127.0.0.1:8848
 ```
 
+### 服务发现/注册-知识
+服务注册与发现
+(Registry)
+微服务架构中，各服务实例的网络坐标（IP 和端口）会动态变化。Nacos 提供了基于 DNS 和基于 RPC 的服务发现机制，解决“服务提供者在哪里”的问题。
+
+**技术实现机制：**
+- **服务注册 (Register)：** 服务提供者 (Provider) 启动时，通过 Nacos Client SDK 向 Nacos Server 发送 REST 请求，注册自身的元数据信息（如 IP、端口、权重、健康状态等）。
+- **健康检查 (Heartbeat)：** 对于临时实例，客户端默认每 5 秒向服务端发送一次心跳包。若 Nacos Server 在 15 秒内未收到心跳，会将实例标记为不健康；若 30 秒未收到，则直接将该实例从可用服务列表中剔除。
+- **服务发现 (Discovery)：** 服务消费者 (Consumer) 定期（默认 10 秒）从 Nacos Server 拉取最新的服务实例列表，并缓存在本地内存中。发起远程调用时，结合本地负载均衡组件（如 Spring Cloud LoadBalancer）从缓存列表中选择一个健康实例发起请求。
+
+Nacos 在作为服务注册中心时，底层是如何实现服务实例的健康检查的（临时实例与持久化实例的区别）？
+- **临时实例（Ephemeral=true）：** 采用**客户端主动心跳**机制。客户端（微服务）定时向 Nacos 服务端发送心跳维持活性。服务端如果在 15 秒内没收到心跳，会将实例标记为不健康；30 秒没收到，则将其从服务列表中剔除。适用于 AP 架构模式（Distro 协议）。
+- **持久化实例（Ephemeral=false）：** 采用**服务端主动探测**机制。Nacos 服务端主动发起 TCP 或 HTTP 探活请求来检查实例状态。即使探测失败，实例也不会被剔除，只会标记为不健康。适用于 CP 架构模式（Raft 协议）。
+
+Nacos作为注册中心，它的临时实例和持久化实例在底层健康检查机制和CAP理论倾向上有什么不同？
+**健康检查机制**：临时实例采用**客户端主动心跳上报**机制（默认5秒一次），若服务端15秒未收到心跳则标记为不健康，30秒未收到则直接剔除；持久化实例采用**服务端主动探测**机制（TCP/HTTP探测），即使探测失败将实例标记为不健康，服务端也**永远不会剔除**该实例。**CAP理论倾向**：临时实例对应 **AP模型**（可用性+分区容错性），底层采用自研的 Distro 协议进行节点间的异步数据复制，优先保证服务发现的高可用；持久化实例对应 **CP模型**（一致性+分区容错性），底层采用 Raft 协议，强依赖多数派选举和日志复制，优先保证集群内注册数据的一致性。
 
 
-
-### 分布式配置管理
+### 配置中心-使用
 (Config Center)
 
 Nacos 允许将系统中各个微服务的配置文件集中提取到 Nacos Server 端进行统一存储和管理，并支持配置的动态下发，服务无需重启即可应用新配置。
@@ -1410,26 +1430,32 @@ public class ConfigController {
 nacos.discovery.server-addr=127.0.0.1:8848,127.0.0.2:8848,127.0.0.3:8848
 ```
 
-### 网络脑裂
 
-如果微服务集群发生网络脑裂（Network Partition），Nacos会表现出什么行为？对业务链路有什么影响？
-**网络脑裂**指由于网络故障，一个完整的集群被物理分割成了两个或多个互不连通的子集群。
-**Nacos（AP模式，临时实例）表现**：Nacos基于去中心化的 Peer-to-Peer 同步。发生脑裂后，两边机房的Nacos节点都不会停止工作，而是各自选出自己的临时Leader（或独立运行）。它们各自维护自己机房内的服务实例信息。**业务影响**：属于“降级”状态。机房A的服务只能发现机房A的其他服务并互相调用，机房B同理。虽然全局数据不一致了（无法跨机房调用），但**最大限度地保证了业务链路的存活**（所谓的“可用性优先”）。当网络恢复后，Nacos会自动进行数据合并修复。
+Nacos配置中心的客户端是如何感知到服务端配置发生变更的？请详细解释其底层的长轮询（Long Polling）机制。
 
-
-### 其它问题
-
-Nacos 在作为服务注册中心时，底层是如何实现服务实例的健康检查的（临时实例与持久化实例的区别）？
-- **临时实例（Ephemeral=true）：** 采用**客户端主动心跳**机制。客户端（微服务）定时向 Nacos 服务端发送心跳维持活性。服务端如果在 15 秒内没收到心跳，会将实例标记为不健康；30 秒没收到，则将其从服务列表中剔除。适用于 AP 架构模式（Distro 协议）。
-- **持久化实例（Ephemeral=false）：** 采用**服务端主动探测**机制。Nacos 服务端主动发起 TCP 或 HTTP 探活请求来检查实例状态。即使探测失败，实例也不会被剔除，只会标记为不健康。适用于 CP 架构模式（Raft 协议）。
+Nacos 采用的是**长轮询机制**（Push与Pull的结合体）。客户端向服务端发起拉取配置的 HTTP 请求，并携带一个超时时间（默认30秒）。服务端收到请求后，会比对客户端携带的配置 MD5 值。1. **如果发生变更**：服务端立即返回最新配置，连接结束。2. **如果未变更**：服务端**不会立即返回**，而是利用 Servlet 3.0 的异步处理机制（AsyncContext）将该请求挂起，放入一个延时任务队列中（最长等待约29.5秒）。在这段挂起期内，如果运维人员在控制台修改了该配置，服务端会触发 DataChangeEvent 事件，立刻找到对应被挂起的客户端请求，写入最新配置并提前返回。如果在 29.5 秒内一直没有变更，服务端返回状态告知无变更，客户端收到后会**立刻发起下一次长轮询**。这种机制既做到了准实时的配置推送，又避免了短轮询带来的无效网络开销和服务器 CPU 飙升。
 
 
+
+
+
+### 集群架构
 **Nacos 高可用集群架构设计是如何设计的？：**
 - 集群采用无中心节点的对等架构（Leader-Follower 主要体现在 CP 协议的 Raft 选举上）。
 - 为了实现高可用，通常前端挂载一层 VIP（Virtual IP）或 Nginx 等负载均衡器，微服务客户端配置 VIP 地址，由负载均衡器将请求分发到不同的 Nacos 节点。
 - 针对持久化数据（如配置信息和持久化实例信息），Nacos 集群必须配置共享的外部数据库（通常是 MySQL 集群主从架构），以保证各 Nacos 节点的数据一致性，而非依赖 Nacos 自带的内嵌 Derby 数据库。
 
+
+**网络脑裂问题**
+如果微服务集群发生网络脑裂（Network Partition），Nacos会表现出什么行为？对业务链路有什么影响？
+**网络脑裂**指由于网络故障，一个完整的集群被物理分割成了两个或多个互不连通的子集群。
+**Nacos（AP模式，临时实例）表现**：Nacos基于去中心化的 Peer-to-Peer 同步。发生脑裂后，两边机房的Nacos节点都不会停止工作，而是各自选出自己的临时Leader（或独立运行）。它们各自维护自己机房内的服务实例信息。**业务影响**：属于“降级”状态。机房A的服务只能发现机房A的其他服务并互相调用，机房B同理。虽然全局数据不一致了（无法跨机房调用），但**最大限度地保证了业务链路的存活**（所谓的“可用性优先”）。当网络恢复后，Nacos会自动进行数据合并修复。
+
 ### 其它
+
+**如何实现热更新**？
+
+
 **如何防止 Nacos 单点故障？**
 - **集群部署**：通过部署多个 Nacos 实例，形成集群，避免单点故障。
 - **数据复制**：配置 Nacos 集群中的每个节点进行数据同步，确保节点间数据一致性。
@@ -1438,25 +1464,22 @@ Nacos 在作为服务注册中心时，底层是如何实现服务实例的健�
 - **持久化配置**：启用 Nacos 的数据持久化，确保配置数据不会丢失。
 
 
-Nacos作为注册中心，它的临时实例和持久化实例在底层健康检查机制和CAP理论倾向上有什么不同？
-**健康检查机制**：临时实例采用**客户端主动心跳上报**机制（默认5秒一次），若服务端15秒未收到心跳则标记为不健康，30秒未收到则直接剔除；持久化实例采用**服务端主动探测**机制（TCP/HTTP探测），即使探测失败将实例标记为不健康，服务端也**永远不会剔除**该实例。**CAP理论倾向**：临时实例对应 **AP模型**（可用性+分区容错性），底层采用自研的 Distro 协议进行节点间的异步数据复制，优先保证服务发现的高可用；持久化实例对应 **CP模型**（一致性+分区容错性），底层采用 Raft 协议，强依赖多数派选举和日志复制，优先保证集群内注册数据的一致性。
-
-
-## Nacos—配置中心
-
-
-Nacos配置中心的客户端是如何感知到服务端配置发生变更的？请详细解释其底层的长轮询（Long Polling）机制。
-
-Nacos 采用的是**长轮询机制**（Push与Pull的结合体）。客户端向服务端发起拉取配置的 HTTP 请求，并携带一个超时时间（默认30秒）。服务端收到请求后，会比对客户端携带的配置 MD5 值。1. **如果发生变更**：服务端立即返回最新配置，连接结束。2. **如果未变更**：服务端**不会立即返回**，而是利用 Servlet 3.0 的异步处理机制（AsyncContext）将该请求挂起，放入一个延时任务队列中（最长等待约29.5秒）。在这段挂起期内，如果运维人员在控制台修改了该配置，服务端会触发 DataChangeEvent 事件，立刻找到对应被挂起的客户端请求，写入最新配置并提前返回。如果在 29.5 秒内一直没有变更，服务端返回状态告知无变更，客户端收到后会**立刻发起下一次长轮询**。这种机制既做到了准实时的配置推送，又避免了短轮询带来的无效网络开销和服务器 CPU 飙升。
 
 
 ## Seata—分布式事务
 ### 介绍
-**介绍**：Seata （Simple Extensible Autonomous Transaction Architecture）是阿里开源的分布式事务中间件，是一套开源的分布式事务解决方案，用于确保在多个微服务中操作多个数据库时的数据一致性。
+**介绍**：Seata （Simple Extensible Autonomous Transaction Architecture）是阿里开源的分布式事务中间件，是一套开源的分布式事务解决方案，
+
+用于确保在多个微服务中操作多个数据库时的数据一致性。
 
 **为什么需要分布式事务**？
-比如对于 用户下单 + 库存扣减 + 支付成功 + 修改订单状态 这一系列操作，它们分布在不同服务/数据库中，并且必须要么都成功，要么都失败，否则就会出问题。所以需要分布式事务，让它们“要么都成功，要么全部回滚”。
-假如支付成功但订单没写入，使用Seata将自动回滚支付记录；假如扣了库存但订单失败，使用Seata可以自动补回库存；当发生网络抖动，调用中断，Seata会将事务挂起，等网络恢复后自动处理
+比如对于“用户下单 + 库存扣减 + 支付成功 + 修改订单状态”这一系列操作，它们分布在不同服务/数据库中，并且必须要么都成功，要么都失败，否则就会出问题。
+所以需要分布式事务，保证它们“要么都成功，要么全部回滚”。
+
+**作用**：
+- 假如支付成功但订单没写入，使用Seata将自动回滚支付记录；
+- 假如扣了库存但订单失败，使用Seata可以自动补回库存；
+- 当发生网络抖动，调用中断，Seata会将事务挂起，等网络恢复后自动处理
 
 Seata的优势：
 - 分布式操作导致多数据库事务难协调，自动拦截 SQL，统一事务控制
@@ -1466,13 +1489,10 @@ Seata的优势：
 
 ### 基础内容
 **Seata的模式**：
-
-| 模式          | 说明                                   |
-| ----------- | ------------------------------------ |
-| **AT 模式**   | 自动代理数据库操作，适用于 JDBC/MyBatis 项目（最多人用）  |
-| **TCC 模式**  | 手写 Try-Confirm-Cancel 接口，适合业务控制度高的场景 |
-| **SAGA 模式** | 长事务补偿机制，适用于长流程/异步场景                  |
-| **XA 模式**   | 接口级的两阶段提交，和传统数据库 XA 接口兼容             |
+- **AT模式**：自动代理数据库操作，适用于JDBC/MyBatis项目（最多人用）
+- **TCC模式**：手写Try-Confirm-Cancel接口，适合业务控制度高的场景
+- **SAGA模式**：长事务补偿机制，适用于长流程/异步场景
+- **XA模式**：接口级的两阶段提交，和传统数据库XA接口兼容
 
 **组件简要说明**：
 **TC**（Transaction Coordinator）：事务协调器，协调全局事务提交/回滚
@@ -1483,39 +1503,45 @@ Seata的优势：
 
 经典2PC（两阶段提交）存在哪些致命缺陷（如同步阻塞、单点故障、数据不一致）？Seata是如何解决这些痛点的？
     
-**经典2PC缺陷**：1. **同步阻塞**：在整个两阶段执行期间（从一阶段准备到二阶段提交或回滚），所有参与的数据库节点必须始终持有本地数据库的排他锁，导致并发性能极差。2. **单点故障**：协调者（TM）若在第二阶段宕机，参与者（RM）将一直阻塞并锁定资源，无法释放。3. **数据不一致**：在二阶段若发生网络分区，只有部分节点收到了Commit指令，会导致整个分布式系统的数据不一致。**Seata的解决方案（以AT模式为例）**：Seata将长事务拆解为本地短事务。在一阶段，业务SQL执行完毕后，Seata会**直接提交本地事务并释放本地数据库锁**，从而彻底解决了同步阻塞问题，极大地提升了吞吐量；同时，Seata引入了高可用的独立TC（事务协调器）集群组件来解决单点问题；二阶段仅负责轻量级的异步清理（Commit）或基于一阶段记录的Undo Log进行反向补偿（Rollback），以最终一致性代替了强一致性。
+**经典2PC缺陷**：
+- **同步阻塞**：在整个两阶段执行期间（从一阶段准备到二阶段提交或回滚），所有参与的数据库节点必须始终持有本地数据库的排他锁，导致并发性能极差。
+- **单点故障**：协调者（TM）若在第二阶段宕机，参与者（RM）将一直阻塞并锁定资源，无法释放。
+- **数据不一致**：在二阶段若发生网络分区，只有部分节点收到了Commit指令，会导致整个分布式系统的数据不一致。
 
-### AT 模式两阶段提交
-**AT模式的执行流程**：
-1️⃣ 全局事务开始：订单服务发起 `@GlobalTransactional`，Seata TC 创建全局事务I
-2️⃣ 各服务执行本地事务：Seata 自动拦截 SQL，记录“**原值快照**”（undo_log）用于回滚
-3️⃣ 全部成功 → 提交；任一失败 → 回滚：Seata TC 通知所有服务提交/回滚
+**Seata的解决方案（以AT模式为例）**：Seata将长事务拆解为本地短事务。在一阶段，业务SQL执行完毕后，Seata会**直接提交本地事务并释放本地数据库锁**，从而彻底解决了同步阻塞问题，极大地提升了吞吐量；同时，Seata引入了高可用的独立TC（事务协调器）集群组件来解决单点问题；二阶段仅负责轻量级的异步清理（Commit）或基于一阶段记录的Undo Log进行反向补偿（Rollback），以最终一致性代替了强一致性。
 
+### AT模式
+两阶段提交
 
-
-底层机制：
+请详细剖析Seata AT模式的完整工作流：
+- **全局事务开始**：订单服务发起 `@GlobalTransactional`，Seata TC 创建全局事务
 - **一阶段（执行与拦截）：** 
-	- Seata 的 RM（资源管理器）拦截业务 SQL。
-	- 解析 SQL 语义，找到要更新的业务数据，在业务数据被更新前，将其保存为“before image”；执行业务 SQL 更新数据；在数据更新后，将其保存为“after image”。
-	- 最后将前后镜像以及业务 SQL 组成一条回滚日志（`undo_log`），与业务 SQL 在同一个本地事务中提交。
+	- 拦截SQL生成前后镜像（Undo Log）和获取本地锁/全局锁
+	- 各服务执行本地事务：Seata 自动拦截 SQL，记录“**原值快照**”（undo_log）用于回滚
+	- Seata 的 RM（资源管理器）代理数据源拦截业务 SQL。
+	- 解析 SQL 语义，找到要更新的业务数据，在业务数据被更新前，将其保存为“before image”；
+	- 执行业务 SQL 更新数据；
+	- 将更新后的数据保存为“after image”。
+	- 最后将前后镜像以及业务 SQL 组成一条回滚日志（`undo_log`），与业务 SQL 在同一个本地事务中提交。到当前数据库的 `undo_log` 表中
 	- 这样保证了一阶段的原子性，并释放本地锁。
-- **二阶段（提交或回滚）：**
-    - **如果全局提交（Commit）：** 
-	    - TC（事务协调器）下发 commit 指令，
-	    - RM 收到指令后，将分支事务放入一个异步任务队列中，快速返回成功。
-	    - 异步任务会批量地删除对应的 `undo_log` 记录。
-    - **如果全局回滚（Rollback）：** 
-	    - TC 下发 rollback 指令，
-	    - RM 收到指令后，开启一个本地事务，通过 XID 和 Branch ID 找到相应的 `undo_log`记录。
-	    - 对比“after image”与当前数据库的数据是否一致（如果不一致，说明发生脏写，需人工介入）；如果一致，则根据“before image”生成逆向 SQL 并执行，还原业务数据。
-	    - 最后删除 `undo_log` 并提交本地事务。
+	- 在提交本地事务前，RM向TC申请该记录的**全局锁**（由表名+主键组成）。若申请不到则重试，重试超时则回滚本地事务。6. 获取到全局锁后，将业务数据和Undo Log在一个本地事务中提交，**释放本地锁**。7. 向TC汇报一阶段完成。
+- **二阶段（提交或回滚）：** 
+- ； 回滚：
+    - **如果全部任务成功 → 提交（Commit）：** 
+	    - TC（事务协调器）下发 commit 全局提交指令，
+	    - RM 收到指令后，快速返回成功，并将该分支事务放入一个异步任务队列中，，由后台线程批量、异步地删除对应的 Undo Log 记录即可。
+    - **如果任一任务失败 →回滚（Rollback）：** 
+	    - Seata TC 通知所有服务提交/回滚
+	    - TC 下发 rollback 全局回滚指令，
+	    - RM 收到指令后，开启一个本地事务
+	    - 通过 XID 和 Branch ID 找到相应的 `undo_log`记录。
+	    - 在执行补偿前，RM会先校验当前数据库的数据是否与“after image”，如果不一致，说明发生脏写，需人工介入；
+	    - 如果一致，则根据“before image”生成逆向 SQL（如将 `UPDATE` 改回原值，`INSERT` 改为 `DELETE`） 并执行，还原业务数据。
+	    - 最后删除 `undo_log` 并释放全局锁。
 
-请详细剖析Seata AT模式的完整工作流：一阶段拦截SQL生成前后镜像（Undo Log）和获取本地锁/全局锁的过程，以及二阶段的异步提交与回滚逻辑。
-    
-**一阶段（Phase 1）**：1. Seata的RM代理数据源拦截业务SQL，解析SQL并查询出修改前的快照（Before Image）。2. 执行真实的业务SQL修改数据。3. 查询修改后的快照（After Image）。4. 将前后镜像合并生成 Undo Log 插入到当前数据库的 `undo_log` 表中。5. **核心动作**：在提交本地事务前，RM向TC申请该记录的**全局锁**（由表名+主键组成）。若申请不到则重试，重试超时则回滚本地事务。6. 获取到全局锁后，将业务数据和Undo Log在一个本地事务中提交，**释放本地锁**。7. 向TC汇报一阶段完成。
+如果遇到全局锁冲突或分支事务长时间不提交，你们是如何处理的？
 
-**二阶段（Phase 2）**：1. **Commit（提交）**：TC发出全局提交指令。RM收到后立即返回成功，并将该分支事务放入一个异步队列，由后台线程批量、异步地删除对应的 Undo Log 记录即可。2. **Rollback（回滚）**：TC发出全局回滚指令。RM通过XID和Branch ID找到对应的 Undo Log。在执行补偿前，RM会先校验当前数据库的数据是否与 After Image 一致。若一致，则根据 Before Image 生成反向SQL（如将 `UPDATE` 改回原值，`INSERT` 改为 `DELETE`）并执行，最后删除 Undo Log 并释放全局锁。
-### TCC
+### TCC模式
 Seata的TCC模式与AT模式有什么本质区别？在设计TCC的Try、Confirm、Cancel接口时，必须保证哪三大核心原则（幂等性、空回滚、防悬挂）？请结合代码逻辑解释如何防悬挂。
  **本质区别**：AT模式是“无侵入”的，底层通过代理数据源自动生成补偿日志，依赖于关系型数据库的事务机制；TCC（Try-Confirm/Cancel）模式是“强侵入”的，属于业务级分布式事务，完全不依赖底层数据库的本地事务，适用于跨库、Redis操作或外部RPC调用。开发者需手动编写三个阶段的业务逻辑：Try（资源预留/冻结）、Confirm（实际扣减）、Cancel（解冻/补偿）。
 **三大核心原则**：
@@ -1831,8 +1857,11 @@ XXL-Job调度中心与执行器之间的通讯机制是怎样的？如果调度�
 
 ## Netty—网络通信框架
 是一个Java 高性能网络通信框架，封装 NIO、支持异步事件驱动、零拷贝等
+
+
 Netty 通过 **ChannelHandler** 链式处理入站/出站数据
 每个 Channel 对应一个 TCP 连接
+
 
 - Netty 的 `EventLoop` 本质是一个单线程事件循环，内部封装了 **Selector**。
 - EventLoop负责事件轮询和selector，一个 `EventLoop` 绑定多个 `Channel`，并不断轮询它们的 IO 事件。
@@ -1844,6 +1873,43 @@ Netty 通过 **ChannelHandler** 链式处理入站/出站数据
 - 复用Channel，建立一次连接，可以多次使用，不用每个连接都new 一个socket，避免频繁创建和销毁 TCP 连接，减小开销，减少端口使用
 - Zero-Copy零拷贝传输，
 - 支持异步事件，使用 `Future`、`Promise` 等非阻塞处理方式
+
+**为什么选择 Netty 而不是直接使用 Java NIO 或 MINA？**
+- **简化开发**：Netty 提供了更高层次的抽象和封装，避免了直接使用 Java NIO 时需要处理的复杂细节，如缓冲区管理、连接管理等。
+- **高性能**：Netty 在 I/O 处理方面做了高度优化，具有更低的延迟和更高的吞吐量。
+- **可扩展性和灵活性**：Netty 提供了丰富的扩展点和自定义处理能力（如自定义编解码器、处理器等），能够满足各种复杂的网络需求。
+- **活跃社区与支持**：Netty 拥有活跃的开发者社区和完善的文档支持，相比 Java NIO 和 MINA 更容易上手和维护。
+
+**Netty 是如何实现高性能的异步通信的？**
+- **异步 I/O**：Netty 使用非阻塞的 I/O 操作，通过 `Channel` 监听事件并处理（例如读/写就绪），避免了传统同步阻塞 I/O 带来的性能瓶颈。
+- **事件驱动**：通过事件循环（`EventLoop`）来处理 I/O 事件，实现高度的并发处理。
+- **高效的内存管理**：Netty 通过内存池和零拷贝机制减少了不必要的内存分配和复制，提高了性能。
+
+
+**如何设计 Netty 的 ChannelPipeline？有哪些 Handler？**
+- **设计 Pipeline**：`ChannelPipeline` 是 Netty 中处理消息的核心组件，用于顺序执行多个 **`ChannelHandler`** 来处理 I/O 事件。
+- **常见 Handler**：
+- **ByteToMessageDecoder**：将字节流解码为消息对象。
+- **MessageToByteEncoder**：将消息对象编码为字节流。
+- **IdleStateHandler**：检测连接是否空闲，用于实现心跳检测。
+- **LoggingHandler**：用于记录日志。
+- **业务逻辑处理**：自定义的 `ChannelHandler` 来处理具体业务逻辑（如协议解析、消息处理等）。
+ 
+**Netty 的线程模型是怎样的？BossGroup 和 WorkerGroup 各自职责是什么？**
+- **BossGroup**：负责接收客户端的连接请求，创建新的 `Channel`。
+- **WorkerGroup**：负责处理已经接入的连接，执行数据读写操作。
+- **线程模型**：Netty 使用事件驱动模型，BossGroup 和 WorkerGroup 都是事件循环器 (`EventLoopGroup`)，每个 `EventLoop` 负责一个或多个 I/O 事件的处理。
+
+**Netty 的 Zero-Copy 是什么？在什么情况下能提升性能？**
+- **Zero-Copy**：通过直接操作操作系统的 I/O 缓冲区而不需要额外的内存拷贝，从而提高数据传输效率。
+- **提升性能的场景**：主要应用于大文件的读取和写入，避免了多次数据拷贝和内存分配，提高了磁盘和网络 I/O 性能。
+
+**客户端的连接池是如何实现和维护的？**
+- **连接池管理**：通过池化技术（如 **Apache Commons Pool**）管理客户端与服务的连接。连接池维护一定数量的空闲连接，并能按需创建和销毁连接。
+- **最大连接数和最小连接数**：设置连接池的最大连接数和最小连接数，根据业务需求动态调整。
+- **连接有效性检查**：定期检查连接是否有效，避免使用失效连接。
+- **负载均衡**：在多节点环境下，连接池结合负载均衡策略，分配请求到不同节点。
+- 负载均衡定义：当有多个服务实例可用时，客户端按一定策略选择其中一个实例，主要是未来分散各服务器的压力，提高性能和容错。
 
 
 **代码**：
@@ -1888,7 +1954,54 @@ Log4j 是 Java 最早期、最经典的 日志框架
 
 ## CompletableFuture
 
+
+
+
 用于支持异步编程和处理异步操作的结果，将多个耗时接口/方法异步执行，并并行处理+合并结果，从而显著提升系统整体响应性能。
+CompletableFuture 支持并行执行多个远程调用，比如账单生成和轨迹上传，可以减少总耗时。
+
+CompletableFuture 异步编排为什么不用 MQ？
+代驾结束时的任务（生成账单、上传轨迹、推送消息）是 强实时同步 的，需要在用户支付前完成，不适合 MQ 异步。
+
+
+
+
+**CompletableFuture 与传统线程池异步提交有何不同？**
+- **CompletableFuture**：更高层次的异步处理，支持链式调用、异常处理、组合任务等，适用于复杂的异步操作。
+- **传统线程池**：通过 `ExecutorService.submit()` 提交任务，无法直接处理返回值或管理任务的执行链。
+- 异步编排用于支付、数据处理等场景。
+- **CompletableFuture** 更灵活、可链式操作。
+
+
+**如何在异步任务中捕获异常并处理？**
+- 使用 `exceptionally()` 或 `handle()` 方法处理异常：
+- 捕获异常用 `exceptionally()` 处理。
+```java
+CompletableFuture.supplyAsync(() -> {
+	// 执行任务
+	}).exceptionally(ex -> {
+	// 处理异常
+	return null;
+});
+```
+
+**CompletableFuture 的 join() 和 get() 有什么区别？**
+- **join()**：抛出 **`CompletionException`** 包裹原始异常。
+- **get()**：直接抛出原始异常（`InterruptedException` 或 `ExecutionException`）。
+- `join()` 包裹异常，`get()` 抛出原始异常。
+
+**如果多个异步调用依赖关系复杂，你如何编排？**
+- 使用 **`thenCompose()`** 和 **`thenCombine()`** 来串联和组合多个异步任务。
+- 用 `thenCompose()` 和 `thenCombine()` 处理复杂依赖关系。
+```java
+CompletableFuture<String> result = 
+CompletableFuture.supplyAsync(() -> "Hello")
+             .thenCompose(s -> CompletableFuture.supplyAsync(() -> s + " World"))
+             .thenCombine(CompletableFuture.supplyAsync(() -> "!"), (a, b) -> a + b);
+```
+
+
+情景问题：当司机结束代驾服务时，要进行非常多的步骤，比如：获取订单信息 1s、计算防止刷单 0.5s、计算订单实际里程 0.5s、计算订单实际代驾费用 1s，数据的获取都需要远程调用，要花费很多时间，这不能接受，但如果使用多个线程并行完成这些操作，那么就可以快很多
 
 情景假设：
 你有一个电商页面，需要同时获取：
@@ -2291,6 +2404,21 @@ kieSession.fireAllRules();
 ```
 
 
+Drools 规则变更后如何动态加载？
+在 **Drools** 中，规则变更后可以通过以下方式动态加载：
+- **使用 KieContainer 重新加载规则**：
+	- 创建新的 `KieContainer` 实例，加载更新后的规则文件。
+	- 获取新的 `KieSession` 来执行更新后的规则。
+- **代码示例**：
+```java
+KieServices kieServices = KieServices.Factory.get();
+KieContainer kieContainer = kieServices.newKieContainer(kieServices.newReleaseId("com.example", "rules", "1.0"));
+KieSession kieSession = kieContainer.newKieSession();
+```
+- **重新加载**：
+- 规则文件更新后，重新加载 `KieContainer` 和 `KieSession`。
+
+
 ## Lomblk
 Lombok 是一个 Java 编译期插件，用来自动生成常用代码，比如 getter/setter、构造方法等。
 常用注解有：
@@ -2321,17 +2449,26 @@ Guava-Retry 简介：[guava-retrying](https://github.com/rholder/guava-retrying)
 | 支持同步 or 异步执行 | 主线程等待 or 自定义执行器 |
 
 
-Guava-Retry 支持非常丰富的**策略组合**：
 
-| 组合       | 示例                                               |
-| -------- | ------------------------------------------------ |
-| 固定重试间隔   | `fixedWait(200ms)` 每次等待200ms                     |
-| 随机重试间隔   | `randomWait(100ms, 500ms)`                       |
-| 指数递增重试   | `exponentialWait(100ms, 2)`                      |
-| 重试最大次数   | `stopAfterAttempt(5)`                            |
-| 重试最大时间   | `stopAfterDelay(1分钟)`                            |
-| 遇到特定异常重试 | `retryIfExceptionOfType(TimeoutException.class)` |
-| 遇到业务失败重试 | `retryIfResult(res -> !res.isSuccess())`         |
+**为什么使用 Guava-Retry 框架？相比自己实现重试逻辑有什么优势？**
+- **Guava-Retry** 提供了简洁、可靠的重试机制，内置多种重试策略和配置，避免了自己实现复杂的重试逻辑。
+- **优势**：
+	- **简化代码**：减少重复的重试代码，并且支持灵活配置。
+	- **多种重试策略**：如固定间隔、指数退避等，不需要手动实现。
+	- **可扩展性强**：可以轻松集成到现有系统，并支持自定义重试条件。
+
+
+
+Guava-Retry 支持非常丰富的**策略组合**：
+- 固定重试间隔：`fixedWait(200ms)`每次等待200ms
+- 随机重试间隔：`randomWait(100ms,500ms)`
+- 指数递增重试：`exponentialWait(100ms,2)`
+- 重试最大次数：`stopAfterAttempt(5)`
+- 重试最大时间：`stopAfterDelay(1分钟)`
+- 遇到特定异常重试：`retryIfExceptionOfType(TimeoutException.class)`
+- 遇到业务失败重试：`retryIfResult(res->!res.isSuccess())`
+
+
 例如：指数递增间隔重试，第一次 100ms，第二次 200ms，第三次 400ms...
 ```java
 .withWaitStrategy(WaitStrategies.exponentialWait(100, 2, TimeUnit.MILLISECONDS))
@@ -2362,7 +2499,6 @@ Guava-Retry 支持非常丰富的**策略组合**：
 
 - 重试逻辑示例代码：定义允许重试的幂等服务接口列表（白名单），然后写好判断机制：只有在白名单的服务才能重试，然后在一个 `RpcClient`中加上重试
 ```java
-
 private static final Set<String> RETRY_WHITELIST = new HashSet<>(Arrays.asList(
     "order.queryStatus",
     "user.getProfile",
