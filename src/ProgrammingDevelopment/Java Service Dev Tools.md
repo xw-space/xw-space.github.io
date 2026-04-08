@@ -1331,7 +1331,7 @@ ZAB协议是专为ZooKeeper设计的崩溃恢复与原子广播协议。**数据
 - **Nacos** 支持配置管理和服务发现，Apollo 仅做配置管理，Consul 更侧重服务发现。
 - **Nacos** 更易与 Spring Cloud 集成。
 
-
+为什么不直接用spring cloud的注册中心，还用Nacos呢？
 
 
 

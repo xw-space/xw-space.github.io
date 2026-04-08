@@ -355,6 +355,12 @@ Maven（或 Gradle）先把项目（和依赖）编译/准备好，再由 java �
 点 Run 时，IDE 就是在背后帮你执行「编译这一步 + 拼好 classpath 再执行 java」这两件事。
 
 
+### 命令行参数
+
+`-cp` / `-classpath`：
+- 加载的类和资源的路径，
+- 多个路径用分隔符：Windows用 **`;`**、Linux/Mac 用 **`:`**
+
 ### 输出-代码
 **输出**：
 ```Java
@@ -754,51 +760,11 @@ Integer.parseInt(String s)
 Integer.valueOf(String s)
 ```
 
-### 命名规范
-- 总体命名规范
-- 类名需要使用大驼峰命名法(UpperCamelCase)风格。
-- 方法名、参数名、成员变量、局部变量需要使用小驼峰命名法(lowerCamelCase)。
-- 测试方法名、常量、枚举名称需要使用蛇形命名法(snake_case) ，比如test_get_user()、TIME_LIMIT。并且，测试方法名称要求全部小写，常量以及枚举名称需要全部大写。
-- 项目文件夹名称使用串式命名法(kebab-case)，比如dubbo-registry。
-- 包名统一使用小写，尽量使用单个名词作为包名，各个单词通过 "." 分隔符连接，并且各个单词必须为单数。
-- 抽象类命名使用 Abstract 开头。如：public abstract class AbstractClient extends AbstractEndpoint{}。
-- 异常类命名使用 Exception 结尾。如：public class NoSuchMethodException extends RuntimeException{}。
-- 测试类命名以它要测试的类的名称开始，以 Test 结尾。如：public class AnnotationUtilsTest{}。
-- 包名命名规范
-- Java的包名由小写单词组成，包的路径符合所开发的系统模块的定义，以便通过包名可得知其属于哪个模块，从而方便到对应包里找相应的实现类。
-
-- 常规包名
-
-- 为了保障每个Java Package命名的唯一性,在Java编程规范中要求开发人员在自己定义的包名前加上唯一的前缀.由于互联网上的域名称是不会重复的,所以多数开发人员采用自己公司在互联网上的域名称作为自己程序包的唯一前缀.例如 : com.sun.swt...
-
-- 公司项目 com : 公司项目,copyright由项目发起的公司所有. 包名 : com.公司名.项目名.模块名..
-- 团队项目 team : 团队项目,指由团队发起,并由该团队开发的项目,copyright属于该团队所有. 包名 : team.团队名.项目名.模块名..
-- 自定义包名
-
-- 一般公司命名为com.公司名.项目名.模块名....那我们个人的项目又怎么命名呢?个人的英语单词有individual、personal、private、one-man,进一步对以上四个单词词意进行分析并在保证了唯一性,继而使用每个单词的前4个字母作为前缀,与com也做了区分.示例如下所示:
-
-- indi : 个体项目,指个人发起,但非自己独自完成的项目,可公开或私有项目,copyright主要属于发起者. 包名 :indi.发起者名.项目名.模块名..
-- pers : 个人项目,指个人发起,独自完成,可分享的项目,copyright主要属于个人.包名 : pers.个人名.项目名.模块名..
-- priv : 私有项目,指个人发起,独自完成,非公开的私人使用的项目,copyright属于个人.包名 : priv.个人名.项目名.模块名..
-- onem : 与indi相同，推荐使用indi.
-
-### java数据结构如何获取大小长度
+### 获取数据结构的长度
 总结：
 - 数组是 `.length` → 它是一个属性（field）
 - 字符串是 `.length()` → 它是一个方法
 - 集合类（List、Set、Map）用 `.size()`
-
-| 类型 / 类名           | 示例对象                   | 获取大小/长度的方式     | 用法是否加括号 | 说明与注意事项                       |
-| ----------------- | ---------------------- | -------------- | ------- | ----------------------------- |
-| 数组（Array）         | `int[] arr`            | `arr.length`   | ❌ 不加括号  | 是一个字段（属性），返回数组元素个数            |
-| 字符串（String）       | `String s`             | `s.length()`   | ✅ 要加括号  | 是一个方法，返回字符串中字符的数量             |
-| StringBuilder     | `StringBuilder sb`     | `sb.length()`  | ✅ 要加括号  | 返回当前字符序列的长度（不同于数组的 `.length`） |
-| StringBuffer      | `StringBuffer sb`      | `sb.length()`  | ✅ 要加括号  | 同上                            |
-| ArrayList         | `List<Integer> list`   | `list.size()`  | ✅ 要加括号  | 方法，返回列表中元素的数量                 |
-| LinkedList        | `LinkedList<String> l` | `l.size()`     | ✅ 要加括号  | 同上                            |
-| HashSet / TreeSet | `Set<String> set`      | `set.size()`   | ✅ 要加括号  | 方法，返回集合中不重复元素的数量              |
-| HashMap / TreeMap | `Map<K, V> map`        | `map.size()`   | ✅ 要加括号  | 方法，返回键值对的数量                   |
-| Stack / Queue     | `Stack<T> stack`       | `stack.size()` | ✅ 要加括号  | 方法，返回栈中元素的数量                  |
 
 ### 基础语法
 
@@ -854,9 +820,33 @@ public class Main {
 只有别的 package 里的类才需要 import（或用全限定名）。
 
 
-### java命令行参数
+### 命名规范
+- 总体命名规范
+- 类名需要使用大驼峰命名法(UpperCamelCase)风格。
+- 方法名、参数名、成员变量、局部变量需要使用小驼峰命名法(lowerCamelCase)。
+- 测试方法名、常量、枚举名称需要使用蛇形命名法(snake_case) ，比如test_get_user()、TIME_LIMIT。并且，测试方法名称要求全部小写，常量以及枚举名称需要全部大写。
+- 项目文件夹名称使用串式命名法(kebab-case)，比如dubbo-registry。
+- 包名统一使用小写，尽量使用单个名词作为包名，各个单词通过 "." 分隔符连接，并且各个单词必须为单数。
+- 抽象类命名使用 Abstract 开头。如：public abstract class AbstractClient extends AbstractEndpoint{}。
+- 异常类命名使用 Exception 结尾。如：public class NoSuchMethodException extends RuntimeException{}。
+- 测试类命名以它要测试的类的名称开始，以 Test 结尾。如：public class AnnotationUtilsTest{}。
+- 包名命名规范
+- Java的包名由小写单词组成，包的路径符合所开发的系统模块的定义，以便通过包名可得知其属于哪个模块，从而方便到对应包里找相应的实现类。
 
-`-cp` / `-classpath`：加载的类和资源的路径，多个路径用分隔符：Windows用 **`;`**、Linux/Mac 用 **`:`**
+- 常规包名
+
+- 为了保障每个Java Package命名的唯一性,在Java编程规范中要求开发人员在自己定义的包名前加上唯一的前缀.由于互联网上的域名称是不会重复的,所以多数开发人员采用自己公司在互联网上的域名称作为自己程序包的唯一前缀.例如 : com.sun.swt...
+
+- 公司项目 com : 公司项目,copyright由项目发起的公司所有. 包名 : com.公司名.项目名.模块名..
+- 团队项目 team : 团队项目,指由团队发起,并由该团队开发的项目,copyright属于该团队所有. 包名 : team.团队名.项目名.模块名..
+- 自定义包名
+
+- 一般公司命名为com.公司名.项目名.模块名....那我们个人的项目又怎么命名呢?个人的英语单词有individual、personal、private、one-man,进一步对以上四个单词词意进行分析并在保证了唯一性,继而使用每个单词的前4个字母作为前缀,与com也做了区分.示例如下所示:
+
+- indi : 个体项目,指个人发起,但非自己独自完成的项目,可公开或私有项目,copyright主要属于发起者. 包名 :indi.发起者名.项目名.模块名..
+- pers : 个人项目,指个人发起,独自完成,可分享的项目,copyright主要属于个人.包名 : pers.个人名.项目名.模块名..
+- priv : 私有项目,指个人发起,独自完成,非公开的私人使用的项目,copyright属于个人.包名 : priv.个人名.项目名.模块名..
+- onem : 与indi相同，推荐使用indi.
 
 ## 面向对象编程（OOP）
 

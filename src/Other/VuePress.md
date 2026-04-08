@@ -55,7 +55,8 @@ VuePress使用教程
 - 【VuePress+Github 部署一个零成本静态站点！】 https://www.bilibili.com/video/BV16Z4heUEgi/?share_source=copy_web&vd_source=4da25d719af47084d6e5f1aad46e01ef
 
 
-## 目录结构
+## 静态文件
+
 在 VuePress 里，推荐把要在站点里用固定 URL 引用的静态文件放在：src/.vuepress/public/
 
 这个目录下的文件会在构建时拷到站点根路径，引用时用以 / 开头的绝对路径（你当前 base: "/"，所以不用加仓库名前缀）。
@@ -64,7 +65,16 @@ VuePress使用教程
 那在 src/README.md 里可以这样写： heroImage: /assets/icon/logo.svg
 
 
+## package.json
+作用：Node/npm 项目的清单：项目名、版本、依赖、脚本命令等。
+你这里主要是 VuePress 2 + webpack + theme-hope 的博客
 
+npm install 会按这里的 dependencies / devDependencies 装包；npm run <脚本名> 会执行 scripts 里定义的命令。
+
+scripts：
+docs:dev / docs:build：开发服务器与生产构建
+docs:clean-dev：带清缓存的开发
+"type": "module"：按 ES 模块方式处理 JS
 
 
 

@@ -4,6 +4,19 @@
   "version": "1.0.0",
   "license": "MIT",
   "type": "module",
+  "dependencies": {
+    "ff-blog": "file:",
+    "vuepress": "^2.0.0-rc.22",
+    "vuepress-theme-hope": "^2.0.0-rc.99"
+  },
+  "devDependencies": {
+    "vue": "^3.5.13",
+    "katex": "^0.16.22",
+    "sass": "^1.93.2",
+    "sass-loader": "^16.0.5",
+    "sass-embedded": "^1.87.0",
+    "@vuepress/bundler-webpack": "^2.0.0-rc.26"
+  },
   "scripts": {
     "//scripts": "项目的文档根目录在 src/；使用的是 webpack 作为构建器；所有脚本都以 docs: 前缀命名",
     "docs:build": "vuepress-webpack build src",
@@ -11,18 +24,5 @@
     "docs:dev": "vuepress-webpack dev src",
     "//docs:dev": "vuepress dev src --open /blog/",
     "docs:update-package": "npx vp-update"
-  },
-  "devDependencies": {
-    "@vuepress/bundler-webpack": "^2.0.0-rc.26",
-    "katex": "^0.16.22",
-    "sass": "^1.93.2",
-    "sass-embedded": "^1.87.0",
-    "sass-loader": "^16.0.5",
-    "vue": "^3.5.13"
-  },
-  "dependencies": {
-    "ff-blog": "file:",
-    "vuepress": "^2.0.0-rc.22",
-    "vuepress-theme-hope": "^2.0.0-rc.99"
   }
 }

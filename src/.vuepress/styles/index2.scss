@@ -1,0 +1,82 @@
+/* -------------------------------------------------------------------------- */
+/* Hero 区域样式覆写（面向 vuepress-theme-hope）                                  */
+/* 目标：                                                                        */
+/* 1) 首页 Hero 固定为“左图右字”横排                                               */
+/* 2) 保持标题/副标题视觉层级                                                     */
+/* 3) 在小屏下也不回退为主题默认纵排                                               */
+/* -------------------------------------------------------------------------- */
+
+/* 统一管理可调参数，后续改尺寸/间距只改这里 */
+$hero-gap: 24px;
+$hero-logo-size: 80px;
+$hero-title-size: clamp(28px, 4vw, 40px);
+$hero-desc-size: 20px;
+$hero-desc-color: #46c4e4;
+
+/* 1) Hero 外层容器：强制横向布局并居中 */
+:is(.vp-blog-hero, .vp-hero) {
+  display: flex !important; // 压过主题默认 display
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-wrap: nowrap !important;
+  gap: $hero-gap !important;
+  margin-inline: auto !important;
+  width: 100%;
+  text-align: initial !important;
+}
+
+/* 2) 左侧 Logo 容器：不伸缩，避免把整行撑坏 */
+:is(.vp-blog-hero-image, .vp-hero .vp-hero-image, .vp-hero .vp-hero-logo) {
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+}
+
+/* 2.1) Logo 图片尺寸固定 */
+:is(.vp-blog-hero-image, .vp-hero .vp-hero-image, .vp-hero .vp-hero-logo) img {
+  display: block !important;
+  width: $hero-logo-size !important;
+  height: $hero-logo-size !important;
+  object-fit: contain !important;
+  border: none !important;
+  filter: none !important;
+}
+
+/* 3) 右侧文案容器：标题和描述上下排列 */
+:is(.vp-blog-hero-info, .vp-hero .vp-hero-info) {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 4px !important;
+  min-width: 0; // 防止窄屏时文本计算宽度异常导致换行抖动
+  text-align: left !important;
+}
+
+/* 3.1) 主标题 */
+:is(.vp-blog-hero-title, .vp-hero .vp-hero-title, .vp-hero h1) {
+  margin: 0 !important;
+  line-height: 1.2 !important;
+  font-weight: 800 !important;
+  font-size: $hero-title-size !important;
+}
+
+/* 3.2) 副标题/描述 */
+:is(.vp-blog-hero-description, .vp-hero .vp-hero-description, .vp-hero .description, .vp-hero p.tagline) {
+  margin: 0 !important;
+  line-height: 1.6 !important;
+  font-size: $hero-desc-size !important;
+  color: $hero-desc-color !important;
+}
+
+/* 4) 移动端：继续保持横排（若想恢复纵排，可删除整个 media 块） */
+@media (max-width: 640px) {
+  :is(.vp-blog-hero, .vp-hero) {
+    flex-direction: row !important;
+    align-items: center !important;
+    text-align: left !important;
+  }
+
+  :is(.vp-blog-hero-info, .vp-hero .vp-hero-info) {
+    align-items: flex-start !important;
+  }
+}

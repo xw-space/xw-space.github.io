@@ -8,15 +8,16 @@ title: 主页
 heroText: 范同学的博客
 tagline: 保持希望，满怀好奇
 
-# 相关教程：https://theme-hope.vuejs.press/zh/guide/blog/home.html#%E5%8D%9A%E5%AE%A2%E7%B1%BB%E5%9E%8B%E4%B8%BB%E9%A1%B5
 # 主页中间大圆图 / Hero 主图
 # heroImage: https://theme-hope-assets.vuejs.press/logo.svg
 heroImage: /assets/icon/logo.png
+heroFullScreen: false
+# 相关教程：https://theme-hope.vuejs.press/zh/guide/blog/home.html#%E5%8D%9A%E5%AE%A2%E7%B1%BB%E5%9E%8B%E4%B8%BB%E9%A1%B5
+
 
 # 主页 Hero 区域的背景图
 bgImage: /assets/icon/background.png
 # bgImageDark: 
-
 # 背景图的style
 # bgImageStyle:  {
 #   width: '400px',
@@ -24,8 +25,6 @@ bgImage: /assets/icon/background.png
 #   filter: 'grayscale(50%)',
 #   border: '2px solid #333',
 # }
-
-heroFullScreen: false
 
 projects:
   - icon: AIRead
@@ -49,8 +48,8 @@ projects:
   #   link: https://你的自定义链接
 
 footer: 页脚
----
 
+---
 <!-- 这是一个博客主页的案例。
 
 要使用此布局，你应该在页面前端设置 `layout: Blog` 和 `home: true`。

@@ -18,7 +18,6 @@ export default hopeTheme({
   // logo: "https://theme-hope-assets.vuejs.press/logo.svg",
   logo: "/assets/icon/logo.png",
 
-
   repo: "vuepress-theme-hope/vuepress-theme-hope",
 
   docsDir: "src",
@@ -51,9 +50,14 @@ export default hopeTheme({
     intro: "/intro",
     // 侧边栏博主信息卡的头像
     avatar: "/assets/icon/logo.png",
+
     medias: {
       Email: "fxw0601@example.com",
       GitHub: "https://github.com/xw-space",
+      blog: {
+        icon: "/assets/icon/logo.png",
+        link: "https://xw-space.github.io/",
+      },
       // Wechat: "https://example.com",
       // Baidu: "https://example.com",
       // BiliBili: "https://example.com",
@@ -83,11 +87,10 @@ export default hopeTheme({
       // Whatsapp: "https://example.com",
       // Youtube: "https://example.com",
       // Zhihu: "https://example.com",
-      VuePressThemeHope: {
-        // icon: "https://theme-hope-assets.vuejs.press/logo.svg",
-        icon: "/assets/icon/logo.png",
-        link: "https://theme-hope.vuejs.press",
-      },
+      // VuePressThemeHope: {
+      //   icon: "https://theme-hope-assets.vuejs.press/logo.svg",
+      //   link: "https://theme-hope.vuejs.press",
+      // },
     },
   },
 
@@ -95,7 +98,7 @@ export default hopeTheme({
   metaLocales: {
     editLink: "在 GitHub 上编辑此页",
   },
-  
+
   // 如果想要实时查看任何改变，启用它。注: 这对更新性能有很大负面影响
   // hotReload: true,
 
@@ -126,6 +129,20 @@ export default hopeTheme({
     mark: true,
     plantuml: true,
     spoiler: true,
+    sub: true,
+    sup: true,
+    tabs: true,
+    tasklist: true,
+    vPre: true,
+
+    // TeX支持
+    math: {
+      // 启用前安装 katex
+      type: "katex",
+      // 或者使用 mathjax-full
+      // type: "mathjax",
+    },
+
     stylize: [
       {
         matcher: "Recommended",
@@ -139,19 +156,6 @@ export default hopeTheme({
         },
       },
     ],
-    sub: true,
-    sup: true,
-    tabs: true,
-    tasklist: true,
-    vPre: true,
-
-    // 取消注释它们如果你需要 TeX 支持
-    math: {
-      // 启用前安装 katex
-      type: "katex",
-      // 或者安装 mathjax-full
-      // type: "mathjax",
-    },
 
     // 如果你需要幻灯片，安装 @vuepress/plugin-revealjs 并取消下方注释
     // revealjs: {
@@ -189,6 +193,12 @@ export default hopeTheme({
       excerptSeparator: "<!-- more -->", // 分隔符（默认就是这个）
       excerptLength: 160,      // ← 例如只取 160 长度
     },
+    components: {
+      components: ["Badge", "VPCard"],
+    },
+    icon: {
+      prefix: "fa6-solid:",
+    },
 
     // 启用之前需安装 @waline/client
     // 警告: 这是一个仅供演示的测试服务，在生产环境中请自行部署并使用自己的服务！
@@ -196,15 +206,6 @@ export default hopeTheme({
     //   provider: "Waline",
     //   serverURL: "https://waline-comment.vuejs.press",
     // },
-
-    components: {
-      components: ["Badge", "VPCard"],
-    },
-
-
-    icon: {
-      prefix: "fa6-solid:",
-    },
 
     // 如果你需要 PWA。安装 @vuepress/plugin-pwa 并取消下方注释
     // pwa: {

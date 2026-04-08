@@ -10,25 +10,20 @@ tag:
 一个简单的JavaSpring&SpringBoot入门教程
 <!-- more -->
 
-# JavaSpring&SpringBoot
-## JavaSpring
+# Java Spring
+
+## Java Spring
 什么是IOC（控制反转）和DI（依赖注入）？
 Spring底层的核心容器是如何实现它们的？
 
-
-
-### 重要概念速览
-
-- **框架**：就是针对某个要实现的目的，已经完成一系列基础代码构建，只要按特定要求去补充完整代码，就可以实现功能。
-- **上下文（ApplicationContext）** ：Spring容器。
-
-
 ### 简介
 Spring是一个框架
+- **框架**：就是针对某个要实现的目的，已经完成一系列基础代码构建，只要按特定要求去补充完整代码，就可以实现功能。
+
+
 **Spring** 提供了许多工具、功能和约定，比如处理，简化了开发流程
 
-
-### Spring的作用
+### 作用
 
 
 **统一的应用配置**：
@@ -124,7 +119,7 @@ public class UserController {
 * **扫描包路径**：Spring 会根据注解 `@ComponentScan` 或 `@SpringBootApplication` 来扫描指定的包路径，查找所有的类，并将符合条件的类注册为 Spring Bean。
 * **加载配置**：Spring 会根据 `application.properties` 或 `application.yml` 文件中的配置加载应用的环境、数据库连接、端口、日志等信息。
 
-**2. **Bean 的初始化与依赖注入**
+**2. Bean 的初始化与依赖注入**
 * **扫描并注册 Bean**：当 Spring 启动时，它会扫描所有的类并根据注解（如 `@Service`、`@Component`、`@Repository` 等）将其注册为 Bean，管理它们的生命周期。
 * **依赖注入**：Spring 会为这些 Bean 注入它们的依赖，常见的方式有：
   * **构造函数注入**：通过构造函数将依赖传入类中。
@@ -142,7 +137,7 @@ public class MyService {
 }
 ```
 
-**3. **Spring Boot 启动流程**
+**3. Spring Boot 启动流程**
 * **`@SpringBootApplication` 注解**：这是 Spring Boot 的核心注解，结合了多个注解，如 `@Configuration`、`@EnableAutoConfiguration` 和 `@ComponentScan`，指示 Spring 启动时执行哪些配置和扫描哪些类。
   ```java
   @SpringBootApplication
@@ -155,16 +150,16 @@ public class MyService {
   ```
 * **`SpringApplication.run()`**：这个方法启动了整个 Spring 应用，它会创建 Spring 容器（ApplicationContext），加载所有的 Bean，初始化 Web 环境（如果是 Web 应用的话），并调用 `run` 方法执行 `CommandLineRunner` 或 `ApplicationRunner` 接口的 `run()` 方法（如果有实现）。
 
-**4. **生命周期管理**
+**4. 生命周期管理**
 Spring 管理的 Bean 都有生命周期，它们的生命周期在 Spring 容器的生命周期内自动管理。典型的生命周期步骤如下：
-1. **Bean 实例化**：Spring 容器根据类的定义创建 Bean 实例。
-2. **依赖注入**：Spring 会注入该 Bean 所依赖的其他 Bean（通过构造函数注入、字段注入等方式）。
-3. **初始化**：如果 Bean 实现了 `InitializingBean` 接口或使用了 `@PostConstruct` 注解，Spring 会调用 `afterPropertiesSet` 方法或相关的初始化方法。
-4. **使用 Bean**：该 Bean 现在可以在应用中使用，处理业务逻辑。
-5. **销毁**：当 Spring 容器关闭时，Spring 会销毁所有的 Bean。如果 Bean 实现了 `DisposableBean` 接口，或者使用了 `@PreDestroy` 注解，Spring 会调用销毁方法。
+1. Bean 实例化**：Spring 容器根据类的定义创建 Bean 实例。
+2. 依赖注入**：Spring 会注入该 Bean 所依赖的其他 Bean（通过构造函数注入、字段注入等方式）。
+3. 初始化**：如果 Bean 实现了 `InitializingBean` 接口或使用了 `@PostConstruct` 注解，Spring 会调用 `afterPropertiesSet` 方法或相关的初始化方法。
+4. 使用 Bean**：该 Bean 现在可以在应用中使用，处理业务逻辑。
+5. 销毁**：当 Spring 容器关闭时，Spring 会销毁所有的 Bean。如果 Bean 实现了 `DisposableBean` 接口，或者使用了 `@PreDestroy` 注解，Spring 会调用销毁方法。
 
 
-**5. **请求处理与控制器执行**
+**5. 请求处理与控制器执行**
 在 Web 应用程序中，Spring 使用 **DispatcherServlet** 来处理 HTTP 请求。它是一个前端控制器，所有的 HTTP 请求都会被该控制器接收。
 * **请求映射**：当请求到达时，`DispatcherServlet` 会将请求分发到相应的控制器（Controller）。控制器方法通常使用 `@RequestMapping` 或更具体的注解（如 `@GetMapping`、`@PostMapping`）来映射 URL 请求。
 例如：
@@ -189,7 +184,7 @@ public class UserController {
   * 控制器方法会调用相关的业务逻辑层（如 `Service`）来处理请求。
   * 最后，Spring 会将处理结果返回给客户端（通常是 JSON 或 HTML 格式）。
 
-**6. **异步执行与事件监听**
+**6. 异步执行与事件监听**
 Spring 提供了支持 **异步执行** 和 **事件监听** 的功能。例如，可以使用 `@Async` 注解来使方法异步执行，或者使用事件发布机制（`ApplicationEventPublisher`）来触发和处理自定义事件。
 * **异步执行**：
   ```java
@@ -215,15 +210,15 @@ Spring 提供了支持 **异步执行** 和 **事件监听** 的功能。例如�
       }
   }
   ```
-**7. **Spring Boot 应用的退出**
+**7. Spring Boot 应用的退出**
 * **关闭 Spring 应用**：当应用执行完毕，或者需要关闭时，Spring 会通过 `SpringApplication.exit()` 或者 JVM 进程退出来关闭应用。
 * **销毁 Bean**：在应用关闭时，Spring 会销毁所有的 Bean，并执行销毁方法（如实现 `DisposableBean` 接口或者 `@PreDestroy` 注解的方法）。
 **总结：
-1. **启动流程**：通过 `SpringApplication.run()` 启动应用，Spring 容器初始化并扫描包路径，注册 Bean。
-2. **依赖注入**：Spring 会为管理的 Bean 注入它们所依赖的其他 Bean。
-3. **生命周期管理**：Spring 会管理 Bean 的生命周期，包括实例化、依赖注入、初始化、销毁等步骤。
-4. **请求处理**：在 Web 应用中，`DispatcherServlet` 会根据请求分发到对应的控制器，控制器执行业务逻辑并返回结果。
-5. **事件和异步处理**：Spring 支持事件监听和异步执行，以增强应用的功能。
+1. 启动流程**：通过 `SpringApplication.run()` 启动应用，Spring 容器初始化并扫描包路径，注册 Bean。
+2. 依赖注入**：Spring 会为管理的 Bean 注入它们所依赖的其他 Bean。
+3. 生命周期管理**：Spring 会管理 Bean 的生命周期，包括实例化、依赖注入、初始化、销毁等步骤。
+4. 请求处理**：在 Web 应用中，`DispatcherServlet` 会根据请求分发到对应的控制器，控制器执行业务逻辑并返回结果。
+5. 事件和异步处理**：Spring 支持事件监听和异步执行，以增强应用的功能。
 这种流程保证了 Spring 应用的高效、松耦合和可扩展性。希望这个概述能够帮助你理解 Spring 应用的运行逻辑！
 
 ### IOC与DI
@@ -309,6 +304,7 @@ public class UserService {
 * Spring 容器在启动时会自动创建和初始化所有 Bean，并且这些 Bean 会随着 Spring 应用的生命周期一直运行。你可以在这些 Bean 中执行不同的业务逻辑，而 Spring 会管理它们的依赖关系、生命周期等。
 * 在 Spring Boot 中，启动应用后，Spring 容器会自动创建并管理这些 Bean，它们负责处理 HTTP 请求、执行业务逻辑等操作。
 
+- **上下文（ApplicationContext）** ：Spring容器。
 
 ### @Resource
 是 Java 平台标准规范（JSR-250）中定义的注解
@@ -365,7 +361,18 @@ public class MyService {
 }
 ```
 
-#### Bean的生命周期
+#### 作用域
+Spring中Bean的作用域（Scope）有哪些？在单例Bean中注入原型（Prototype）Bean时，如何保证每次获取的都是新实例？
+    
+   **核心作用域**：`singleton`（单例，默认）、`prototype`（原型，每次获取创建新实例）、`request`（每个HTTP请求一个实例）、`session`（每个HTTP Session一个实例）、`application`（ServletContext级别）、`websocket`。
+   
+   **单例注入原型的解决方案**：因为单例Bean只被实例化一次，其内部注入的属性也会在实例化时固化，导致注入的原型Bean变成了“单例”。解决方案如下：
+   1. 使用 `@Lookup` 注解**：在单例Bean中定义一个返回该原型Bean的抽象方法或普通方法，并加上 `@Lookup` 注解。Spring底层会使用CGLIB动态代理重写该方法，每次调用时都去容器中主动获取新的原型Bean。
+   2. 注入 `ObjectFactory<T>` 或 `ObjectProvider<T>`**：注入这两种工厂接口，在需要使用时调用 `getObject()` 方法从容器中获取新实例。
+   3. 实现 `ApplicationContextAware`**：直接注入 `ApplicationContext` 并在需要时手动调用 `getBean()` 获取（不推荐，代码侵入性过强）。
+
+
+#### 生命周期
 Spring容器是如何管理和创建bean实例
 请详细描述Spring Bean的完整生命周期（包含实例化、属性赋值、初始化、销毁，以及BeanPostProcessor和各类Aware接口的介入时机）。
 
@@ -409,7 +416,7 @@ Spring容器在进行实例化时，会将xml配置的`<bean>`的信息封装成
 - lazyInit：延迟初始化
 
 
-#### Bean线程安全问题
+#### 线程安全
 
 
 
@@ -456,21 +463,9 @@ Spring框架中有一个@Scope注解，默认的值就是singleton，单例的�
 
 
 
-#### BeanFactory和ApplicationContext
-BeanFactory和ApplicationContext有什么本质区别？在实际源码中它们是如何协同工作的？
+#### 循环依赖
+及解决方式
 
- **本质区别**：
- - `BeanFactory` 是Spring内部最底层的核心接口，提供基础的IOC/DI功能，采用延迟加载（懒加载）策略，即调用 `getBean()` 时才实例化Bean；
- - `ApplicationContext` 是 `BeanFactory` 的子接口，面向开发者，除了包含后者的所有功能，还扩展了AOP集成、国际化（i18n）、事件发布、Environment环境配置等企业级特性，且默认采用预加载策略，在容器启动时就完成所有单例Bean的实例化。
- 
- **协同工作机制**：
- 在源码中，它们是**组合（委派）关系**。
- `ApplicationContext`（如 `AnnotationConfigApplicationContext` 或 `ClassPathXmlApplicationContext`）内部持有一个 `DefaultListableBeanFactory` 实例。
- `ApplicationContext` 将核心的Bean注册、创建、依赖注入等工作直接委派给底层的 `DefaultListableBeanFactory` 去执行，自身则专注于上下文环境的构建和附加功能的增强。
-
-
-
-#### Spring循环依赖及解决方式
 Spring是如何通过“三级缓存”解决单例Bean的循环依赖问题的？具体每一级缓存存放的是什么状态的Bean？如果只有两级缓存行不行？为什么？
 
 
@@ -542,15 +537,18 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 Spring中的@Lazy懒加载能否解决循环依赖问题?
 https://blog.csdn.net/zzzzzengjf/article/details/141953708
 
-#### Bean的作用域
-Spring中Bean的作用域（Scope）有哪些？在单例Bean中注入原型（Prototype）Bean时，如何保证每次获取的都是新实例？
-    
-   **核心作用域**：`singleton`（单例，默认）、`prototype`（原型，每次获取创建新实例）、`request`（每个HTTP请求一个实例）、`session`（每个HTTP Session一个实例）、`application`（ServletContext级别）、`websocket`。
-   
-   **单例注入原型的解决方案**：因为单例Bean只被实例化一次，其内部注入的属性也会在实例化时固化，导致注入的原型Bean变成了“单例”。解决方案如下：
-   1. **使用 `@Lookup` 注解**：在单例Bean中定义一个返回该原型Bean的抽象方法或普通方法，并加上 `@Lookup` 注解。Spring底层会使用CGLIB动态代理重写该方法，每次调用时都去容器中主动获取新的原型Bean。
-   2. **注入 `ObjectFactory<T>` 或 `ObjectProvider<T>`**：注入这两种工厂接口，在需要使用时调用 `getObject()` 方法从容器中获取新实例。
-   3. **实现 `ApplicationContextAware`**：直接注入 `ApplicationContext` 并在需要时手动调用 `getBean()` 获取（不推荐，代码侵入性过强）。
+#### BeanFactory和ApplicationContext
+BeanFactory和ApplicationContext有什么本质区别？在实际源码中它们是如何协同工作的？
+
+ **本质区别**：
+ - `BeanFactory` 是Spring内部最底层的核心接口，提供基础的IOC/DI功能，采用延迟加载（懒加载）策略，即调用 `getBean()` 时才实例化Bean；
+ - `ApplicationContext` 是 `BeanFactory` 的子接口，面向开发者，除了包含后者的所有功能，还扩展了AOP集成、国际化（i18n）、事件发布、Environment环境配置等企业级特性，且默认采用预加载策略，在容器启动时就完成所有单例Bean的实例化。
+ 
+ **协同工作机制**：
+ 在源码中，它们是**组合（委派）关系**。
+ `ApplicationContext`（如 `AnnotationConfigApplicationContext` 或 `ClassPathXmlApplicationContext`）内部持有一个 `DefaultListableBeanFactory` 实例。
+ `ApplicationContext` 将核心的Bean注册、创建、依赖注入等工作直接委派给底层的 `DefaultListableBeanFactory` 去执行，自身则专注于上下文环境的构建和附加功能的增强。
+
 
 
 ### AOP面向切面编程
@@ -1053,7 +1051,7 @@ Spring通过**事务同步管理器**（`TransactionSynchronizationManager`）�
 - @Scope： 标注Bean的作用范围
 
 
-### Spring中用到的设计模式
+### 用到的设计模式
 - **工厂模式**（Factory Pattern）用于创建对象实例。Spring的IOC容器就是一个工厂模式的实现。它通过配置文件或注解管理Bean的创建和依赖注入，使得开发者不必直接使用`new`关键字创建对象。
 - **单例模式**（Singleton Pattern）用于确保一个类只有一个实例。Spring的默认Bean作用域为单例模式，即在整个应用中共享同一个Bean实例。通过这种方式，Spring可以节省内存并提高性能。
 - **代理模式**（Proxy Pattern）用于增强或控制对目标对象的访问。Spring AOP（面向切面编程）就大量使用了代理模式。在Spring中，可以通过JDK动态代理或CGLIB代理来创建代理对象，以在不修改原始代码的情况下添加功能，如事务管理和日志记录。
@@ -1085,7 +1083,7 @@ https://weread.qq.com/web/reader/64532fc071c96a44645204f
 - 它通过轻量级的容器管理Bean的创建、配置和销毁，帮助开发者实现模块化设计。
 
 
-## SpringBoot
+## Spring Boot
 
 ### 介绍
 
@@ -1249,7 +1247,7 @@ public class UserController {
 
 
 
-### SpringBoot作用
+### Spring Boot作用
 
 
 当你启动 Spring Boot 应用时，后台确实启动了一个 Spring 应用程序，它负责处理很多繁琐的任务
@@ -1669,6 +1667,30 @@ yudaocode/SpringBoot-Labs: 一个涵盖六个专栏：Spring Boot 2.X、Spring C
 
 
   
+
+### 组件
+Spring MVC 的核心组件包括：
+* **Controller**：处理 HTTP 请求的类。
+* **DispatcherServlet**：前端控制器，用于接收请求并将其分发到适当的 Controller。
+* **View Resolver**：将数据渲染到客户端的视图（通常是 HTML、JSON、XML 等）。
+* **Model**：封装数据的对象，用于与视图交互。
+
+
+- **DispatcherServlet**是Spring MVC的前端控制器，用于接收所有的请求并将其转发到适当的处理器。它是整个Spring MVC框架的核心，负责请求的分发和响应的生成。
+- **Handler Mapping**（处理器映射器）负责将请求映射到相应的处理器（Controller）。当`DispatcherServlet`收到请求后，`Handler Mapping`会根据请求的URL或其他信息，找到相应的控制器方法。
+- **Controller**（控制器）是请求处理的核心组件。控制器包含业务逻辑和请求处理方法，通常使用`@Controller`或`@RestController`注解定义。控制器接收请求数据，处理逻辑，返回数据或视图名。
+- **HandlerAdapter**（处理器适配器）是一个适配器接口，负责适配不同类型的处理器。它使得`DispatcherServlet`可以调用不同类型的控制器（例如注解控制器或接口控制器）来处理请求。
+- **View Resolver**（视图解析器）负责将控制器返回的视图名解析为具体的视图实现。它决定了视图文件的路径和格式，例如JSP、Thymeleaf、Freemarker等。视图解析器将逻辑视图名转化为具体的视图对象，用于最终的响应呈现。
+- **View**（视图）用于呈现最终的响应，通常是HTML页面。Spring MVC支持多种视图模板，如JSP、Thymeleaf、Velocity等，`View`对象通过与模型数据结合生成完整的响应内容。
+- **ModelAndView**用于在控制器中封装模型数据和视图名。控制器返回`ModelAndView`对象，以便`DispatcherServlet`将数据和视图传递给视图解析器，生成最终响应。
+- **Model**是一个数据容器，用于在控制器和视图之间传递数据。Spring MVC会将控制器方法返回的数据自动添加到`Model`中，使得视图可以访问这些数据。
+- **Exception Resolver**（异常解析器）用于处理控制器方法中抛出的异常。它将异常映射到相应的错误视图或错误响应，提供灵活的异常处理机制。
+- **MultipartResolver**用于处理文件上传。它将多部分请求解析为上传的文件对象，并将文件数据注入到控制器方法中。
+- **LocaleResolver**和**ThemeResolver**分别用于国际化和主题管理。`LocaleResolver`根据请求决定语言环境，`ThemeResolver`允许应用设置和管理不同的主题风格。
+这些组件共同构成了Spring MVC的完整框架。通过配置和组合这些组件，Spring MVC可以灵活处理各种Web应用需求。
+
+
+
 ### 执行流程
 
 **示例**：处理 HTTP 请求的 Spring MVC 控制器：
@@ -1724,30 +1746,16 @@ Springmvc的执行流程是这个框架最核心的内容
 - 方法上添加了@ResponseBody
 - 通过HttpMessageConverter来返回结果转换为JSON并响应
 
-### 组件
-Spring MVC 的核心组件包括：
-* **Controller**：处理 HTTP 请求的类。
-* **DispatcherServlet**：前端控制器，用于接收请求并将其分发到适当的 Controller。
-* **View Resolver**：将数据渲染到客户端的视图（通常是 HTML、JSON、XML 等）。
-* **Model**：封装数据的对象，用于与视图交互。
+### Interceptor（拦截器）
+Spring MVC拦截器（Interceptor）用于在请求进入控制器之前、处理请求之后以及视图渲染之前，插入自定义逻辑。它类似于过滤器，但比过滤器更灵活和精确，能够针对控制器的执行环节提供切入点。拦截器通常用于实现日志记录、权限验证、性能监控等功能，从而提高应用的可扩展性和可维护性。
+Spring MVC拦截器通过实现`HandlerInterceptor`接口来定义，并通过重写接口中的三个方法实现不同阶段的逻辑：
+`preHandle`方法在请求到达控制器之前执行。它通常用于权限检查、参数验证等操作。如果`preHandle`返回`true`，请求将继续执行；如果返回`false`，请求将被中断，不会进入控制器。
+`postHandle`方法在控制器方法执行完毕后执行，但在视图渲染之前调用。它通常用于处理返回数据或添加模型数据。此时可以修改模型数据，以便在视图中展示。
+`afterCompletion`方法在视图渲染完成后调用。它适用于清理资源、日志记录等操作。无论请求是否成功处理，`afterCompletion`都会被调用，因此适合放置最终执行的逻辑，如异常处理、清理等。
+Spring MVC的拦截器链支持多个拦截器，按配置顺序依次执行。拦截器链允许多个拦截器按顺序处理同一请求，每个拦截器的`preHandle`方法按顺序执行，而`postHandle`和`afterCompletion`方法则按相反顺序执行。
+配置拦截器时，可以在`WebMvcConfigurer`的`addInterceptors`方法中注册拦截器，并指定需要拦截的URL模式。例如，拦截所有请求或特定路径下的请求。Spring MVC拦截器可以灵活地应用到不同的URL路径，还可以结合条件过滤特定的请求，满足不同的应用场景需求。
 
-
-- **DispatcherServlet**是Spring MVC的前端控制器，用于接收所有的请求并将其转发到适当的处理器。它是整个Spring MVC框架的核心，负责请求的分发和响应的生成。
-- **Handler Mapping**（处理器映射器）负责将请求映射到相应的处理器（Controller）。当`DispatcherServlet`收到请求后，`Handler Mapping`会根据请求的URL或其他信息，找到相应的控制器方法。
-- **Controller**（控制器）是请求处理的核心组件。控制器包含业务逻辑和请求处理方法，通常使用`@Controller`或`@RestController`注解定义。控制器接收请求数据，处理逻辑，返回数据或视图名。
-- **HandlerAdapter**（处理器适配器）是一个适配器接口，负责适配不同类型的处理器。它使得`DispatcherServlet`可以调用不同类型的控制器（例如注解控制器或接口控制器）来处理请求。
-- **View Resolver**（视图解析器）负责将控制器返回的视图名解析为具体的视图实现。它决定了视图文件的路径和格式，例如JSP、Thymeleaf、Freemarker等。视图解析器将逻辑视图名转化为具体的视图对象，用于最终的响应呈现。
-- **View**（视图）用于呈现最终的响应，通常是HTML页面。Spring MVC支持多种视图模板，如JSP、Thymeleaf、Velocity等，`View`对象通过与模型数据结合生成完整的响应内容。
-- **ModelAndView**用于在控制器中封装模型数据和视图名。控制器返回`ModelAndView`对象，以便`DispatcherServlet`将数据和视图传递给视图解析器，生成最终响应。
-- **Model**是一个数据容器，用于在控制器和视图之间传递数据。Spring MVC会将控制器方法返回的数据自动添加到`Model`中，使得视图可以访问这些数据。
-- **Exception Resolver**（异常解析器）用于处理控制器方法中抛出的异常。它将异常映射到相应的错误视图或错误响应，提供灵活的异常处理机制。
-- **MultipartResolver**用于处理文件上传。它将多部分请求解析为上传的文件对象，并将文件数据注入到控制器方法中。
-- **LocaleResolver**和**ThemeResolver**分别用于国际化和主题管理。`LocaleResolver`根据请求决定语言环境，`ThemeResolver`允许应用设置和管理不同的主题风格。
-这些组件共同构成了Spring MVC的完整框架。通过配置和组合这些组件，Spring MVC可以灵活处理各种Web应用需求。
-
-
-
-### SpringMVC常用注解
+### 常用注解
 
 @RequestMapping： 用于映射请求路径，可以定义在类上和方法上。用于类上，则表示类中的所有的方法都是以该地址作为父路径
 @RequestBody： 注解实现接收http请求的json数据，将json转换为java对象
@@ -1772,19 +1780,6 @@ Spring MVC 的核心组件包括：
 - `@ExceptionHandler`用于定义异常处理方法，捕获并处理控制器中的异常。可以在类或方法上使用，通常配合`@ControllerAdvice`全局异常处理器进行使用。
 - `@ControllerAdvice`用于定义全局控制器增强功能，通常用于全局异常处理、数据绑定配置等。带有`@ControllerAdvice`的类可以包含多种增强功能，应用于整个应用的控制器。
 
-### `@RestController`
-- **`@RestController`** 是用于暴露本地 API，处理来自客户端的请求。
-- **用途**：用于标记一个类为 Spring MVC 的控制器，处理 HTTP 请求并返回数据。
-- **典型用法**：定义本地的 RESTful API 服务。
-- **特性**：结合 `@RequestMapping`，可以指定 URL 路径和请求方法（GET、POST 等）。
-- **示例**：
-    
-    JAVA
-    
-    `@RestController @RequestMapping("/customer/info") public class CustomerInfoController {          @GetMapping("/{id}")     public Customer getCustomerById(@PathVariable Long id) {         // 处理逻辑         return customerService.findById(id);     } }`
-    
-- **功能**：接受 HTTP 请求、处理业务逻辑、返回 JSON/XML 等格式的数据。
-
 ### `@FeignClient`
 - **`@FeignClient`** 是用于调用其他服务的远程 API，通常在微服务架构中用于服务间通信。
 - **用途**：用于创建一个声明式的 HTTP 客户端，通过接口与远程服务通信。
@@ -1800,15 +1795,20 @@ Spring MVC 的核心组件包括：
 
 
 
-### Interceptor（拦截器）
-Spring MVC拦截器（Interceptor）用于在请求进入控制器之前、处理请求之后以及视图渲染之前，插入自定义逻辑。它类似于过滤器，但比过滤器更灵活和精确，能够针对控制器的执行环节提供切入点。拦截器通常用于实现日志记录、权限验证、性能监控等功能，从而提高应用的可扩展性和可维护性。
-Spring MVC拦截器通过实现`HandlerInterceptor`接口来定义，并通过重写接口中的三个方法实现不同阶段的逻辑：
-`preHandle`方法在请求到达控制器之前执行。它通常用于权限检查、参数验证等操作。如果`preHandle`返回`true`，请求将继续执行；如果返回`false`，请求将被中断，不会进入控制器。
-`postHandle`方法在控制器方法执行完毕后执行，但在视图渲染之前调用。它通常用于处理返回数据或添加模型数据。此时可以修改模型数据，以便在视图中展示。
-`afterCompletion`方法在视图渲染完成后调用。它适用于清理资源、日志记录等操作。无论请求是否成功处理，`afterCompletion`都会被调用，因此适合放置最终执行的逻辑，如异常处理、清理等。
-Spring MVC的拦截器链支持多个拦截器，按配置顺序依次执行。拦截器链允许多个拦截器按顺序处理同一请求，每个拦截器的`preHandle`方法按顺序执行，而`postHandle`和`afterCompletion`方法则按相反顺序执行。
-配置拦截器时，可以在`WebMvcConfigurer`的`addInterceptors`方法中注册拦截器，并指定需要拦截的URL模式。例如，拦截所有请求或特定路径下的请求。Spring MVC拦截器可以灵活地应用到不同的URL路径，还可以结合条件过滤特定的请求，满足不同的应用场景需求。
-## SpringCloud
+### `@RestController`
+- **`@RestController`** 是用于暴露本地 API，处理来自客户端的请求。
+- **用途**：用于标记一个类为 Spring MVC 的控制器，处理 HTTP 请求并返回数据。
+- **典型用法**：定义本地的 RESTful API 服务。
+- **特性**：结合 `@RequestMapping`，可以指定 URL 路径和请求方法（GET、POST 等）。
+- **示例**：
+    
+    JAVA
+    
+    `@RestController @RequestMapping("/customer/info") public class CustomerInfoController {          @GetMapping("/{id}")     public Customer getCustomerById(@PathVariable Long id) {         // 处理逻辑         return customerService.findById(id);     } }`
+    
+- **功能**：接受 HTTP 请求、处理业务逻辑、返回 JSON/XML 等格式的数据。
+
+## Spring Cloud
 
 ### 介绍
 - **Spring Cloud**扩展了Spring的功能，专注于分布式系统和微服务架构。它提供了一套解决方案，用于服务发现、负载均衡、配置管理、断路器等，使得开发者能够快速构建可靠的微服务系统。
@@ -1845,7 +1845,7 @@ public class MyServiceApplication {
 - 服务保护 sentinel
 - 服务网关 Gateway
 
-### Spring Cloud Eureka
+### Eureka
 Spring Cloud Eureka 是一个基于 Netflix Eureka 的服务发现和注册机制，
 是 Spring Cloud 生态系统中的重要组件之一，
 
@@ -1873,7 +1873,7 @@ Eureka 集成了 Spring Cloud Ribbon，可以在客户端进行负载均衡。
 这样可以减少单点故障的风险，同时提高系统的响应效率。
 
 **示例**：
-1. **Eureka Server 配置**：如何快速搭建一个 Eureka Server 作为服务注册中心
+1. Eureka Server 配置**：如何快速搭建一个 Eureka Server 作为服务注册中心
    在一个 Spring Boot 应用中配置 Eureka Server：
    ```java
    @SpringBootApplication
@@ -1895,7 +1895,7 @@ Eureka 集成了 Spring Cloud Ribbon，可以在客户端进行负载均衡。
      instance:
        hostname: localhost
    ```
-2. **Eureka Client 配置**：一个微服务注册到 Eureka Server 并从中获取其他服务的注册信息
+2. Eureka Client 配置**：一个微服务注册到 Eureka Server 并从中获取其他服务的注册信息
    在另一个微服务应用中，配置它注册到 Eureka Server：
    ```java
    @SpringBootApplication
@@ -2042,8 +2042,6 @@ Nacos的工作流程
 
 
 
-### 为什么不直接用spring cloud的注册中心，还去用Nacos呢？
-
 
 ### 资料
 Spring Cloud教程（非常详细）： https://c.biancheng.net/springcloud/
@@ -2053,7 +2051,8 @@ Spring Cloud微服务和分布式系统实践 https://weread.qq.com/web/reader/2
 
 
 
-## Spring Security安全框架
+## Spring Security
+安全框架
 - **Spring Security**模块为应用程序提供了强大的安全支持，包括认证、授权和基于角色的访问控制。这对于保护应用中的敏感信息至关重要，通过简单的配置实现复杂的安全策略。
 
 **Spring Security** 是一个全面的安全框架，用于处理 Web 应用中的认证、授权、会话管理等。它是 Spring Web 开发中不可或缺的一部分，用于保护网络请求，防止未授权的访问。
