@@ -1235,6 +1235,43 @@ t2.start();
 
 
 
+## 并发容器
+### 常用并发容器
+
+- `ConcurrentHashMap` 在 JDK 8 中基于数组 + 链表 + 红黑树，并配合 CAS 和 synchronized 实现高性能并发。
+- `CopyOnWriteArrayList` 每次写操作都会复制一份数据，适合读远远多于写的场景。
+- `ConcurrentLinkedQueue` 是基于非阻塞队列，使用 CAS 操作节点的指针，避免加锁。
+- `BlockingQueue` 提供阻塞的 put 和 take 操作，广泛用于生产者-消费者模型。
+- `ConcurrentSkipListMap` 基于跳表结构，支持并发有序映射，适合需要范围查询的高并发场景。
+
+
+### Concurrent Hash Map 
+ConcurrentHashMap 是一种线程安全的高效Map集合
+底层数据结构：
+- JDK1.7底层采用分段的数组+链表实现
+- JDK1.8 采用的数据结构跟HashMap1.8的结构一样，数组+链表/红黑二叉树。
+
+**JDK1.7中ConcurrentHashMap**
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251224180940.png)
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251224180949.png)
+
+在JDK1.8中，放弃了Segment臃肿的设计，数据结构跟HashMap的数据结构是一样的：数组+红黑树+链表
+采用 CAS + Synchronized来保证并发安全进行实现
+- CAS控制数组节点的添加
+- synchronized只锁定当前链表或红黑二叉树的首节点，只要hash不冲突，就不会产生并发的问题 , 效率得到提升
+![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251224181003.png)
+
+聊一下ConcurrentHashMap 
+
+1. 底层数据结构：
+	- JDK1.7底层采用分段的数组+链表实现
+	- JDK1.8 采用的数据结构跟HashMap1.8的结构一样，数组+链表/红黑二叉树
+- 加锁的方式
+	- JDK1.7采用Segment分段锁，底层使用的是ReentrantLock
+	- JDK1.8采用CAS添加新节点，采用synchronized锁定链表或红黑二叉树的首节点，相对Segment分段锁粒度更细，性能更好
+
+
+
 ## ThreadLocal
 ### 介绍
 ThreadLocal的底层数据结构是什么？
@@ -1441,43 +1478,6 @@ WeakReference weakReference = new WeakReference(user);
 
 
 
-
-
-
-## 并发容器
-### 常用并发容器
-
-- `ConcurrentHashMap` 在 JDK 8 中基于数组 + 链表 + 红黑树，并配合 CAS 和 synchronized 实现高性能并发。
-- `CopyOnWriteArrayList` 每次写操作都会复制一份数据，适合读远远多于写的场景。
-- `ConcurrentLinkedQueue` 是基于非阻塞队列，使用 CAS 操作节点的指针，避免加锁。
-- `BlockingQueue` 提供阻塞的 put 和 take 操作，广泛用于生产者-消费者模型。
-- `ConcurrentSkipListMap` 基于跳表结构，支持并发有序映射，适合需要范围查询的高并发场景。
-
-
-### Concurrent Hash Map 
-ConcurrentHashMap 是一种线程安全的高效Map集合
-底层数据结构：
-- JDK1.7底层采用分段的数组+链表实现
-- JDK1.8 采用的数据结构跟HashMap1.8的结构一样，数组+链表/红黑二叉树。
-
-**JDK1.7中ConcurrentHashMap**
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251224180940.png)
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251224180949.png)
-
-在JDK1.8中，放弃了Segment臃肿的设计，数据结构跟HashMap的数据结构是一样的：数组+红黑树+链表
-采用 CAS + Synchronized来保证并发安全进行实现
-- CAS控制数组节点的添加
-- synchronized只锁定当前链表或红黑二叉树的首节点，只要hash不冲突，就不会产生并发的问题 , 效率得到提升
-![image.png](https://markdown-1300868533.cos.ap-guangzhou.myqcloud.com/20251224181003.png)
-
-聊一下ConcurrentHashMap 
-
-1. 底层数据结构：
-	- JDK1.7底层采用分段的数组+链表实现
-	- JDK1.8 采用的数据结构跟HashMap1.8的结构一样，数组+链表/红黑二叉树
-- 加锁的方式
-	- JDK1.7采用Segment分段锁，底层使用的是ReentrantLock
-	- JDK1.8采用CAS添加新节点，采用synchronized锁定链表或红黑二叉树的首节点，相对Segment分段锁粒度更细，性能更好
 
 
 
